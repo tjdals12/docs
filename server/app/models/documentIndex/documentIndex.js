@@ -479,10 +479,10 @@ DocumentIndexSchema.statics.trackingDocument = function (id, page) {
             }
         },
         {
-            $skip: (page - 1) * 5
+            $skip: (page - 1) * 10
         },
         {
-            $limit: 5
+            $limit: 10
         },
         {
             $project: {

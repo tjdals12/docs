@@ -77,6 +77,7 @@ const initialState = Map({
 			index: 0,
 			documentNumber: '',
 			documentTitle: '',
+			documentGb: '',
 			plan: ''
 		})
 	]),
@@ -114,7 +115,7 @@ export default handleActions(
 				return state
 					.set('indexes', fromJS(indexes))
 					.set('lastPage', parseInt(lastPage, 10))
-					.setIn([ 'search', 'isSearch' ], true);
+					.setIn(['search', 'isSearch'], true);
 			}
 		}),
 		...pender({
@@ -141,9 +142,9 @@ export default handleActions(
 
 				return state
 					.set('index', fromJS(index))
-					.setIn([ 'edit', 'vendor' ], index.vendor._id)
-					.setIn([ 'edit', 'list' ], fromJS(list))
-					.setIn([ 'edit', 'deleteList' ], fromJS(deleteList));
+					.setIn(['edit', 'vendor'], index.vendor._id)
+					.setIn(['edit', 'list'], fromJS(list))
+					.setIn(['edit', 'deleteList'], fromJS(deleteList));
 			}
 		}),
 		...pender({
@@ -151,7 +152,7 @@ export default handleActions(
 			onSuccess: (state, action) => {
 				const { data: overall } = action.payload.data;
 
-				return state.setIn([ 'indexDetail', 'overall' ], Map(overall));
+				return state.setIn(['indexDetail', 'overall'], Map(overall));
 			}
 		}),
 		...pender({
@@ -159,7 +160,7 @@ export default handleActions(
 			onSuccess: (state, action) => {
 				const { data: statisticsByStatus } = action.payload.data;
 
-				return state.setIn([ 'indexDetail', 'statisticsByStatus' ], fromJS(statisticsByStatus));
+				return state.setIn(['indexDetail', 'statisticsByStatus'], fromJS(statisticsByStatus));
 			}
 		}),
 		...pender({
@@ -169,8 +170,8 @@ export default handleActions(
 				const lastPage = action.payload.headers['last-page'];
 
 				return state
-					.setIn([ 'indexDetail', 'list' ], fromJS(list))
-					.setIn([ 'indexDetail', 'lastPage' ], parseInt(lastPage, 10));
+					.setIn(['indexDetail', 'list'], fromJS(list))
+					.setIn(['indexDetail', 'lastPage'], parseInt(lastPage, 10));
 			}
 		}),
 		...pender({
@@ -183,7 +184,13 @@ export default handleActions(
 			onFailure: (state, action) => {
 				const add = state.get('add');
 
-				return state.set('error', add.get('vendor') === '');
+				const errors = add.get('list').map((item, index) => ({ ...item.toJS(), index })).filter(item => {
+					const { documentNumber, documentTitle, documentGb, plan } = item;
+
+					return documentNumber === '' || documentTitle === '' || documentGb === '' || plan === '' ? true : false;
+				}).map(item => item.index);
+
+				return state.set('error', add.get('vendor') === '').set('infosError', fromJS(errors));
 			}
 		}),
 		...pender({
@@ -198,9 +205,9 @@ export default handleActions(
 
 				infos = infos
 					.filter((info) => {
-						const { documentNumber, documentTitle, plan } = info.toJS();
+						const { documentNumber, documentTitle, documentGb, plan } = info.toJS();
 
-						return documentNumber === '' || documentTitle === '' || plan === '' ? true : false;
+						return documentNumber === '' || documentTitle === '' || documentGb === '' || plan === '' ? true : false;
 					})
 					.map((info) => info.get('index'));
 
@@ -214,7 +221,7 @@ export default handleActions(
 			},
 			onFailure: (state, action) => {
 				const edit = state.get('edit');
-				let infos = state.getIn([ 'edit', 'list' ]);
+				let infos = state.getIn(['edit', 'list']);
 
 				infos = infos
 					.filter((info) => {
@@ -241,33 +248,33 @@ export default handleActions(
 		[ON_CHANGE]: (state, action) => {
 			const { target, name, value } = action.payload;
 
-			return !target ? state.set(name, fromJS(value)) : state.setIn([ target, name ], fromJS(value));
+			return !target ? state.set(name, fromJS(value)) : state.setIn([target, name], fromJS(value));
 		},
 		[ON_CHANGE_ADD]: (state, action) => {
 			const { target, index, name, value } = action.payload;
 
-			return state.setIn([ target, 'list', index, name ], value);
+			return state.setIn([target, 'list', index, name], value);
 		},
 		[ON_CHANGE_INFO]: (state, action) => {
 			const { index, name, value } = action.payload;
 			const infos = state.get('infos');
 			const target = infos.findIndex((info) => info.get('index') === index);
 
-			return state.setIn([ 'infos', target, name ], value);
+			return state.setIn(['infos', target, name], value);
 		},
 		[ON_CHANGE_EDIT_INFO]: (state, action) => {
 			const { id, name, value } = action.payload;
-			const list = state.getIn([ 'edit', 'list' ]);
+			const list = state.getIn(['edit', 'list']);
 
 			let target = list.findIndex((document) => document.get('_id') === id);
 			target = target > -1 ? target : id;
 
-			return state.setIn([ 'edit', 'list', target, name ], value);
+			return state.setIn(['edit', 'list', target, name], value);
 		},
 		[ON_CHANGE_EDIT_LIST]: (state, action) => {
 			const { id, type } = action.payload;
-			const list = state.getIn([ 'edit', 'list' ]);
-			const deleteList = state.getIn([ 'edit', 'deleteList' ]);
+			const list = state.getIn(['edit', 'list']);
+			const deleteList = state.getIn(['edit', 'deleteList']);
 
 			let target;
 			let index;
@@ -278,18 +285,18 @@ export default handleActions(
 					target = list.get(index);
 
 					return state
-						.setIn([ 'edit', 'list' ], list.splice(index, 1))
-						.setIn([ 'edit', 'deleteList' ], deleteList.push(target));
+						.setIn(['edit', 'list'], list.splice(index, 1))
+						.setIn(['edit', 'deleteList'], deleteList.push(target));
 				case 'RECOVERY':
 					index = deleteList.findIndex((document) => document.get('_id') === id);
 					target = deleteList.get(index);
 
 					return state
-						.setIn([ 'edit', 'deleteList' ], deleteList.splice(index, 1))
-						.setIn([ 'edit', 'list' ], list.push(target));
+						.setIn(['edit', 'deleteList'], deleteList.splice(index, 1))
+						.setIn(['edit', 'list'], list.push(target));
 
 				case 'DELETE':
-					return state.setIn([ 'edit', 'list' ], list.splice(id, 1));
+					return state.setIn(['edit', 'list'], list.splice(id, 1));
 
 				default:
 					return state;
@@ -304,8 +311,8 @@ export default handleActions(
 			return state.update('infos', (infos) =>
 				infos.push(
 					Map({
-						...initialState.getIn([ 'infos', 0 ]).toJS(),
-						index: infos.getIn([ infos.size - 1, 'index' ]) + 1
+						...initialState.getIn(['infos', 0]).toJS(),
+						index: infos.getIn([infos.size - 1, 'index']) + 1
 					})
 				)
 			);
@@ -321,7 +328,7 @@ export default handleActions(
 		[ADD_INFO_BY_EXCEL]: (state, action) => {
 			const { payload: data } = action;
 			const infos = state.get('infos');
-			let currentIndex = infos.getIn([ infos.size - 1, 'index' ]);
+			let currentIndex = infos.getIn([infos.size - 1, 'index']);
 
 			const newInfos = data.map((info) => {
 				return Map({

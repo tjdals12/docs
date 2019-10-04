@@ -77,7 +77,7 @@ class DocumentIndexAddModalContainer extends React.Component {
 	}
 
 	render() {
-		const { gbs, vendorList, documentIndex, error, isOpen } = this.props;
+		const { gbs, vendorList, documentIndex, error, infosError, isOpen } = this.props;
 
 		if (!gbs || !vendorList) return null;
 
@@ -87,6 +87,7 @@ class DocumentIndexAddModalContainer extends React.Component {
 				vendorList={vendorList}
 				data={documentIndex}
 				error={error}
+				infosError={infosError}
 				isOpen={isOpen}
 				onClose={this.handleClose}
 				onChange={this.handleChange}
@@ -104,6 +105,7 @@ export default connect(
 		vendorList: state.vendor.get('vendorList'),
 		documentIndex: state.indexes.get('add'),
 		error: state.indexes.get('error'),
+		infosError: state.indexes.get('infosError'),
 		isOpen: state.modal.get('documentIndexAddModal')
 	}),
 	(dispatch) => ({

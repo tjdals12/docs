@@ -63,17 +63,17 @@ const DocumentInfoTable = ({
 									<span
 										className="can-click have-link"
 										onClick={() => {
-											onTargetVendor({ id: info.getIn([ 'vendor', '_id' ]) });
+											onTargetVendor({ id: info.getIn(['vendor', '_id']) });
 											onOpen('vendorDetail')();
 										}}
 									>
-										{info.getIn([ 'vendor', 'vendorName' ])}
+										{info.getIn(['vendor', 'vendorName'])}
 										<br />
-										({info.getIn([ 'vendor', 'partNumber' ])} /{' '}
-										{info.getIn([ 'vendor', 'part', 'cdSName' ])})
+										({info.getIn(['vendor', 'partNumber'])} /{' '}
+										{info.getIn(['vendor', 'part', 'cdSName'])})
 									</span>
 								</td>
-								<td className="text-center">{info.getIn([ 'documentGb', 'cdSName' ])}</td>
+								<td className="text-center">{info.getIn(['documentGb', 'cdSName'])}</td>
 								<td>{info.get('documentNumber')}</td>
 								<td>
 									<span className="can-click have-link" onClick={onOpenDetail(id)}>
@@ -81,11 +81,11 @@ const DocumentInfoTable = ({
 									</span>
 								</td>
 								<td className="text-center">
-									{info.getIn([ 'removeYn', 'yn' ])}
+									{info.getIn(['removeYn', 'yn'])}
 									<br />
-									{info.getIn([ 'removeYn', 'yn' ]) === 'YES' && (
+									{info.getIn(['removeYn', 'yn']) === 'YES' && (
 										<small className="text-danger font-weight-bold">
-											{info.getIn([ 'removeYn', 'deleteDt' ]).substr(0, 10)}
+											{info.getIn(['removeYn', 'deleteDt']).substr(0, 10)}
 										</small>
 									)}
 								</td>
@@ -96,11 +96,11 @@ const DocumentInfoTable = ({
 								</td>
 								<td className="text-right">
 									<span className="text-danger">
-										등록: {info.getIn([ 'timestamp', 'regId' ])} ({info.getIn([ 'timestamp', 'regDt' ])})
+										등록: {info.getIn(['timestamp', 'regId'])} ({info.getIn(['timestamp', 'regDt'])})
 									</span>
 									<br />
 									<span className="text-danger">
-										수정: {info.getIn([ 'timestamp', 'updId' ])} ({info.getIn([ 'timestamp', 'updDt' ])})
+										수정: {info.getIn(['timestamp', 'updId'])} ({info.getIn(['timestamp', 'updDt'])})
 									</span>
 								</td>
 							</tr>

@@ -19,6 +19,7 @@ const DocumentIndexAddModal = ({
 	vendorList,
 	data,
 	error,
+	infosError,
 	isOpen,
 	onClose,
 	onChange,
@@ -49,7 +50,7 @@ const DocumentIndexAddModal = ({
 								<option>--- 업체를 선택해주세요. ---</option>
 								{vendorList.map((vendor) => (
 									<option key={vendor.get('_id')} value={vendor.get('_id')}>
-										{vendor.get('vendorName')} ({vendor.getIn([ 'part', 'cdSName' ])},{' '}
+										{vendor.get('vendorName')} ({vendor.getIn(['part', 'cdSName'])},{' '}
 										{vendor.get('partNumber')})
 									</option>
 								))}
@@ -98,29 +99,30 @@ const DocumentIndexAddModal = ({
 									</td>
 								</tr>
 							) : (
-								data.get('list').map((document, index) => {
-									const { documentNumber, documentTitle, plan } = document.toJS();
+									data.get('list').map((document, index) => {
+										const { documentNumber, documentTitle, plan } = document.toJS();
+										const isError = infosError.indexOf(index) > -1;
 
-									return (
-										<tr key={index}>
-											<td className="text-right">{index + 1}</td>
-											<td>{documentNumber}</td>
-											<td>{documentTitle}</td>
-											<td>
-												<Input type="select" name="documentGb" onChange={onChangeGb(index)}>
-													<option value="">-- 구분 --</option>
-													{gbs.get('cdMinors').map((gb) => (
-														<option key={gb.get('_id')} value={gb.get('_id')}>
-															{gb.get('cdSName')}
-														</option>
-													))}
-												</Input>
-											</td>
-											<td className="text-center">{plan.substr(0, 10)}</td>
-										</tr>
-									);
-								})
-							)}
+										return (
+											<tr key={index} className={isError ? 'bg-secondary' : ''}>
+												<td className="text-right">{index + 1}</td>
+												<td>{documentNumber}</td>
+												<td>{documentTitle}</td>
+												<td>
+													<Input type="select" name="documentGb" onChange={onChangeGb(index)}>
+														<option value="">-- 구분 --</option>
+														{gbs.get('cdMinors').map((gb) => (
+															<option key={gb.get('_id')} value={gb.get('_id')}>
+																{gb.get('cdSName')}
+															</option>
+														))}
+													</Input>
+												</td>
+												<td className="text-center">{plan.substr(0, 10)}</td>
+											</tr>
+										);
+									})
+								)}
 						</tbody>
 					</Table>
 				</Form>

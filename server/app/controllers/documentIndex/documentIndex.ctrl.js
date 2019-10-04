@@ -10,40 +10,39 @@ import { Types } from 'mongoose';
  * @description 문서목록 목록 조회
  */
 export const list = async (ctx) => {
-    let page = parseInt(ctx.query.page || 1, 10);
+	let page = parseInt(ctx.query.page || 1, 10);
 
-    if (page < 1) {
-        ctx.res.badRequest({
-            data: page,
-            message: 'Page can\'t be less than 1'
-        });
+	if (page < 1) {
+		ctx.res.badRequest({
+			data: page,
+			message: 'Page can\'t be less than 1'
+		});
 
-        return;
-    }
+		return;
+	}
 
-    try {
-        const documentIndexes = await DocumentIndex
-            .find()
-            .populate({ path: 'vendor', populate: { path: 'part' } })
-            .populate({ path: 'list', populate: { path: 'documentGb' } })
-            .skip((page - 1) * 10)
-            .limit(10)
-            .sort({ 'timestamp.regDt': -1 });
+	try {
+		const documentIndexes = await DocumentIndex.find()
+			.populate({ path: 'vendor', populate: { path: 'part' } })
+			.populate({ path: 'list', populate: { path: 'documentGb' } })
+			.skip((page - 1) * 10)
+			.limit(10)
+			.sort({ 'timestamp.regDt': -1 });
 
-        const count = await DocumentIndex.countDocuments();
+		const count = await DocumentIndex.countDocuments();
 
-        ctx.set('Last-Page', Math.ceil(count / 10));
+		ctx.set('Last-Page', Math.ceil(count / 10));
 
-        ctx.res.ok({
-            data: documentIndexes,
-            message: 'Success - documentIndexCtrl > list'
-        });
-    } catch (e) {
-        ctx.res.internalServerError({
-            data: [],
-            message: 'Error - documentIndexCtrl > list'
-        });
-    }
+		ctx.res.ok({
+			data: documentIndexes,
+			message: 'Success - documentIndexCtrl > list'
+		});
+	} catch (e) {
+		ctx.res.internalServerError({
+			data: [],
+			message: 'Error - documentIndexCtrl > list'
+		});
+	}
 };
 
 /**
@@ -52,22 +51,25 @@ export const list = async (ctx) => {
  * @description 문서목록 목록 조회 (For select)
  */
 export const listForSelect = async (ctx) => {
-    try {
-        const documentIndexes = await DocumentIndex
-            .find({}, { _id: 1, vendor: 1 })
-            .populate({ path: 'vendor', select: 'vendorName partNumber', populate: { path: 'part', select: 'cdSName' } })
-            .sort({ 'timestamp.regDt': -1 });
+	try {
+		const documentIndexes = await DocumentIndex.find({}, { _id: 1, vendor: 1 })
+			.populate({
+				path: 'vendor',
+				select: 'vendorName partNumber',
+				populate: { path: 'part', select: 'cdSName' }
+			})
+			.sort({ 'timestamp.regDt': -1 });
 
-        ctx.res.ok({
-            data: documentIndexes,
-            message: 'Success - documentIndexCtrl > listForSelect'
-        });
-    } catch (e) {
-        ctx.res.internalServerError({
-            data: [],
-            message: 'Erorr - documentIndexCtrl > listForSelect'
-        });
-    }
+		ctx.res.ok({
+			data: documentIndexes,
+			message: 'Success - documentIndexCtrl > listForSelect'
+		});
+	} catch (e) {
+		ctx.res.internalServerError({
+			data: [],
+			message: 'Erorr - documentIndexCtrl > listForSelect'
+		});
+	}
 };
 
 /**
@@ -76,49 +78,44 @@ export const listForSelect = async (ctx) => {
  * @description 문서목록 검색
  */
 export const search = async (ctx) => {
-    let page = parseInt(ctx.query.page || 1, 10);
+	let page = parseInt(ctx.query.page || 1, 10);
 
-    if (page < 1) {
-        ctx.res.badRequest({
-            data: page,
-            message: 'Page can\'t be less than 1'
-        });
+	if (page < 1) {
+		ctx.res.badRequest({
+			data: page,
+			message: 'Page can\'t be less than 1'
+		});
 
-        return;
-    }
+		return;
+	}
 
-    let {
-        part,
-        partNumber,
-        vendorName,
-        officialName
-    } = ctx.request.body;
+	let { part, partNumber, vendorName, officialName } = ctx.request.body;
 
-    const { ObjectId } = Types;
+	const { ObjectId } = Types;
 
-    const query = {
-        part: ObjectId.isValid(part) ? part : '',
-        partNumber: partNumber ? partNumber : '',
-        vendorName: vendorName ? vendorName : '',
-        officialName: officialName ? officialName : ''
-    };
+	const query = {
+		part: ObjectId.isValid(part) ? part : '',
+		partNumber: partNumber ? partNumber : '',
+		vendorName: vendorName ? vendorName : '',
+		officialName: officialName ? officialName : ''
+	};
 
-    try {
-        const documentIndexes = await DocumentIndex.searchDocumentIndexes(query, page);
-        const countQuery = await DocumentIndex.searchDocumentIndexesCount(query);
+	try {
+		const documentIndexes = await DocumentIndex.searchDocumentIndexes(query, page);
+		const countQuery = await DocumentIndex.searchDocumentIndexesCount(query);
 
-        ctx.set('Last-Page', Math.ceil((countQuery[0] ? countQuery[0].count : 1) / 10));
+		ctx.set('Last-Page', Math.ceil((countQuery[0] ? countQuery[0].count : 1) / 10));
 
-        ctx.res.ok({
-            data: documentIndexes,
-            message: 'Success - documentIndexCtrl > search'
-        });
-    } catch (e) {
-        ctx.res.internalServerError({
-            data: ctx.request.body,
-            message: 'Error - documentIndexCtrl > search'
-        });
-    }
+		ctx.res.ok({
+			data: documentIndexes,
+			message: 'Success - documentIndexCtrl > search'
+		});
+	} catch (e) {
+		ctx.res.internalServerError({
+			data: ctx.request.body,
+			message: 'Error - documentIndexCtrl > search'
+		});
+	}
 };
 
 /**
@@ -127,27 +124,33 @@ export const search = async (ctx) => {
  * @description 엑셀 읽기
  */
 export const readExcel = async (ctx) => {
-    try {
-        const workbook = XLSX.readFile(ctx.req.file.path);
-        const excelData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: ['documentNumber', 'documentTitle', 'plan'] });
+	try {
+		const workbook = XLSX.readFile(ctx.req.file.path);
+		const excelData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {
+			header: ['documentNumber', 'documentTitle', 'plan']
+		});
 
-        const result = excelData.map((row) => {
-            return {
-                ...row,
-                plan: typeof row.plan === 'number' ? moment('1900-01-01').add(row.plan, 'days') : moment(row.plan.replace(/[.\-/]/g, ''))
-            };
-        });
+		const result = excelData.map((row) => {
+			return {
+				...row,
+				documentGb: '',
+				plan:
+					typeof row.plan === 'number'
+						? moment('1900-01-01').add(row.plan, 'days')
+						: moment(row.plan.replace(/[.\-/]/g, ''))
+			};
+		});
 
-        ctx.res.ok({
-            data: result,
-            message: 'Success - documentIndexCtrl > readExcel'
-        });
-    } catch (e) {
-        ctx.res.internalServerError({
-            data: [],
-            message: 'Error - documentIndexCtrl > readExcel'
-        });
-    }
+		ctx.res.ok({
+			data: result,
+			message: 'Success - documentIndexCtrl > readExcel'
+		});
+	} catch (e) {
+		ctx.res.internalServerError({
+			data: [],
+			message: 'Error - documentIndexCtrl > readExcel'
+		});
+	}
 };
 
 /**
@@ -156,48 +159,49 @@ export const readExcel = async (ctx) => {
  * @description 문서목록 생성
  */
 export const create = async (ctx) => {
-    let {
-        vendor,
-        list
-    } = ctx.request.body;
+	let { vendor, list } = ctx.request.body;
 
-    const schema = Joi.object().keys({
-        vendor: Joi.string().required(),
-        list: Joi.array().items(Joi.object().keys({
-            documentNumber: Joi.string().required(),
-            documentTitle: Joi.string().required(),
-            documentGb: Joi.string().required(),
-            plan: Joi.string().required()
-        })).required()
-    });
+	const schema = Joi.object().keys({
+		vendor: Joi.string().required(),
+		list: Joi.array()
+			.items(
+				Joi.object().keys({
+					documentNumber: Joi.string().required(),
+					documentTitle: Joi.string().required(),
+					documentGb: Joi.string().required(),
+					plan: Joi.string().required()
+				})
+			)
+			.required()
+	});
 
-    const result = Joi.validate(ctx.request.body, schema);
+	const result = Joi.validate(ctx.request.body, schema);
 
-    if (result.error) {
-        ctx.res.badRequest({
-            data: {
-                vendor,
-                list
-            },
-            message: 'Fail - documentIndexCtrl > create'
-        });
+	if (result.error) {
+		ctx.res.badRequest({
+			data: {
+				vendor,
+				list
+			},
+			message: 'Fail - documentIndexCtrl > create'
+		});
 
-        return;
-    }
+		return;
+	}
 
-    try {
-        const documentIndex = await DocumentIndex.saveDocumentIndex({ vendor, list });
+	try {
+		const documentIndex = await DocumentIndex.saveDocumentIndex({ vendor, list });
 
-        ctx.res.ok({
-            data: documentIndex,
-            message: 'Success - documentIndexCtrl > create'
-        });
-    } catch (e) {
-        ctx.res.internalServerError({
-            data: ctx.request.body,
-            message: 'Error - documentIndexCtrl > create'
-        });
-    }
+		ctx.res.ok({
+			data: documentIndex,
+			message: 'Success - documentIndexCtrl > create'
+		});
+	} catch (e) {
+		ctx.res.internalServerError({
+			data: ctx.request.body,
+			message: 'Error - documentIndexCtrl > create'
+		});
+	}
 };
 
 /**
@@ -206,37 +210,43 @@ export const create = async (ctx) => {
  * @description 문서목록 개별 추가
  */
 export const addPartial = async (ctx) => {
-    let { id } = ctx.params;
-    let { list } = ctx.request.body;
+	let { id } = ctx.params;
+	let { list } = ctx.request.body;
 
-    const schema = Joi.object().keys({
-        list: Joi.array().items(Joi.object()).required()
-    });
+	const schema = Joi.object().keys({
+		list: Joi.array().items(Joi.object().keys({
+			index: Joi.number().optional(),
+			documentNumber: Joi.string().required(),
+			documentTitle: Joi.string().required(),
+			documentGb: Joi.string().required(),
+			plan: Joi.string().required()
+		})).required()
+	});
 
-    const result = Joi.validate(ctx.request.body, schema);
+	const result = Joi.validate(ctx.request.body, schema);
 
-    if (result.error) {
-        ctx.res.badRequest({
-            data: result.error,
-            message: 'Fail - documentIndexCtrl > addPartial'
-        });
+	if (result.error) {
+		ctx.res.badRequest({
+			data: result.error,
+			message: 'Fail - documentIndexCtrl > addPartial'
+		});
 
-        return;
-    }
+		return;
+	}
 
-    try {
-        const documentIndex = await DocumentIndex.addPartial({ id, list });
+	try {
+		const documentIndex = await DocumentIndex.addPartial({ id, list });
 
-        ctx.res.ok({
-            data: documentIndex,
-            message: 'Success - documentIndexCtrl > addPartial'
-        });
-    } catch (e) {
-        ctx.res.internalServerError({
-            data: ctx.request.body,
-            message: 'Erro - documentIndexCtrl > addPartial'
-        });
-    }
+		ctx.res.ok({
+			data: documentIndex,
+			message: 'Success - documentIndexCtrl > addPartial'
+		});
+	} catch (e) {
+		ctx.res.internalServerError({
+			data: ctx.request.body,
+			message: 'Erro - documentIndexCtrl > addPartial'
+		});
+	}
 };
 
 /**
@@ -245,24 +255,23 @@ export const addPartial = async (ctx) => {
  * @description 문서목록 개별 조회
  */
 export const one = async (ctx) => {
-    let { id } = ctx.params;
+	let { id } = ctx.params;
 
-    try {
-        const documentIndex = await DocumentIndex
-            .findById(id)
-            .populate({ path: 'vendor', populate: { path: 'part' } })
-            .populate({ path: 'list', populate: { path: 'documentGb trackingDocument' } });
+	try {
+		const documentIndex = await DocumentIndex.findById(id)
+			.populate({ path: 'vendor', populate: { path: 'part' } })
+			.populate({ path: 'list', populate: { path: 'documentGb trackingDocument' } });
 
-        ctx.res.ok({
-            data: documentIndex,
-            message: 'Success - documentIndexCtrl > one'
-        });
-    } catch (e) {
-        ctx.res.internalServerError({
-            data: id,
-            message: 'Error - documentIndexCtrl > one'
-        });
-    }
+		ctx.res.ok({
+			data: documentIndex,
+			message: 'Success - documentIndexCtrl > one'
+		});
+	} catch (e) {
+		ctx.res.internalServerError({
+			data: id,
+			message: 'Error - documentIndexCtrl > one'
+		});
+	}
 };
 
 /**
@@ -271,21 +280,21 @@ export const one = async (ctx) => {
  * @description 문서목록 Overall
  */
 export const overall = async (ctx) => {
-    let { id } = ctx.params;
+	let { id } = ctx.params;
 
-    try {
-        const overall = await DocumentIndex.documentIndexOverall(id);
+	try {
+		const overall = await DocumentIndex.documentIndexOverall(id);
 
-        ctx.res.ok({
-            data: overall[0] ? overall[0] : {},
-            messge: 'Success - documentIndexCtrl > overall'
-        });
-    } catch (e) {
-        ctx.res.internalServerError({
-            data: id,
-            message: `Error - documentIndexCtrl > overall: ${e.messge}`
-        });
-    }
+		ctx.res.ok({
+			data: overall[0] ? overall[0] : {},
+			messge: 'Success - documentIndexCtrl > overall'
+		});
+	} catch (e) {
+		ctx.res.internalServerError({
+			data: id,
+			message: `Error - documentIndexCtrl > overall: ${e.messge}`
+		});
+	}
 };
 
 /**
@@ -294,21 +303,21 @@ export const overall = async (ctx) => {
  * @description 문서목록 상태별 통계
  */
 export const statisticsByStatus = async (ctx) => {
-    let { id } = ctx.params;
+	let { id } = ctx.params;
 
-    try {
-        const statisticsByStatus = await DocumentIndex.statisticsByStatus(id);
+	try {
+		const statisticsByStatus = await DocumentIndex.statisticsByStatus(id);
 
-        ctx.res.ok({
-            data: statisticsByStatus,
-            message: 'Success - documentIndexCtrl > statisticsByStatus'
-        });
-    } catch (e) {
-        ctx.res.internalServerError({
-            data: id,
-            message: `Error - documentIndexCtrl > statisticsByStatus: ${e.messge}`
-        });
-    }
+		ctx.res.ok({
+			data: statisticsByStatus,
+			message: 'Success - documentIndexCtrl > statisticsByStatus'
+		});
+	} catch (e) {
+		ctx.res.internalServerError({
+			data: id,
+			message: `Error - documentIndexCtrl > statisticsByStatus: ${e.messge}`
+		});
+	}
 };
 
 /**
@@ -317,34 +326,34 @@ export const statisticsByStatus = async (ctx) => {
  * @description 문서정보 추적
  */
 export const trackingDocument = async (ctx) => {
-    let { id } = ctx.params;
-    let page = parseInt(ctx.query.page || 1, 10);
+	let { id } = ctx.params;
+	let page = parseInt(ctx.query.page || 1, 10);
 
-    if (page < 1) {
-        ctx.res.badRequest({
-            data: page,
-            message: 'Page can\'t be less than 1'
-        });
+	if (page < 1) {
+		ctx.res.badRequest({
+			data: page,
+			message: 'Page can\'t be less than 1'
+		});
 
-        return;
-    }
+		return;
+	}
 
-    try {
-        const list = await DocumentIndex.trackingDocument(id, page);
-        const listCountQuery = await DocumentIndex.trackingDocumentCount(id);
+	try {
+		const list = await DocumentIndex.trackingDocument(id, page);
+		const listCountQuery = await DocumentIndex.trackingDocumentCount(id);
 
-        ctx.set('Last-Page', Math.ceil((listCountQuery[0] ? listCountQuery[0].count : 1) / 5));
+		ctx.set('Last-Page', Math.ceil((listCountQuery[0] ? listCountQuery[0].count : 1) / 10));
 
-        ctx.res.ok({
-            data: list,
-            message: 'Success - documentIndexCtrl > trackingDocument'
-        });
-    } catch (e) {
-        ctx.res.internalServerError({
-            data: id,
-            message: `Error - documentIndexCtrl > trackingDocument: ${e.message}`
-        });
-    }
+		ctx.res.ok({
+			data: list,
+			message: 'Success - documentIndexCtrl > trackingDocument'
+		});
+	} catch (e) {
+		ctx.res.internalServerError({
+			data: id,
+			message: `Error - documentIndexCtrl > trackingDocument: ${e.message}`
+		});
+	}
 };
 
 /**
@@ -353,51 +362,52 @@ export const trackingDocument = async (ctx) => {
  * @description 문서목록 수정
  */
 export const editDocumentIndex = async (ctx) => {
-    let { id } = ctx.params;
-    let {
-        vendor,
-        list,
-        deleteList
-    } = ctx.request.body;
+	let { id } = ctx.params;
+	let { vendor, list, deleteList } = ctx.request.body;
 
-    const schema = Joi.object().keys({
-        vendor: Joi.string().required(),
-        list: list.length === 0
-            ? Joi.array().items(Joi.object().keys()).required()
-            : Joi.array().items(Joi.object().keys({
-                _id: Joi.string().optional(),
-                documentNumber: Joi.string().required(),
-                documentTitle: Joi.string().required(),
-                documentGb: Joi.string().required(),
-                plan: Joi.string().required()
-            })).required(),
-        deleteList: Joi.array().items(Joi.object()).required()
-    });
+	const schema = Joi.object().keys({
+		vendor: Joi.string().required(),
+		list:
+			list.length === 0
+				? Joi.array().items(Joi.object().keys()).required()
+				: Joi.array()
+					.items(
+						Joi.object().keys({
+							_id: Joi.string().optional(),
+							documentNumber: Joi.string().required(),
+							documentTitle: Joi.string().required(),
+							documentGb: Joi.string().required(),
+							plan: Joi.string().required()
+						})
+					)
+					.required(),
+		deleteList: Joi.array().items(Joi.object()).required()
+	});
 
-    const result = Joi.validate(ctx.request.body, schema);
+	const result = Joi.validate(ctx.request.body, schema);
 
-    if (result.error) {
-        ctx.res.badRequest({
-            data: result.error,
-            message: 'Fail - documentIndexCtrl > editDocumentIndex'
-        });
+	if (result.error) {
+		ctx.res.badRequest({
+			data: result.error,
+			message: 'Fail - documentIndexCtrl > editDocumentIndex'
+		});
 
-        return;
-    }
+		return;
+	}
 
-    try {
-        const documentIndex = await DocumentIndex.editDocumentIndex({ id, vendor, list, deleteList });
+	try {
+		const documentIndex = await DocumentIndex.editDocumentIndex({ id, vendor, list, deleteList });
 
-        ctx.res.ok({
-            data: documentIndex,
-            message: 'Success - documentIndexCtrl > editDocumentIndex'
-        });
-    } catch (e) {
-        ctx.res.internalServerError({
-            data: ctx.request.body,
-            message: 'Error - documentIndexCtrl > editDocumentIndex'
-        });
-    }
+		ctx.res.ok({
+			data: documentIndex,
+			message: 'Success - documentIndexCtrl > editDocumentIndex'
+		});
+	} catch (e) {
+		ctx.res.internalServerError({
+			data: ctx.request.body,
+			message: 'Error - documentIndexCtrl > editDocumentIndex'
+		});
+	}
 };
 
 /**
@@ -406,43 +416,42 @@ export const editDocumentIndex = async (ctx) => {
  * @description 문서목록 삭제
  */
 export const deleteDocumentIndex = async (ctx) => {
-    let { id } = ctx.params;
-    let page = parseInt(ctx.query.page || 1, 10);
+	let { id } = ctx.params;
+	let page = parseInt(ctx.query.page || 1, 10);
 
-    if (page < 1) {
-        ctx.res.badRequest({
-            data: page,
-            message: 'Page can\'t be less than 1'
-        });
+	if (page < 1) {
+		ctx.res.badRequest({
+			data: page,
+			message: 'Page can\'t be less than 1'
+		});
 
-        return;
-    }
+		return;
+	}
 
-    try {
-        await DocumentIndex.deleteDocumentIndex(id);
+	try {
+		await DocumentIndex.deleteDocumentIndex(id);
 
-        const documentIndexes = await DocumentIndex
-            .find()
-            .populate({ path: 'vendor', populate: { path: 'part' } })
-            .populate({ path: 'list' })
-            .skip((page - 1) * 10)
-            .limit(10)
-            .sort({ 'timestamp.regDt': -1 });
+		const documentIndexes = await DocumentIndex.find()
+			.populate({ path: 'vendor', populate: { path: 'part' } })
+			.populate({ path: 'list' })
+			.skip((page - 1) * 10)
+			.limit(10)
+			.sort({ 'timestamp.regDt': -1 });
 
-        const count = await DocumentIndex.countDocuments();
+		const count = await DocumentIndex.countDocuments();
 
-        ctx.set('Last-Page', Math.ceil(count / 10));
+		ctx.set('Last-Page', Math.ceil(count / 10));
 
-        ctx.res.ok({
-            data: documentIndexes,
-            message: 'Success - documentIndexCtrl > deleteDocumentIndex'
-        });
-    } catch (e) {
-        ctx.res.internalServerError({
-            data: id,
-            message: 'Error - documentIndexCtrl > deleteDocumentIndex'
-        });
-    }
+		ctx.res.ok({
+			data: documentIndexes,
+			message: 'Success - documentIndexCtrl > deleteDocumentIndex'
+		});
+	} catch (e) {
+		ctx.res.internalServerError({
+			data: id,
+			message: 'Error - documentIndexCtrl > deleteDocumentIndex'
+		});
+	}
 };
 
 /**
@@ -451,39 +460,36 @@ export const deleteDocumentIndex = async (ctx) => {
  * @description 문서정보 삭제
  */
 export const deleteDocumentInfo = async (ctx) => {
-    let { id } = ctx.params;
-    let {
-        targetId,
-        reason
-    } = ctx.request.body;
+	let { id } = ctx.params;
+	let { targetId, reason } = ctx.request.body;
 
-    const schema = Joi.object().keys({
-        targetId: Joi.string().required(),
-        reason: Joi.string().required()
-    });
+	const schema = Joi.object().keys({
+		targetId: Joi.string().required(),
+		reason: Joi.string().required()
+	});
 
-    const result = Joi.validate(ctx.request.body, schema);
+	const result = Joi.validate(ctx.request.body, schema);
 
-    if (result.error) {
-        ctx.res.badRequest({
-            data: result.error,
-            message: 'Fail - documentIndexCtrl > deleteDocumentInfo'
-        });
+	if (result.error) {
+		ctx.res.badRequest({
+			data: result.error,
+			message: 'Fail - documentIndexCtrl > deleteDocumentInfo'
+		});
 
-        return;
-    }
+		return;
+	}
 
-    try {
-        const documentIndex = await DocumentIndex.deleteDocumentInfo(id, targetId, reason);
+	try {
+		const documentIndex = await DocumentIndex.deleteDocumentInfo(id, targetId, reason);
 
-        ctx.res.ok({
-            data: documentIndex,
-            message: 'Success - documentIndexCtrl > deleteDocumentInfo'
-        });
-    } catch (e) {
-        ctx.res.internalServerError({
-            data: ctx.request.body,
-            message: 'Error - documentIndexCtrl > deleteDocumentInfo'
-        });
-    }
+		ctx.res.ok({
+			data: documentIndex,
+			message: 'Success - documentIndexCtrl > deleteDocumentInfo'
+		});
+	} catch (e) {
+		ctx.res.internalServerError({
+			data: ctx.request.body,
+			message: 'Error - documentIndexCtrl > deleteDocumentInfo'
+		});
+	}
 };
