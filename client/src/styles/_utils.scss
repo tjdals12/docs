@@ -1,0 +1,157 @@
+.text-line-through {
+	text-decoration: line-through;
+}
+
+.title-font {
+	font-family: 'Do Hyeon', sans-serif !important;
+	font-size: 1.2rem !important;
+	letter-spacing: 0.1rem !important;
+}
+
+.can-click {
+	cursor: pointer;
+}
+
+.hover {
+	transition: all 0.15s ease-in;
+
+	&:hover {
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18), 0 2px 5px rgba(0, 0, 0, 0.23);
+	}
+}
+
+.have-link {
+	cursor: pointer;
+	color: theme-color('primary');
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.custom-file-uploader {
+	position: relative;
+
+	input[type='file'] {
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 5;
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+		cursor: default;
+	}
+}
+
+.overflow-hidden {
+	overflow: hidden;
+}
+
+.overflow-scroll {
+	overflow: scroll;
+}
+
+.hidden-xs {
+	@include media-breakpoint-only(xs) {
+		display: none;
+	}
+}
+
+.hidden-sm {
+	@include media-breakpoint-only(sm) {
+		display: none;
+	}
+}
+
+.hidden-md {
+	@include media-breakpoint-only(md) {
+		display: none;
+	}
+}
+
+.hidden-lg {
+	@include media-breakpoint-only(lg) {
+		display: none;
+	}
+}
+.hidden-xl {
+	@include media-breakpoint-only(xl) {
+		display: none;
+	}
+}
+
+.w-10 {
+	width: 10% !important;
+}
+
+.w-15 {
+	width: 15% !important;
+}
+
+.w-20 {
+	width: 20% !important;
+}
+
+.w-30 {
+	width: 30% !important;
+}
+
+.w-35 {
+	width: 35% !important;
+}
+
+.w-40 {
+	width: 40% !important;
+}
+
+.w-45 {
+	width: 45% !important;
+}
+
+.w-60 {
+	width: 60% !important;
+}
+
+.w-65 {
+	width: 65% !important;
+}
+
+.w-70 {
+	width: 70% !important;
+}
+
+.w-80 {
+	width: 80% !important;
+}
+
+.w-85 {
+	width: 85% !important;
+}
+
+.w-90 {
+	width: 90% !important;
+}
+
+.w-95 {
+	width: 95% !important;
+}
+
+.h-95 {
+	height: 95%;
+}
+
+.h-90 {
+	height: 90%;
+}
+
+.h-85 {
+	height: 85%;
+}
+
+.h-80 {
+	height: 80%;
+}

@@ -1,0 +1,36 @@
+version: '3'
+services:
+  server:
+    container_name: server
+    build:
+      dockerfile: Dockerfile.env
+      context: ./server
+    ports:
+      - 4000:4000
+    networks:
+      - backend
+  client:
+    container_name: client
+    build:
+      dockerfile: Dockerfile.env
+      context: ./client
+    ports:
+      - 80:80
+    networks:
+      - backend
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - 27017:27017
+    networks:
+      - backend
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=docs
+      - MONGO_INITDB_ROOT_PASSWORD=1205360
+
+networks:
+  backend:
+    driver: bridge

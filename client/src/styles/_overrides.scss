@@ -1,0 +1,67 @@
+.nav-item {
+	.nav-link {
+		display: flex;
+		align-items: center;
+
+		&.active {
+			color: #fff;
+			background: rgba(255, 255, 255, 0.23);
+			opacity: 1;
+		}
+	}
+}
+
+.page-item {
+	.page-link {
+		color: #fc5c7d;
+	}
+
+	&.active {
+		.page-link {
+			background: #fc5c7d;
+			border: #fc5c7d;
+		}
+	}
+}
+
+.table td {
+	padding: .5rem .75rem;
+	font-size: .8rem;
+	vertical-align: middle;
+}
+
+.card-body {
+	.card-title {
+		font-size: 1.5rem;
+		font-family: 'Do Hyeon', sans-serif;
+	}
+
+	.card-subtitle {
+		font-size: 1rem;
+	}
+
+	.card-text {
+		font-size: .8rem;
+	}
+}
+
+/* react-datepicker override */
+.react-datepicker__input-container {
+	height: 100%;
+
+	input {
+		height: 100%;
+	}
+}
+
+/* react-rangeslider override */
+.rangeslider-horizontal {
+	.rangeslider__fill {
+		background-color: #6a82fb !important;
+	}
+
+	.rangeslider__label-item {
+		font-family: 'Do Hyeon', sans-serif;
+		text-transform: uppercase;
+	}
+}
