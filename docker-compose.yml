@@ -19,7 +19,7 @@ services:
       - DB_USER=docs
       - DB_PASS=1205360
     volumes:  
-      - "/var/jenkins_home/app/aws:/app/app/aws"
+      - "$HOME/jenkins/app/aws:/app/app/aws"
   client:
     container_name: client
     build:
