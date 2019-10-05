@@ -29,6 +29,6 @@ server/.vscode
 server/.env
 server/yarn-error.log*
 server/app/logs/*.log
-server/app/configs/awsconfig.json
+server/app/aws/awsconfig.json
 server/.dockerignore
 server/upload/*.xlsx

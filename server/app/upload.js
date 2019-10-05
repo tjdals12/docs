@@ -3,7 +3,7 @@ import multer from 'koa-multer';
 import multerS3 from 'multer-s3';
 import AWS from 'aws-sdk';
 
-AWS.config.loadFromPath(__dirname + '/configs/awsconfig.json');
+AWS.config.loadFromPath(__dirname + '/aws/awsconfig.json');
 const s3 = new AWS.S3();
 
 // Local Storage
