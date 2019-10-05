@@ -9,9 +9,17 @@ services:
       - 4000:4000
     networks:
       - backend
-    volumes:
+    environment:
+      - APP_NAME=docs-backend
+      - APP_HOST=127.0.0.1
+      - APP_PORT=4000
+      - LOG_ENABLED=true
+      - LOG_LEVEL=all
+      - DB_URI=mongodb://mongo:27017/admin
+      - DB_USER=docs
+      - DB_PASS=1205360
+    volumes:  
       - "$HOME/app/awsconfig.json:/app/app/configs/awsconfig.json"
-      - "$HOME/app/.env:/app/.env"
   client:
     container_name: client
     build:
@@ -30,11 +38,11 @@ services:
       - 27017:27017
     networks:
       - backend
-    volumes:
-      - "$HOME/data/db:/data/db"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=docs
       - MONGO_INITDB_ROOT_PASSWORD=1205360
+    volumes:
+      - "$HOME/data/db:/data/db"
 
 networks:
   backend:
