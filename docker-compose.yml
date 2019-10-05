@@ -10,8 +10,8 @@ services:
     networks:
       - backend
     volumes:
-      - $HOME/app/awsconfig.json:/app/app/configs/awsconfig.json
-      - $HOME/app/.env:/app/.env
+      - "$HOME/app/awsconfig.json:/app/app/configs/awsconfig.json"
+      - "$HOME/app/.env:/app/.env"
   client:
     container_name: client
     build:
@@ -31,7 +31,7 @@ services:
     networks:
       - backend
     volumes:
-      - $HOME/data/db:/data/db
+      - "$HOME/data/db:/data/db"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=docs
       - MONGO_INITDB_ROOT_PASSWORD=1205360
