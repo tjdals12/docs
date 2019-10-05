@@ -19,7 +19,7 @@ services:
       - DB_USER=docs
       - DB_PASS=1205360
     volumes:  
-      - "$HOME/jenkins/app/aws:/app/app/aws"
+      - ${HOME}/app/aws:/app/app/aws
   client:
     container_name: client
     build:
@@ -42,7 +42,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=docs
       - MONGO_INITDB_ROOT_PASSWORD=1205360
     volumes:
-      - "$HOME/data/db:/data/db"
+      - ${HOME}/data/db:/data/db
 
 networks:
   backend:
