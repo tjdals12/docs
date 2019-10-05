@@ -19,7 +19,7 @@ services:
       - DB_USER=docs
       - DB_PASS=1205360
     volumes:  
-      - "$HOME/app/configs:/app/app/configs"
+      - "$HOME/app/configs:./app/configs"
   client:
     container_name: client
     build:
