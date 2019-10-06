@@ -6,6 +6,7 @@ import Typography from 'components/Typography';
 
 const VendorDetailModal = ({
 	data,
+	reasonError,
 	isOpen,
 	isOpenQuestion,
 	onOpen,
@@ -36,7 +37,7 @@ const VendorDetailModal = ({
 					<div>
 						<p className="m-0">해당 업체를 삭제하시겠습니까?</p>
 						<p className="m-0 text-danger">(* 삭제된 데이터 복구되지 않습니다.)</p>
-						<Input type='text' name='reason' className="mt-2" placeholder={isDelete ? '복구 사유 (필수)' : '삭제 사유 (필수)'} onChange={onChange} />
+						<Input type='text' name='reason' className="mt-2" placeholder={isDelete ? '복구 사유 (필수)' : '삭제 사유 (필수)'} onChange={onChange} invalid={reasonError}/>
 					</div>
 				}
 				footer={
