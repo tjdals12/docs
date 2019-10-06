@@ -40,7 +40,6 @@ class VendorDetailModalContainer extends React.Component {
 
 		await VendorActions.deleteVendor({ id: target, yn, reason });
 		ModalActions.close('question');
-		// ModalActions.close('vendorDetail');
 	};
 
 	handleChange = (e) => {
@@ -57,7 +56,7 @@ class VendorDetailModalContainer extends React.Component {
 	}
 
 	render() {
-		const { isOpen, isOpenQuestion, vendor, loading } = this.props;
+		const { isOpen, isOpenQuestion, vendor, reasonError, loading } = this.props;
 
 		if (loading === undefined || loading) return null;
 
@@ -66,6 +65,7 @@ class VendorDetailModalContainer extends React.Component {
 				isOpen={isOpen}
 				isOpenQuestion={isOpenQuestion}
 				data={vendor}
+				reasonError={reasonError}
 				onOpen={this.handleOpen}
 				onClose={this.handleClose}
 				onDelete={this.handleDelete}
@@ -83,6 +83,7 @@ export default connect(
 		vendor: state.vendor.get('vendor'),
 		target: state.vendor.get('target'),
 		reason: state.vendor.get('reason'),
+		reasonError: state.vendor.get('reasonError'),
 		loading: state.pender.pending['vendor/GET_VENDOR']
 	}),
 	(dispatch) => ({

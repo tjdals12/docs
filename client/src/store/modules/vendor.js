@@ -214,6 +214,9 @@ export default handleActions(
 				const { data: vendor } = action.payload.data;
 
 				return state.set('target', initialState.target).set('vendor', fromJS(vendor));
+			},
+			onFailure: (state, action) => {
+				return state.set('reasonError', state.get('reason') === '');
 			}
 		}),
 		...pender({
