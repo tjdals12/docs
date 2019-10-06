@@ -100,7 +100,9 @@ const initialState = Map({
 	]),
 	personsError: List(),
 	target: '',
-	targetError: false
+	targetError: false,
+	reason: '',
+	reasonError: false
 });
 
 export default handleActions(
@@ -131,7 +133,7 @@ export default handleActions(
 				return state
 					.set('vendors', fromJS(vendors))
 					.set('lastPage', parseInt(lastPage, 10))
-					.setIn([ 'search', 'isSearch' ], true);
+					.setIn(['search', 'isSearch'], true);
 			}
 		}),
 		...pender({
@@ -141,15 +143,15 @@ export default handleActions(
 
 				return state
 					.set('vendor', fromJS(vendor))
-					.setIn([ 'edit', 'vendorGb' ], vendor.vendorGb === '계약' ? '01' : '02')
-					.setIn([ 'edit', 'countryCd' ], vendor.countryCd === '국내' ? '01' : '02')
-					.setIn([ 'edit', 'vendorName' ], vendor.vendorName)
-					.setIn([ 'edit', 'itemName' ], vendor.itemName)
-					.setIn([ 'edit', 'effStaDt' ], vendor.effStaDt)
-					.setIn([ 'edit', 'effEndDt' ], vendor.effEndDt)
-					.setIn([ 'edit', 'part' ], vendor.part._id)
-					.setIn([ 'edit', 'partNumber' ], vendor.partNumber)
-					.setIn([ 'edit', 'officialName' ], vendor.officialName);
+					.setIn(['edit', 'vendorGb'], vendor.vendorGb === '계약' ? '01' : '02')
+					.setIn(['edit', 'countryCd'], vendor.countryCd === '국내' ? '01' : '02')
+					.setIn(['edit', 'vendorName'], vendor.vendorName)
+					.setIn(['edit', 'itemName'], vendor.itemName)
+					.setIn(['edit', 'effStaDt'], vendor.effStaDt)
+					.setIn(['edit', 'effEndDt'], vendor.effEndDt)
+					.setIn(['edit', 'part'], vendor.part._id)
+					.setIn(['edit', 'partNumber'], vendor.partNumber)
+					.setIn(['edit', 'officialName'], vendor.officialName);
 			}
 		}),
 		...pender({
@@ -163,15 +165,15 @@ export default handleActions(
 				const vendor = state.get('add');
 
 				return state
-					.setIn([ 'errors', 'vendorGbError' ], vendor.get('vendorGb') === '')
-					.setIn([ 'errors', 'countryCdError' ], vendor.get('countryCd') === '')
-					.setIn([ 'errors', 'vendorNameError' ], vendor.get('vendorName') === '')
-					.setIn([ 'errors', 'itemNameError' ], vendor.get('itemName') === '')
-					.setIn([ 'errors', 'effStaDtError' ], vendor.get('effStaDt') === '')
-					.setIn([ 'errors', 'effEndDtError' ], vendor.get('effEndDt') === '')
-					.setIn([ 'errors', 'partError' ], vendor.get('part') === '')
-					.setIn([ 'errors', 'partNumberError' ], vendor.get('partNumber') === '')
-					.setIn([ 'errors', 'officialNameError' ], vendor.get('officialName') === '');
+					.setIn(['errors', 'vendorGbError'], vendor.get('vendorGb') === '')
+					.setIn(['errors', 'countryCdError'], vendor.get('countryCd') === '')
+					.setIn(['errors', 'vendorNameError'], vendor.get('vendorName') === '')
+					.setIn(['errors', 'itemNameError'], vendor.get('itemName') === '')
+					.setIn(['errors', 'effStaDtError'], vendor.get('effStaDt') === '')
+					.setIn(['errors', 'effEndDtError'], vendor.get('effEndDt') === '')
+					.setIn(['errors', 'partError'], vendor.get('part') === '')
+					.setIn(['errors', 'partNumberError'], vendor.get('partNumber') === '')
+					.setIn(['errors', 'officialNameError'], vendor.get('officialName') === '');
 			}
 		}),
 		...pender({
@@ -181,35 +183,37 @@ export default handleActions(
 
 				return state
 					.set('vendor', fromJS(vendor))
-					.setIn([ 'edit', 'vendorGb' ], vendor.vendorGb === '계약' ? '01' : '02')
-					.setIn([ 'edit', 'countryCd' ], vendor.countryCd === '국내' ? '01' : '02')
-					.setIn([ 'edit', 'vendorName' ], vendor.vendorName)
-					.setIn([ 'edit', 'itemName' ], vendor.itemName)
-					.setIn([ 'edit', 'effStaDt' ], vendor.effStaDt)
-					.setIn([ 'edit', 'effEndDt' ], vendor.effEndDt)
-					.setIn([ 'edit', 'part' ], vendor.part._id)
-					.setIn([ 'edit', 'partNumber' ], vendor.partNumber)
-					.setIn([ 'edit', 'officialName' ], vendor.officialName);
+					.setIn(['edit', 'vendorGb'], vendor.vendorGb === '계약' ? '01' : '02')
+					.setIn(['edit', 'countryCd'], vendor.countryCd === '국내' ? '01' : '02')
+					.setIn(['edit', 'vendorName'], vendor.vendorName)
+					.setIn(['edit', 'itemName'], vendor.itemName)
+					.setIn(['edit', 'effStaDt'], vendor.effStaDt)
+					.setIn(['edit', 'effEndDt'], vendor.effEndDt)
+					.setIn(['edit', 'part'], vendor.part._id)
+					.setIn(['edit', 'partNumber'], vendor.partNumber)
+					.setIn(['edit', 'officialName'], vendor.officialName);
 			},
 			onFailure: (state, action) => {
 				const vendor = state.get('edit');
 
 				return state
-					.setIn([ 'errors', 'vendorGbError' ], vendor.get('vendorGb') === '')
-					.setIn([ 'errors', 'countryCdError' ], vendor.get('countryCd') === '')
-					.setIn([ 'errors', 'vendorNameError' ], vendor.get('vendorName') === '')
-					.setIn([ 'errors', 'itemNameError' ], vendor.get('itemName') === '')
-					.setIn([ 'errors', 'effStaDtError' ], vendor.get('effStaDt') === '')
-					.setIn([ 'errors', 'effEndDtError' ], vendor.get('effEndDt') === '')
-					.setIn([ 'errors', 'partError' ], vendor.get('part') === '')
-					.setIn([ 'errors', 'partNumberError' ], vendor.get('partNumber') === '')
-					.setIn([ 'errors', 'officialNameError' ], vendor.get('officialName') === '');
+					.setIn(['errors', 'vendorGbError'], vendor.get('vendorGb') === '')
+					.setIn(['errors', 'countryCdError'], vendor.get('countryCd') === '')
+					.setIn(['errors', 'vendorNameError'], vendor.get('vendorName') === '')
+					.setIn(['errors', 'itemNameError'], vendor.get('itemName') === '')
+					.setIn(['errors', 'effStaDtError'], vendor.get('effStaDt') === '')
+					.setIn(['errors', 'effEndDtError'], vendor.get('effEndDt') === '')
+					.setIn(['errors', 'partError'], vendor.get('part') === '')
+					.setIn(['errors', 'partNumberError'], vendor.get('partNumber') === '')
+					.setIn(['errors', 'officialNameError'], vendor.get('officialName') === '');
 			}
 		}),
 		...pender({
 			type: DELETE_VENDOR,
 			onSuccess: (state, action) => {
-				return state.set('target', initialState.target);
+				const { data: vendor } = action.payload.data;
+
+				return state.set('target', initialState.target).set('vendor', fromJS(vendor));
 			}
 		}),
 		...pender({
@@ -219,15 +223,15 @@ export default handleActions(
 
 				return state
 					.set('vendor', fromJS(vendor))
-					.setIn([ 'edit', 'vendorGb' ], vendor.vendorGb === '계약' ? '01' : '02')
-					.setIn([ 'edit', 'countryCd' ], vendor.countryCd === '국내' ? '01' : '02')
-					.setIn([ 'edit', 'vendorName' ], vendor.vendorName)
-					.setIn([ 'edit', 'itemName' ], vendor.itemName)
-					.setIn([ 'edit', 'effStaDt' ], vendor.effStaDt)
-					.setIn([ 'edit', 'effEndDt' ], vendor.effEndDt)
-					.setIn([ 'edit', 'part' ], vendor.part._id)
-					.setIn([ 'edit', 'partNumber' ], vendor.partNumber)
-					.setIn([ 'edit', 'officialName' ], vendor.officialName);
+					.setIn(['edit', 'vendorGb'], vendor.vendorGb === '계약' ? '01' : '02')
+					.setIn(['edit', 'countryCd'], vendor.countryCd === '국내' ? '01' : '02')
+					.setIn(['edit', 'vendorName'], vendor.vendorName)
+					.setIn(['edit', 'itemName'], vendor.itemName)
+					.setIn(['edit', 'effStaDt'], vendor.effStaDt)
+					.setIn(['edit', 'effEndDt'], vendor.effEndDt)
+					.setIn(['edit', 'part'], vendor.part._id)
+					.setIn(['edit', 'partNumber'], vendor.partNumber)
+					.setIn(['edit', 'officialName'], vendor.officialName);
 			},
 			onFailure: (state, action) => {
 				const target = state.get('target');
@@ -249,7 +253,7 @@ export default handleActions(
 		[ON_CHANGE]: (state, action) => {
 			const { target, name, value } = action.payload;
 
-			return !target ? state.set(name, value) : state.setIn([ target, name ], value);
+			return !target ? state.set(name, value) : state.setIn([target, name], value);
 		},
 		[ON_CHANGE_PERSON]: (state, action) => {
 			const { index, name, value } = action.payload;
@@ -257,7 +261,7 @@ export default handleActions(
 
 			const target = persons.findIndex((person) => person.get('index') === index);
 
-			return state.setIn([ 'persons', target, name ], value);
+			return state.setIn(['persons', target, name], value);
 		},
 		[SET_TARGET]: (state, action) => {
 			const { payload } = action;
@@ -268,8 +272,8 @@ export default handleActions(
 			return state.update('persons', (persons) =>
 				persons.push(
 					Map({
-						...initialState.getIn([ 'persons', 0 ]).toJS(),
-						index: persons.getIn([ persons.size - 1, 'index' ]) + 1
+						...initialState.getIn(['persons', 0]).toJS(),
+						index: persons.getIn([persons.size - 1, 'index']) + 1
 					})
 				)
 			);
@@ -284,8 +288,8 @@ export default handleActions(
 		},
 		[SET_TO_FULL_PERIOD]: (state, action) => {
 			return state
-				.setIn([ 'search', 'effStaDt' ], moment().subtract(10, 'years').format('YYYY-MM-DD'))
-				.setIn([ 'search', 'effEndDt' ], moment().add(10, 'years').format('YYYY-MM-DD'));
+				.setIn(['search', 'effStaDt'], moment().subtract(10, 'years').format('YYYY-MM-DD'))
+				.setIn(['search', 'effEndDt'], moment().add(10, 'years').format('YYYY-MM-DD'));
 		},
 		[INITIALIZE]: (state, action) => {
 			const { payload } = action;

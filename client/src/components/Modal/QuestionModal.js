@@ -30,7 +30,7 @@ const QuestionModal = ({ isOpen, size, header, body, footer, onClose, className 
 QuestionModal.propTypes = {
 	isOpen: PropTypes.bool,
 	size: PropTypes.string,
-	header: PropTypes.oneOfType([ PropTypes.func, PropTypes.string ]),
+	header: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
 	body: PropTypes.node,
 	footer: PropTypes.node,
 	onClose: PropTypes.func

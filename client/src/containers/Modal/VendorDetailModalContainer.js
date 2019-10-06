@@ -35,12 +35,20 @@ class VendorDetailModalContainer extends React.Component {
 		ModalActions.close(name);
 	};
 
-	handleDelete = async () => {
-		const { ModalActions, VendorActions, target } = this.props;
+	handleDelete = async (yn) => {
+		const { ModalActions, VendorActions, target, reason } = this.props;
 
-		await VendorActions.deleteVendor({ id: target });
-		ModalActions.close('vendorDetail');
+		await VendorActions.deleteVendor({ id: target, yn, reason });
+		ModalActions.close('question');
+		// ModalActions.close('vendorDetail');
 	};
+
+	handleChange = (e) => {
+		const { VendorActions } = this.props;
+		const { name, value } = e.target;
+
+		VendorActions.onChange({ name, value });
+	}
 
 	componentDidUpdate(prevProps) {
 		if (prevProps.isOpen === false && this.props.isOpen !== prevProps.isOpen) {
@@ -62,6 +70,7 @@ class VendorDetailModalContainer extends React.Component {
 				onClose={this.handleClose}
 				onDelete={this.handleDelete}
 				onTarget={this.handleTarget}
+				onChange={this.handleChange}
 			/>
 		);
 	}
@@ -73,6 +82,7 @@ export default connect(
 		isOpenQuestion: state.modal.get('questionModal'),
 		vendor: state.vendor.get('vendor'),
 		target: state.vendor.get('target'),
+		reason: state.vendor.get('reason'),
 		loading: state.pender.pending['vendor/GET_VENDOR']
 	}),
 	(dispatch) => ({
