@@ -97,9 +97,6 @@ const document = new Router();
  *                  reason:
  *                      type: string
  *                      default: 이력없음.
- *          delayGb:
- *              type: string
- *              default: 01 (여유)
  *          chainingDocument:
  *              type: array
  *              items:
@@ -202,9 +199,6 @@ document.get('/', documentCtrl.list);
  *                   holdYn:
  *                      type: string
  *                      example: "NO"
- *                   delayGb:
- *                      type: string
- *                      example: "01"
  *                   regDtSta:
  *                      type: string
  *                      example: "2000-01-01"

@@ -7,6 +7,7 @@ describe('  [ Document ]', () => {
     let server;
     let part;
     let documentGb;
+    let vendorId;
     let id;
     let inOutId;
     let statusId;
@@ -108,6 +109,57 @@ describe('  [ Document ]', () => {
                     done();
                 });
         });
+
+        it('add vendor', (done) => {
+            request(server)
+                .post('/api/vendors')
+                .send({
+                    vendorGb: '01',
+                    countryCd: '01',
+                    part: part,
+                    partNumber: 'G-001',
+                    vendorName: '성민테크',
+                    officialName: 'SMT',
+                    itemName: 'Centrifugal Pump',
+                    effStaDt: '2019-07-10',
+                    effEndDt: '2020-04-02',
+                    persons: [
+                        {
+                            name: '이성민',
+                            position: '사원',
+                            email: 'lll2slll@naver.com',
+                            contactNumber: '010-4143-3664',
+                            task: '개발'
+                        },
+                        {
+                            name: '김준철',
+                            position: '대리',
+                            email: 'jsteel@naver.com',
+                            contactNumber: '010-4421-5238',
+                            task: '개발'
+                        },
+
+                        {
+                            name: '박희영',
+                            position: '사원',
+                            email: 'phzer0o@naver.com',
+                            contactNumber: '010-2361-1642',
+                            task: '개발'
+                        }
+                    ]
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if (err) throw err;
+
+                    vendorId = ctx.body.data._id;
+
+                    expect(ctx.body.data.partNumber).to.equal('G-001');
+                    expect(ctx.body.data.vendorName).to.equal('성민테크');
+                    expect(ctx.body.data.vendorPerson).have.length(3);
+                    done();
+                })
+        })
     });
 
     describe('GET /documents/search', () => {
@@ -142,7 +194,7 @@ describe('  [ Document ]', () => {
             request(server)
                 .post('/api/documents')
                 .send({
-                    vendor: '5d33ef877cceb91244d16fdd',
+                    vendor: vendorId,
                     part: part,
                     documentNumber: 'ABC-DEF-G-001-003',
                     documentTitle: 'Inspection Report',
@@ -189,10 +241,9 @@ describe('  [ Document ]', () => {
                     documentStatus: '01',
                     deleteYn: 'NO',
                     holdYn: 'NO',
-                    delayGb: '01',
                     regDtSta: '2000-01-01',
                     regDtEnd: '9999-12-31',
-                    level: 0
+                    level: 1
                 })
                 .expect(200)
                 .end((err, ctx) => {
@@ -229,6 +280,7 @@ describe('  [ Document ]', () => {
                     documentTitle: 'Drawing',
                     documentGb: '5d33ef877cceb91244d16fd2',
                     documentRev: '01',
+                    level: 3,
                     officialNumber: 'ABC-DEF-T-G-001-001',
                     memo: '최초 접수'
                 })
@@ -237,6 +289,8 @@ describe('  [ Document ]', () => {
                     if (err) throw err;
 
                     expect(ctx.body.data.documentTitle).to.equal('Drawing');
+                    expect(ctx.body.data.level.number).to.equal(3);
+                    expect(ctx.body.data.level.description).to.equal('보통');
                     done();
                 });
         });

@@ -74,7 +74,6 @@ DocumentSchema.statics.searchDocuments = async function (param, page) {
         documentStatus,
         deleteYn,
         holdYn,
-        delayGb,
         regDtSta,
         regDtEnd,
         level
@@ -117,7 +116,6 @@ DocumentSchema.statics.searchDocuments = async function (param, page) {
                 memo: 1,
                 holdYn: 1,
                 deleteYn: 1,
-                delayGb: 1,
                 chainingDocument: 1,
                 timestamp: 1
             },
@@ -147,14 +145,13 @@ DocumentSchema.statics.searchDocuments = async function (param, page) {
                             }
                         }
                     },
-                    { delayGb: { $regex: delayGb + '.*', $options: 'i' } },
                     {
                         $and: [
                             { 'timestamp.regDt': { $gte: new Date(regDtSta) } },
                             { 'timestamp.regDt': { $lte: new Date(regDtEnd) } }
                         ]
                     },
-                    { level: level === -1 ? { $gt: level } : level }
+                    { level: level === -1 ? { $gte: level } : level }
                 ]
             },
         },
@@ -184,7 +181,6 @@ DocumentSchema.statics.searchDocumentsCount = function (param) {
         documentStatus,
         deleteYn,
         holdYn,
-        delayGb,
         regDtSta,
         regDtEnd,
         level
@@ -209,7 +205,6 @@ DocumentSchema.statics.searchDocumentsCount = function (param) {
                 memo: 1,
                 holdYn: 1,
                 deleteYn: 1,
-                delayGb: 1,
                 chainingDocument: 1,
                 timestamp: 1,
             },
@@ -239,7 +234,6 @@ DocumentSchema.statics.searchDocumentsCount = function (param) {
                             }
                         }
                     },
-                    { delayGb: { $regex: delayGb + '.*', $options: 'i' } },
                     {
                         $and: [
                             { 'timestamp.regDt': { $gte: new Date(regDtSta) } },
