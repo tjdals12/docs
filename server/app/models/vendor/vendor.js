@@ -322,9 +322,7 @@ VendorSchema.statics.deleteVendor = async function (param) {
         {
             new: true
         }
-    )
-
-    // await this.findOneAndDelete({ _id: id }).populate({ path: 'part' }).populate({ path: 'vendorPerson' });
+    ).populate({ path: 'part' }).populate({ path: 'vendorPerson' });
 };
 
 /**
