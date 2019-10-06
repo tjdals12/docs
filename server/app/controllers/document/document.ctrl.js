@@ -73,7 +73,6 @@ export const search = async (ctx) => {
         documentStatus,
         deleteYn,
         holdYn,
-        delayGb,
         regDtSta,
         regDtEnd,
         level
@@ -89,7 +88,6 @@ export const search = async (ctx) => {
         documentStatus: documentStatus ? documentStatus : '',
         deleteYn: deleteYn ? deleteYn : '',
         holdYn: holdYn ? holdYn : '',
-        delayGb: delayGb ? delayGb : '',
         regDtSta: regDtSta ? regDtSta : '2000-01-01',
         regDtEnd: regDtEnd ? regDtEnd : '9999-12-31',
         level: parseInt(level || -1, 10)
