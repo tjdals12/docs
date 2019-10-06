@@ -112,19 +112,6 @@ VendorSchema.statics.searchVendors = function (param, page) {
             $unwind: '$part'
         },
         {
-            $project: {
-                vendorGb: 1,
-                vendorName: 1,
-                vendorPerson: 1,
-                officialName: 1,
-                part: 1,
-                partNumber: 1,
-                countryCd: 1,
-                effStaDt: 1,
-                effEndDt: 1
-            }
-        },
-        {
             $match: {
                 $and: [
                     { vendorGb: { $regex: vendorGb + '.*', $options: 'i' } },
@@ -140,6 +127,31 @@ VendorSchema.statics.searchVendors = function (param, page) {
                         ]
                     }
                 ]
+            }
+        },
+        {
+            $project: {
+                vendorGb: {
+                    $cond: {
+                        if: { $eq: ['$vendorGb', '01']},
+                        then: '계약',
+                        else: '관리'
+                    }
+                },
+                vendorName: 1,
+                vendorPerson: 1,
+                officialName: 1,
+                part: 1,
+                partNumber: 1,
+                countryCd: {
+                    $cond: {
+                        if: { $eq: ['$countryCd', '01']},
+                        then: '국내',
+                        else: '해외'
+                    }
+                },
+                effStaDt: 1,
+                effEndDt: 1
             }
         },
         {
