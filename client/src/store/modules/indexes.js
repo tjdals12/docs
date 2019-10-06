@@ -291,9 +291,11 @@ export default handleActions(
 					index = deleteList.findIndex((document) => document.get('_id') === id);
 					target = deleteList.get(index);
 
+					const { _id, documentNumber, documentTitle, documentGb, plan } = target.toJS();
+
 					return state
 						.setIn(['edit', 'deleteList'], deleteList.splice(index, 1))
-						.setIn(['edit', 'list'], list.push(target));
+						.setIn(['edit', 'list'], list.push(Map({ _id, documentNumber, documentTitle, documentGb: documentGb._id, plan })));
 
 				case 'DELETE':
 					return state.setIn(['edit', 'list'], list.splice(id, 1));

@@ -13,6 +13,7 @@ import {
 	Table
 } from 'reactstrap';
 import { MdClose, MdKeyboardCapslock } from 'react-icons/md';
+import { FaCaretRight } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 
 const DocumentIndexAddModal = ({
@@ -61,7 +62,7 @@ const DocumentIndexAddModal = ({
 					</FormGroup>
 					<FormGroup row>
 						<Label for="list" md={2}>
-							문서목록
+							<FaCaretRight className="text-success pb-1" size={20} />문서목록
 						</Label>
 						{data.get('list').size === 0 && (
 							<Col md={4}>
@@ -182,7 +183,7 @@ const DocumentIndexAddModal = ({
 
 					<FormGroup row>
 						<Label for="deleteList" md={2}>
-							삭제된 문서목록
+							<FaCaretRight className="text-danger pb-1" size={20} />삭제된 문서목록
 						</Label>
 					</FormGroup>
 					<Table bordered striped>
