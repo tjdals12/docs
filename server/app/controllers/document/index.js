@@ -340,6 +340,9 @@ document.get('/:id', documentCtrl.one);
  *                  documentRev: 
  *                      type: string
  *                      example: 'Rev.A'
+ *                  level:
+ *                      type: number
+ *                      example: 3
  *                  officialNumber:
  *                      type: string
  *                      example: ABC-DEF-T-R-001-001
