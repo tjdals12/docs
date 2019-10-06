@@ -324,8 +324,6 @@ describe('  [ Vendor Letter ]', () => {
                 .end((err, ctx) => {
                     if (err) throw err;
 
-                    statusId = ctx.body.data.letterStatus[0]._id;
-
                     expect(ctx.body.data._id).to.equal(id);
                     done();
                 });
@@ -555,6 +553,8 @@ describe('  [ Vendor Letter ]', () => {
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
+
+                    statusId = ctx.body.data.letterStatus.slice(-1)[0]._id;
 
                     expect(ctx.body.data.letterStatus).have.length(10);
                     done();

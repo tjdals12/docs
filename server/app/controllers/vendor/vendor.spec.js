@@ -288,11 +288,15 @@ describe('  [ Vendor ]', () => {
         it('delete vendor', (done) => {
             request(server)
                 .patch(`/api/vendors/${id}/delete`)
+                .send({
+                    yn: 'YES',
+                    reason: 'mocha 테스트 삭제'
+                })
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
 
-                    expect(ctx.body.data).to.equal(id);
+                    expect(ctx.body.data.deleteYn.yn).to.equal('YES');
                     done();
                 });
         });

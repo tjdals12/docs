@@ -3,6 +3,9 @@ import { Timestamp } from 'models/common/schema';
 import DEFINE from 'models/common';
 import Person from './person';
 
+import DocumentIndex from '../documentIndex/documentIndex';
+import DocumentInfo from '../documentIndex/documentIndex';
+
 /**
  * @author      minz-logger
  * @date        2019. 07. 21
@@ -45,6 +48,21 @@ const VendorSchema = new Schema({
         get: DEFINE.dateConverter
     },
     trackingTransmittal: [Schema.Types.ObjectId],
+    deleteYn: {
+        yn: {
+            type: String,
+            default: 'NO'
+        },
+        deleteDt: {
+            type: Date,
+            default: new Date(DEFINE.COMMON.MAX_END_DT),
+            get: DEFINE.dateConverter
+        },
+        reason: {
+            type: String,
+            default: DEFINE.COMMON.DEFAULT_REASON
+        }
+    },
     timestamp: {
         type: Timestamp.schema,
         default: Timestamp
@@ -282,8 +300,31 @@ VendorSchema.statics.editVendor = function (id, param) {
  * @description 업체 삭제
  * @param       {String} id
  */
-VendorSchema.statics.deleteVendor = async function (id) {
-    await this.findOneAndDelete({ _id: id }).populate({ path: 'part' }).populate({ path: 'vendorPerson' });
+VendorSchema.statics.deleteVendor = async function (param) {
+    let {
+        id,
+        yn,
+        reason
+    } = param;
+
+    return this.findOneAndUpdate(
+        { _id: id },
+        {
+            $set: {
+                deleteYn: {
+                    yn,
+                    deleteDt: DEFINE.dateNow(),
+                    reason
+                },
+                'timestamp.updDt': DEFINE.dateNow()
+            }
+        },
+        {
+            new: true
+        }
+    )
+
+    // await this.findOneAndDelete({ _id: id }).populate({ path: 'part' }).populate({ path: 'vendorPerson' });
 };
 
 /**

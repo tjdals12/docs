@@ -284,18 +284,35 @@ export const editVendor = async (ctx) => {
  */
 export const deleteVendor = async (ctx) => {
     let { id } = ctx.params;
+    let { yn, reason } = ctx.request.body;
+
+    const schema = Joi.object().keys({
+        yn: Joi.string().required(),
+        reason: Joi.string().required()
+    })
+
+    const result = Joi.validate(ctx.request.body, schema);
+
+    if (result.error) {
+        ctx.res.badRequest({
+            data: result.error,
+            message: 'Fail - vendorCtrl > deleteVendor'
+        });
+
+        return;
+    }
 
     try {
-        await Vendor.deleteVendor(id);
+        const vendor = await Vendor.deleteVendor({ id, yn, reason });
 
         ctx.res.ok({
-            data: id,
+            data: vendor,
             message: 'Success - vendorCtrl > deleteVendor'
         });
     } catch (e) {
         ctx.res.internalServerError({
             data: id,
-            message: 'Error - vendorCtrl > delete'
+            message: `Error - vendorCtrl > delete: ${e.message}`
         });
     }
 };
