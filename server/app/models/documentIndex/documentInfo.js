@@ -2,6 +2,7 @@ import { Schema, model, Types } from 'mongoose';
 import { Timestamp } from 'models/common/schema';
 import DEFINE from 'models/common';
 import removeYn from 'models/documentIndex/removeYn';
+import document from '../document/document';
 
 /**
  * @author      minz-logger
@@ -132,7 +133,7 @@ DocumentInfoSchema.statics.updateDocumentInfos = async function (id, param) {
 
             ids.push(documentInfo._id);
         } else {
-            await this.findByIdAndUpdate(
+            const documentInfo = await this.findByIdAndUpdate(
                 _id,
                 {
                     $set: {
@@ -147,6 +148,16 @@ DocumentInfoSchema.statics.updateDocumentInfos = async function (id, param) {
                         },
                         'timestamp.updDt': DEFINE.dateNow()
                     }
+                },
+                {
+                    new: true
+                }
+            );
+
+            await document.updateMany(
+                { _id: { $in: documentInfo.trackingDocument } },
+                {
+                    documentGb: documentGb
                 }
             );
         }

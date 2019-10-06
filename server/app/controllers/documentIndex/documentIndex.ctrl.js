@@ -369,7 +369,7 @@ export const editDocumentIndex = async (ctx) => {
 		vendor: Joi.string().required(),
 		list:
 			list.length === 0
-				? Joi.array().items(Joi.object().keys()).required()
+				? Joi.array().items(Joi.object()).required()
 				: Joi.array()
 					.items(
 						Joi.object().keys({
