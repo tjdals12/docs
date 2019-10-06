@@ -342,11 +342,13 @@ describe('  [ Document Index ]', () => {
                         {
                             documentNumber: 'VP-NCC-R-001-004',
                             documentTitle: 'Inspection Test & Plan',
+                            documentGb: documentGb,
                             plan: '2019-09-11'
                         },
                         {
                             documentNumber: 'VP-NCC-R-001-005',
                             documentTitle: 'Inspection Test & Procedure',
+                            documentGb: documentGb,
                             plan: '2019-09-11'
                         }
                     ]
