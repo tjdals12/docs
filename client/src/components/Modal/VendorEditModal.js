@@ -25,7 +25,7 @@ const VendorEditModal = ({ parts, data, errors, isOpen, onClose, onChange, onEdi
 			size="lg"
 		>
 			<ModalHeader toggle={onClose('vendorEdit')} className="bg-light">
-				Vendor 추가
+				업체 수정
 			</ModalHeader>
 			<ModalBody>
 				<Form>
@@ -161,10 +161,10 @@ const VendorEditModal = ({ parts, data, errors, isOpen, onClose, onChange, onEdi
 			</ModalBody>
 			<ModalFooter className="bg-light">
 				<Button color="primary" onClick={onEdit}>
-					EDIT
+					수정
 				</Button>
 				<Button color="secondary" onClick={onClose('vendorEdit')}>
-					CANCEL
+					취소
 				</Button>
 			</ModalFooter>
 		</Modal>

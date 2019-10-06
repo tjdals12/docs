@@ -9,7 +9,7 @@ const DocumentInfoDetailTable = ({ data, onOpen, className, ...rest }) => {
 
 	return (
 		<React.Fragment>
-			<Table className={className} {...rest}>
+			<Table className={className} {...rest} hover>
 				<colgroup>
 					<col width="25%" />
 					<col width="35%" />
@@ -17,20 +17,20 @@ const DocumentInfoDetailTable = ({ data, onOpen, className, ...rest }) => {
 					<col width="10%" />
 					<col width="15%" />
 				</colgroup>
-				<thead>
+				<thead className="title-font border">
 					<tr>
-						<th>No.</th>
-						<th>Title</th>
-						<th className="text-left">Date</th>
+						<th>문서번호</th>
+						<th>문서제목</th>
+						<th className="text-left">Plan / Actual</th>
 						<th className="text-center">삭제여부</th>
-						<th className="text-center">등록정보</th>
+						<th className="text-right">등록정보</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody className="border">
 					{documentInfos.map(({ documentInfo }, index) => {
 						return (
 							<React.Fragment key={index}>
-								<tr className="border-right">
+								<tr>
 									<td>{documentInfo.documentNumber}</td>
 									<td>{documentInfo.documentTitle}</td>
 									<td className="text-left">{documentInfo.plan.substr(0, 10)} 예정</td>
@@ -38,11 +38,11 @@ const DocumentInfoDetailTable = ({ data, onOpen, className, ...rest }) => {
 										{documentInfo.removeYn.yn === 'NO' ? (
 											documentInfo.removeYn.yn
 										) : (
-											`${documentInfo.removeYn.yn} (${documentInfo.removeYn.deleteDt.substr(
-												0,
-												10
-											)})`
-										)}
+												`${documentInfo.removeYn.yn} (${documentInfo.removeYn.deleteDt.substr(
+													0,
+													10
+												)})`
+											)}
 									</td>
 									<td className="text-danger text-right">
 										{documentInfo.timestamp.regId} ({documentInfo.timestamp.regDt.substr(0, 10)})<br />

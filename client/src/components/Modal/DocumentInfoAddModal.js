@@ -44,7 +44,7 @@ const DocumentInfoAddModal = ({
 			size="xl"
 		>
 			<ModalHeader toggle={onClose} className="bg-light">
-				Document Index > Document 추가
+				문서목록 > 문서 추가
 			</ModalHeader>
 			<ModalBody>
 				<Form onSubmit={(e) => e.preventDefault()}>
@@ -55,8 +55,8 @@ const DocumentInfoAddModal = ({
 								<option>--- 업체를 선택해주세요. ---</option>
 								{vendorList.map((vendor) => (
 									<option key={vendor.get('_id')} value={vendor.get('_id')}>
-										{vendor.getIn([ 'vendor', 'vendorName' ])} ({vendor.getIn([ 'vendor', 'part', 'cdSName' ])},{' '}
-										{vendor.getIn([ 'vendor', 'partNumber' ])})
+										{vendor.getIn(['vendor', 'vendorName'])} ({vendor.getIn(['vendor', 'part', 'cdSName'])},{' '}
+										{vendor.getIn(['vendor', 'partNumber'])})
 									</option>
 								))}
 							</Input>
@@ -140,7 +140,7 @@ const DocumentInfoAddModal = ({
 										</td>
 										<td className="text-center">
 											<MdClose
-												className="can-click text-danger"
+												className={`can-click ${isError ? 'text-warning' : 'text-danger'}`}
 												onClick={onDeleteInfoForm(index)}
 											/>
 										</td>
@@ -161,10 +161,10 @@ const DocumentInfoAddModal = ({
 			</ModalBody>
 			<ModalFooter className="bg-light">
 				<Button color="primary" onClick={onAddInfo}>
-					ADD
+					추가
 				</Button>
 				<Button color="secondary" onClick={onClose}>
-					CANCEL
+					취소
 				</Button>
 			</ModalFooter>
 		</Modal>

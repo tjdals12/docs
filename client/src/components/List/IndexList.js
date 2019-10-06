@@ -26,7 +26,7 @@ const IndexList = ({
 				isOpen={isOpenQuestion}
 				onClose={onClose}
 				size="md"
-				header="Document Index 삭제"
+				header="문서목록 삭제"
 				body={
 					<div>
 						<p className="m-0">선택 값을 삭제하시겠습니까?</p>
@@ -35,7 +35,7 @@ const IndexList = ({
 				}
 				footer={
 					<Button color="primary" onClick={onDeleteIndex}>
-						DELETE
+						삭제
 					</Button>
 				}
 			/>
@@ -43,10 +43,10 @@ const IndexList = ({
 			<Row className="hidden-md hidden-sm hidden-xs">
 				<Col md={4}>
 					<Button color="primary" className="mr-2" onClick={onOpenAdd}>
-						ADD
+						생성
 					</Button>
 					<Button color="secondary" onClick={onOpenInfoAdd}>
-						ADD DOCUMENT
+						문서 추가
 					</Button>
 				</Col>
 			</Row>

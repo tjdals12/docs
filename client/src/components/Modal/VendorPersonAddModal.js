@@ -29,14 +29,14 @@ const VendorPersonAddModal = ({
 			size="md"
 		>
 			<ModalHeader toggle={onClose} className="bg-light">
-				Vendor Person 추가
+				업체 구성원 추가
 			</ModalHeader>
 			<ModalBody>
 				<Input type="select" name="vendor" className="mb-3" onChange={onTarget} invalid={targetError}>
 					<option value="">--- 업체를 선택해주세요. ---</option>
 					{vendorList.map((vendor) => (
 						<option key={vendor.get('_id')} value={vendor.get('_id')}>
-							{vendor.get('vendorName')} ({vendor.getIn([ 'part', 'cdSName' ])},{' '}
+							{vendor.get('vendorName')} ({vendor.getIn(['part', 'cdSName'])},{' '}
 							{vendor.get('partNumber')})
 						</option>
 					))}
@@ -67,10 +67,10 @@ const VendorPersonAddModal = ({
 			</ModalBody>
 			<ModalFooter className="bg-light">
 				<Button color="primary" onClick={onInsert}>
-					ADD
+					추가
 				</Button>
 				<Button color="secondary" onClick={onClose}>
-					CANCEL
+					취소
 				</Button>
 			</ModalFooter>
 		</Modal>

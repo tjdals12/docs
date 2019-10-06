@@ -25,7 +25,7 @@ const VendorAddModal = ({ parts, errors, isOpen, onClose, onChange, onInsert, cl
 			size="lg"
 		>
 			<ModalHeader toggle={onClose('vendorAdd')} className="bg-light">
-				Vendor 추가
+				업체 생성
 			</ModalHeader>
 			<ModalBody>
 				<Form>
@@ -148,10 +148,10 @@ const VendorAddModal = ({ parts, errors, isOpen, onClose, onChange, onInsert, cl
 			</ModalBody>
 			<ModalFooter className="bg-light">
 				<Button color="primary" onClick={onInsert}>
-					ADD
+					생성
 				</Button>
 				<Button color="secondary" onClick={onClose('vendorAdd')}>
-					CANCEL
+					취소
 				</Button>
 			</ModalFooter>
 		</Modal>

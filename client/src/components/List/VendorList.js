@@ -10,10 +10,10 @@ const VendorList = ({ page, lastPage, data, onPage, onOpenAdd, onOpenPersonAdd, 
 			<Row className="hidden-md hidden-sm hidden-xs">
 				<Col md={4}>
 					<Button color="primary" className="mr-2" onClick={onOpenAdd}>
-						ADD
+						생성
 					</Button>
 					<Button color="secondary" onClick={onOpenPersonAdd}>
-						ADD PERSON
+						구성원 추가
 					</Button>
 				</Col>
 			</Row>

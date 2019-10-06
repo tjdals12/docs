@@ -41,7 +41,7 @@ const DocumentIndexAddModal = ({
 			size="xl"
 		>
 			<ModalHeader toggle={onClose} className="bg-light">
-				Document Index 수정
+				문서목록 수정
 			</ModalHeader>
 			<ModalBody>
 				<Form onSubmit={(e) => e.preventDefault()}>
@@ -52,7 +52,7 @@ const DocumentIndexAddModal = ({
 								<option value="">--- 업체를 선택해주세요. ---</option>
 								{vendorList.map((vendor) => (
 									<option key={vendor.get('_id')} value={vendor.get('_id')}>
-										{vendor.get('vendorName')} ({vendor.getIn([ 'part', 'cdSName' ])},{' '}
+										{vendor.get('vendorName')} ({vendor.getIn(['part', 'cdSName'])},{' '}
 										{vendor.get('partNumber')})
 									</option>
 								))}
@@ -90,9 +90,9 @@ const DocumentIndexAddModal = ({
 						<thead>
 							<tr style={{ background: '#e7f5ff' }}>
 								<th>#</th>
-								<th>Number</th>
-								<th>Title</th>
-								<th>Gb</th>
+								<th>문서번호</th>
+								<th>문서제목</th>
+								<th>구분</th>
 								<th className="text-center">Plan</th>
 								<th />
 							</tr>
@@ -105,78 +105,78 @@ const DocumentIndexAddModal = ({
 									</td>
 								</tr>
 							) : (
-								data.get('list').map((document, index) => {
-									const {
-										_id = '',
-										documentNumber,
-										documentTitle,
-										documentGb,
-										plan
-									} = document.toJS();
-									const isError = infosError.indexOf(_id) > -1;
+									data.get('list').map((document, index) => {
+										const {
+											_id = '',
+											documentNumber,
+											documentTitle,
+											documentGb,
+											plan
+										} = document.toJS();
+										const isError = infosError.indexOf(_id) > -1;
 
-									return (
-										<tr key={index} className={isError ? 'bg-secondary' : ''}>
-											<td className="text-right">{index + 1}</td>
-											<td>
-												<Input
-													type="text"
-													name="documentNumber"
-													value={documentNumber}
-													onChange={onChangeInfo(_id || index)}
-													bsSize="sm"
-												/>
-											</td>
-											<td>
-												<Input
-													type="text"
-													name="documentTitle"
-													value={documentTitle}
-													onChange={onChangeInfo(_id || index)}
-													bsSize="sm"
-												/>
-											</td>
-											<td>
-												<Input
-													type="select"
-													name="documentGb"
-													value={documentGb || index}
-													onChange={onChangeInfo(_id || index)}
-												>
-													<option value="">-- 구분 --</option>
-													{gbs.get('cdMinors').map((gb) => (
-														<option key={gb.get('_id')} value={gb.get('_id')}>
-															{gb.get('cdSName')}
-														</option>
-													))}
-												</Input>
-											</td>
-											<td className="text-center">
-												<Input
-													type="date"
-													name="plan"
-													value={plan.substr(0, 10)}
-													onChange={onChangeInfo(_id || index)}
-													bsSize="sm"
-												/>
-											</td>
-											<td className="text-center">
-												<MdClose
-													size={20}
-													className="text-danger can-click"
-													onClick={
-														_id === '' ? (
-															onChangeList(index, 'DELETE')
-														) : (
-															onChangeList(_id, 'REMOVE')
-														)
-													}
-												/>
-											</td>
-										</tr>
-									);
-								})
-							)}
+										return (
+											<tr key={index} className={isError ? 'bg-secondary' : ''}>
+												<td className="text-right">{index + 1}</td>
+												<td>
+													<Input
+														type="text"
+														name="documentNumber"
+														value={documentNumber}
+														onChange={onChangeInfo(_id || index)}
+														bsSize="sm"
+													/>
+												</td>
+												<td>
+													<Input
+														type="text"
+														name="documentTitle"
+														value={documentTitle}
+														onChange={onChangeInfo(_id || index)}
+														bsSize="sm"
+													/>
+												</td>
+												<td>
+													<Input
+														type="select"
+														name="documentGb"
+														value={documentGb || index}
+														onChange={onChangeInfo(_id || index)}
+													>
+														<option value="">-- 구분 --</option>
+														{gbs.get('cdMinors').map((gb) => (
+															<option key={gb.get('_id')} value={gb.get('_id')}>
+																{gb.get('cdSName')}
+															</option>
+														))}
+													</Input>
+												</td>
+												<td className="text-center">
+													<Input
+														type="date"
+														name="plan"
+														value={plan.substr(0, 10)}
+														onChange={onChangeInfo(_id || index)}
+														bsSize="sm"
+													/>
+												</td>
+												<td className="text-center">
+													<MdClose
+														size={20}
+														className="text-danger can-click"
+														onClick={
+															_id === '' ? (
+																onChangeList(index, 'DELETE')
+															) : (
+																	onChangeList(_id, 'REMOVE')
+																)
+														}
+													/>
+												</td>
+											</tr>
+										);
+									})
+								)}
 						</tbody>
 					</Table>
 
@@ -196,8 +196,8 @@ const DocumentIndexAddModal = ({
 						<thead>
 							<tr style={{ background: '#ffe3e3' }}>
 								<th>#</th>
-								<th>Number</th>
-								<th>Title</th>
+								<th>문서번호</th>
+								<th>문서제목</th>
 								<th className="text-center">Plan</th>
 								<th />
 							</tr>
@@ -210,36 +210,36 @@ const DocumentIndexAddModal = ({
 									</td>
 								</tr>
 							) : (
-								data.get('deleteList').map((document, index) => {
-									const { _id = '', documentNumber, documentTitle, plan } = document.toJS();
+									data.get('deleteList').map((document, index) => {
+										const { _id = '', documentNumber, documentTitle, plan } = document.toJS();
 
-									return (
-										<tr key={index}>
-											<td>{index + 1}</td>
-											<td>{documentNumber}</td>
-											<td>{documentTitle}</td>
-											<td>{plan.substr(0, 10).replace(/-/g, '. ')}</td>
-											<td className="text-center">
-												<MdKeyboardCapslock
-													size={20}
-													className="text-danger can-click"
-													onClick={onChangeList(_id, 'RECOVERY')}
-												/>
-											</td>
-										</tr>
-									);
-								})
-							)}
+										return (
+											<tr key={index}>
+												<td>{index + 1}</td>
+												<td>{documentNumber}</td>
+												<td>{documentTitle}</td>
+												<td>{plan.substr(0, 10).replace(/-/g, '. ')}</td>
+												<td className="text-center">
+													<MdKeyboardCapslock
+														size={20}
+														className="text-danger can-click"
+														onClick={onChangeList(_id, 'RECOVERY')}
+													/>
+												</td>
+											</tr>
+										);
+									})
+								)}
 						</tbody>
 					</Table>
 				</Form>
 			</ModalBody>
 			<ModalFooter className="bg-light">
 				<Button color="primary" onClick={onEdit}>
-					EDIT
+					수정
 				</Button>
 				<Button color="secondary" onClick={onClose}>
-					CANCEL
+					취소
 				</Button>
 			</ModalFooter>
 		</Modal>

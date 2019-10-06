@@ -61,7 +61,7 @@ const DocumentInfoTable = ({
 								</td>
 								<td className="text-center">
 									<span
-										className="can-click have-link"
+										className={`can-click have-link ${info.getIn(['vendor', 'deleteYn', 'yn']) === 'YES' && 'text-line-through text-danger'}`}
 										onClick={() => {
 											onTargetVendor({ id: info.getIn(['vendor', '_id']) });
 											onOpen('vendorDetail')();

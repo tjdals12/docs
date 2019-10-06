@@ -39,7 +39,7 @@ const DocumentIndexAddModal = ({
 			size="xl"
 		>
 			<ModalHeader toggle={onClose} className="bg-light">
-				Document Index 추가
+				문서목록 생성
 			</ModalHeader>
 			<ModalBody>
 				<Form onSubmit={(e) => e.preventDefault()}>
@@ -129,10 +129,10 @@ const DocumentIndexAddModal = ({
 			</ModalBody>
 			<ModalFooter className="bg-light">
 				<Button color="primary" onClick={onInsert}>
-					ADD
+					생성
 				</Button>
 				<Button color="secondary" onClick={onClose}>
-					CANCEL
+					취소
 				</Button>
 			</ModalFooter>
 		</Modal>

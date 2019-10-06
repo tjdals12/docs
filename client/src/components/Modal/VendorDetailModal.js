@@ -101,25 +101,25 @@ const VendorDetailModal = ({
 							<td>{data.get('officialName')}</td>
 						</tr>
 						<tr className="border-bottom">
-							<th scope="row" className="text-right bg-light">
+							<th scope="row" className="text-right align-middle bg-light">
 								계약기간
 							</th>
 							<td>
 								{data.get('effStaDt').substr(0, 10)} ~ {data.get('effEndDt').substr(0, 10)}
 							</td>
-							<th scope="row" className="text-right bg-light">삭제여부</th>
+							<th scope="row" className="text-right align-middle bg-light">삭제여부</th>
 							<td>
-								{data.getIn([ 'deleteYn', 'yn' ])}{' '}
-									{data.getIn([ 'deleteYn', 'yn' ]) === 'YES' && (
-										<React.Fragment>
-											<Typography tag="span" className="text-danger">
-												({data.getIn([ 'deleteYn', 'deleteDt' ])})
+								{data.getIn(['deleteYn', 'yn'])}{' '}
+								{data.getIn(['deleteYn', 'yn']) === 'YES' && (
+									<React.Fragment>
+										<Typography tag="span" className="text-danger">
+											({data.getIn(['deleteYn', 'deleteDt'])})
 											</Typography>
-											<Typography type="p" className="m-0 pt-2">
-												사유: {data.getIn([ 'deleteYn', 'reason' ])}
-											</Typography>
-										</React.Fragment>
-									)}
+										<Typography type="p" className="m-0 pt-2">
+											사유: {data.getIn(['deleteYn', 'reason'])}
+										</Typography>
+									</React.Fragment>
+								)}
 							</td>
 						</tr>
 						<tr className="border-bottom">
