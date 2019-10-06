@@ -24,7 +24,7 @@ export const searchVendors = (page, param) => axios.post(`${real}/api/vendors/se
 export const getVendor = ({ id }) => axios.get(`${real}/api/vendors/${id}`);
 export const addVendor = (vendor) => axios.post(`${real}/api/vendors`, { ...vendor });
 export const editVendor = ({ id, vendor }) => axios.patch(`${real}/api/vendors/${id}/edit`, { ...vendor });
-export const deleteVendor = ({ id }) => axios.patch(`${real}/api/vendors/${id}/delete`);
+export const deleteVendor = ({ id, yn, reason }) => axios.patch(`${real}/api/vendors/${id}/delete`, { yn, reason });
 export const addPerson = ({ id, persons }) => axios.post(`${real}/api/vendors/${id}/add`, { persons });
 
 /** Cmcode */
@@ -96,7 +96,7 @@ export const downloadTemplate = (param) =>
 	axios.post(`${real}/api/templates/download`, { ...param }, { responseType: 'blob' }).then((response) => {
 		let { filename } = ContentDisposition.parse(response.headers['content-disposition']).parameters;
 
-		const url = window.URL.createObjectURL(new Blob([ response.data ]));
+		const url = window.URL.createObjectURL(new Blob([response.data]));
 		const link = document.createElement('a');
 		link.href = url;
 		link.setAttribute('download', filename);

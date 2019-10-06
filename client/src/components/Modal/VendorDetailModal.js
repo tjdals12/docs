@@ -1,7 +1,8 @@
 import React from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Table } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Table, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import QuestionModal from 'components/Modal/QuestionModal';
+import Typography from 'components/Typography';
 
 const VendorDetailModal = ({
 	data,
@@ -11,9 +12,12 @@ const VendorDetailModal = ({
 	onClose,
 	onDelete,
 	onTarget,
+	onChange,
 	className,
 	...rest
 }) => {
+	const isDelete = data.getIn(['deleteYn', 'yn']) === 'YES';
+
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -27,21 +31,27 @@ const VendorDetailModal = ({
 				isOpen={isOpen && isOpenQuestion}
 				onClose={onClose}
 				size="md"
-				header="Vendor 삭제"
+				header="업체 삭제"
 				body={
 					<div>
-						<p className="m-0">해당 Vendor를 삭제하시겠습니까?</p>
+						<p className="m-0">해당 업체를 삭제하시겠습니까?</p>
 						<p className="m-0 text-danger">(* 삭제된 데이터 복구되지 않습니다.)</p>
+						<Input type='text' name='reason' className="mt-2" placeholder={isDelete ? '복구 사유 (필수)' : '삭제 사유 (필수)'} onChange={onChange} />
 					</div>
 				}
 				footer={
-					<Button color="primary" onClick={onDelete}>
-						DELETE
-					</Button>
+					isDelete ?
+						<Button color="success" onClick={() => onDelete('NO')}>
+							복구
+						</Button>
+						:
+						<Button color="primary" onClick={() => onDelete('YES')}>
+							삭제
+						</Button>
 				}
 			/>
 			<ModalHeader toggle={onClose('vendorDetail')} className="bg-light">
-				Vendor 상세
+				업체 상세
 			</ModalHeader>
 			<ModalBody className="p-0">
 				<Table borderless className="rounded m-0">
@@ -81,7 +91,7 @@ const VendorDetailModal = ({
 								공종
 							</th>
 							<td>
-								{data.getIn([ 'part', 'cdSName' ])} ({data.get('partNumber')})
+								{data.getIn(['part', 'cdSName'])} ({data.get('partNumber')})
 							</td>
 						</tr>
 						<tr className="border-bottom">
@@ -94,19 +104,33 @@ const VendorDetailModal = ({
 							<th scope="row" className="text-right bg-light">
 								계약기간
 							</th>
-							<td colSpan="3">
+							<td>
 								{data.get('effStaDt').substr(0, 10)} ~ {data.get('effEndDt').substr(0, 10)}
+							</td>
+							<th scope="row" className="text-right bg-light">삭제여부</th>
+							<td>
+								{data.getIn([ 'deleteYn', 'yn' ])}{' '}
+									{data.getIn([ 'deleteYn', 'yn' ]) === 'YES' && (
+										<React.Fragment>
+											<Typography tag="span" className="text-danger">
+												({data.getIn([ 'deleteYn', 'deleteDt' ])})
+											</Typography>
+											<Typography type="p" className="m-0 pt-2">
+												사유: {data.getIn([ 'deleteYn', 'reason' ])}
+											</Typography>
+										</React.Fragment>
+									)}
 							</td>
 						</tr>
 						<tr className="border-bottom">
 							<th className="text-right bg-light">등록정보</th>
 							<td colSpan="3">
 								<span className="text-secondary">
-									등록: {data.getIn([ 'timestamp', 'regId' ])} ({data.getIn([ 'timestamp', 'regDt' ])})
+									등록: {data.getIn(['timestamp', 'regId'])} ({data.getIn(['timestamp', 'regDt'])})
 								</span>
 								<br />
 								<span className="text-secondary">
-									수정: {data.getIn([ 'timestamp', 'updId' ])} ({data.getIn([ 'timestamp', 'updDt' ])})
+									수정: {data.getIn(['timestamp', 'updId'])} ({data.getIn(['timestamp', 'updDt'])})
 								</span>
 							</td>
 						</tr>
@@ -129,17 +153,17 @@ const VendorDetailModal = ({
 												</td>
 											</tr>
 										) : (
-											data.get('vendorPerson').map((person) => (
-												<tr key={person.get('_id')} className="border-bottom">
-													<td className="text-center">
-														{person.get('name')} {person.get('position')}
-													</td>
-													<td className="text-center">{person.get('email')}</td>
-													<td className="text-center">{person.get('contactNumber')}</td>
-													<td className="text-center">{person.get('task')}</td>
-												</tr>
-											))
-										)}
+												data.get('vendorPerson').map((person) => (
+													<tr key={person.get('_id')} className="border-bottom">
+														<td className="text-center">
+															{person.get('name')} {person.get('position')}
+														</td>
+														<td className="text-center">{person.get('email')}</td>
+														<td className="text-center">{person.get('contactNumber')}</td>
+														<td className="text-center">{person.get('task')}</td>
+													</tr>
+												))
+											)}
 									</tbody>
 								</Table>
 							</td>
@@ -156,13 +180,13 @@ const VendorDetailModal = ({
 						onOpen('question')();
 					}}
 				>
-					DELETE
+					삭제/복구
 				</Button>
 				<Button color="primary" onClick={onOpen('vendorEdit')}>
-					EDIT
+					수정
 				</Button>
 				<Button color="secondary" onClick={onClose('vendorDetail')}>
-					CANCEL
+					닫기
 				</Button>
 			</ModalFooter>
 		</Modal>
