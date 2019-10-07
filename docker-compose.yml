@@ -20,7 +20,7 @@ services:
       - DB_USER=docs
       - DB_PASS=1205360
     volumes:  
-      - ~/app/aws:/app/app/aws
+      - /home/ubuntu/app/aws:/app/app/aws
   server2:
     container_name: server2
     build:
@@ -41,7 +41,7 @@ services:
       - DB_USER=docs
       - DB_PASS=1205360
     volumes:  
-      - ~/app/aws:/app/app/aws
+      - /home/ubuntu/app/aws:/app/app/aws
   server3:
     container_name: server3
     build:
@@ -62,7 +62,7 @@ services:
       - DB_USER=docs
       - DB_PASS=1205360
     volumes:  
-      - ~/app/aws:/app/app/aws
+      - /home/ubuntu/app/aws:/app/app/aws
   client:
     container_name: client
     build:
@@ -85,7 +85,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=docs
       - MONGO_INITDB_ROOT_PASSWORD=1205360
     volumes:
-      - ~/data/db:/data/db
+      - /home/ubuntu/data/db:/data/db
 
 networks:
   backend:
