@@ -16,6 +16,69 @@ import { MdClose, MdKeyboardCapslock } from 'react-icons/md';
 import { FaCaretRight } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 
+const DocumentIndexItem = React.memo(({ gbs, index, _id, documentNumber, documentTitle, documentGb, plan, isError, onChangeInfo, onChangeList }) => {
+	return (
+		<tr key={index} className={isError ? 'bg-secondary' : ''}>
+			<td className="text-right">{index + 1}</td>
+			<td>
+				<Input
+					type="text"
+					name="documentNumber"
+					value={documentNumber}
+					onChange={onChangeInfo(_id || index)}
+					bsSize="sm"
+				/>
+			</td>
+			<td>
+				<Input
+					type="text"
+					name="documentTitle"
+					value={documentTitle}
+					onChange={onChangeInfo(_id || index)}
+					bsSize="sm"
+				/>
+			</td>
+			<td>
+				<Input
+					type="select"
+					name="documentGb"
+					value={documentGb || index}
+					onChange={onChangeInfo(_id || index)}
+				>
+					<option value="">-- 구분 --</option>
+					{gbs.get('cdMinors').map((gb) => (
+						<option key={gb.get('_id')} value={gb.get('_id')}>
+							{gb.get('cdSName')}
+						</option>
+					))}
+				</Input>
+			</td>
+			<td className="text-center">
+				<Input
+					type="date"
+					name="plan"
+					value={plan.substr(0, 10)}
+					onChange={onChangeInfo(_id || index)}
+					bsSize="sm"
+				/>
+			</td>
+			<td className="text-center">
+				<MdClose
+					size={20}
+					className="text-danger can-click"
+					onClick={
+						_id === '' ? (
+							onChangeList(index, 'DELETE')
+						) : (
+								onChangeList(_id, 'REMOVE')
+							)
+					}
+				/>
+			</td>
+		</tr>
+	)
+})
+
 const DocumentIndexAddModal = ({
 	vendorList,
 	gbs,
@@ -117,64 +180,17 @@ const DocumentIndexAddModal = ({
 										const isError = infosError.indexOf(_id) > -1;
 
 										return (
-											<tr key={index} className={isError ? 'bg-secondary' : ''}>
-												<td className="text-right">{index + 1}</td>
-												<td>
-													<Input
-														type="text"
-														name="documentNumber"
-														value={documentNumber}
-														onChange={onChangeInfo(_id || index)}
-														bsSize="sm"
-													/>
-												</td>
-												<td>
-													<Input
-														type="text"
-														name="documentTitle"
-														value={documentTitle}
-														onChange={onChangeInfo(_id || index)}
-														bsSize="sm"
-													/>
-												</td>
-												<td>
-													<Input
-														type="select"
-														name="documentGb"
-														value={documentGb || index}
-														onChange={onChangeInfo(_id || index)}
-													>
-														<option value="">-- 구분 --</option>
-														{gbs.get('cdMinors').map((gb) => (
-															<option key={gb.get('_id')} value={gb.get('_id')}>
-																{gb.get('cdSName')}
-															</option>
-														))}
-													</Input>
-												</td>
-												<td className="text-center">
-													<Input
-														type="date"
-														name="plan"
-														value={plan.substr(0, 10)}
-														onChange={onChangeInfo(_id || index)}
-														bsSize="sm"
-													/>
-												</td>
-												<td className="text-center">
-													<MdClose
-														size={20}
-														className="text-danger can-click"
-														onClick={
-															_id === '' ? (
-																onChangeList(index, 'DELETE')
-															) : (
-																	onChangeList(_id, 'REMOVE')
-																)
-														}
-													/>
-												</td>
-											</tr>
+											<DocumentIndexItem
+												gbs={gbs}
+											 	index={index}
+											  	_id={_id}
+												documentNumber={documentNumber}
+												documentTitle={documentTitle}
+												documentGb={documentGb}
+												plan={plan}
+												isError={isError}
+												onChangeInfo={onChangeInfo}
+												onChangeList={onChangeList} />
 										);
 									})
 								)}
