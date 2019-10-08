@@ -89,7 +89,8 @@ const initialState = Map({
 		partError: false,
 		partNumberError: false,
 		effStaDtError: false,
-		effEndDtError: false
+		effEndDtError: false,
+		vendorPersonError: List()
 	}),
 	persons: List([
 		Map({
@@ -210,6 +211,12 @@ export default handleActions(
 			onFailure: (state, action) => {
 				const vendor = state.get('edit');
 
+				const vendorPerson = vendor.get('vendorPerson').filter(person => {
+					const { name, position, task, email, contactNumber } = person.toJS();
+
+					return name === '' || position === '' || task === '' || email === '' || contactNumber === '' ? true : false;
+				}).map(person => person.get('_id'));
+
 				return state
 					.setIn(['errors', 'vendorGbError'], vendor.get('vendorGb') === '')
 					.setIn(['errors', 'countryCdError'], vendor.get('countryCd') === '')
@@ -219,7 +226,8 @@ export default handleActions(
 					.setIn(['errors', 'effEndDtError'], vendor.get('effEndDt') === '')
 					.setIn(['errors', 'partError'], vendor.get('part') === '')
 					.setIn(['errors', 'partNumberError'], vendor.get('partNumber') === '')
-					.setIn(['errors', 'officialNameError'], vendor.get('officialName') === '');
+					.setIn(['errors', 'officialNameError'], vendor.get('officialName') === '')
+					.setIn(['errors', 'vendorPersonError'], vendorPerson);
 			}
 		}),
 		...pender({

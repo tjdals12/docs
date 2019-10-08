@@ -161,9 +161,12 @@ const VendorEditModal = ({ parts, data, errors, isOpen, onClose, onChange, onCha
 				</Form>
 				{
 					data.get('vendorPerson').size > 0 &&
-					data.get('vendorPerson').map((vendor, index) => (
-						<VendorPersonEditForm key={index} index={index} data={vendor} onChange={onChangePerson} onDelete={onDeletePerson} />
-					))
+					data.get('vendorPerson').map((person, index) => {
+						const _id = person.get('_id');
+						const isError = errors.get('vendorPersonError').indexOf(_id) > -1;
+						
+						return <VendorPersonEditForm key={index} index={index} data={person} onChange={onChangePerson} onDelete={onDeletePerson} className={isError ? 'border-danger' : ''}/>
+					})
 				}
 			</ModalBody>
 			<ModalFooter className="bg-light">
