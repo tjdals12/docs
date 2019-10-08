@@ -29,14 +29,14 @@ const makeHeaderCell = ({ title, className }) => {
     return <span className={classes}>{title}</span>;
 };
 
-const CmcodeCollapse = ({ isOpen, onChange, onSave, onEdit }) => {
+const CmcodeCollapse = ({ cdMajors, isOpen, onChange, onSave, onEdit }) => {
     return (
         <Collapse isOpen={isOpen} className="mt-3 pt-4 border-top">
             <Row style={{ minHeight: '400px' }}>
                 <Col md={5} style={colStyle}>
                     <Grid
                         pageable
-                        data={majorDemos}
+                        data={cdMajors.toJS()}
                         total={30}
                         take={10}
                         skip={0}

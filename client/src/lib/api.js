@@ -29,6 +29,7 @@ export const addPerson = ({ id, persons }) => axios.post(`${real}/api/vendors/${
 
 /** Cmcode */
 export const getCmcodeByMajor = ({ major }) => axios.get(`${real}/api/cmcodes/${major}/minors`);
+export const getCdMajors = () => axios.get(`${real}/api/cmcodes/forselect`);
 
 /** Index */
 export const getIndexes = ({ page }) => axios.get(`${real}/api/documentindexes?page=${page}`);
