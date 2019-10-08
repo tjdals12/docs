@@ -96,7 +96,7 @@ const TemplateCollapse = ({
 									onChange={(e) => onChange(e)(isAdd ? 'add' : 'template')}
 									invalid={errors.get('templateGbError')}
 								>
-									<option value="">구분</option>
+									<option value="">-- 구분 --</option>
 									{gbs.get('cdMinors').map((gb) => (
 										<option key={gb.get('_id')} value={gb.get('_id')}>
 											{gb.get('cdSName')}
@@ -170,8 +170,8 @@ const TemplateCollapse = ({
 										detail.get('templatePath') ? (
 											detail.get('templatePath').split('/').pop()
 										) : (
-											add.get('templatePath').split('/').pop()
-										)
+												add.get('templatePath').split('/').pop()
+											)
 									}
 									readOnly
 									invalid={errors.get('templatePathError')}
@@ -187,22 +187,22 @@ const TemplateCollapse = ({
 									</Button>
 								</Col>
 							) : (
-								<React.Fragment>
-									<Col md={4}>
-										<Button color="success" size="lg" tag="a" href={detail.get('templatePath')}>
-											DOWNLOAD
+									<React.Fragment>
+										<Col md={4}>
+											<Button color="success" size="lg" tag="a" href={detail.get('templatePath')}>
+												DOWNLOAD
 										</Button>
-									</Col>
-									<Col md={{ offset: 4, size: 4 }} className="d-flex justify-content-end">
-										<Button color="primary" size="lg" className="mr-2" onClick={onEdit}>
-											EDIT
+										</Col>
+										<Col md={{ offset: 4, size: 4 }} className="d-flex justify-content-end">
+											<Button color="primary" size="lg" className="mr-2" onClick={onEdit}>
+												EDIT
 										</Button>
-										<Button color="danger" size="lg">
-											DELETE
+											<Button color="danger" size="lg">
+												DELETE
 										</Button>
-									</Col>
-								</React.Fragment>
-							)}
+										</Col>
+									</React.Fragment>
+								)}
 						</FormGroup>
 					</Form>
 				</Col>
