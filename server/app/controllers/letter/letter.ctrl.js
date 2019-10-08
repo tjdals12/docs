@@ -311,6 +311,46 @@ export const edit = async (ctx) => {
 
 /**
  * @author      minz-logger
+ * @date        2019. 10. 08
+ * @description 공문 회신
+ */
+export const reply = async (ctx) => {
+    let { id } = ctx.params;
+    let { yn, replyDate } = ctx.request.body;
+
+    const schema = Joi.object().keys({
+        yn: Joi.string().required(),
+        replyDate: Joi.string().required()
+    });
+
+    const result = Joi.validate(ctx.request.body, schema);
+
+    if (result.error) {
+        ctx.res.badRequest({
+            data: result.error,
+            message: 'Fail - letterCtrl > reply'
+        });
+
+        return;
+    }
+
+    try {
+        const letter = await Letter.replyLetter({ id, yn, replyDate });
+
+        ctx.res.ok({
+            data: letter[0],
+            message: 'Success - letterCtrl > reply'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            data: { id, yn, replyDate },
+            message: `Error - letterCtrl > reply: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
  * @date        2019. 09. 18
  * @description 공식문서 취소
  */
