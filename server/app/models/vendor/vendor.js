@@ -3,9 +3,6 @@ import { Timestamp } from 'models/common/schema';
 import DEFINE from 'models/common';
 import Person from './person';
 
-import DocumentIndex from '../documentIndex/documentIndex';
-import DocumentInfo from '../documentIndex/documentIndex';
-
 /**
  * @author      minz-logger
  * @date        2019. 07. 21
@@ -133,7 +130,7 @@ VendorSchema.statics.searchVendors = function (param, page) {
             $project: {
                 vendorGb: {
                     $cond: {
-                        if: { $eq: ['$vendorGb', '01']},
+                        if: { $eq: ['$vendorGb', '01'] },
                         then: '계약',
                         else: '관리'
                     }
@@ -145,7 +142,7 @@ VendorSchema.statics.searchVendors = function (param, page) {
                 partNumber: 1,
                 countryCd: {
                     $cond: {
-                        if: { $eq: ['$countryCd', '01']},
+                        if: { $eq: ['$countryCd', '01'] },
                         then: '국내',
                         else: '해외'
                     }
@@ -272,7 +269,7 @@ VendorSchema.statics.saveVendor = async function (param) {
  * @param       {String} id
  * @param       {Object} param
  */
-VendorSchema.statics.editVendor = function (id, param) {
+VendorSchema.statics.editVendor = async function (id, param) {
     let {
         vendorGb,
         countryCd,
@@ -282,8 +279,13 @@ VendorSchema.statics.editVendor = function (id, param) {
         officialName,
         itemName,
         effStaDt,
-        effEndDt
+        effEndDt,
+        vendorPerson
     } = param;
+
+    const { vendorPerson: oldVendorPerson } = await this.findOne({ _id: id });
+
+    const persons = await Person.editPerson({ oldVendorPerson, vendorPerson });
 
     return this.findOneAndUpdate(
         { _id: id },
@@ -297,7 +299,9 @@ VendorSchema.statics.editVendor = function (id, param) {
                 officialName,
                 itemName,
                 effStaDt: new Date(effStaDt),
-                effEndDt: new Date(effEndDt)
+                effEndDt: new Date(effEndDt),
+                vendorPerson: persons,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

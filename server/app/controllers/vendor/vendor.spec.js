@@ -9,6 +9,7 @@ describe('  [ Vendor ]', () => {
     let part1;
     let part2;
     let personId;
+    let vendorPerson;
 
     before((done) => {
         db.connect().then(type => {
@@ -135,6 +136,14 @@ describe('  [ Vendor ]', () => {
                     if (err) throw err;
 
                     id = ctx.body.data._id;
+                    vendorPerson = ctx.body.data.vendorPerson.map((person) => ({
+                        _id: person._id,
+                        name: person.name,
+                        position: person.position,
+                        task: person.task,
+                        email: person.email,
+                        contactNumber: person.contactNumber
+                    }));
 
                     expect(ctx.body.data.part._id).to.equal(part1);
                     expect(ctx.body.data.partNumber).to.equals('R-001');
@@ -256,6 +265,27 @@ describe('  [ Vendor ]', () => {
     });
 
     describe('PATCH /vendors/:id/edit', () => {
+
+        before(() => {
+            vendorPerson.splice(0, 1);
+            vendorPerson[0] = {
+                _id: vendorPerson[0]._id,
+                name: '홍길동',
+                position: '이사',
+                task: '조달',
+                email: 'hong@naver.com',
+                contactNumber: '010-5678-5678'
+            };
+            vendorPerson[1] = {
+                _id: vendorPerson[1]._id,
+                name: '대장금',
+                position: '상무',
+                task: '조달',
+                email: 'bigold@naver.com',
+                contactNumber: '010-1234-1234'
+            };
+        });
+
         it('edit vendor', (done) => {
             request(server)
                 .patch(`/api/vendors/${id}/edit`)
@@ -269,6 +299,7 @@ describe('  [ Vendor ]', () => {
                     itemName: 'Boiler Feed Water Pump',
                     effStaDt: '2019-08-20',
                     effEndDt: '2020-02-21',
+                    vendorPerson: vendorPerson
                 })
                 .expect(200)
                 .end((err, ctx) => {
@@ -279,6 +310,7 @@ describe('  [ Vendor ]', () => {
                     expect(ctx.body.data.vendorName).to.equal('성은테크');
                     expect(ctx.body.data.officialName).to.equal('SUT');
                     expect(ctx.body.data.itemName).to.equal('Boiler Feed Water Pump');
+                    expect(ctx.body.data.vendorPerson).have.length(2);
                     done();
                 });
         });

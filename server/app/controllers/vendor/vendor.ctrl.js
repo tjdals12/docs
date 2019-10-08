@@ -226,7 +226,8 @@ export const editVendor = async (ctx) => {
         officialName,
         itemName,
         effStaDt,
-        effEndDt
+        effEndDt,
+        vendorPerson
     } = ctx.request.body;
 
     const schema = Joi.object().keys({
@@ -238,7 +239,15 @@ export const editVendor = async (ctx) => {
         officialName: Joi.string().required(),
         itemName: Joi.string().required(),
         effStaDt: Joi.string().required(),
-        effEndDt: Joi.string().required()
+        effEndDt: Joi.string().required(),
+        vendorPerson: Joi.array().items(Joi.object().keys({
+            _id: Joi.string().required(),
+            name: Joi.string().required(),
+            position: Joi.string().required(),
+            task: Joi.string().required(),
+            email: Joi.string().required(),
+            contactNumber: Joi.string().required()
+        })).required()
     });
 
     const result = Joi.validate(ctx.request.body, schema);
@@ -262,7 +271,8 @@ export const editVendor = async (ctx) => {
             officialName,
             itemName,
             effStaDt,
-            effEndDt
+            effEndDt,
+            vendorPerson
         });
 
         ctx.res.ok({
@@ -289,7 +299,7 @@ export const deleteVendor = async (ctx) => {
     const schema = Joi.object().keys({
         yn: Joi.string().required(),
         reason: Joi.string().required()
-    })
+    });
 
     const result = Joi.validate(ctx.request.body, schema);
 

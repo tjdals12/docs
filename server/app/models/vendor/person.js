@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { Timestamp } from 'models/common/schema';
+import DEFINE from 'models/common';
 
 /**
  * @author      minz-logger
@@ -45,6 +46,73 @@ PersonSchema.statics.savePersons = async function (param) {
         const person = new this({ ...param.pop() });
         await person.save();
         ids.push(person._id);
+    }
+
+    return ids;
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 08
+ * @description 담당자 수정
+ * @param       {Object} param
+ */
+PersonSchema.statics.editPerson = async function (param) {
+    let {
+        oldVendorPerson,
+        vendorPerson
+    } = param;
+
+    let ids = [];
+
+    if (oldVendorPerson.length !== vendorPerson.length) {
+        while (oldVendorPerson.length > 0) {
+            const _id = oldVendorPerson.pop() + '';
+
+            const target = vendorPerson.find(person => person._id === _id);
+
+            if (target) {
+                const { name, position, task, email, contactNumber } = target;
+
+                await this.findByIdAndUpdate(
+                    _id,
+                    {
+                        $set: {
+                            name,
+                            position,
+                            task,
+                            email,
+                            contactNumber,
+                            'timestamp.updDt': DEFINE.dateNow()
+                        }
+                    }
+                );
+
+                ids.push(_id);
+            } else {
+                await this.findByIdAndDelete(_id);
+            }
+        }
+    } else {
+        while (vendorPerson.length > 0) {
+            const { _id, name, position, task, email, contactNumber } = vendorPerson.pop();
+
+            await this.findByIdAndUpdate(
+                _id,
+                {
+                    $set: {
+                        name,
+                        position,
+                        task,
+                        email,
+                        contactNumber,
+                        'timestamp.updDt': DEFINE.dateNow()
+                    }
+                }
+            );
+
+            ids.push(_id);
+        }
     }
 
     return ids;
