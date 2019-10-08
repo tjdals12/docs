@@ -10,12 +10,14 @@ import DEFINE from 'models/common';
  */
 const CmcodeSchema = new Schema({
     effStaDt: {
-        type: String,
-        default: DEFINE.dateNow
+        type: Date,
+        default: DEFINE.dateNow,
+        get: DEFINE.dateConverter
     },
     effEndDt: {
-        type: String,
-        default: DEFINE.COMMON.MAX_END_DT
+        type: Date,
+        default: DEFINE.COMMON.MAX_END_DT,
+        get: DEFINE.dateConverter
     },
     cdMajor: {
         type: String,
