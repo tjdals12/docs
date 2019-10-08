@@ -10,6 +10,7 @@ const LetterDetailModal = ({
 	data,
 	reasonError,
 	replyDate,
+	replyDateError,
 	isOpen,
 	onClose,
 	onOpen,
@@ -114,7 +115,7 @@ const LetterDetailModal = ({
 								{data.get('replyRequired') === 'YES' ? (
 									<span className="text-danger">
 										{data.get('replyYn')}{' '}
-										{data.get('replyYn') === 'YES' && `(${data.get('replyDate')})`}
+										{data.get('replyYn') === 'YES' && `(${data.get('replyDate').substr(0, 10)})`}
 									</span>
 								) : (
 										'-'
@@ -241,8 +242,20 @@ const LetterDetailModal = ({
 						</Col>
 					)}
 
-				<Input type='date' className="w-20" name="replyDate" onChange={onChange} value={replyDate}></Input>
-				<Button color="danger" onClick={onReply(data.get('_id'))}>회신</Button>
+				{data.get('replyRequired') === 'YES' && (data.get('replyYn') === 'NO' ? (
+					<React.Fragment>
+						<Input type='date' className="w-20" name="replyDate" onChange={onChange} value={replyDate} invalid={replyDateError} />
+						<Button color="danger" onClick={onReply(data.get('_id'), 'YES')}>
+							회신
+						</Button>
+					</React.Fragment>
+				) : (
+						<Button color="danger" onClick={onReply(data.get('_id'), 'NO')}>
+							회신 취소
+					</Button>
+					))}
+
+
 				<Input
 					type="text"
 					name="reason"
@@ -268,7 +281,7 @@ const LetterDetailModal = ({
 					닫기
 				</Button>
 			</ModalFooter>
-		</Modal>
+		</Modal >
 	);
 };
 

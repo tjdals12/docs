@@ -77,6 +77,7 @@ export const getLetter = ({ id }) => axios.get(`${real}/api/letters/${id}`);
 export const addLetter = (param) => axios.post(`${real}/api/letters`, { ...param });
 export const referenceSearch = ({ keyword }) => axios.get(`${real}/api/letters/ref/search?keyword=${keyword}`);
 export const editLetter = ({ id, param }) => axios.patch(`${real}/api/letters/${id}/edit`, { ...param });
+export const replyLetter = ({ id, yn, replyDate }) => axios.patch(`${real}/api/letters/${id}/reply`, { yn, replyDate });
 export const cancelLetter = ({ id, yn, reason }) => axios.patch(`${real}/api/letters/${id}/cancel`, { yn, reason });
 
 /** Project */

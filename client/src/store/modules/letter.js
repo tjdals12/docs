@@ -10,6 +10,7 @@ const GET_LETTER = 'letter/GET_LETTER';
 const ADD_LETTER = 'letter/ADD_LETTER';
 const REFERENCE_SEARCH = 'letter/REFERENCE_SEARCH';
 const EDIT_LETTER = 'letter/EDIT_LETTER';
+const REPLY_LETTER = 'letter/REPLY_LETTER';
 const CANCEL_LETTER = 'letter/CANCEL_LETTER';
 const ON_CHANGE = 'letter/ON_CHANGE';
 const INITIALIZE = 'letter/INITIALIZE';
@@ -20,6 +21,7 @@ export const getLetter = createAction(GET_LETTER, api.getLetter);
 export const addLetter = createAction(ADD_LETTER, api.addLetter);
 export const referenceSearch = createAction(REFERENCE_SEARCH, api.referenceSearch);
 export const editLetter = createAction(EDIT_LETTER, api.editLetter);
+export const replyLetter = createAction(REPLY_LETTER, api.replyLetter);
 export const cancelLetter = createAction(CANCEL_LETTER, api.cancelLetter);
 export const onChange = createAction(ON_CHANGE);
 export const initialize = createAction(INITIALIZE);
@@ -80,6 +82,7 @@ const initialState = Map({
 	keyword: '',
 	keywordError: false,
 	replyDate: moment().format('YYYY-MM-DD'),
+	replyDateError: false,
 	lastPage: null
 });
 
@@ -183,6 +186,17 @@ export default handleActions(
 					.setIn(['errors', 'receiverError'], data.get('receiver') === '')
 					.setIn(['errors', 'sendDateError'], data.get('sendDate') === '')
 					.setIn(['errors', 'replyRequiredError'], data.get('replyRequired') === '');
+			}
+		}),
+		...pender({
+			type: REPLY_LETTER,
+			onSuccess: (state, action) => {
+				const { data: letter } = action.payload.data;
+
+				return state.set('letter', fromJS(letter));
+			},
+			onFailure: (state, action) => {
+				return state.set('replyDateError', state.get('replyDate') === '');
 			}
 		}),
 		...pender({

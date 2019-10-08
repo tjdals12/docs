@@ -67,10 +67,10 @@ class LetterDetailModalContainer extends React.Component {
 		TemplateActions.downloadTemplate({ key: 'letter', target: id, template: selectedTemplate });
 	};
 
-	handleReply = (id) => () => {
+	handleReply = (id, yn) => () => {
 		const { LetterActions, replyDate } = this.props;
 
-		console.log(id, replyDate);
+		LetterActions.replyLetter({ id, yn, replyDate });
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -80,7 +80,7 @@ class LetterDetailModalContainer extends React.Component {
 	}
 
 	render() {
-		const { templates, selectedTemplate, letter, reasonError, replyDate, isOpen, loading } = this.props;
+		const { templates, selectedTemplate, letter, reasonError, replyDate, replyDateError, isOpen, loading } = this.props;
 
 		if (loading || loading === undefined) return null;
 
@@ -91,6 +91,7 @@ class LetterDetailModalContainer extends React.Component {
 				data={letter}
 				reasonError={reasonError}
 				replyDate={replyDate}
+				replyDateError={replyDateError}
 				isOpen={isOpen}
 				onClose={this.handleClose}
 				onOpen={this.handleOpen}
@@ -113,6 +114,7 @@ export default connect(
 		reason: state.letter.get('reason'),
 		reasonError: state.letter.get('reasonError'),
 		replyDate: state.letter.get('replyDate'),
+		replyDateError: state.letter.get('relpyDateError'),
 		isOpen: state.modal.get('letterDetailModal'),
 		loading: state.pender.pending['letter/GET_LETTER']
 	}),
