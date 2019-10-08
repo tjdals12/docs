@@ -206,6 +206,26 @@ describe('  [ Letter ]', () => {
         });
     });
 
+    describe('PATCH /letters/:id/reply', () => {
+        it('reply letter', (done) => {
+            request(server)
+                .patch(`/api/letters/${id}/reply`)
+                .send({
+                    yn: 'YES',
+                    replyDate: '2019-10-08'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if (err) throw err;
+
+                    expect(ctx.body.data._id).to.equal(id);
+                    expect(ctx.body.data.replyYn).to.equal('YES');
+                    expect(ctx.body.data.replyDate.substr(0, 10)).to.equal('2019-10-08');
+                    done();
+                });
+        });
+    });
+
     describe('PATCH /letters/:id/cancel', () => {
         it('delete letter', (done) => {
             request(server)

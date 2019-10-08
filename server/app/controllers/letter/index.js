@@ -330,6 +330,43 @@ letter.patch('/:id/edit', commonCtrl.checkObjectId, letterCtrl.edit);
 
 /**
  * @swagger
+ * /api/letters/{id}/reply:
+ *  patch:
+ *      tags:
+ *          - Letter
+ *      summary: 공식문서 회신
+ *      description: 공식문서 회신
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            description: letter id
+ *            required: true
+ *            type: string
+ *            example: 5d33ef877cceb91244d16fdd
+ *          - in: body
+ *            name: body
+ *            description: reply parameters
+ *            required: true
+ *            schema:
+ *              type: object
+ *              properties:
+ *                  yn:
+ *                      type: string
+ *                      example: 'YES'
+ *                  replyDate:
+ *                      type: string
+ *                      format: date
+ *                      example: '2019-10-08'
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ *              schema:
+ *                  $ref: '#/definitions/letter'
+ */
+letter.patch('/:id/reply', commonCtrl.checkObjectId, letterCtrl.reply);
+
+/**
+ * @swagger
  * /api/letters/{id}/cancel:
  *  patch:
  *      tags:

@@ -370,6 +370,33 @@ LetterSchema.statics.editLetter = async function (param) {
 
 /**
  * @author      minz-logger
+ * @date        2019. 10. 08
+ * @description 공문 회신
+ * @param       {Object} param
+ */
+LetterSchema.statics.replyLetter = async function (param) {
+    let {
+        id,
+        yn,
+        replyDate
+    } = param;
+
+    await this.findOneAndUpdate(
+        { _id: id },
+        {
+            $set: {
+                replyYn: yn,
+                replyDate: yn === 'YES' ? replyDate : DEFINE.COMMON.MAX_END_DT,
+                'timestamp.uptDt': DEFINE.dateNow()
+            }
+        }
+    );
+
+    return this.letterDetail(id);
+};
+
+/**
+ * @author      minz-logger
  * @date        2019. 09. 18
  * @description 공식문서 취소 
  */
