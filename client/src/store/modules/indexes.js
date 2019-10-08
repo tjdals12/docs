@@ -83,6 +83,7 @@ const initialState = Map({
 	]),
 	error: false,
 	infosError: List(),
+	fileError: false,
 	target: '',
 	lastPage: null
 });

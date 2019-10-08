@@ -13,6 +13,7 @@ import {
 	Table
 } from 'reactstrap';
 import PropTypes from 'prop-types';
+import Typography from 'components/Typography';
 
 const DocumentIndexAddModal = ({
 	gbs,
@@ -20,6 +21,7 @@ const DocumentIndexAddModal = ({
 	data,
 	error,
 	infosError,
+	fileError,
 	isOpen,
 	onClose,
 	onChange,
@@ -125,6 +127,9 @@ const DocumentIndexAddModal = ({
 								)}
 						</tbody>
 					</Table>
+					{
+						fileError && <Typography type='span' className="text-center text-danger font-italic font-weight-bold">* 누락된 값이 존재합니다.</Typography>
+					}
 				</Form>
 			</ModalBody>
 			<ModalFooter className="bg-light">

@@ -181,9 +181,10 @@ const DocumentIndexAddModal = ({
 
 										return (
 											<DocumentIndexItem
+												key={index}
 												gbs={gbs}
-											 	index={index}
-											  	_id={_id}
+												index={index}
+												_id={_id}
 												documentNumber={documentNumber}
 												documentTitle={documentTitle}
 												documentGb={documentGb}
