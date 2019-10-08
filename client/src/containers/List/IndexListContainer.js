@@ -23,6 +23,8 @@ class IndexListContainer extends React.Component {
 		const { ModalActions, IndexesActions } = this.props;
 
 		IndexesActions.initialize('error');
+		IndexesActions.initialize('add');
+		IndexesActions.initialize('fileError');
 		ModalActions.open('documentIndexAdd');
 	};
 
@@ -107,7 +109,7 @@ export default connect(
 		isOpenQuestion: state.modal.get('questionModal'),
 		indexes: state.indexes.get('indexes'),
 		target: state.indexes.get('target'),
-		isSearch: state.indexes.getIn([ 'search', 'isSearch' ]),
+		isSearch: state.indexes.getIn(['search', 'isSearch']),
 		search: state.indexes.get('search'),
 		loading: state.pender.pending['indexes/GET_INDEXES']
 	}),

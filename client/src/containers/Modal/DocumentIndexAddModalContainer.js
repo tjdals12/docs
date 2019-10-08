@@ -55,11 +55,21 @@ class DocumentIndexAddModalContainer extends React.Component {
 			config: { headers: { 'Content-Type': 'multipart/form-data' } }
 		}).then((response) => {
 			IndexesActions.onChange({
+				name: 'fileError',
+				value: false
+			});
+
+			IndexesActions.onChange({
 				target: 'add',
 				name: 'list',
 				value: response.data.data
 			});
-		});
+		}).catch((err) => {
+			IndexesActions.onChange({
+				name: 'fileError',
+				value: true
+			});
+		})
 	};
 
 	handleInsert = async () => {
@@ -77,7 +87,7 @@ class DocumentIndexAddModalContainer extends React.Component {
 	}
 
 	render() {
-		const { gbs, vendorList, documentIndex, error, infosError, isOpen } = this.props;
+		const { gbs, vendorList, documentIndex, error, infosError, fileError, isOpen } = this.props;
 
 		if (!gbs || !vendorList) return null;
 
@@ -88,6 +98,7 @@ class DocumentIndexAddModalContainer extends React.Component {
 				data={documentIndex}
 				error={error}
 				infosError={infosError}
+				fileError={fileError}
 				isOpen={isOpen}
 				onClose={this.handleClose}
 				onChange={this.handleChange}
@@ -106,6 +117,7 @@ export default connect(
 		documentIndex: state.indexes.get('add'),
 		error: state.indexes.get('error'),
 		infosError: state.indexes.get('infosError'),
+		fileError: state.indexes.get('fileError'),
 		isOpen: state.modal.get('documentIndexAddModal')
 	}),
 	(dispatch) => ({
