@@ -87,7 +87,7 @@ const TemplateCollapse = ({
 					>
 						<FormGroup row>
 							<Col md={6}>
-								<Label for="templateGb">구분</Label>
+								<Label for="templateGb" className="title-font">구분</Label>
 								<Input
 									type="select"
 									id="templateGb"
@@ -105,7 +105,7 @@ const TemplateCollapse = ({
 								</Input>
 							</Col>
 							<Col md={6}>
-								<Label for="templateType">형식</Label>
+								<Label for="templateType" className="title-font">형식</Label>
 								<Input
 									type="text"
 									id="templateType"
@@ -118,7 +118,7 @@ const TemplateCollapse = ({
 						</FormGroup>
 						<FormGroup row>
 							<Col md={12}>
-								<Label for="templateName">양식명</Label>
+								<Label for="templateName" className="title-font">양식명</Label>
 								<Input
 									type="text"
 									id="templateName"
@@ -131,7 +131,7 @@ const TemplateCollapse = ({
 						</FormGroup>
 						<FormGroup row>
 							<Col md={12}>
-								<Label for="templateDescription">설명</Label>
+								<Label for="templateDescription" className="title-font">설명</Label>
 								<Input
 									type="textarea"
 									id="templateDescription"
@@ -144,7 +144,7 @@ const TemplateCollapse = ({
 							</Col>
 						</FormGroup>
 						<FormGroup row>
-							<Label for="list" md={4}>
+							<Label for="list" md={4} className="title-font">
 								양식 파일
 							</Label>
 							<Col md={8} className="d-flex justify-content-end">
