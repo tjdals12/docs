@@ -86,6 +86,20 @@ describe('  [ CMCODE ]', () => {
         });
     });
 
+    describe('GET /cmcodes', () => {
+        it('get cmcodes for select', (done) => {
+            request(server)
+                .get('/api/cmcodes/forselect')
+                .expect(200)
+                .end((err, ctx) => {
+                    if (err) throw err;
+
+                    expect(ctx.body.data).have.length(1);
+                    done();
+                });
+        });
+    });
+
     describe('GET /cmcodes/:id/:minor', () => {
         it('get cmcode', (done) => {
             request(server)
