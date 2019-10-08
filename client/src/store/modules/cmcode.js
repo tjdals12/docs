@@ -5,12 +5,15 @@ import { pender } from 'redux-pender';
 
 const GET_CMCODE_BY_MAJOR = 'cmcode/GET_CMCODE_BY_MAJOR';
 const GET_CDMAJORS = 'cmcode/GET_CDMAJORS';
+const GET_CDMINORS = 'cmcode/GET_CDMINORS';
 
 export const getCmcodeByMajor = createAction(GET_CMCODE_BY_MAJOR, api.getCmcodeByMajor);
 export const getCdMajors = createAction(GET_CDMAJORS, api.getCdMajors);
+export const getCdMinors = createAction(GET_CDMINORS, api.getCmcodeById);
 
 const initialState = Map({
-	cdMajors: List()
+	cdMajors: List(),
+	cdMajor: Map({})
 });
 
 export default handleActions(
@@ -36,6 +39,23 @@ export default handleActions(
 				}))
 
 				return state.set('cdMajors', fromJS(cdMajors));
+			}
+		}),
+		...pender({
+			type: GET_CDMINORS,
+			onSuccess: (state, action) => {
+				let { data: cmcode } = action.payload.data;
+
+				cmcode.cdMinors = cmcode.cdMinors.map((cdMinor, index) => ({
+					index: index + 1,
+					...cdMinor,
+					timestamp: {
+						...cdMinor.timestamp,
+						regDt: cdMinor.timestamp.regDt.substr(0, 10)
+					}
+				}))
+
+				return state.set('cdMajor', fromJS(cmcode));
 			}
 		})
 	},

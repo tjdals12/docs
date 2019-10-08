@@ -16,6 +16,12 @@ class CmcodeCollapseCardContainer extends React.Component {
         CmcodeActions.getCdMajors();
     }
 
+    getCdMinors = (id) => {
+        const { CmcodeActions } = this.props;
+
+        CmcodeActions.getCdMinors(id);
+    }
+
     handleOpen = () => {
         this.setState(prevState => {
             let { isOpen } = prevState;
@@ -32,9 +38,9 @@ class CmcodeCollapseCardContainer extends React.Component {
 
     render() {
         const { isOpen } = this.state;
-        const { cdMajors, loading } = this.props;
+        const { cdMajors, cdMajor, majorLoading } = this.props;
 
-        if (loading || loading === undefined) return null;
+        if (majorLoading || majorLoading === undefined) return null;
 
         return (
             <CollapseCard
@@ -42,7 +48,7 @@ class CmcodeCollapseCardContainer extends React.Component {
                 description="공통코드 관리"
                 onOpen={this.handleOpen}
                 collapse={
-                    <CmcodeCollapse cdMajors={cdMajors} isOpen={isOpen} />
+                    <CmcodeCollapse cdMajors={cdMajors} cdMajor={cdMajor} isOpen={isOpen} onSelectCdMajor={this.getCdMinors} />
                 } />
         )
     }
@@ -51,7 +57,9 @@ class CmcodeCollapseCardContainer extends React.Component {
 export default connect(
     (state) => ({
         cdMajors: state.cmcode.get('cdMajors'),
-        loading: state.pender.pending['cmcode/GET_CDMAJORS']
+        cdMajor: state.cmcode.get('cdMajor'),
+        majorLoading: state.pender.pending['cmcode/GET_CDMAJORS'],
+        minorLoading: state.pender.pending['cmcode/GET_CDMINORS']
     }),
     (dispatch) => ({
         CmcodeActions: bindActionCreators(cmcodeActions, dispatch)

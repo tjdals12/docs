@@ -4,20 +4,6 @@ import { Collapse, Row, Col, Button, Form, FormGroup, Label, Input } from 'react
 import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
 import PropTypes from 'prop-types';
 
-const majorDemos = [
-    { index: 1, cdMajor: '0001', cdFName: '공종', effStaDt: '2019-06-13', effEndDt: '9999-12-31' },
-    { index: 2, cdMajor: '0002', cdFName: '구분', effStaDt: '2019-07-20', effEndDt: '9999-12-31' },
-    { index: 3, cdMajor: '0003', cdFName: '수발신 및 상태코드', effStaDt: '2019-07-28', effEndDt: '9999-12-31' },
-]
-
-const minorDemos = [
-    { index: 1, cdMinor: '0001', cdSName: '기계', regDt: '2019-06-13' },
-    { index: 2, cdMinor: '0002', cdSName: '장치', regDt: '2019-06-13' },
-    { index: 3, cdMinor: '0003', cdSName: '배관', regDt: '2019-06-13' },
-    { index: 4, cdMinor: '0004', cdSName: '계장', regDt: '2019-06-13' },
-    { index: 5, cdMinor: '0005', cdSName: '전기', regDt: '2019-06-13' }
-]
-
 const colStyle = {
     maxHeight: '400px',
     overflow: 'scroll'
@@ -29,7 +15,16 @@ const makeHeaderCell = ({ title, className }) => {
     return <span className={classes}>{title}</span>;
 };
 
-const CmcodeCollapse = ({ cdMajors, isOpen, onChange, onSave, onEdit }) => {
+const CmcodeCollapse = ({ cdMajors, cdMajor, isOpen, onSelectCdMajor, onChange, onSave, onEdit }) => {
+
+    const rowRender = (Row, props) => {
+        const isActive = props.dataItem._id === cdMajor.get('_id');
+
+        return React.cloneElement(Row, {
+            className: classNames(isActive && 'bg-gradient-theme-left text-white ', 'can-click', Row.props.className)
+        });
+    };
+
     return (
         <Collapse isOpen={isOpen} className="mt-3 pt-4 border-top">
             <Row style={{ minHeight: '400px' }}>
@@ -40,6 +35,8 @@ const CmcodeCollapse = ({ cdMajors, isOpen, onChange, onSave, onEdit }) => {
                         total={30}
                         take={10}
                         skip={0}
+                        onRowClick={(e) => onSelectCdMajor(e.dataItem._id)}
+                        rowRender={rowRender}
                         className='h-100 border rounded'>
                         <Column
                             field='index'
@@ -70,7 +67,7 @@ const CmcodeCollapse = ({ cdMajors, isOpen, onChange, onSave, onEdit }) => {
                 <Col md={4} style={colStyle}>
                     <Grid
                         pageable
-                        data={minorDemos}
+                        data={cdMajor.size === 0 ? [] : cdMajor.get('cdMinors').toJS()}
                         total={30}
                         take={10}
                         skip={0}
@@ -89,7 +86,7 @@ const CmcodeCollapse = ({ cdMajors, isOpen, onChange, onSave, onEdit }) => {
                             field='cdSName'
                             headerCell={() => makeHeaderCell({ title: '코드명' })} />
                         <Column
-                            field='regDt'
+                            field='timestamp.regDt'
                             width={120}
                             className='text-center'
                             headerCell={() => makeHeaderCell({ title: '등록일', className: 'text-center' })} />
