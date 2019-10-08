@@ -30,7 +30,7 @@ export const list = async (ctx) => {
  */
 export const cdMajors = async (ctx) => {
     try {
-        const cmcodes = await Cmcode.find({}, { cdMajor: 1, cdFName: 1, effStaDt: 1, effEndDt: 1 });
+        const cmcodes = await Cmcode.find({}, { cdMajor: 1, cdFName: 1, effStaDt: 1, effEndDt: 1 }).sort({ cdMajor: 1 });
 
         ctx.res.ok({
             data: cmcodes,
