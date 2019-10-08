@@ -26,20 +26,20 @@ export const list = async (ctx) => {
 /**
  * @author      minz-logger
  * @date        2019. 10. 08
- * @description 공통코드 목록 조회 (For select)
+ * @description 상위 공통코드 목록 조회
  */
-export const listForSelect = async (ctx) => {
+export const cdMajors = async (ctx) => {
     try {
         const cmcodes = await Cmcode.find({}, { cdMajor: 1, cdFName: 1, effStaDt: 1, effEndDt: 1 });
 
         ctx.res.ok({
             data: cmcodes,
-            message: 'Success - cmcodeCtrl > listForSelect'
+            message: 'Success - cmcodeCtrl > cdMajors'
         });
     } catch (e) {
         ctx.res.internalServerError({
             data: [],
-            message: `Error - cmcodeCtrl > listForSelect: ${e.message}`
+            message: `Error - cmcodeCtrl > cdMajors: ${e.message}`
         });
     }
 };

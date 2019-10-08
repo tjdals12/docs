@@ -87,9 +87,9 @@ describe('  [ CMCODE ]', () => {
     });
 
     describe('GET /cmcodes', () => {
-        it('get cmcodes for select', (done) => {
+        it('get cdMajors', (done) => {
             request(server)
-                .get('/api/cmcodes/forselect')
+                .get('/api/cmcodes/majors')
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
