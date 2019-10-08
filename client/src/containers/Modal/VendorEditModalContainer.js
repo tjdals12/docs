@@ -34,6 +34,19 @@ class VendorEditModalContainer extends React.Component {
 		ModalActions.close(name);
 	};
 
+	handleChangePerson = (e, index) => {
+		const { VendorActions } = this.props;
+		const { name, value } = e.target;
+
+		VendorActions.onChangeDeep({ target: 'edit', nestedTarget: 'vendorPerson', index: index, name, value });
+	}
+
+	handleDeletePerson = (index) => {
+		const { VendorActions } = this.props;
+
+		VendorActions.onDeletePerson(index);
+	}
+
 	componentDidUpdate(prevProps) {
 		if (prevProps.isOpen === false && this.props.isOpen !== prevProps.isOpen) {
 			this.getCmcodes('0001');
@@ -53,6 +66,8 @@ class VendorEditModalContainer extends React.Component {
 				isOpen={isOpen}
 				onClose={this.handleClose}
 				onChange={this.handleChange}
+				onChangePerson={this.handleChangePerson}
+				onDeletePerson={this.handleDeletePerson}
 				onEdit={this.handleEdit}
 			/>
 		);
@@ -61,7 +76,7 @@ class VendorEditModalContainer extends React.Component {
 
 export default connect(
 	(state) => ({
-		id: state.vendor.getIn([ 'vendor', 'id' ]),
+		id: state.vendor.getIn(['vendor', 'id']),
 		parts: state.cmcode.get('0001'),
 		vendor: state.vendor.get('edit'),
 		errors: state.vendor.get('errors'),

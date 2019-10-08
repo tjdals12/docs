@@ -13,8 +13,9 @@ import {
 	InputGroup
 } from 'reactstrap';
 import PropTypes from 'prop-types';
+import VendorPersonEditForm from 'components/Form/VendorPersonEditForm';
 
-const VendorEditModal = ({ parts, data, errors, isOpen, onClose, onChange, onEdit, className, ...rest }) => {
+const VendorEditModal = ({ parts, data, errors, isOpen, onClose, onChange, onChangePerson, onDeletePerson, onEdit, className, ...rest }) => {
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -158,6 +159,12 @@ const VendorEditModal = ({ parts, data, errors, isOpen, onClose, onChange, onEdi
 						</Col>
 					</FormGroup>
 				</Form>
+				{
+					data.get('vendorPerson').size > 0 &&
+					data.get('vendorPerson').map((vendor, index) => (
+						<VendorPersonEditForm key={index} index={index} data={vendor} onChange={onChangePerson} onDelete={onDeletePerson} />
+					))
+				}
 			</ModalBody>
 			<ModalFooter className="bg-light">
 				<Button color="primary" onClick={onEdit}>

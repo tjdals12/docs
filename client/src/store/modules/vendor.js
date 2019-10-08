@@ -12,9 +12,10 @@ const ADD_VENDOR = 'vendor/ADD_VENDOR';
 const EDIT_VENDOR = 'vendor/EDIT_VENDOR';
 const DELETE_VENDOR = 'vendor/DELETE_VENDOR';
 const ON_CHANGE = 'vendor/ON_CHANGE';
-const ON_CHANGE_EDIT = 'vendor/ON_CHANGE_EDIT';
+const ON_CHANGE_DEEP = 'vendor/ON_CHANGE_DEEP';
 const ON_CHANGE_SEARCH = 'vendor/ON_CHANGE_SEARCH';
 const ON_CHANGE_PERSON = 'vendor/ON_CHANGE_PERSON';
+const ON_DELETE_PERSON = 'vendor/ON_DELETE_PERSON';
 const SET_TARGET = 'vendor/SET_TARGET';
 const ADD_PERSON_FORM = 'vendor/ADD_PERSON_FORM';
 const DELETE_PERSON_FORM = 'vendor/DELETE_PERSON_FORM';
@@ -30,9 +31,10 @@ export const addVendor = createAction(ADD_VENDOR, api.addVendor);
 export const editVendor = createAction(EDIT_VENDOR, api.editVendor);
 export const deleteVendor = createAction(DELETE_VENDOR, api.deleteVendor);
 export const onChange = createAction(ON_CHANGE);
-export const onChangeEdit = createAction(ON_CHANGE_EDIT);
+export const onChangeDeep = createAction(ON_CHANGE_DEEP);
 export const onChangeSearch = createAction(ON_CHANGE_SEARCH);
 export const onChangePerson = createAction(ON_CHANGE_PERSON);
+export const onDeletePerson = createAction(ON_DELETE_PERSON);
 export const setTarget = createAction(SET_TARGET);
 export const addPersonForm = createAction(ADD_PERSON_FORM);
 export const deletePersonForm = createAction(DELETE_PERSON_FORM);
@@ -65,7 +67,8 @@ const initialState = Map({
 		effEndDt: '',
 		part: '',
 		partNumber: '',
-		officialName: ''
+		officialName: '',
+		vendorPerson: List()
 	}),
 	search: Map({
 		vendorGb: '',
@@ -151,7 +154,8 @@ export default handleActions(
 					.setIn(['edit', 'effEndDt'], vendor.effEndDt)
 					.setIn(['edit', 'part'], vendor.part._id)
 					.setIn(['edit', 'partNumber'], vendor.partNumber)
-					.setIn(['edit', 'officialName'], vendor.officialName);
+					.setIn(['edit', 'officialName'], vendor.officialName)
+					.setIn(['edit', 'vendorPerson'], fromJS(vendor.vendorPerson));
 			}
 		}),
 		...pender({
@@ -258,6 +262,11 @@ export default handleActions(
 
 			return !target ? state.set(name, value) : state.setIn([target, name], value);
 		},
+		[ON_CHANGE_DEEP]: (state, action) => {
+			const { target, nestedTarget, index, name, value } = action.payload;
+
+			return index === undefined ? state.setIn([target, nestedTarget, name], value) : state.setIn([target, nestedTarget, index, name], value);
+		},
 		[ON_CHANGE_PERSON]: (state, action) => {
 			const { index, name, value } = action.payload;
 			const persons = state.get('persons');
@@ -265,6 +274,11 @@ export default handleActions(
 			const target = persons.findIndex((person) => person.get('index') === index);
 
 			return state.setIn(['persons', target, name], value);
+		},
+		[ON_DELETE_PERSON]: (state, action) => {
+			const { payload: index } = action;
+
+			return state.updateIn(['edit', 'vendorPerson'], (vendorPerson) => vendorPerson.remove(index));
 		},
 		[SET_TARGET]: (state, action) => {
 			const { payload } = action;

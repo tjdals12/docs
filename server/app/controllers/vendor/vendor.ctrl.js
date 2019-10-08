@@ -289,7 +289,7 @@ export const deleteVendor = async (ctx) => {
     const schema = Joi.object().keys({
         yn: Joi.string().required(),
         reason: Joi.string().required()
-    })
+    });
 
     const result = Joi.validate(ctx.request.body, schema);
 
