@@ -62,12 +62,12 @@ cmcode.get('/', cmcodeCtrl.list);
 
 /**
  * @swagger
- * /api/cmcocdes/forselect:
+ * /api/cmcodes/majors:
  *  get:
  *      tags:
  *          - Cmcode
- *      summary: 공통코드 목록 조회 (For select)
- *      description: 공통코드 목록 조회 (For select)
+ *      summary: 상위 공통코드 목록 조회
+ *      description: 상위 공통코드 목록 조회
  *      produces:
  *          - application/json
  *      responses:
@@ -76,7 +76,7 @@ cmcode.get('/', cmcodeCtrl.list);
  *              schema:
  *                  $ref: '#/definitions/cmcode'
  */
-cmcode.get('/forselect', cmcodeCtrl.listForSelect);
+cmcode.get('/majors', cmcodeCtrl.cdMajors);
 
 /**
  * @swagger
