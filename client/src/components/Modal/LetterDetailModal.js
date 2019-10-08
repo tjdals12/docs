@@ -9,6 +9,7 @@ const LetterDetailModal = ({
 	selectedTemplate,
 	data,
 	reasonError,
+	replyDate,
 	isOpen,
 	onClose,
 	onOpen,
@@ -16,6 +17,7 @@ const LetterDetailModal = ({
 	onCancel,
 	onOpenReference,
 	onDownload,
+	onReply,
 	className,
 	...rest
 }) => {
@@ -29,7 +31,7 @@ const LetterDetailModal = ({
 			size="xl"
 		>
 			<ModalHeader toggle={onClose} className="bg-light">
-				Letter 상세 <span className="text-primary">({data.get('officialNumber')})</span>
+				내부 공문 상세 <span className="text-primary">({data.get('officialNumber')})</span>
 			</ModalHeader>
 			<ModalBody className="p-0">
 				<Table borderless className="rounded m-0">
@@ -81,14 +83,14 @@ const LetterDetailModal = ({
 								취소 여부
 							</th>
 							<td>
-								{data.getIn([ 'cancelYn', 'yn' ])}{' '}
-								{data.getIn([ 'cancelYn', 'yn' ]) === 'YES' && (
+								{data.getIn(['cancelYn', 'yn'])}{' '}
+								{data.getIn(['cancelYn', 'yn']) === 'YES' && (
 									<React.Fragment>
 										<Typography tag="span" className="text-danger">
-											({data.getIn([ 'cancelYn', 'cancelDt' ])})
+											({data.getIn(['cancelYn', 'cancelDt'])})
 										</Typography>
 										<Typography type="p" className="m-0 pt-2">
-											사유: {data.getIn([ 'cancelYn', 'reason' ])}
+											사유: {data.getIn(['cancelYn', 'reason'])}
 										</Typography>
 									</React.Fragment>
 								)}
@@ -102,8 +104,8 @@ const LetterDetailModal = ({
 								{data.get('replyRequired') === 'NO' ? (
 									<span className="text-danger">회신 필요없음</span>
 								) : (
-									<span className="text-success">{data.get('targetDate').substr(0, 10)}</span>
-								)}
+										<span className="text-success">{data.get('targetDate').substr(0, 10)}</span>
+									)}
 							</td>
 							<th scope="row" className="text-right bg-light">
 								회신여부
@@ -115,8 +117,8 @@ const LetterDetailModal = ({
 										{data.get('replyYn') === 'YES' && `(${data.get('replyDate')})`}
 									</span>
 								) : (
-									'-'
-								)}
+										'-'
+									)}
 							</td>
 						</tr>
 						<tr className="border-bottom">
@@ -174,11 +176,11 @@ const LetterDetailModal = ({
 							</th>
 							<td colSpan={3}>
 								<span className="text-danger">
-									등록: {data.getIn([ 'timestamp', 'regId' ])} ({data.getIn([ 'timestamp', 'regDt' ])})
+									등록: {data.getIn(['timestamp', 'regId'])} ({data.getIn(['timestamp', 'regDt'])})
 								</span>
 								<br />
 								<span className="text-danger">
-									수정: {data.getIn([ 'timestamp', 'updId' ])} ({data.getIn([ 'timestamp', 'updDt' ])})
+									수정: {data.getIn(['timestamp', 'updId'])} ({data.getIn(['timestamp', 'updDt'])})
 								</span>
 							</td>
 						</tr>
@@ -199,8 +201,8 @@ const LetterDetailModal = ({
 								const body = `수신: ${data.get('receiver')} / ${data.get('receiverGb') === '01'
 									? clientCode
 									: contractorCode}\n발신: ${data.get('sender')} / ${data.get('senderGb') === '01'
-									? clientCode
-									: contractorCode}\n\n제목: ${subject}\t\t\t${data.get('sendDate').substr(0, 10)}`;
+										? clientCode
+										: contractorCode}\n\n제목: ${subject}\t\t\t${data.get('sendDate').substr(0, 10)}`;
 
 								window.location.href = `mailto:lll2slll@naver.com?${queryString.stringify({
 									subject,
@@ -212,56 +214,58 @@ const LetterDetailModal = ({
 						</Button>
 					</Col>
 				) : (
-					<Col className="d-flex align-items-center justify-content-start mr-4 p-0">
-						<Input
-							type="select"
-							name="template"
-							className="mr-2"
-							value={selectedTemplate}
-							onChange={onChange}
-						>
-							<option value="">-- 양식 --</option>
-							{templates
-								.filter((template) => template.getIn([ 'templateGb', 'cdMinor' ]) === '0001')
-								.map((template) => (
-									<option key={template.get('_id')} value={template.get('_id')}>
-										{template.get('templateName')}
-									</option>
-								))}
-						</Input>
-						<Button
-							color="success"
-							disabled={selectedTemplate === ''}
-							onClick={onDownload(data.get('_id'))}
-						>
-							DOWNLOAD
-						</Button>
-					</Col>
-				)}
+						<Col className="d-flex align-items-center justify-content-start mr-4 p-0">
+							<Input
+								type="select"
+								name="template"
+								className="mr-2 w-60"
+								value={selectedTemplate}
+								onChange={onChange}
+							>
+								<option value="">-- 양식 --</option>
+								{templates
+									.filter((template) => template.getIn(['templateGb', 'cdMinor']) === '0001')
+									.map((template) => (
+										<option key={template.get('_id')} value={template.get('_id')}>
+											{template.get('templateName')}
+										</option>
+									))}
+							</Input>
+							<Button
+								color="success"
+								disabled={selectedTemplate === ''}
+								onClick={onDownload(data.get('_id'))}
+							>
+								다운로드
+							</Button>
+						</Col>
+					)}
 
+				<Input type='date' className="w-20" name="replyDate" onChange={onChange} value={replyDate}></Input>
+				<Button color="danger" onClick={onReply(data.get('_id'))}>회신</Button>
 				<Input
 					type="text"
 					name="reason"
-					className="w-40"
-					placeholder="Cancel 사유 (필수)"
+					className="w-25"
+					placeholder="취소 사유 (필수)"
 					onChange={onChange}
 					invalid={reasonError}
 				/>
-				{data.getIn([ 'cancelYn', 'yn' ]) === 'NO' ? (
+				{data.getIn(['cancelYn', 'yn']) === 'NO' ? (
 					<Button color="danger" onClick={onCancel('YES')}>
-						CANCEL
+						취소
 					</Button>
 				) : (
-					<Button color="danger" onClick={onCancel('NO')}>
-						CANCEL 취소
-					</Button>
-				)}
+						<Button color="danger" onClick={onCancel('NO')}>
+							복구
+						</Button>
+					)}
 
 				<Button color="primary" onClick={onOpen('letterEdit')}>
-					EDIT
+					수정
 				</Button>
 				<Button color="secondary" onClick={onClose}>
-					CLOSE
+					닫기
 				</Button>
 			</ModalFooter>
 		</Modal>

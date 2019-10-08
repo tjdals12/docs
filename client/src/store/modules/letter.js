@@ -79,6 +79,7 @@ const initialState = Map({
 	reasonError: false,
 	keyword: '',
 	keywordError: false,
+	replyDate: moment().format('YYYY-MM-DD'),
 	lastPage: null
 });
 
@@ -102,7 +103,7 @@ export default handleActions(
 				return state
 					.set('letters', fromJS(letters))
 					.set('lastPage', parseInt(lastPage, 10))
-					.setIn([ 'search', 'isSearch' ], true);
+					.setIn(['search', 'isSearch'], true);
 			}
 		}),
 		...pender({
@@ -112,17 +113,17 @@ export default handleActions(
 
 				return state
 					.set('letter', fromJS(letter))
-					.setIn([ 'edit', 'letterGb' ], letter.letterGb)
-					.setIn([ 'edit', 'reference' ], fromJS(letter.reference))
-					.setIn([ 'edit', 'letterTitle' ], letter.letterTitle)
-					.setIn([ 'edit', 'senderGb' ], letter.senderGb)
-					.setIn([ 'edit', 'sender' ], letter.sender)
-					.setIn([ 'edit', 'receiverGb' ], letter.receiverGb)
-					.setIn([ 'edit', 'receiver' ], letter.receiver)
-					.setIn([ 'edit', 'sendDate' ], letter.sendDate)
-					.setIn([ 'edit', 'replyRequired' ], letter.replyRequired)
-					.setIn([ 'edit', 'targetDate' ], letter.targetDate)
-					.setIn([ 'edit', 'memo' ], letter.memo);
+					.setIn(['edit', 'letterGb'], letter.letterGb)
+					.setIn(['edit', 'reference'], fromJS(letter.reference))
+					.setIn(['edit', 'letterTitle'], letter.letterTitle)
+					.setIn(['edit', 'senderGb'], letter.senderGb)
+					.setIn(['edit', 'sender'], letter.sender)
+					.setIn(['edit', 'receiverGb'], letter.receiverGb)
+					.setIn(['edit', 'receiver'], letter.receiver)
+					.setIn(['edit', 'sendDate'], letter.sendDate)
+					.setIn(['edit', 'replyRequired'], letter.replyRequired)
+					.setIn(['edit', 'targetDate'], letter.targetDate)
+					.setIn(['edit', 'memo'], letter.memo);
 			}
 		}),
 		...pender({
@@ -136,17 +137,17 @@ export default handleActions(
 				const add = state.get('add');
 
 				return state
-					.setIn([ 'errors', 'projectError' ], add.get('project') === '')
-					.setIn([ 'errors', 'letterGbError' ], add.get('letterGb') === '')
-					.setIn([ 'errors', 'letterTitleError' ], add.get('letterTitle') === '')
-					.setIn([ 'errors', 'senderGbError' ], add.get('senderGb') === '')
-					.setIn([ 'errors', 'senderError' ], add.get('sender') === '')
-					.setIn([ 'errors', 'receiverGbError' ], add.get('receiverGb') === '')
-					.setIn([ 'errors', 'receiverError' ], add.get('receiver') === '')
-					.setIn([ 'errors', 'sendDateError' ], add.get('sendDate') === '')
-					.setIn([ 'errors', 'replyRequiredError' ], add.get('replyRequired') === '')
+					.setIn(['errors', 'projectError'], add.get('project') === '')
+					.setIn(['errors', 'letterGbError'], add.get('letterGb') === '')
+					.setIn(['errors', 'letterTitleError'], add.get('letterTitle') === '')
+					.setIn(['errors', 'senderGbError'], add.get('senderGb') === '')
+					.setIn(['errors', 'senderError'], add.get('sender') === '')
+					.setIn(['errors', 'receiverGbError'], add.get('receiverGb') === '')
+					.setIn(['errors', 'receiverError'], add.get('receiver') === '')
+					.setIn(['errors', 'sendDateError'], add.get('sendDate') === '')
+					.setIn(['errors', 'replyRequiredError'], add.get('replyRequired') === '')
 					.setIn(
-						[ 'errors', 'targetDateError' ],
+						['errors', 'targetDateError'],
 						add.get('replyRequired') === 'YES' && (!add.get('targetDate') || add.get('targetDate') === '')
 					);
 			}
@@ -174,14 +175,14 @@ export default handleActions(
 				const data = state.get('edit');
 
 				return state
-					.setIn([ 'errors', 'letterGbError' ], data.get('letterGb') === '')
-					.setIn([ 'errors', 'letterTitleError' ], data.get('letterTitle') === '')
-					.setIn([ 'errors', 'senderGbError' ], data.get('senderGb') === '')
-					.setIn([ 'errors', 'senderError' ], data.get('sender') === '')
-					.setIn([ 'errors', 'receiverGbError' ], data.get('receiverGb') === '')
-					.setIn([ 'errors', 'receiverError' ], data.get('receiver') === '')
-					.setIn([ 'errors', 'sendDateError' ], data.get('sendDate') === '')
-					.setIn([ 'errors', 'replyRequiredError' ], data.get('replyRequired') === '');
+					.setIn(['errors', 'letterGbError'], data.get('letterGb') === '')
+					.setIn(['errors', 'letterTitleError'], data.get('letterTitle') === '')
+					.setIn(['errors', 'senderGbError'], data.get('senderGb') === '')
+					.setIn(['errors', 'senderError'], data.get('sender') === '')
+					.setIn(['errors', 'receiverGbError'], data.get('receiverGb') === '')
+					.setIn(['errors', 'receiverError'], data.get('receiver') === '')
+					.setIn(['errors', 'sendDateError'], data.get('sendDate') === '')
+					.setIn(['errors', 'replyRequiredError'], data.get('replyRequired') === '');
 			}
 		}),
 		...pender({
@@ -198,7 +199,7 @@ export default handleActions(
 		[ON_CHANGE]: (state, action) => {
 			const { target, name, value } = action.payload;
 
-			return !target ? state.set(name, value) : state.setIn([ target, name ], value);
+			return !target ? state.set(name, value) : state.setIn([target, name], value);
 		},
 		[INITIALIZE]: (state, action) => {
 			const { payload } = action;
