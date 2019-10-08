@@ -143,6 +143,16 @@ export default handleActions(
 			type: GET_VENDOR,
 			onSuccess: (state, action) => {
 				const { data: vendor } = action.payload.data;
+				const vendorPerson = vendor.vendorPerson.map(person => (
+					{
+						_id: person._id,
+						name: person.name,
+						position: person.position,
+						task: person.task,
+						email: person.email,
+						contactNumber: person.contactNumber,
+					}
+				))
 
 				return state
 					.set('vendor', fromJS(vendor))
@@ -155,7 +165,7 @@ export default handleActions(
 					.setIn(['edit', 'part'], vendor.part._id)
 					.setIn(['edit', 'partNumber'], vendor.partNumber)
 					.setIn(['edit', 'officialName'], vendor.officialName)
-					.setIn(['edit', 'vendorPerson'], fromJS(vendor.vendorPerson));
+					.setIn(['edit', 'vendorPerson'], fromJS(vendorPerson));
 			}
 		}),
 		...pender({
