@@ -54,7 +54,7 @@ export const one = async (ctx) => {
     let { id } = ctx.params;
 
     try {
-        const cmcode = await Cmcode.findById(id).populate({ path: 'cdMinors' }).sort({ 'cdMinors.cdMinor': 1 });
+        const cmcode = await Cmcode.findById(id).populate({ path: 'cdMinors', options: { sort: { cdMinor: 1 } } });
 
         ctx.res.ok({
             data: cmcode,
