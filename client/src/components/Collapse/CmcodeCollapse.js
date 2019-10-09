@@ -86,7 +86,7 @@ const CmcodeCollapse = ({ cdMajors, cdMajor, cdMinor, add, isOpen, onSelectCdMaj
                         className='h-100 border rounded'>
                         <Column
                             field='index'
-                            width={40}
+                            width={60}
                             className='text-right'
                             headerCell={() => makeHeaderCell({ title: '#', className: 'text-right' })} />
                         <Column
