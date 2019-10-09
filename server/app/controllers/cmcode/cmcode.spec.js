@@ -185,7 +185,23 @@ describe('  [ CMCODE ]', () => {
                 .end((err, ctx) => {
                     if (err) throw err;
 
-                    expect(ctx.body.data.cdMinors).have.length(0);
+                    expect(ctx.body.data.cdMinors).have.length(1);
+                    expect(ctx.body.data.cdMinors[0].effEndDt.substr(0, 10)).not.equal('9999-12-31');
+                    done();
+                });
+        });
+    });
+
+    describe('PATCH /cmcodes/:id/:minor/recovery', () => {
+        it('recovery cdMinor', (done) => {
+            request(server)
+                .patch(`/api/cmcodes/${id}/${minorId}/recovery`)
+                .expect(200)
+                .end((err, ctx) => {
+                    if (err) throw err;
+
+                    expect(ctx.body.data.cdMinors).have.length(1);
+                    expect(ctx.body.data.cdMinors[0].effEndDt.substr(0, 10)).to.equal('9999-12-31');
                     done();
                 });
         });

@@ -29,10 +29,13 @@ export const addPerson = ({ id, persons }) => axios.post(`${real}/api/vendors/${
 
 /** Cmcode */
 export const getCmcodeByMajor = ({ major }) => axios.get(`${real}/api/cmcodes/${major}/minors`);
-export const getCdMajors = () => axios.get(`${real}/api/cmcodes/majors`);
-export const getCmcodeById = (id) => axios.get(`${real}/api/cmcodes/${id}`);
+export const getCdMajors = (page) => axios.get(`${real}/api/cmcodes/majors?page=${page}`);
+export const getCmcodeById = (id, page) => axios.get(`${real}/api/cmcodes/${id}?page=${page}`);
 export const getCdMinor = (id) => axios.get(`${real}/api/cmcodes/${id}/minor`);
 export const addCdMinor = (id, param) => axios.patch(`${real}/api/cmcodes/${id}/add`, { ...param });
+export const editCdMinor = (major, minor, param) => axios.patch(`${real}/api/cmcodes/${major}/${minor}/edit`, { ...param });
+export const deleteCdMinor = (major, minor) => axios.patch(`${real}/api/cmcodes/${major}/${minor}/delete`);
+export const recoveryCdMinor = (major, minor) => axios.patch(`${real}/api/cmcodes/${major}/${minor}/recovery`);
 
 /** Index */
 export const getIndexes = ({ page }) => axios.get(`${real}/api/documentindexes?page=${page}`);

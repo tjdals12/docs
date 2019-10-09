@@ -30,8 +30,26 @@ export const list = async (ctx) => {
  * @description 상위 공통코드 목록 조회
  */
 export const cdMajors = async (ctx) => {
+    let page = parseInt(ctx.query.page || 1, 10);
+
+    if (page < 1) {
+        ctx.res.badRequest({
+            data: page,
+            message: 'Page can\'t be less than 1'
+        });
+
+        return;
+    }
+
     try {
-        const cmcodes = await Cmcode.find({}, { cdMajor: 1, cdFName: 1, effStaDt: 1, effEndDt: 1 }).sort({ cdMajor: 1 });
+        const cmcodes = await Cmcode
+            .find({}, { cdMajor: 1, cdFName: 1, effStaDt: 1, effEndDt: 1 })
+            .sort({ cdMajor: 1 });
+
+        const count = await Cmcode.countDocuments();
+
+        ctx.set('Total', count);
+        ctx.set('Last-Page', Math.ceil(count / 10));
 
         ctx.res.ok({
             data: cmcodes,
@@ -51,10 +69,31 @@ export const cdMajors = async (ctx) => {
  * @description 상위 공통코드 조회
  */
 export const one = async (ctx) => {
+    let page = parseInt(ctx.query.page || 1, 10);
     let { id } = ctx.params;
 
+    if (page < 1) {
+        ctx.res.badRequest({
+            data: page,
+            message: 'Page can\'t be less than 1'
+        });
+
+        return;
+    }
+
     try {
-        const cmcode = await Cmcode.findById(id).populate({ path: 'cdMinors', options: { sort: { cdMinor: 1 } } });
+        const cmcode = await Cmcode
+            .findById(id, { cdMinors: { $slice: [(page - 1) * 10, 10] } })
+            .populate({ path: 'cdMinors', options: { sort: { cdMinor: 1 } } });
+
+        const count = await Cmcode
+            .findById(id, { _id: 0, cdMinors: 1 })
+            .then(data => {
+                return data.cdMinors.length;
+            });
+
+        ctx.set('Total', count);
+        ctx.set('Last-Page', Math.ceil(count / 10));
 
         ctx.res.ok({
             data: cmcode,
@@ -354,6 +393,38 @@ export const deleteCdMinor = async (ctx) => {
         ctx.res.internalServerError({
             data: { id, minorId },
             message: 'Error - cmcodeCtrl > deleteCdMinor'
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 09
+ * @description 하위 공통코드 복구
+ */
+export const recoveryCdMinor = async (ctx) => {
+    let { id, minorId } = ctx.params;
+
+    if (!Types.ObjectId.isValid(minorId)) {
+        ctx.res.badRequest({
+            data: { id, minorId },
+            message: 'Fail - cmcodeCtrl > recoveryCdMinor'
+        });
+
+        return;
+    }
+
+    try {
+        const cmcode = await Cmcode.recoveryCdMinor({ id, minorId });
+
+        ctx.res.ok({
+            data: cmcode,
+            message: 'Success - cmcodeCtrl > deleteCdMinor'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            data: { id, minorId },
+            message: `Error - cmcodeCtrl > recoveryCdMinor: ${e.message}`
         });
     }
 };

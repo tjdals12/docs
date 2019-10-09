@@ -82,7 +82,7 @@ CmcodeSchema.statics.saveCmcodeMinor = function (param) {
         {
             new: true
         }
-    ).populate({ path: 'cdMinors', options: { sort: { cdMinor: 1 } } });
+    );
 };
 
 /**
@@ -166,6 +166,23 @@ CmcodeSchema.statics.deleteCdMinor = async function (param) {
     } = param;
 
     await CdMinor.deleteCdMinor({ id: minorId });
+
+    return this.findOne({ _id: id }).populate({ path: 'cdMinors' });
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 09
+ * @description 하위 공통코드 복구
+ * @param       {Object} param
+ */
+CmcodeSchema.statics.recoveryCdMinor = async function (param) {
+    let {
+        id,
+        minorId
+    } = param;
+
+    await CdMinor.recoveryCdMinor({ id: minorId });
 
     return this.findOne({ _id: id }).populate({ path: 'cdMinors' });
 };

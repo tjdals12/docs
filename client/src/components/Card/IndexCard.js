@@ -24,11 +24,11 @@ const IndexCard = ({ data, type, onDetail, onOpenQuestion, onTarget, onOpenEdit 
 					<Col md={4} lg={4} className="d-flex align-items-start justify-content-center flex-column">
 						<CardTitle className="m-0">
 							<Typography type="p" className="mb-2">
-								{data.getIn([ 'vendor', 'partNumber' ])} ({data.getIn([ 'vendor', 'part', 'cdSName' ])})
-								/ {data.getIn([ 'vendor', 'vendorName' ])}
+								{data.getIn(['vendor', 'partNumber'])} ({data.getIn(['vendor', 'part', 'cdSName'])})
+								/ {data.getIn(['vendor', 'vendorName'])}
 							</Typography>
 							<Typography type="h5" className="title-font">
-								{data.getIn([ 'vendor', 'itemName' ])}
+								{data.getIn(['vendor', 'itemName'])}
 							</Typography>
 						</CardTitle>
 					</Col>
@@ -39,19 +39,19 @@ const IndexCard = ({ data, type, onDetail, onOpenQuestion, onTarget, onOpenEdit 
 							</CardSubtitle>
 							<CardSubtitle className="text-secondary small">
 								<MdAccessAlarm size={20} className="pb-1 mr-1" />
-								{data.getIn([ 'vendor', 'period', 'leftMonth' ])} months left
+								{data.getIn(['vendor', 'period', 'leftMonth'])} months left
 							</CardSubtitle>
 						</div>
 
-						<Progress color="secondary" value={data.getIn([ 'vendor', 'period', 'percent' ])} />
+						<Progress color="secondary" value={data.getIn(['vendor', 'period', 'percent'])} />
 
 						<CardText className="d-flex justify-content-between">
 							<Typography tag="span" className="text-left text-muted small">
-								{data.getIn([ 'vendor', 'effStaDt' ]).substr(0, 10)} ~{' '}
-								{data.getIn([ 'vendor', 'effEndDt' ]).substr(0, 10)}
+								{data.getIn(['vendor', 'effStaDt']).substr(0, 10)} ~{' '}
+								{data.getIn(['vendor', 'effEndDt']).substr(0, 10)}
 							</Typography>
 							<Typography tag="span" className="text-right text-muted small">
-								{data.getIn([ 'vendor', 'period', 'percent' ])}%
+								{data.getIn(['vendor', 'period', 'percent'])}%
 							</Typography>
 						</CardText>
 					</Col>
@@ -67,7 +67,7 @@ const IndexCard = ({ data, type, onDetail, onOpenQuestion, onTarget, onOpenEdit 
 										onOpenEdit(data.get('_id'))();
 									}}
 								>
-									EDIT
+									수정
 								</Button>
 								<Button
 									color="danger"
@@ -77,7 +77,7 @@ const IndexCard = ({ data, type, onDetail, onOpenQuestion, onTarget, onOpenEdit 
 										onOpenQuestion();
 									}}
 								>
-									DELETE
+									삭제
 								</Button>
 							</ButtonGroup>
 							<MdSearch size={25} onClick={onDetail(data.get('_id'))} className="can-click hover" />
@@ -87,10 +87,10 @@ const IndexCard = ({ data, type, onDetail, onOpenQuestion, onTarget, onOpenEdit 
 					{type === 'detail' && (
 						<Col md={4} className="text-right hidden-lg hidden-md hidden-sm hidden-xs">
 							<Typography type="p" className="text-danger">
-								등록: {data.getIn([ 'timestamp', 'regId' ])} ({data.getIn([ 'timestamp', 'regDt' ])})
+								등록: {data.getIn(['timestamp', 'regId'])} ({data.getIn(['timestamp', 'regDt'])})
 							</Typography>
 							<Typography type="p" className="text-danger">
-								수정: {data.getIn([ 'timestamp', 'updId' ])} ({data.getIn([ 'timestamp', 'updDt' ])})
+								수정: {data.getIn(['timestamp', 'updId'])} ({data.getIn(['timestamp', 'updDt'])})
 							</Typography>
 						</Col>
 					)}

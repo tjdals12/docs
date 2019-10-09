@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import Timestamp from 'models/common/schema/Timestamp';
+import DEFINE from 'models/common';
 
 /**
  * @author      minz-logger
@@ -10,6 +11,16 @@ const CdMinorSchema = new Schema({
     cdMinor: String,
     cdSName: String,
     cdRef1: Object,
+    effStaDt: {
+        type: Date,
+        default: DEFINE.dateNow,
+        get: DEFINE.dateConverter
+    },
+    effEndDt: {
+        type: Date,
+        default: DEFINE.COMMON.MAX_END_DT,
+        get: DEFINE.dateConverter
+    },
     timestamp: {
         type: Timestamp.schema,
         default: Timestamp
@@ -68,7 +79,38 @@ CdMinorSchema.statics.editCdMinor = function (param) {
 CdMinorSchema.statics.deleteCdMinor = function (param) {
     let { id } = param;
 
-    return this.findOneAndDelete({ _id: id });
+    return this.findOneAndUpdate(
+        { _id: id },
+        {
+            $set: {
+                effEndDt: DEFINE.dateNow()
+            }
+        },
+        {
+            new: true
+        }
+    );
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 09
+ * @description 하위 공통코드 복구
+ */
+CdMinorSchema.statics.recoveryCdMinor = function (param) {
+    let { id } = param;
+
+    return this.findOneAndUpdate(
+        { _id: id },
+        {
+            $set: {
+                effEndDt: DEFINE.COMMON.MAX_END_DT
+            }
+        },
+        {
+            new: true
+        }
+    );
 };
 
 export default model('Cdminor', CdMinorSchema);

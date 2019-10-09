@@ -70,6 +70,12 @@ cmcode.get('/', cmcodeCtrl.list);
  *      description: 상위 공통코드 목록 조회
  *      produces:
  *          - application/json
+ *      parameters:
+ *          - in: query
+ *            name: page
+ *            description: page number
+ *            type: string
+ *            example: 1
  *      responses:
  *          200:
  *              description: Successful operation
@@ -97,6 +103,11 @@ cmcode.get('/majors', cmcodeCtrl.cdMajors);
  *            required: true
  *            type: string
  *            example: 5d3e4a41709a5107893bfe4c
+ *          - in: query
+ *            name: page
+ *            description: page number
+ *            type: string
+ *            example: 1
  *      responses:
  *          200:
  *              description: Successful operation
@@ -387,5 +398,38 @@ cmcode.patch('/:id/delete', commonCtrl.checkObjectId, cmcodeCtrl.deleteCmcode);
  *                  $ref: '#/definitions/cmcode'
  */
 cmcode.patch('/:id/:minorId/delete', commonCtrl.checkObjectId, cmcodeCtrl.deleteCdMinor);
+
+/**
+ * @swagger
+ * /api/cmcodes/{id}/{minorId}/recovery:
+ *  patch:
+ *      tags:
+ *          - Cmcode
+ *      summary: 하위 공통코드 복구
+ *      description: 하위 공통코드 복구
+ *      consumes:
+ *          - application/json
+ *      produces:
+ *          - application/json  
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            description: cmcode id
+ *            required: true
+ *            type: string
+ *            example: 5d3e40cf742ebd0594392a15
+ *          - in: path
+ *            name: minorId
+ *            description: cdMinor id
+ *            required: true
+ *            type: string
+ *            example: 5d3e40cf742ebd0594392a15
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ *              schema:
+ *                  $ref: '#/definitions/cmcode'
+ */
+cmcode.patch('/:id/:minorId/recovery', commonCtrl.checkObjectId, cmcodeCtrl.recoveryCdMinor);
 
 export default cmcode;

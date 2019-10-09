@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { Collapse, Row, Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
+import PropTypes from 'prop-types';
 
 const makeHeaderCell = ({ title, className }) => {
 	const classes = classNames('k-link title-font', className);
@@ -152,8 +153,8 @@ const ProjectCollapse = ({
 										detail.get('effStaDt') ? (
 											detail.get('effStaDt').substr(0, 10)
 										) : (
-											add.get('effStaDt')
-										)
+												add.get('effStaDt')
+											)
 									}
 									onChange={(e) => onChange(e)(isAdd ? 'add' : 'project')}
 									invalid={errors.get('effStaDtError')}
@@ -171,8 +172,8 @@ const ProjectCollapse = ({
 										detail.get('effEndDt') ? (
 											detail.get('effEndDt').substr(0, 10)
 										) : (
-											add.get('effEndDt')
-										)
+												add.get('effEndDt')
+											)
 									}
 									onChange={(e) => onChange(e)(isAdd ? 'add' : 'project')}
 									invalid={errors.get('effEndDtError')}
@@ -250,18 +251,18 @@ const ProjectCollapse = ({
 							<Col md={{ offset: 8, size: 4 }} className="d-flex justify-content-end">
 								{isAdd ? (
 									<Button size="lg" color="primary" onClick={onSave}>
-										SAVE
+										저장
 									</Button>
 								) : (
-									<React.Fragment>
-										<Button size="lg" color="primary" className="mr-2" onClick={onEdit}>
-											EDIT
+										<React.Fragment>
+											<Button size="lg" color="primary" className="mr-2" onClick={onEdit}>
+												수정
 										</Button>
-										<Button size="lg" color="danger">
-											DELETE
+											<Button size="lg" color="danger">
+												삭제
 										</Button>
-									</React.Fragment>
-								)}
+										</React.Fragment>
+									)}
 							</Col>
 						</FormGroup>
 					</Form>
@@ -270,5 +271,23 @@ const ProjectCollapse = ({
 		</Collapse>
 	);
 };
+
+ProjectCollapse.propTypes = {
+	isOpen: PropTypes.bool,
+	onPage: PropTypes.func,
+	onSelect: PropTypes.func,
+	onChange: PropTypes.func,
+	onSave: PropTypes.func,
+	onEdit: PropTypes.func
+};
+
+ProjectCollapse.defaultProps = {
+	isOpen: false,
+	onPage: () => console.warn('Warning: onPage is not defined'),
+	onSelect: () => console.warn('Warning: onSelect is not defined'),
+	onChange: () => console.warn('Warning: onChange is not defined'),
+	onSave: () => console.warn('Warning: onSave is not defined'),
+	onEdit: () => console.warn('Warning: onEdit is not defined')
+}
 
 export default ProjectCollapse;

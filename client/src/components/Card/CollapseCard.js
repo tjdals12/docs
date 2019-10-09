@@ -29,7 +29,7 @@ const CollapseCard = ({ title, description, onOpen, onAddForm, collapse: Collaps
 							onAddForm();
 						}}
 					>
-						ADD
+						추가
 					</Button>
 				</Col>
 			</Row>
@@ -45,7 +45,7 @@ CollapseCard.propTypes = {
 	isOpen: PropTypes.bool,
 	onOpen: PropTypes.func,
 	onAddForm: PropTypes.func,
-	collapse: PropTypes.oneOfType([ PropTypes.node, PropTypes.string ]),
+	collapse: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
 	className: PropTypes.string
 };
 

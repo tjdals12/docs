@@ -183,23 +183,23 @@ const TemplateCollapse = ({
 							{isAdd ? (
 								<Col md={{ offset: 8, size: 4 }} className="d-flex justify-content-end">
 									<Button color="primary" size="lg" onClick={onSave}>
-										SAVE
+										저장
 									</Button>
 								</Col>
 							) : (
 									<React.Fragment>
 										<Col md={4}>
 											<Button color="success" size="lg" tag="a" href={detail.get('templatePath')}>
-												DOWNLOAD
+												다운로드
 										</Button>
 										</Col>
 										<Col md={{ offset: 4, size: 4 }} className="d-flex justify-content-end">
 											<Button color="primary" size="lg" className="mr-2" onClick={onEdit}>
-												EDIT
-										</Button>
+												수정
+											</Button>
 											<Button color="danger" size="lg">
-												DELETE
-										</Button>
+												삭제
+											</Button>
 										</Col>
 									</React.Fragment>
 								)}
@@ -207,7 +207,7 @@ const TemplateCollapse = ({
 					</Form>
 				</Col>
 			</Row>
-		</Collapse>
+		</Collapse >
 	);
 };
 
