@@ -100,15 +100,15 @@ describe('  [ CMCODE ]', () => {
         });
     });
 
-    describe('GET /cmcodes/:id/:minor', () => {
+    describe('GET /cmcodes/:id/minor', () => {
         it('get cmcode', (done) => {
             request(server)
-                .get(`/api/cmcodes/${id}/${minorId}`)
+                .get(`/api/cmcodes/${minorId}/minor`)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
 
-                    expect(ctx.body.data.cdMajor).to.equal(major);
+                    expect(ctx.body.data._id).to.equal(minorId);
                     done();
                 });
         });

@@ -1,4 +1,5 @@
-import Cmcode from '../../models/cmcode/cmcode';
+import Cmcode from 'models/cmcode/cmcode';
+import CdMinor from 'models/cmcode/cdMinor';
 import Joi from 'joi';
 import { Types } from 'mongoose';
 
@@ -104,29 +105,20 @@ export const oneByMajor = async (ctx) => {
  * @date        2019. 07. 29
  * @description 하위 공통코드 조회
  */
-export const listWithMinor = async (ctx) => {
-    let { id, minor } = ctx.params;
-
-    if (!minor) {
-        ctx.res.badRequest({
-            data: { id, minor },
-            message: 'Fail - cmcodeCtrl > listWithMinor'
-        });
-
-        return;
-    }
+export const oneMinor = async (ctx) => {
+    let { id } = ctx.params;
 
     try {
-        const cmcode = await Cmcode.findWithMinor({ id, minor });
+        const cmcode = await CdMinor.findById(id);
 
         ctx.res.ok({
             data: cmcode,
-            message: 'Success - cmcodeCtrl > listWithMinor'
+            message: 'Success - cmcodeCtrl > oneMinor'
         });
     } catch (e) {
         ctx.res.internalServerError({
-            data: { id, minor },
-            message: 'Error - cmcodeCtrl > listWithMinor'
+            data: id,
+            message: 'Error - cmcodeCtrl > oneMinor'
         });
     }
 };
