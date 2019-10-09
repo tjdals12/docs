@@ -15,15 +15,25 @@ const makeHeaderCell = ({ title, className }) => {
     return <span className={classes}>{title}</span>;
 };
 
-const CmcodeCollapse = ({ cdMajors, cdMajor, isOpen, onSelectCdMajor, onSelectCdMinor, onChange, onSave, onEdit }) => {
+const CmcodeCollapse = ({ cdMajors, cdMajor, cdMinor, add, isOpen, onSelectCdMajor, onSelectCdMinor, onChange, onSave, onEdit }) => {
 
-    const rowRender = (Row, props) => {
+    const isAdd = cdMinor.size === 0;
+
+    const majorRowRender = (Row, props) => {
         const isActive = props.dataItem._id === cdMajor.get('_id');
 
         return React.cloneElement(Row, {
             className: classNames(isActive && 'bg-gradient-theme-left text-white ', 'can-click', Row.props.className)
         });
     };
+
+    const minorRowRender = (Row, props) => {
+        const isActive = props.dataItem._id === cdMinor.get('_id');
+
+        return React.cloneElement(Row, {
+            className: classNames(isActive && 'bg-gradient-theme-left text-white ', 'can-click', Row.props.className)
+        });
+    }
 
     return (
         <Collapse isOpen={isOpen} className="mt-3 pt-4 border-top">
@@ -36,7 +46,7 @@ const CmcodeCollapse = ({ cdMajors, cdMajor, isOpen, onSelectCdMajor, onSelectCd
                         take={10}
                         skip={0}
                         onRowClick={(e) => onSelectCdMajor(e.dataItem._id)}
-                        rowRender={rowRender}
+                        rowRender={majorRowRender}
                         className='h-100 border rounded'>
                         <Column
                             field='index'
@@ -71,7 +81,8 @@ const CmcodeCollapse = ({ cdMajors, cdMajor, isOpen, onSelectCdMajor, onSelectCd
                         total={30}
                         take={10}
                         skip={0}
-                        onRowClick={(e) => onSelectCdMinor(e.dataItem.cdMinor)}
+                        onRowClick={(e) => onSelectCdMinor(e.dataItem._id)}
+                        rowRender={minorRowRender}
                         className='h-100 border rounded'>
                         <Column
                             field='index'
@@ -101,20 +112,37 @@ const CmcodeCollapse = ({ cdMajors, cdMajor, isOpen, onSelectCdMajor, onSelectCd
                         <FormGroup row>
                             <Label md={4} for='cdMinor'>코드</Label>
                             <Col md={8}>
-                                <Input type='text' id='cdMinor' name='cdMinor' onChange={onChange} />
+                                <Input
+                                    type='text'
+                                    id='cdMinor'
+                                    name='cdMinor'
+                                    value={isAdd ? add.get('cdMinor') : cdMinor.get('cdMinor')}
+                                    onChange={(e) => onChange(e)(isAdd ? 'add' : 'cdMinor')} />
                             </Col>
                         </FormGroup>
                         <FormGroup row>
                             <Label md={4} for='cdSName'>코드명</Label>
                             <Col md={8}>
-                                <Input type='text' id='cdSName' name='cdSName' onChange={onChange} />
+                                <Input
+                                    type='text'
+                                    id='cdSName'
+                                    name='cdSName'
+                                    value={isAdd ? add.get('cdMinor') : cdMinor.get('cdSName')}
+                                    onChange={(e) => onChange(e)(isAdd ? 'add' : 'cdMinor')} />
                             </Col>
                         </FormGroup>
                         <FormGroup row>
                             <Col className='d-flex align-items-center justify-content-end'>
-                                <Button color='primary' onClick={onSave}>SAVE</Button>
-                                <Button color='primary' className="mr-2">EDIT</Button>
-                                <Button color='danger'>DELETE</Button>
+                                {
+                                    isAdd ? (
+                                        <Button color='primary' onClick={onSave}>SAVE</Button>
+                                    ) : (
+                                            <React.Fragment>
+                                                <Button color='primary' className="mr-2" onClick={onEdit}>EDIT</Button>
+                                                <Button color='danger'>DELETE</Button>
+                                            </React.Fragment>
+                                        )
+                                }
                             </Col>
                         </FormGroup>
                     </Form>

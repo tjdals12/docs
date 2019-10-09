@@ -7,16 +7,24 @@ const GET_CMCODE_BY_MAJOR = 'cmcode/GET_CMCODE_BY_MAJOR';
 const GET_CDMAJORS = 'cmcode/GET_CDMAJORS';
 const GET_CDMINORS = 'cmcode/GET_CDMINORS';
 const GET_CDMINOR = 'cmcode/GET_CDMINOR';
+const ON_CHANGE = 'cmcode/ON_CHANGE';
+const INITIALIZE = 'cmcode/INITIALIZE';
 
 export const getCmcodeByMajor = createAction(GET_CMCODE_BY_MAJOR, api.getCmcodeByMajor);
 export const getCdMajors = createAction(GET_CDMAJORS, api.getCdMajors);
 export const getCdMinors = createAction(GET_CDMINORS, api.getCmcodeById);
-export const getCdMinor = createAction(GET_CDMINOR, api.getCdMinorByIdWithMinor);
+export const getCdMinor = createAction(GET_CDMINOR, api.getCdMinor);
+export const onChange = createAction(ON_CHANGE);
+export const initialize = createAction(INITIALIZE);
 
 const initialState = Map({
 	cdMajors: List(),
 	cdMajor: Map({}),
-	cdMinor: Map({})
+	cdMinor: Map({}),
+	add: Map({
+		cdMinor: '',
+		cdSName: ''
+	})
 });
 
 export default handleActions(
@@ -68,7 +76,17 @@ export default handleActions(
 
 				return state.set('cdMinor', fromJS(cdMinor));
 			}
-		})
+		}),
+		[ON_CHANGE]: (state, action) => {
+			const { target, name, value } = action.payload;
+
+			return target ? state.setIn([target, name], value) : state.set(name, value);
+		},
+		[INITIALIZE]: (state, action) => {
+			const { payload } = action;
+
+			return state.set(payload, initialState.get(payload));
+		}
 	},
 	initialState
 );

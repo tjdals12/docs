@@ -22,12 +22,10 @@ class CmcodeCollapseCardContainer extends React.Component {
         CmcodeActions.getCdMinors(id);
     }
 
-    getCdMinor = (minor) => {
-        const { CmcodeActions, cdMajor } = this.props;
+    getCdMinor = (id) => {
+        const { CmcodeActions } = this.props;
 
-        console.log(cdMajor.get('_id'), minor);
-
-        CmcodeActions.getCdMinor({ id: cdMajor.get('_id'), minor });
+        CmcodeActions.getCdMinor(id);
     }
 
     handleOpen = () => {
@@ -40,13 +38,26 @@ class CmcodeCollapseCardContainer extends React.Component {
         })
     }
 
+    handleAddForm = () => {
+        const { CmcodeActions } = this.props;
+
+        CmcodeActions.initialize('cdMinor');
+    }
+
+    handleChange = (e) => (target) => {
+        const { CmcodeActions } = this.props;
+        const { name, value } = e.target;
+
+        CmcodeActions.onChange({ target, name, value });
+    }
+
     componentDidMount() {
         this.getCdMajors();
     }
 
     render() {
         const { isOpen } = this.state;
-        const { cdMajors, cdMajor, loading } = this.props;
+        const { cdMajors, cdMajor, cdMinor, add, loading } = this.props;
 
         if (loading || loading === undefined) return null;
 
@@ -55,10 +66,13 @@ class CmcodeCollapseCardContainer extends React.Component {
                 title="공통코드 관리"
                 description="공통코드 관리"
                 onOpen={this.handleOpen}
+                onAddForm={this.handleAddForm}
                 collapse={
                     <CmcodeCollapse
                         cdMajors={cdMajors}
                         cdMajor={cdMajor}
+                        cdMinor={cdMinor}
+                        add={add}
                         isOpen={isOpen}
                         onSelectCdMajor={this.getCdMinors}
                         onSelectCdMinor={this.getCdMinor}
@@ -72,6 +86,8 @@ export default connect(
     (state) => ({
         cdMajors: state.cmcode.get('cdMajors'),
         cdMajor: state.cmcode.get('cdMajor'),
+        cdMinor: state.cmcode.get('cdMinor'),
+        add: state.cmcode.get('add'),
         loading: state.pender.pending['cmcode/GET_CDMAJORS'],
     }),
     (dispatch) => ({
