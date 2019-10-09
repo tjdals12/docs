@@ -37,21 +37,6 @@ const CmcodeSchema = new Schema({
 /**
  * @author      minz-logger
  * @date        2019. 07. 29
- * @description 하위 공통코드 조회
- * @param       {Object} param
- */
-CmcodeSchema.statics.findWithMinor = function (param) {
-    let {
-        id,
-        minor
-    } = param;
-
-    return this.findOne({ _id: id }).populate({ path: 'cdMinors', match: { cdMinor: minor } });
-};
-
-/**
- * @author      minz-logger
- * @date        2019. 07. 29
  * @description 상위 공통코드 생성
  * @param       {Object} param
  */

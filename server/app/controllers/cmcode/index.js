@@ -134,7 +134,7 @@ cmcode.get('/:major/minors', cmcodeCtrl.oneByMajor);
 
 /**
  * @swagger
- * /api/cmcodes/{id}/{minor}:
+ * /api/cmcodes/{id}/minor:
  *  get:
  *      tags:
  *          - Cmcode
@@ -147,23 +147,17 @@ cmcode.get('/:major/minors', cmcodeCtrl.oneByMajor);
  *      parameters:
  *          - in: path
  *            name: id
- *            description: cmcode id
+ *            description: cdMinor id
  *            required: true
  *            type: string
  *            example: 5d3ea3a47570f80e3c363e41
- *          - in: path
- *            name: minor
- *            description: cmcode cdMinor
- *            required: true
- *            type: string
- *            example: '0001'
  *      responses:
  *          200:
  *              description: Successful operation
  *              schema:
  *                  $ref: '#/definitions/cmcode'
  */
-cmcode.get('/:id/:minor', commonCtrl.checkObjectId, cmcodeCtrl.listWithMinor);
+cmcode.get('/:id/minor', commonCtrl.checkObjectId, cmcodeCtrl.oneMinor);
 
 /**
  * @swagger
