@@ -15,7 +15,7 @@ const makeHeaderCell = ({ title, className }) => {
     return <span className={classes}>{title}</span>;
 };
 
-const CmcodeCollapse = ({ cdMajors, cdMajor, isOpen, onSelectCdMajor, onChange, onSave, onEdit }) => {
+const CmcodeCollapse = ({ cdMajors, cdMajor, isOpen, onSelectCdMajor, onSelectCdMinor, onChange, onSave, onEdit }) => {
 
     const rowRender = (Row, props) => {
         const isActive = props.dataItem._id === cdMajor.get('_id');
@@ -71,6 +71,7 @@ const CmcodeCollapse = ({ cdMajors, cdMajor, isOpen, onSelectCdMajor, onChange, 
                         total={30}
                         take={10}
                         skip={0}
+                        onRowClick={(e) => onSelectCdMinor(e.dataItem.cdMinor)}
                         className='h-100 border rounded'>
                         <Column
                             field='index'
