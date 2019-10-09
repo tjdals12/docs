@@ -127,7 +127,7 @@ const CmcodeCollapse = ({ cdMajors, cdMajor, cdMinor, add, isOpen, onSelectCdMaj
                                     type='text'
                                     id='cdSName'
                                     name='cdSName'
-                                    value={isAdd ? add.get('cdMinor') : cdMinor.get('cdSName')}
+                                    value={isAdd ? add.get('cdSName') : cdMinor.get('cdSName')}
                                     onChange={(e) => onChange(e)(isAdd ? 'add' : 'cdMinor')} />
                             </Col>
                         </FormGroup>
@@ -135,7 +135,7 @@ const CmcodeCollapse = ({ cdMajors, cdMajor, cdMinor, add, isOpen, onSelectCdMaj
                             <Col className='d-flex align-items-center justify-content-end'>
                                 {
                                     isAdd ? (
-                                        <Button color='primary' onClick={onSave}>SAVE</Button>
+                                        <Button color='primary' onClick={() => onSave(cdMajor.get('_id'))} disabled={cdMajor.size === 0 ? true : false} >SAVE</Button>
                                     ) : (
                                             <React.Fragment>
                                                 <Button color='primary' className="mr-2" onClick={onEdit}>EDIT</Button>

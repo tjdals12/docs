@@ -42,6 +42,7 @@ class CmcodeCollapseCardContainer extends React.Component {
         const { CmcodeActions } = this.props;
 
         CmcodeActions.initialize('cdMinor');
+        CmcodeActions.initialize('add');
     }
 
     handleChange = (e) => (target) => {
@@ -49,6 +50,13 @@ class CmcodeCollapseCardContainer extends React.Component {
         const { name, value } = e.target;
 
         CmcodeActions.onChange({ target, name, value });
+    }
+
+    handleSave = (id) => {
+        const { CmcodeActions, add } = this.props;
+
+        CmcodeActions.addCdMinor(id, { ...add.toJS() });
+        CmcodeActions.initialize('add');
     }
 
     componentDidMount() {
@@ -76,6 +84,8 @@ class CmcodeCollapseCardContainer extends React.Component {
                         isOpen={isOpen}
                         onSelectCdMajor={this.getCdMinors}
                         onSelectCdMinor={this.getCdMinor}
+                        onChange={this.handleChange}
+                        onSave={this.handleSave}
                     />
                 } />
         )

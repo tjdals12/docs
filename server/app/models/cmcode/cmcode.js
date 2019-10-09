@@ -82,7 +82,7 @@ CmcodeSchema.statics.saveCmcodeMinor = function (param) {
         {
             new: true
         }
-    );
+    ).populate({ path: 'cdMinors', options: { sort: { cdMinor: 1 } } });
 };
 
 /**

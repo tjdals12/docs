@@ -7,6 +7,7 @@ const GET_CMCODE_BY_MAJOR = 'cmcode/GET_CMCODE_BY_MAJOR';
 const GET_CDMAJORS = 'cmcode/GET_CDMAJORS';
 const GET_CDMINORS = 'cmcode/GET_CDMINORS';
 const GET_CDMINOR = 'cmcode/GET_CDMINOR';
+const ADD_CDMINOR = 'cmcode/ADD_CDMINOR';
 const ON_CHANGE = 'cmcode/ON_CHANGE';
 const INITIALIZE = 'cmcode/INITIALIZE';
 
@@ -14,6 +15,7 @@ export const getCmcodeByMajor = createAction(GET_CMCODE_BY_MAJOR, api.getCmcodeB
 export const getCdMajors = createAction(GET_CDMAJORS, api.getCdMajors);
 export const getCdMinors = createAction(GET_CDMINORS, api.getCmcodeById);
 export const getCdMinor = createAction(GET_CDMINOR, api.getCdMinor);
+export const addCdMinor = createAction(ADD_CDMINOR, api.addCdMinor);
 export const onChange = createAction(ON_CHANGE);
 export const initialize = createAction(INITIALIZE);
 
@@ -75,6 +77,23 @@ export default handleActions(
 				const { data: cdMinor } = action.payload.data;
 
 				return state.set('cdMinor', fromJS(cdMinor));
+			}
+		}),
+		...pender({
+			type: ADD_CDMINOR,
+			onSuccess: (state, action) => {
+				let { data: cmcode } = action.payload.data;
+
+				cmcode.cdMinors = cmcode.cdMinors.map((cdMinor, index) => ({
+					index: index + 1,
+					...cdMinor,
+					timestamp: {
+						...cdMinor.timestamp,
+						regDt: cdMinor.timestamp.regDt.substr(0, 10)
+					}
+				}))
+
+				return state.set('cdMajor', fromJS(cmcode));
 			}
 		}),
 		[ON_CHANGE]: (state, action) => {
