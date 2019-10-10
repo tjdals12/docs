@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { Collapse, Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
+import QuestionModal from 'components/Modal/QuestionModal';
 import PropTypes from 'prop-types';
 
 const makeHeaderCell = ({ title, className }) => {
@@ -19,11 +20,15 @@ const TemplateCollapse = ({
 	total,
 	lastPage,
 	isOpen,
+	isOpenQuestion,
+	onCloseModal,
+	onOpenModal,
 	onSelect,
 	onChange,
 	onUpload,
 	onSave,
-	onEdit
+	onEdit,
+	onDelete
 }) => {
 	const isAdd = detail.size === 0;
 
@@ -37,6 +42,24 @@ const TemplateCollapse = ({
 
 	return (
 		<Collapse isOpen={isOpen} className="mt-3 pt-4 border-top">
+			<QuestionModal
+				isOpen={isOpenQuestion}
+				onClose={onCloseModal}
+				size="md"
+				header="양식 삭제"
+				body={
+					<div>
+						<p className="m-0">선택 양식을 삭제하시겠습니까?</p>
+						<p className="m-0 text-danger">(* 삭제된 데이터 복구되지 않습니다.)</p>
+					</div>
+				}
+				footer={
+					<Button color="primary" onClick={() => onDelete(detail.get('_id'))}>
+						삭제
+					</Button>
+				}
+			/>
+
 			<Row style={{ minHeight: '520px' }}>
 				<Col md={6} style={{ maxHeight: '520px', overflow: 'scroll' }}>
 					<Grid
@@ -191,13 +214,13 @@ const TemplateCollapse = ({
 										<Col md={4}>
 											<Button color="success" size="lg" tag="a" href={detail.get('templatePath')}>
 												다운로드
-										</Button>
+											</Button>
 										</Col>
 										<Col md={{ offset: 4, size: 4 }} className="d-flex justify-content-end">
 											<Button color="primary" size="lg" className="mr-2" onClick={onEdit}>
 												수정
 											</Button>
-											<Button color="danger" size="lg">
+											<Button color="danger" size="lg" onClick={() => onOpenModal('question')}>
 												삭제
 											</Button>
 										</Col>
@@ -213,21 +236,29 @@ const TemplateCollapse = ({
 
 TemplateCollapse.propTypes = {
 	isOpen: PropTypes.bool,
+	isOpenQuestion: PropTypes.bool,
+	onCloseModal: PropTypes.func,
+	onOpenModal: PropTypes.func,
 	onSelect: PropTypes.func,
 	onChange: PropTypes.func,
 	onUpload: PropTypes.func,
 	onSave: PropTypes.func,
 	onEdit: PropTypes.func,
+	onDelete: PropTypes.func,
 	className: PropTypes.string
 };
 
 TemplateCollapse.defaultProps = {
 	isOpen: false,
+	isOpenQuestion: false,
+	onCloseModal: () => console.warn('Warning: onCloseModal is not defined'),
+	onOpenModal: () => console.warn('Warning: onOpenModal is not defined'),
 	onSelect: () => console.warn('Warning: onSelect is not defined'),
 	onChange: () => console.warn('Warning: onChange is not defined'),
 	onUpload: () => console.warn('Warning: onUpload is not defined'),
 	onSave: () => console.warn('Warning onSave is not defined'),
-	onEdit: () => console.warn('Warning: onEdit is not defined')
+	onEdit: () => console.warn('Warning: onEdit is not defined'),
+	onDelete: () => console.warn('Warning: onDelete: is not defined')
 };
 
 export default TemplateCollapse;

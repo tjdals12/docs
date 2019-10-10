@@ -30,7 +30,7 @@ class CmcodeCollapseCardContainer extends React.Component {
 		CmcodeActions.getCdMinor(id);
 	};
 
-	handleOpen = () => {
+	handleToggle = () => {
 		this.setState((prevState) => {
 			let { isOpen } = prevState;
 
@@ -110,7 +110,7 @@ class CmcodeCollapseCardContainer extends React.Component {
 			<CollapseCard
 				title="공통코드 관리"
 				description="공통코드 관리"
-				onOpen={this.handleOpen}
+				onToggle={this.handleToggle}
 				onAddForm={this.handleAddForm}
 				collapse={
 					<CmcodeCollapse

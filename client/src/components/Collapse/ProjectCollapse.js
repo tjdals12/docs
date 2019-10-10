@@ -23,15 +23,17 @@ const ProjectCollapse = ({
 	onSelect,
 	onChange,
 	onSave,
-	onEdit
+	onEdit,
+	onDelete,
 }) => {
 	const isAdd = detail.size === 0;
 
 	const rowRender = (Row, props) => {
 		const isActive = props.dataItem._id === detail.get('_id');
+		const isDelete = props.dataItem.deleteYn === 'YES';
 
 		return React.cloneElement(Row, {
-			className: classNames(isActive && 'bg-gradient-theme-left text-white ', 'can-click', Row.props.className)
+			className: classNames(isDelete && 'text-line-through text-muted font-italic', isActive && 'bg-gradient-theme-left text-white ', 'can-click', Row.props.className)
 		});
 	};
 
@@ -257,10 +259,12 @@ const ProjectCollapse = ({
 										<React.Fragment>
 											<Button size="lg" color="primary" className="mr-2" onClick={onEdit}>
 												수정
-										</Button>
-											<Button size="lg" color="danger">
-												삭제
-										</Button>
+											</Button>
+											{
+												detail.get('deleteYn') === 'YES'
+													? <Button size="lg" color="success" onClick={() => onDelete(detail.get('_id'), 'NO')}>복구</Button>
+													: <Button size="lg" color="danger" onClick={() => onDelete(detail.get('_id'), 'YES')}>삭제</Button>
+											}
 										</React.Fragment>
 									)}
 							</Col>
@@ -278,7 +282,8 @@ ProjectCollapse.propTypes = {
 	onSelect: PropTypes.func,
 	onChange: PropTypes.func,
 	onSave: PropTypes.func,
-	onEdit: PropTypes.func
+	onEdit: PropTypes.func,
+	onDelete: PropTypes.func
 };
 
 ProjectCollapse.defaultProps = {
@@ -287,7 +292,8 @@ ProjectCollapse.defaultProps = {
 	onSelect: () => console.warn('Warning: onSelect is not defined'),
 	onChange: () => console.warn('Warning: onChange is not defined'),
 	onSave: () => console.warn('Warning: onSave is not defined'),
-	onEdit: () => console.warn('Warning: onEdit is not defined')
+	onEdit: () => console.warn('Warning: onEdit is not defined'),
+	onDelete: () => console.warn('Warning: onDelete is not defined')
 }
 
 export default ProjectCollapse;

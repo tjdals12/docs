@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import axios from 'axios';
 import * as cmcodeActions from 'store/modules/cmcode';
 import * as templateActions from 'store/modules/template';
+import * as modalActions from 'store/modules/modal';
 
 class TemplateCollapseCardContainer extends React.Component {
 	state = {
@@ -21,10 +22,11 @@ class TemplateCollapseCardContainer extends React.Component {
 	getTemplates = (page) => {
 		const { TemplateActions } = this.props;
 
+		TemplateActions.onChange({ name: 'page', value: page });
 		TemplateActions.getTemplates({ page });
 	};
 
-	handleOpen = () => {
+	handleToggle = () => {
 		this.setState((prevState) => {
 			const { isOpen } = prevState;
 
@@ -33,6 +35,18 @@ class TemplateCollapseCardContainer extends React.Component {
 			};
 		});
 	};
+
+	handleOpenModal = (name) => {
+		const { ModalActions } = this.props;
+
+		ModalActions.open(name);
+	}
+
+	handleCloseModal = (name) => () => {
+		const { ModalActions } = this.props;
+
+		ModalActions.close(name);
+	}
 
 	handleSelect = (e) => {
 		const { TemplateActions } = this.props;
@@ -110,13 +124,22 @@ class TemplateCollapseCardContainer extends React.Component {
 		this.getTemplates(1);
 	};
 
+	handleDelete = (id) => {
+		const { TemplateActions } = this.props;
+
+		TemplateActions.deleteTemplate({ id });
+		TemplateActions.initialize('template');
+		this.getTemplates(1);
+		this.handleCloseModal('question')();
+	}
+
 	componentDidMount() {
 		this.getCmcodes('0004');
 		this.getTemplates(1);
 	}
 
 	render() {
-		const { gbs, templates, template, add, errors, total, lastPage, loading } = this.props;
+		const { gbs, templates, template, add, errors, total, lastPage, isOpenQuestion, loading } = this.props;
 
 		if (!gbs || (loading || loading === undefined)) return null;
 
@@ -124,7 +147,7 @@ class TemplateCollapseCardContainer extends React.Component {
 			<CollapseCard
 				title="양식 관리"
 				description="사용하는 양식 관리"
-				onOpen={this.handleOpen}
+				onToggle={this.handleToggle}
 				onAddForm={this.handleAddForm}
 				collapse={
 					<TemplateCollapse
@@ -136,11 +159,15 @@ class TemplateCollapseCardContainer extends React.Component {
 						total={total}
 						lastPage={lastPage}
 						isOpen={this.state.isOpen}
+						isOpenQuestion={isOpenQuestion}
+						onOpenModal={this.handleOpenModal}
+						onCloseModal={this.handleCloseModal}
 						onSelect={this.handleSelect}
 						onChange={this.handleChange}
 						onUpload={this.handleUpload}
 						onSave={this.handleSave}
 						onEdit={this.handleEdit}
+						onDelete={this.handleDelete}
 					/>
 				}
 			/>
@@ -157,10 +184,12 @@ export default connect(
 		errors: state.template.get('errors'),
 		total: state.template.get('total'),
 		lastPage: state.template.get('lastPage'),
+		isOpenQuestion: state.modal.get('questionModal'),
 		loading: state.pender.pending['template/GET_TEMPLATES']
 	}),
 	(dispatch) => ({
 		CmcodeActions: bindActionCreators(cmcodeActions, dispatch),
-		TemplateActions: bindActionCreators(templateActions, dispatch)
+		TemplateActions: bindActionCreators(templateActions, dispatch),
+		ModalActions: bindActionCreators(modalActions, dispatch)
 	})
 )(TemplateCollapseCardContainer);

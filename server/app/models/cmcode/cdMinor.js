@@ -18,7 +18,7 @@ const CdMinorSchema = new Schema({
     },
     effEndDt: {
         type: Date,
-        default: DEFINE.COMMON.MAX_END_DT,
+        default: new Date(DEFINE.COMMON.MAX_END_DT),
         get: DEFINE.dateConverter
     },
     timestamp: {
@@ -104,7 +104,7 @@ CdMinorSchema.statics.recoveryCdMinor = function (param) {
         { _id: id },
         {
             $set: {
-                effEndDt: DEFINE.COMMON.MAX_END_DT
+                effEndDt: new Date(DEFINE.COMMON.MAX_END_DT)
             }
         },
         {

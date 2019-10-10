@@ -20,7 +20,7 @@ const QuestionModal = ({ isOpen, size, header, body, footer, onClose, className 
 			<ModalFooter>
 				{footer}
 				<Button color="secondary" onClick={onClose('question')}>
-					CANCEL
+					취소
 				</Button>
 			</ModalFooter>
 		</Modal>

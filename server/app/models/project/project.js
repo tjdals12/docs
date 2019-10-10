@@ -27,6 +27,10 @@ const ProjectSchema = new Schema({
     contractor: String,
     contractorCode: String,
     memo: String,
+    deleteYn: {
+        type: String,
+        default: DEFINE.COMMON.DEFAULT_NO
+    },
     timestamp: {
         type: Timestamp.schema,
         default: Timestamp
@@ -108,6 +112,31 @@ ProjectSchema.statics.editProject = function (id, param) {
             new: true
         }
     ).populate({ path: 'projectGb' });
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 10
+ * @description 프로젝트 삭제
+ * @param       {Object} param
+ */
+ProjectSchema.statics.deleteProject = function (param) {
+    let {
+        id,
+        yn
+    } = param;
+
+    return this.findOneAndUpdate(
+        { _id: id },
+        {
+            $set: {
+                deleteYn: yn
+            }
+        },
+        {
+            new: true
+        }
+    );
 };
 
 export default model('Project', ProjectSchema);

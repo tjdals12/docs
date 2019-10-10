@@ -182,4 +182,18 @@ describe('  [ Template ]', () => {
                 });
         });
     });
+
+    describe('DELETE /templates/:id/delete', () => {
+        it('delete template', (done) => {
+            request(server)
+                .delete(`/api/templates/${id}/delete`)
+                .expect(200)
+                .end((err, ctx) => {
+                    if (err) throw err;
+
+                    expect(ctx.body.data).to.equal(id);
+                    done();
+                });
+        });
+    });
 });

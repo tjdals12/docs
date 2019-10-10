@@ -8,6 +8,7 @@ const GET_PROJECTS_FOR_SELECT = 'project/GET_PROJECTS_FOR_SELECT';
 const GET_PROJECT = 'project/GET_PROJECT';
 const ADD_PROJECT = 'project/ADD_PROJECT';
 const EDIT_PROJECT = 'project/EDIT_PROJECT';
+const DELETE_PROJECT = 'project/DELETE_PROJECT';
 const SELECT_PROJECT = 'project/SELECT_PROJECT';
 const ON_CHANGE = 'project/ON_CHANGE';
 const ON_CHANGE_DEEP = 'project/ON_CHANGE_DEEP';
@@ -18,6 +19,7 @@ export const getProjectsForSelect = createAction(GET_PROJECTS_FOR_SELECT, api.ge
 export const getProject = createAction(GET_PROJECT, api.getProject);
 export const addProject = createAction(ADD_PROJECT, api.addProject);
 export const editProject = createAction(EDIT_PROJECT, api.editProject);
+export const deleteProject = createAction(DELETE_PROJECT, api.deleteProject);
 export const selectProject = createAction(SELECT_PROJECT);
 export const onChange = createAction(ON_CHANGE);
 export const onChangeDeep = createAction(ON_CHANGE_DEEP);
@@ -51,6 +53,7 @@ const initialState = Map({
 		contractorError: false
 	}),
 	total: 0,
+	page: 1,
 	lastPage: null
 });
 
@@ -103,15 +106,15 @@ export default handleActions(
 				const add = state.get('add');
 
 				return state
-					.setIn([ 'errors', 'projectGbError' ], add.get('projectGb') === '')
-					.setIn([ 'errors', 'projectNameError' ], add.get('projectName') === '')
-					.setIn([ 'errors', 'projectCodeError' ], add.get('projectCode') === '')
-					.setIn([ 'errors', 'effStaDtError' ], add.get('effStaDt') === '')
-					.setIn([ 'errors', 'effEndDtError' ], add.get('effEndDt') === '')
-					.setIn([ 'errors', 'clientError' ], add.get('client') === '')
-					.setIn([ 'errors', 'clientCodeError' ], add.get('clientCode') === '')
-					.setIn([ 'errors', 'contractorError' ], add.get('contractor') === '')
-					.setIn([ 'errors', 'contractorCodeError' ], add.get('contractorCode') === '');
+					.setIn(['errors', 'projectGbError'], add.get('projectGb') === '')
+					.setIn(['errors', 'projectNameError'], add.get('projectName') === '')
+					.setIn(['errors', 'projectCodeError'], add.get('projectCode') === '')
+					.setIn(['errors', 'effStaDtError'], add.get('effStaDt') === '')
+					.setIn(['errors', 'effEndDtError'], add.get('effEndDt') === '')
+					.setIn(['errors', 'clientError'], add.get('client') === '')
+					.setIn(['errors', 'clientCodeError'], add.get('clientCode') === '')
+					.setIn(['errors', 'contractorError'], add.get('contractor') === '')
+					.setIn(['errors', 'contractorCodeError'], add.get('contractorCode') === '');
 			}
 		}),
 		...pender({
@@ -120,15 +123,23 @@ export default handleActions(
 				const project = state.get('project');
 
 				return state
-					.setIn([ 'errors', 'projectGbError' ], project.get('projectGb') === '')
-					.setIn([ 'errors', 'projectNameError' ], project.get('projectName') === '')
-					.setIn([ 'errors', 'projectCodeError' ], project.get('projectCode') === '')
-					.setIn([ 'errors', 'effStaDtError' ], project.get('effStaDt') === '')
-					.setIn([ 'errors', 'effEndDtError' ], project.get('effEndDt') === '')
-					.setIn([ 'errors', 'clientError' ], project.get('client') === '')
-					.setIn([ 'errors', 'clientCodeError' ], project.get('clientCode') === '')
-					.setIn([ 'errors', 'contractorError' ], project.get('contractor') === '')
-					.setIn([ 'errors', 'contractorCodeError' ], project.get('contractorCode') === '');
+					.setIn(['errors', 'projectGbError'], project.get('projectGb') === '')
+					.setIn(['errors', 'projectNameError'], project.get('projectName') === '')
+					.setIn(['errors', 'projectCodeError'], project.get('projectCode') === '')
+					.setIn(['errors', 'effStaDtError'], project.get('effStaDt') === '')
+					.setIn(['errors', 'effEndDtError'], project.get('effEndDt') === '')
+					.setIn(['errors', 'clientError'], project.get('client') === '')
+					.setIn(['errors', 'clientCodeError'], project.get('clientCode') === '')
+					.setIn(['errors', 'contractorError'], project.get('contractor') === '')
+					.setIn(['errors', 'contractorCodeError'], project.get('contractorCode') === '');
+			}
+		}),
+		...pender({
+			type: DELETE_PROJECT,
+			onSuccess: (state, action) => {
+				const { data: project } = action.payload.data;
+
+				return state.set('project', fromJS(project));
 			}
 		}),
 		[SELECT_PROJECT]: (state, action) => {
@@ -136,12 +147,12 @@ export default handleActions(
 
 			const project = state.get('projects').find((project) => project.get('_id') === id);
 
-			return state.set('project', Map({ ...project.toJS(), projectGb: project.getIn([ 'projectGb', '_id' ]) }));
+			return state.set('project', Map({ ...project.toJS(), projectGb: project.getIn(['projectGb', '_id']) }));
 		},
 		[ON_CHANGE]: (state, action) => {
 			let { target, name, value } = action.payload;
 
-			return target ? state.setIn([ target, name ], value) : state.set(name, value);
+			return target ? state.setIn([target, name], value) : state.set(name, value);
 		},
 		[INITIALIZE]: (state, action) => {
 			const { payload } = action;

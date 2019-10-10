@@ -270,10 +270,32 @@ export const download = async (ctx) => {
             });
         });
     } catch (e) {
-        console.log(e.message);
         ctx.res.internalServerError({
             data: {},
             message: `Error - letterCtrl > download: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 10
+ * @description 양식 삭제
+ */
+export const deleteOne = async (ctx) => {
+    let { id } = ctx.params;
+
+    try {
+        await Template.findOneAndDelete({ _id: id });
+
+        ctx.res.ok({
+            data: id,
+            message: 'Success - templateCtrl > deleteOne'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            data: id,
+            message: `Error - templateCtrl > deleteOne: ${e.message}`
         });
     }
 };

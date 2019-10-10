@@ -5,12 +5,12 @@ import { FaCircle } from 'react-icons/fa';
 import Typography from 'components/Typography';
 import PropTypes from 'prop-types';
 
-const CollapseCard = ({ title, description, onOpen, onAddForm, collapse: Collapse, className }) => {
+const CollapseCard = ({ title, description, onToggle, onAddForm, collapse: Collapse, className }) => {
 	const classes = classNames('px-4 py-3 mb-3', className);
 
 	return (
 		<Card className={classes}>
-			<Row onClick={onOpen} className="align-items-center">
+			<Row onClick={onToggle} className="align-items-center">
 				<Col md={3}>
 					<Typography type="h2" className="m-0 title-font">
 						<FaCircle size={10} className="mr-2" /> {title}
@@ -43,7 +43,7 @@ CollapseCard.propTypes = {
 	title: PropTypes.string,
 	description: PropTypes.string,
 	isOpen: PropTypes.bool,
-	onOpen: PropTypes.func,
+	onToggle: PropTypes.func,
 	onAddForm: PropTypes.func,
 	collapse: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
 	className: PropTypes.string
@@ -53,7 +53,7 @@ CollapseCard.defaultProps = {
 	title: 'Title',
 	description: 'Description',
 	isOpen: false,
-	onOpen: () => console.warn('Warning: onOpen is not defined'),
+	onToggle: () => console.warn('Warning: onToggle is not defined'),
 	onAddForm: () => console.warn('Warning: onAddForm is not defined')
 };
 

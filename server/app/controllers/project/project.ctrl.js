@@ -226,3 +226,42 @@ export const edit = async (ctx) => {
         });
     }
 };
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 10
+ * @description 프로젝트 삭제
+ */
+export const deleteOne = async (ctx) => {
+    let { id } = ctx.params;
+    let { yn } = ctx.request.body;
+
+    const schema = Joi.object().keys({
+        yn: Joi.string().required()
+    });
+
+    const result = Joi.validate(ctx.request.body, schema);
+
+    if (result.error) {
+        ctx.res.badRequest({
+            data: result.error,
+            message: 'Fail - projectCtrl > deleteOne'
+        });
+
+        return;
+    }
+
+    try {
+        const project = await Project.deleteProject({ id, yn });
+
+        ctx.res.ok({
+            data: project,
+            message: 'Success - projectCtrl > deleteOne'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            data: { id, yn },
+            message: `Error - projectCtrl > deleteOne: ${e.message}`
+        });
+    }
+};

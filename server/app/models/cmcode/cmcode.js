@@ -16,7 +16,7 @@ const CmcodeSchema = new Schema({
     },
     effEndDt: {
         type: Date,
-        default: DEFINE.COMMON.MAX_END_DT,
+        default: new Date(DEFINE.COMMON.MAX_END_DT),
         get: DEFINE.dateConverter
     },
     cdMajor: {

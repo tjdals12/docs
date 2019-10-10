@@ -254,4 +254,31 @@ project.get('/:id', commonCtrl.checkObjectId, projectCtrl.one);
  */
 project.patch('/:id/edit', commonCtrl.checkObjectId, projectCtrl.edit);
 
+/**
+ * @swagger
+ * /api/projects/{id}/delete:
+ *  patch:
+ *      tags:
+ *          - Project
+ *      summary: 프로젝트 삭제
+ *      description: 프로젝트 삭제
+ *      consumes:
+ *          - application/json
+ *      produces:
+ *          - application/json
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            description: project id
+ *            required: true
+ *            type: string
+ *            example: 5d33ef877cceb91244d16fdd
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ *              schema:
+ *                  $ref: '#/definitions/project'
+ */
+project.patch('/:id/delete', commonCtrl.checkObjectId, projectCtrl.deleteOne);
+
 export default project;

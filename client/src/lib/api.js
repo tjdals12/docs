@@ -93,6 +93,7 @@ export const getProjectsForSelect = () => axios.get(`${real}/api/projects/forsel
 export const getProject = ({ id }) => axios.get(`${real}/api/projects/${id}`);
 export const addProject = (param) => axios.post(`${real}/api/projects`, { ...param });
 export const editProject = ({ id, param }) => axios.patch(`${real}/api/projects/${id}/edit`, { ...param });
+export const deleteProject = ({ id, yn }) => axios.patch(`${real}/api/projects/${id}/delete`, { yn });
 
 /** Template */
 export const getTemplates = ({ page }) => axios.get(`${real}/api/templates?page=${page}`);
@@ -111,3 +112,4 @@ export const downloadTemplate = (param) =>
 		document.body.appendChild(link);
 		link.click();
 	});
+export const deleteTemplate = ({ id }) => axios.delete(`${real}/api/templates/${id}/delete`);

@@ -242,4 +242,31 @@ template.patch('/:id/edit', commonCtrl.checkObjectId, templateCtrl.edit);
  */
 template.post('/download', templateCtrl.download);
 
+/**
+ * @swagger
+ * /api/templates/{id}/delete:
+ *  delete:
+ *      tags:
+ *          - Template
+ *      summary: 양식 삭제
+ *      description: 양식 삭제
+ *      consumes:
+ *          - application/json
+ *      produces:
+ *          - application/json
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            description: template id
+ *            required: true
+ *            type: string
+ *            example: 5d8c6a367ff3d804e4b569d0
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ *              schema:
+ *                  $ref: '#/definitions/template'
+ */
+template.delete('/:id/delete', commonCtrl.checkObjectId, templateCtrl.deleteOne);
+
 export default template;

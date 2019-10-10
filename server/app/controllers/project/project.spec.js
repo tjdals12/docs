@@ -151,6 +151,41 @@ describe('  [ Project ]', () => {
 
                     expect(ctx.body.data._id).to.equal(id);
                     expect(ctx.body.data.projectName).to.equal('High Purity N-Heptane Project');
+                    expect(ctx.body.data.deleteYn).to.equal('NO');
+                    done();
+                });
+        });
+    });
+
+    describe('PATCH /api/projects/:id/delete', () => {
+        it('delete project', (done) => {
+            request(server)
+                .patch(`/api/projects/${id}/delete`)
+                .send({
+                    yn: 'YES'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if (err) throw err;
+
+                    expect(ctx.body.data.deleteYn).to.equal('YES');
+                    done();
+                });
+        });
+    });
+
+    describe('PATCH /api/projects/:id/delete', () => {
+        it('recovery project', (done) => {
+            request(server)
+                .patch(`/api/projects/${id}/delete`)
+                .send({
+                    yn: 'NO'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if (err) throw err;
+
+                    expect(ctx.body.data.deleteYn).to.equal('NO');
                     done();
                 });
         });

@@ -9,6 +9,7 @@ const GET_TEMPLATE = 'template/GET_TEMPLATE';
 const ADD_TEMPLATE = 'template/ADD_TEMPLATE';
 const EDIT_TEMPLATE = 'template/EDIT_TEMPLATE';
 const DOWNLOAD_TEMPLATE = 'template/DOWNLOAD_TEMPLATE';
+const DELETE_TEMPLATE = 'template/DELETE_TEMPLATE';
 const SELECT_TEMPLATE = 'template/SELECT_TEMPLATE';
 const ON_CHANGE = 'template/ON_CHANGE';
 const INITIALIZE = 'template/INITIALIZE';
@@ -19,6 +20,7 @@ export const getTemplate = createAction(GET_TEMPLATE, api.getTemplate);
 export const addTemplate = createAction(ADD_TEMPLATE, api.addTemplate);
 export const editTemplate = createAction(EDIT_TEMPLATE, api.editTemplate);
 export const downloadTemplate = createAction(DOWNLOAD_TEMPLATE, api.downloadTemplate);
+export const deleteTemplate = createAction(DELETE_TEMPLATE, api.deleteTemplate);
 export const selectTemplate = createAction(SELECT_TEMPLATE);
 export const onChange = createAction(ON_CHANGE);
 export const initialize = createAction(INITIALIZE);
@@ -43,6 +45,7 @@ const initialState = Map({
 	}),
 	total: 0,
 	selectedTemplate: '',
+	page: 1,
 	lastPage: null
 });
 
@@ -96,11 +99,11 @@ export default handleActions(
 				const template = state.get('add');
 
 				return state
-					.setIn([ 'errors', 'templateGbError' ], template.get('templateGb') === '')
-					.setIn([ 'errors', 'templateNameError' ], template.get('templateName') === '')
-					.setIn([ 'errors', 'templateTypeError' ], template.get('templateType') === '')
-					.setIn([ 'errors', 'templatePathError' ], template.get('templatePath') === '')
-					.setIn([ 'errors', 'templateDescriptionError' ], template.get('templateDescription') === '');
+					.setIn(['errors', 'templateGbError'], template.get('templateGb') === '')
+					.setIn(['errors', 'templateNameError'], template.get('templateName') === '')
+					.setIn(['errors', 'templateTypeError'], template.get('templateType') === '')
+					.setIn(['errors', 'templatePathError'], template.get('templatePath') === '')
+					.setIn(['errors', 'templateDescriptionError'], template.get('templateDescription') === '');
 			}
 		}),
 		...pender({
@@ -117,6 +120,9 @@ export default handleActions(
 				return state.set('selectedTemplate', '');
 			}
 		}),
+		...pender({
+			type: DELETE_TEMPLATE
+		}),
 		[SELECT_TEMPLATE]: (state, action) => {
 			const { payload: id } = action;
 
@@ -124,13 +130,13 @@ export default handleActions(
 
 			return state.set(
 				'template',
-				Map({ ...template.toJS(), templateGb: template.getIn([ 'templateGb', '_id' ]) })
+				Map({ ...template.toJS(), templateGb: template.getIn(['templateGb', '_id']) })
 			);
 		},
 		[ON_CHANGE]: (state, action) => {
 			const { target, name, value } = action.payload;
 
-			return target ? state.setIn([ target, name ], value) : state.set(name, value);
+			return target ? state.setIn([target, name], value) : state.set(name, value);
 		},
 		[INITIALIZE]: (state, action) => {
 			const { payload } = action;

@@ -20,10 +20,11 @@ class ProjectCollapseCardContainer extends React.Component {
 	getProjects = async (page) => {
 		const { ProjectActions } = this.props;
 
+		ProjectActions.onChange({ name: 'page', value: page });
 		await ProjectActions.getProjects({ page });
 	};
 
-	handleOpen = () => {
+	handleToggle = () => {
 		this.setState((prevState) => {
 			const { isOpen } = prevState;
 
@@ -56,15 +57,15 @@ class ProjectCollapseCardContainer extends React.Component {
 	};
 
 	handleSave = async () => {
-		const { ProjectActions, add } = this.props;
+		const { ProjectActions, add, page } = this.props;
 
 		await ProjectActions.addProject(add.toJS());
 		ProjectActions.initialize('errors');
-		this.getProjects(1);
+		this.getProjects(page);
 	};
 
 	handleEdit = async () => {
-		const { ProjectActions, project } = this.props;
+		const { ProjectActions, project, page } = this.props;
 
 		const {
 			_id,
@@ -96,8 +97,15 @@ class ProjectCollapseCardContainer extends React.Component {
 			}
 		});
 
-		this.getProjects(1);
+		this.getProjects(page);
 	};
+
+	handleDelete = (id, yn) => {
+		const { ProjectActions, page } = this.props;
+
+		ProjectActions.deleteProject({ id, yn });
+		this.getProjects(page);
+	}
 
 	componentDidMount() {
 		this.getCmcodes('0000');
@@ -114,7 +122,7 @@ class ProjectCollapseCardContainer extends React.Component {
 			<CollapseCard
 				title="프로젝트 관리"
 				description="관리하는 프로젝트 목록"
-				onOpen={this.handleOpen}
+				onToggle={this.handleToggle}
 				onAddForm={this.handleAddForm}
 				collapse={
 					<ProjectCollapse
@@ -131,6 +139,7 @@ class ProjectCollapseCardContainer extends React.Component {
 						onChange={this.handleChange}
 						onSave={this.handleSave}
 						onEdit={this.handleEdit}
+						onDelete={this.handleDelete}
 					/>
 				}
 			/>
@@ -146,6 +155,7 @@ export default connect(
 		add: state.project.get('add'),
 		errors: state.project.get('errors'),
 		total: state.project.get('total'),
+		page: state.project.get('page'),
 		lastPage: state.project.get('lastPage'),
 		loading: state.pender.pending['project/GET_PROJECTS']
 	}),
