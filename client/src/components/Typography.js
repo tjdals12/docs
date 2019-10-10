@@ -9,10 +9,10 @@ const tagMap = {
 	h4: 'h4',
 	h5: 'h5',
 	h6: 'h6',
-	'display-1': 'display-1',
-	'display-2': 'display-2',
-	'display-3': 'display-3',
-	'display-4': 'display-4',
+	'display-1': 'h1',
+	'display-2': 'h1',
+	'display-3': 'h1',
+	'display-4': 'h1',
 	p: 'p',
 	leaf: 'p',
 	blockqoute: 'blockqoute'
@@ -36,7 +36,7 @@ const Typography = ({ tag: Tag, type, className, ...restProps }) => {
 };
 
 Typography.propTypes = {
-	tag: PropTypes.oneOfType([ PropTypes.func, PropTypes.string ]),
+	tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
 	type: PropTypes.oneOf(types),
 	className: PropTypes.string
 };
