@@ -10,7 +10,7 @@ class VendorEditModalContainer extends React.Component {
 	getCmcodes = async (major) => {
 		const { CmcodeActions } = this.props;
 
-		await CmcodeActions.getCmcodeByMajor({ major: major });
+		await CmcodeActions.getCmcodeByMajorExcludeRemoved({ major: major });
 	};
 
 	handleEdit = async () => {

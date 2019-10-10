@@ -11,7 +11,7 @@ class DocumentEditModalContainer extends React.Component {
 	getCmcodes = async (major) => {
 		const { CmcodeActions } = this.props;
 
-		await CmcodeActions.getCmcodeByMajor({ major: major });
+		await CmcodeActions.getCmcodeByMajorExcludeRemoved({ major: major });
 	};
 
 	getVendorList = async () => {
@@ -72,7 +72,7 @@ class DocumentEditModalContainer extends React.Component {
 
 export default connect(
 	(state) => ({
-		id: state.document.getIn([ 'document', 'id' ]),
+		id: state.document.getIn(['document', 'id']),
 		vendorList: state.vendor.get('vendorList'),
 		parts: state.cmcode.get('0001'),
 		gbs: state.cmcode.get('0002'),

@@ -125,7 +125,9 @@ export const oneByMajor = async (ctx) => {
     }
 
     try {
-        const cmcode = await Cmcode.findOne({ cdMajor: major }).populate({ path: 'cdMinors' }).sort({ 'cdMinors.cdMinor': 1 });
+        const cmcode = await Cmcode
+            .findOne({ cdMajor: major })
+            .populate({ path: 'cdMinors', options: { sort: { cdMinor: 1 } } });
 
         ctx.res.ok({
             data: cmcode,
@@ -135,6 +137,51 @@ export const oneByMajor = async (ctx) => {
         ctx.res.internalServerError({
             data: major,
             message: 'Error - cmcodeCtrl > oneByMajor'
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 10
+ * @description 상위 공통코드 조회 by major exclude removed
+ */
+export const oneByMajorExcludeRemoved = async (ctx) => {
+    let { major } = ctx.params;
+
+    if (!major) {
+        ctx.res.badRequest({
+            data: major,
+            message: 'Fail - cmcocdeCtrl > oneByMajorExcludeRemoved'
+        });
+
+        return;
+    }
+
+    try {
+        const cmcode = await Cmcode
+            .findOne({ cdMajor: major })
+            .populate({ path: 'cdMinors', options: { sort: { cdMinor: 1 } } })
+            .then((data) => {
+                return {
+                    _id: data._id,
+                    cdMajor: data.cdMajor,
+                    cdFName: data.cdFName,
+                    cdMinors: data.cdMinors.filter((cdMinor) => cdMinor.effEndDt.substr(0, 10) === '9999-12-31'),
+                    effStaDt: data.effStaDt,
+                    effEndDt: data.effEndDt,
+                    timestamp: data.timestamp
+                };
+            });
+
+        ctx.res.ok({
+            data: cmcode,
+            message: 'Success - cmcodeCtrl > oneByMajorExcludeRemoved'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            data: major,
+            message: `Error - cmcocdeCtrl > oneByMajorExcludeRemoved: ${e.message}`
         });
     }
 };

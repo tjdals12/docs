@@ -17,7 +17,7 @@ class DocumentInfoSearchFormContainer extends React.Component {
 	getCmcodes = (major) => {
 		const { CmcodeActions } = this.props;
 
-		CmcodeActions.getCmcodeByMajor({ major: major });
+		CmcodeActions.getCmcodeByMajorExcludeRemoved({ major: major });
 	};
 
 	handleChange = (e) => {

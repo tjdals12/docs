@@ -4,6 +4,7 @@ import * as api from 'lib/api';
 import { pender } from 'redux-pender';
 
 const GET_CMCODE_BY_MAJOR = 'cmcode/GET_CMCODE_BY_MAJOR';
+const GET_CMCODE_BY_MAJOR_EXCLUDE_REMOVED = 'cmcode/GET_CMCODE_BY_MAJOR_EXCLUDE_REMOVED';
 const GET_CDMAJORS = 'cmcode/GET_CDMAJORS';
 const GET_CDMINORS = 'cmcode/GET_CDMINORS';
 const GET_CDMINOR = 'cmcode/GET_CDMINOR';
@@ -15,6 +16,7 @@ const ON_CHANGE = 'cmcode/ON_CHANGE';
 const INITIALIZE = 'cmcode/INITIALIZE';
 
 export const getCmcodeByMajor = createAction(GET_CMCODE_BY_MAJOR, api.getCmcodeByMajor);
+export const getCmcodeByMajorExcludeRemoved = createAction(GET_CMCODE_BY_MAJOR_EXCLUDE_REMOVED, api.getCmcodeByMajorExcludeRemoved);
 export const getCdMajors = createAction(GET_CDMAJORS, api.getCdMajors);
 export const getCdMinors = createAction(GET_CDMINORS, api.getCmcodeById);
 export const getCdMinor = createAction(GET_CDMINOR, api.getCdMinor);
@@ -45,6 +47,14 @@ export default handleActions(
 	{
 		...pender({
 			type: GET_CMCODE_BY_MAJOR,
+			onSuccess: (state, action) => {
+				const { data: cmcode } = action.payload.data;
+
+				return state.set(cmcode.cdMajor, fromJS(cmcode));
+			}
+		}),
+		...pender({
+			type: GET_CMCODE_BY_MAJOR_EXCLUDE_REMOVED,
 			onSuccess: (state, action) => {
 				const { data: cmcode } = action.payload.data;
 

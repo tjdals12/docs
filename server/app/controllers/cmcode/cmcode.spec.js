@@ -128,7 +128,7 @@ describe('  [ CMCODE ]', () => {
         });
     });
 
-    describe('GET /cmcodes/:id/minors', () => {
+    describe('GET /cmcodes/:major/minors', () => {
         it('get cmcode by cdMajor', (done) => {
             request(server)
                 .get(`/api/cmcodes/${major}/minors`)
@@ -152,6 +152,8 @@ describe('  [ CMCODE ]', () => {
                 })
                 .end((err, ctx) => {
                     if (err) throw err;
+
+                    major = ctx.body.data.cdMajor;
 
                     expect(ctx.body.data.cdFName).to.equal('구분');
                     done();
@@ -192,6 +194,20 @@ describe('  [ CMCODE ]', () => {
         });
     });
 
+    describe('PATCH /cmcodes/:major/minors/exclude', () => {
+        it('get cmcode by cdMajor', (done) => {
+            request(server)
+                .get(`/api/cmcodes/${major}/minors/exclude`)
+                .expect(200)
+                .end((err, ctx) => {
+                    if (err) throw err;
+
+                    expect(ctx.body.data.cdMinors).have.length(0);
+                    done();
+                });
+        });
+    });
+
     describe('PATCH /cmcodes/:id/:minor/recovery', () => {
         it('recovery cdMinor', (done) => {
             request(server)
@@ -202,6 +218,20 @@ describe('  [ CMCODE ]', () => {
 
                     expect(ctx.body.data.cdMinors).have.length(1);
                     expect(ctx.body.data.cdMinors[0].effEndDt.substr(0, 10)).to.equal('9999-12-31');
+                    done();
+                });
+        });
+    });
+
+    describe('PATCH /cmcodes/:major/minors/exclude', () => {
+        it('get cmcode by cdMajor', (done) => {
+            request(server)
+                .get(`/api/cmcodes/${major}/minors/exclude`)
+                .expect(200)
+                .end((err, ctx) => {
+                    if (err) throw err;
+
+                    expect(ctx.body.data.cdMinors).have.length(1);
                     done();
                 });
         });

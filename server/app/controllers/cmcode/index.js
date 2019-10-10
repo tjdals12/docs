@@ -145,6 +145,33 @@ cmcode.get('/:major/minors', cmcodeCtrl.oneByMajor);
 
 /**
  * @swagger
+ * /api/cmcodes/{major}/minors/exclude:
+ *  get:
+ *      tags:
+ *          - Cmcode
+ *      summary: 상위 공통코드 조회 by major exclude removed
+ *      description: 상위 공통코드 조회 by major exclude removed
+ *      consumes:
+ *          - application/json
+ *      produces:
+ *          - application/json
+ *      parameters:
+ *          - in: path
+ *            name: major
+ *            description: cmcode cdMajor
+ *            required: true
+ *            type: string
+ *            example: '0001'
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ *              schema:
+ *                  $ref: '#/definitions/cmcode'
+ */
+cmcode.get('/:major/minors/exclude', cmcodeCtrl.oneByMajorExcludeRemoved);
+
+/**
+ * @swagger
  * /api/cmcodes/{id}/minor:
  *  get:
  *      tags:
