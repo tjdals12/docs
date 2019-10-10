@@ -11,9 +11,9 @@ import {
 	MdChevronRight,
 	MdSettings
 } from 'react-icons/md';
-import { FaGithub } from 'react-icons/fa';
 import bn from 'utils/bemnames';
 import sidebarBgImg from 'assets/img/sidebar/sidebar-9.jpg';
+import Typography from 'components/Typography';
 
 const bem = bn.create('sidebar');
 
@@ -61,10 +61,10 @@ class Sidebar extends React.Component {
 				<div className={bem.e('background')} style={sidebarBackground} />
 				<div className={bem.e('content')}>
 					<Navbar>
-						<NavbarBrand>
-							<span>
-								Minz-logger <FaGithub />
-							</span>
+						<NavbarBrand className="w-100 text-center">
+							<Typography type='display-2' className="logo-font">
+								Docs
+							</Typography>
 						</NavbarBrand>
 					</Navbar>
 					<Nav vertical>
