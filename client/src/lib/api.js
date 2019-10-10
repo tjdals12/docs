@@ -14,8 +14,7 @@ export const deleteDocument = ({ id, yn, reason }) => axios.patch(`${real}/api/d
 export const deleteDocuments = (ids, page) => axios.patch(`${real}/api/documents/delete?page=${page}`, { ids: ids });
 export const editDocument = ({ id, document }) => axios.patch(`${real}/api/documents/${id}/edit`, { ...document });
 export const inOutDocument = (id, param) => axios.patch(`${real}/api/documents/${id}/inout`, { ...param });
-export const deleteInOutDocument = ({ id, target }) =>
-	axios.patch(`${real}/api/documents/${id}/inout/delete`, { targetId: target });
+export const deleteInOutDocument = ({ id, target }) => axios.patch(`${real}/api/documents/${id}/inout/delete`, { targetId: target });
 
 /** Vendor */
 export const getVendors = ({ page }) => axios.get(`${real}/api/vendors?page=${page}`);
@@ -41,13 +40,11 @@ export const recoveryCdMinor = (major, minor) => axios.patch(`${real}/api/cmcode
 /** Index */
 export const getIndexes = ({ page }) => axios.get(`${real}/api/documentindexes?page=${page}`);
 export const getIndexesForSelect = () => axios.get(`${real}/api/documentindexes/forselect`);
-export const searchIndexes = (page, param) =>
-	axios.post(`${real}/api/documentindexes/search?page=${page}`, { ...param });
+export const searchIndexes = (page, param) => axios.post(`${real}/api/documentindexes/search?page=${page}`, { ...param });
 export const getIndex = ({ id }) => axios.get(`${real}/api/documentindexes/${id}`);
 export const getIndexOverall = ({ id }) => axios.get(`${real}/api/documentindexes/${id}/overall`);
 export const getStatisticsByStatus = ({ id }) => axios.get(`${real}/api/documentindexes/${id}/statisticsbystatus`);
-export const getTrackingDocument = ({ id, page }) =>
-	axios.get(`${real}/api/documentindexes/${id}/trackingdocument?page=${page}`);
+export const getTrackingDocument = ({ id, page }) => axios.get(`${real}/api/documentindexes/${id}/trackingdocument?page=${page}`);
 export const addIndex = (param) => axios.post(`${real}/api/documentindexes`, { ...param });
 export const addPartial = ({ id, list }) => axios.patch(`${real}/api/documentindexes/${id}/add`, { list });
 export const editIndex = (id, param) => axios.patch(`${real}/api/documentindexes/${id}/edit`, { ...param });
@@ -57,26 +54,20 @@ export const deleteIndex = ({ id }) => axios.patch(`${real}/api/documentindexes/
 export const getInfos = ({ page }) => axios.get(`${real}/api/documentinfos?page=${page}`);
 export const searchInfos = (page, param) => axios.post(`${real}/api/documentinfos/search?page=${page}`, { ...param });
 export const getInfo = ({ id }) => axios.get(`${real}/api/documentinfos/${id}`);
-export const getLatestDocuments = ({ vendor, page }) =>
-	axios.get(`${real}/api/documentinfos/${vendor}/latest?page=${page}`);
+export const getLatestDocuments = ({ vendor, page }) => axios.get(`${real}/api/documentinfos/${vendor}/latest?page=${page}`);
 
 /** Vendor Letter */
 export const getVendorLetters = ({ page }) => axios.get(`${real}/api/vendorletters?page=${page}`);
 export const getVendorLettersByVendor = ({ vendor }) => axios.get(`${real}/api/vendorletters/${vendor}/letters`);
-export const statisticsByTransmittal = ({ vendor }) =>
-	axios.get(`${real}/api/vendorletters/${vendor}/statisticsbytransmittal`);
-export const searchVendorLetters = (page, param) =>
-	axios.post(`${real}/api/vendorletters/search?page=${page}`, { ...param });
+export const statisticsByTransmittal = ({ vendor }) => axios.get(`${real}/api/vendorletters/${vendor}/statisticsbytransmittal`);
+export const searchVendorLetters = (page, param) => axios.post(`${real}/api/vendorletters/search?page=${page}`, { ...param });
 export const getVendorLetter = ({ id }) => axios.get(`${real}/api/vendorletters/${id}`);
 export const receiveVendorLetter = (param) => axios.post(`${real}/api/vendorletters`, { ...param });
 export const editVendorLetter = ({ id, param }) => axios.patch(`${real}/api/vendorletters/${id}/edit`, { ...param });
-export const additionalReceiveVendorLetter = ({ id, param }) =>
-	axios.patch(`${real}/api/vendorletters/${id}/add`, { receiveDocuments: param });
-export const deleteVendorLetter = ({ id, yn, reason }) =>
-	axios.patch(`${real}/api/vendorletters/${id}/delete`, { yn, reason });
+export const additionalReceiveVendorLetter = ({ id, param }) => axios.patch(`${real}/api/vendorletters/${id}/add`, { receiveDocuments: param });
+export const deleteVendorLetter = ({ id, yn, reason }) => axios.patch(`${real}/api/vendorletters/${id}/delete`, { yn, reason });
 export const inOutVendorLetter = (id, param) => axios.patch(`${real}/api/vendorletters/${id}/inout`, { ...param });
-export const deleteInOutVendorLetter = ({ id, target }) =>
-	axios.patch(`${real}/api/vendorletters/${id}/inout/delete`, { targetId: target });
+export const deleteInOutVendorLetter = ({ id, target }) => axios.patch(`${real}/api/vendorletters/${id}/inout/delete`, { targetId: target });
 
 /** Letter */
 export const getLetters = ({ page }) => axios.get(`/api/letters?page=${page}`);
