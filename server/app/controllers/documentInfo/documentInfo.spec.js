@@ -1,19 +1,20 @@
+import clc from 'cli-color';
 import * as db from 'models';
 import app from 'app';
 import request from 'supertest';
 import { expect } from 'chai';
 
-describe('  [ Document Info ]', () => {
+describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
     let server;
     let id;
     let vendorId;
 
     before((done) => {
-        db.connect().then((type) => {
-            console.log(`Connected ${type}`);
+        db.connect().then(type => {
+            console.log(clc.yellow(`    Connected ${type}`));
 
             server = app.listen(4000, () => {
-                console.log('Server localhost:4000');
+                console.log(clc.yellow('    Server localhost:4000'));
                 done();
             });
         });
