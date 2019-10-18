@@ -9,6 +9,7 @@ import vendorLetter from 'controllers/vendorLetter';
 import letter from 'controllers/letter';
 import project from 'controllers/project';
 import template from 'controllers/template';
+import account from 'controllers/account';
 
 const api = new Router();
 
@@ -50,5 +51,6 @@ api.use('/vendorletters', vendorLetter.routes());
 api.use('/letters', letter.routes());
 api.use('/projects', project.routes());
 api.use('/templates', template.routes());
+api.use('/accounts', account.routes());
 
 export default api;
