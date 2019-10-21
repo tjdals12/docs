@@ -178,6 +178,7 @@ describe('  [ Vendor Letter ]', () => {
 
                     major = ctx.body.data._id;
 
+                    expect(ctx.body.data.cdMajor).to.equal('0002');
                     expect(ctx.body.data.cdFName).to.equal('구분');
                     done();
                 });

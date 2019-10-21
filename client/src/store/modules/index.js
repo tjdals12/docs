@@ -8,4 +8,5 @@ export { default as vendorLetter } from './vendorLetter';
 export { default as letter } from './letter';
 export { default as project } from './project';
 export { default as template } from './template';
+export { default as role } from './role';
 export { penderReducer as pender } from 'redux-pender';

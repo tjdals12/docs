@@ -8,6 +8,7 @@ import documentInfo from 'controllers/documentInfo';
 import vendorLetter from 'controllers/vendorLetter';
 import letter from 'controllers/letter';
 import project from 'controllers/project';
+import role from 'controllers/role';
 import template from 'controllers/template';
 import account from 'controllers/account';
 
@@ -50,6 +51,7 @@ api.use('/documentinfos', documentInfo.routes());
 api.use('/vendorletters', vendorLetter.routes());
 api.use('/letters', letter.routes());
 api.use('/projects', project.routes());
+api.use('/roles', role.routes());
 api.use('/templates', template.routes());
 api.use('/accounts', account.routes());
 

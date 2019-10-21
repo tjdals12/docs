@@ -114,3 +114,6 @@ export const downloadTemplate = (param) =>
 		link.click();
 	});
 export const deleteTemplate = ({ id }) => axios.delete(`${real}/api/templates/${id}/delete`);
+
+/** Role */
+export const getRoles = () => axios.get(`${real}/api/roles`);
