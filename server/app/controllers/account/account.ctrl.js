@@ -84,7 +84,7 @@ export const login = async (ctx) => {
         }
 
         const token = await currentUser.generateToken();
-        ctx.cookies.set('access_token', token, { httpOnly: true, maxAge: 60 * 60 * 60 * 24 * 1000 });
+        ctx.cookies.set('access_token', token, { httpOnly: true, maxAge: 60 * 60 * 3 * 1000 });
 
         ctx.res.ok({
             data: {
@@ -96,6 +96,57 @@ export const login = async (ctx) => {
     } catch (e) {
         ctx.res.internalServerError({
             message: `Error - accountCtrl > login: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 21
+ * @description 로그인 여부 확인
+ */
+export const check = async (ctx) => {
+    let { user } = ctx.request;
+
+    if (!user) {
+        ctx.res.noContent({
+            data: user,
+            message: 'Success - accountCtrl > check'
+        });
+
+        return;
+    }
+
+    try {
+        ctx.res.ok({
+            data: {
+                _id: user._id,
+                profile: user.profile
+            },
+            message: 'Success - accountCtrl > check'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            message: `Error - accountCtrl > check: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 21
+ * @description 로그아웃
+ */
+export const logout = (ctx) => {
+    try {
+        ctx.cookies.set('access_token', null, { httpOnly: true, maxAge: 0 });
+
+        ctx.res.ok({
+            message: 'Success - accountCtrl > logout'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            message: `Error - accountCtrl > logout: ${e.message}`
         });
     }
 };

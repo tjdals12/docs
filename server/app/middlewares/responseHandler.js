@@ -65,6 +65,13 @@ const responseHandler = () => {
             });
         };
 
+        ctx.res.noContent = (params = {}) => {
+            ctx.res.success({
+                statusCode: statusCodes.NO_CONTENT,
+                ...params
+            });
+        };
+
         ctx.res.badRequest = (params = {}) => {
             ctx.res.fail({
                 statusCode: statusCodes.BAD_REQUEST,
