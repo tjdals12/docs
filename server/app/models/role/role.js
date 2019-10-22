@@ -17,6 +17,10 @@ const RoleSchema = new Schema({
         type: String,
         enum: ['READ', 'WRITE', 'ROOT']
     },
+    dispGb: {
+        type: String,
+        enum: ['01', '02']
+    },
     sub: {
         type: Array,
         default: []

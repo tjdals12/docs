@@ -1,19 +1,33 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import AccessibleRoutes from 'components/Layout/AccessibleRoutes';
-import { useSelector, useDispatch } from 'react-redux';
-import { getRoles } from 'store/modules/role';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as roleActions from 'store/modules/role';
 
-const AccessibleRoutesContainer = () => {
-    const roles = useSelector((state) => state.role.get('roles').toJS(), []);
-    const dispatch = useDispatch();
+class AccessibleRoutesContainer extends React.Component {
+    getRoles = () => {
+        const { RoleActions } = this.props;
+        RoleActions.getRoles();
+    }
 
-    useEffect(() => {
-        dispatch(getRoles())
-    }, [dispatch])
+    componentDidMount() {
+        this.getRoles();
+    }
 
-    return (
-        <AccessibleRoutes roles={roles} />
-    )
+    render() {
+        const { roles } = this.props;
+
+        return (
+            <AccessibleRoutes roles={roles.toJS()} />
+        )
+    }
 }
 
-export default AccessibleRoutesContainer;
+export default connect(
+    (state) => ({
+        roles: state.role.get('roles')
+    }),
+    (dispatch) => ({
+        RoleActions: bindActionCreators(roleActions, dispatch)
+    })
+)(AccessibleRoutesContainer);

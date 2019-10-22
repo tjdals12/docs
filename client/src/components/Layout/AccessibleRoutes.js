@@ -8,16 +8,16 @@ const AccessibleRoutes = ({ roles }) => (
     <BrowserRouter>
         <Switch>
             {
-                roles.map(role => {
+                roles.map((role, index) => {
                     const { to, layout, component, sub } = role;
 
-                    return sub.length > 0 ? sub.map((subRole) => {
+                    return sub.length > 0 ? sub.map((subRole, index) => {
 
                         const { to, layout, component } = subRole;
 
-                        return (<LayoutRoute exact path={to} layout={Layouts[layout]} component={Pages[component]} />)
+                        return (<LayoutRoute key={index} exact path={to} layout={Layouts[layout]} component={Pages[component]} />)
                     }) : (
-                            <LayoutRoute exact path={to} layout={Layouts[layout]} component={Pages[component]} />
+                            <LayoutRoute key={index} exact path={to} layout={Layouts[layout]} component={Pages[component]} />
                         )
                 })
             }
