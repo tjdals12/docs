@@ -1,6 +1,6 @@
 import React from 'react';
 import bn from 'utils/bemnames';
-import Sidebar from './Sidebar';
+import SidebarContainer from 'containers/Layout/SidebarContainer';
 import Content from './Content';
 import Header from './Header';
 import Footer from './Footer';
@@ -49,7 +49,7 @@ class MainLayout extends React.Component {
 
 		return (
 			<main className={bem.b('bg-light')}>
-				<Sidebar />
+				<SidebarContainer />
 				<Content fluid>
 					<Header />
 					{children}
