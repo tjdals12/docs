@@ -14,7 +14,7 @@ const DocumentsPage = (props) => {
 
 	return (
 		<ScrollToTop>
-			<Page title="Documents" breadcrumbs={[ { name: 'Documents', active: true } ]}>
+			<Page title="Documents" breadcrumbs={[{ name: 'Documents', active: true }]}>
 				<DocumentSearchFormContainer />
 				<DocumentTableContainer page={parseInt(page || 1, 10)} />
 				<DocumentAddModalContainer />

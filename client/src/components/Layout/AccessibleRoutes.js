@@ -7,18 +7,18 @@ import * as Pages from 'pages';
 const AccessibleRoutes = ({ roles }) => (
     <BrowserRouter>
         <Switch>
+            <LayoutRoute exact path="/login" layout={Layouts['EmptyLayout']} component={Pages['LoginPage']} />
             {
                 roles.map((role) => {
-                    const { to, layout, component, sub } = role;
+                    const { to, layout, component, sub, roleId } = role;
 
                     return sub.length > 0 ? sub.map((subRole) => {
+                        const { to, layout, component, roleId: subRoleId } = subRole;
 
-                        const { to, layout, component } = subRole;
-
-                        return (<LayoutRoute exact path={to} layout={Layouts[layout]} component={Pages[component]} />)
-                    }) : (
-                            <LayoutRoute exact path={to} layout={Layouts[layout]} component={Pages[component]} />
-                        )
+                        return (<LayoutRoute exact path={to} layout={Layouts[layout]} component={Pages[component]} roleId={subRoleId} />)
+                    }) : to !== 'ROOT' && (
+                        <LayoutRoute exact path={to} layout={Layouts[layout]} component={Pages[component]} roleId={roleId} />
+                    )
                 })
             }
         </Switch>

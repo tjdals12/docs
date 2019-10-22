@@ -117,3 +117,6 @@ export const deleteTemplate = ({ id }) => axios.delete(`${real}/api/templates/${
 
 /** Role */
 export const getRoles = () => axios.get(`${real}/api/roles`);
+
+/** Account */
+export const login = (param) => axios.post(`${real}/api/accounts/login`, { ...param });

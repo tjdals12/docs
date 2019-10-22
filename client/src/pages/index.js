@@ -1,5 +1,6 @@
 import withSplitting from 'hocs/withSplitting';
 
+export const LoginPage = withSplitting(() => import('./LoginPage'));
 export const DashboardPage = withSplitting(() => import('./DashboardPage'));
 export const DocumentsPage = withSplitting(() => import('./DocumentsPage'));
 export const VendorsPage = withSplitting(() => import('./VendorsPage'));
