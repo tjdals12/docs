@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import { Timestamp } from 'models/common/schema';
 import DEFINE from 'models/common';
 
@@ -13,9 +13,15 @@ const RoleSchema = new Schema({
     icon: String,
     layout: String,
     component: String,
-    roleType: {
-        type: String,
-        enum: ['READ', 'WRITE', 'ROOT']
+    roleId: {
+        READ: {
+            type: Schema.Types.ObjectId,
+            default: new Types.ObjectId
+        },
+        WRITE: {
+            type: Schema.Types.ObjectId,
+            default: new Types.ObjectId
+        }
     },
     dispGb: {
         type: String,

@@ -79,8 +79,7 @@ describe('  [ Role ]', () => {
                     name: 'Indexes',
                     icon: 'MdIndex',
                     layout: 'MainLayout',
-                    component: 'IndexesPage',
-                    roleType: 'ROOT'
+                    component: 'IndexesPage'
                 })
                 .expect(200)
                 .end((err, ctx) => {
@@ -108,8 +107,7 @@ describe('  [ Role ]', () => {
                     name: 'Indexes Overall',
                     icon: 'MdOverall',
                     layout: 'MainLayout',
-                    component: 'IndexesOverallPage',
-                    roleType: 'READ'
+                    component: 'IndexesOverallPage'
                 })
                 .expect(200)
                 .end((err, ctx) => {

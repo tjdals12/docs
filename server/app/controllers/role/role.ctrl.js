@@ -42,8 +42,7 @@ export const create = async (ctx) => {
         name: Joi.string().required(),
         icon: Joi.string().required(),
         layout: Joi.string().required(),
-        component: Joi.string().required(),
-        roleType: Joi.string().valid('READ', 'WRITE', 'ROOT').required()
+        component: Joi.string().required()
     });
 
     const result = Joi.validate(ctx.request.body, schema);
@@ -93,8 +92,7 @@ export const add = async (ctx) => {
         name: Joi.string().required(),
         icon: Joi.string().required(),
         layout: Joi.string().required(),
-        component: Joi.string().required(),
-        roleType: Joi.string().valid('READ', 'WRITE').required()
+        component: Joi.string().required()
     });
 
     const result = Joi.validate(ctx.request.body, schema);
