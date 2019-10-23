@@ -114,7 +114,8 @@ UserSchema.methods.validatePassword = function (password) {
 UserSchema.methods.generateToken = function () {
     const payload = {
         _id: this._id,
-        profile: this.profile
+        profile: this.profile,
+        roles: this.roles
     };
 
     return auth.generateToken(payload);

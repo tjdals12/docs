@@ -69,6 +69,8 @@ class Header extends React.Component {
 	};
 
 	render() {
+		const { userInfo, onLogout } = this.props;
+
 		return (
 			<Navbar light expand className={bem.b('bg-white')}>
 				<Nav navbar className="mr-3">
@@ -85,11 +87,11 @@ class Header extends React.Component {
 							{this.state.isNotificationsConfirmed ? (
 								<MdNotificationsNone size={25} className="can-click text-secondary" />
 							) : (
-								<MdNotificationsActiveWithBadge
-									size={25}
-									className="can-click text-secondary swing animated infinite"
-								/>
-							)}
+									<MdNotificationsActiveWithBadge
+										size={25}
+										className="can-click text-secondary swing animated infinite"
+									/>
+								)}
 						</NavLink>
 						<Popover
 							placement="bottom"
@@ -105,7 +107,7 @@ class Header extends React.Component {
 
 					<NavItem>
 						<NavLink id="Popover2">
-							<Avatar className="can-click" />
+							<Avatar className="can-click" src={userInfo.getIn(['profile', 'thumbnail'])} />
 						</NavLink>
 						<Popover
 							placement="bottom-end"
@@ -116,9 +118,10 @@ class Header extends React.Component {
 						>
 							<PopoverBody className="p-0 border-light">
 								<UserCard
-									title="Seongmin"
-									subtitle="seongmin@minzlogger.info"
-									text="Full Stack Engineer"
+									avatar={userInfo.getIn(['profile', 'thumbnail'])}
+									title={userInfo.getIn(['profile', 'username'])}
+									subtitle={userInfo.getIn(['profile', 'description'])}
+									text={userInfo.getIn(['profile', 'userType'])}
 								>
 									<ListGroup flush>
 										<ListGroupItem tag="button" action className="border-light">
@@ -136,7 +139,7 @@ class Header extends React.Component {
 										<ListGroupItem tag="button" action className="border-light">
 											<MdSettingsApplications /> Settings
 										</ListGroupItem>
-										<ListGroupItem tag="button" action className="border-light">
+										<ListGroupItem tag="button" action className="border-light" onClick={onLogout}>
 											<MdExitToApp /> Signout
 										</ListGroupItem>
 									</ListGroup>

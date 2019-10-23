@@ -3,7 +3,7 @@ import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import Typography from 'components/Typography';
 import PropTypes from 'prop-types';
 
-const LoginForm = ({ onChange, onSubmit }) => (
+const LoginForm = ({ error, onChange, onSubmit }) => (
     <Form onSubmit={(e) => {
         e.preventDefault();
         onSubmit();
@@ -17,18 +17,23 @@ const LoginForm = ({ onChange, onSubmit }) => (
             <Label for="pwd">Password</Label>
             <Input type='password' name='pwd' placeholder="your password" onChange={onChange} />
         </FormGroup>
+        {
+            error && <strong className="m-auto text-danger">* 회원정보가 일치하지 않습니다.</strong>
+        }
         <hr />
         <Button type='submit' size="lg" className="w-100 bg-gradient-theme-left border-0">LOGIN</Button>
     </Form>
 )
 
 LoginForm.propTypes = {
+    error: PropTypes.bool,
     onChange: PropTypes.func,
     onSubmit: PropTypes.func
 };
 
 
 LoginForm.defaultProps = {
+    error: false,
     onChange: () => console.warn('Warning: onChange is not defined'),
     onSubmit: () => console.warn('Warning: onSubmit is not defined')
 };

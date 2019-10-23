@@ -89,7 +89,8 @@ export const login = async (ctx) => {
         ctx.res.ok({
             data: {
                 _id: currentUser._id,
-                profile: currentUser.profile
+                profile: currentUser.profile,
+                roles: currentUser.roles
             },
             message: 'Success - accountCtrl > login'
         });
@@ -109,9 +110,9 @@ export const check = async (ctx) => {
     let { user } = ctx.request;
 
     if (!user) {
-        ctx.res.noContent({
+        ctx.res.forbidden({
             data: user,
-            message: 'Success - accountCtrl > check'
+            message: 'Fail - accountCtrl > check'
         });
 
         return;
@@ -121,7 +122,8 @@ export const check = async (ctx) => {
         ctx.res.ok({
             data: {
                 _id: user._id,
-                profile: user.profile
+                profile: user.profile,
+                roles: user.roles
             },
             message: 'Success - accountCtrl > check'
         });

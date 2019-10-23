@@ -79,6 +79,13 @@ const responseHandler = () => {
             });
         };
 
+        ctx.res.forbidden = (params = {}) => {
+            ctx.res.fail({
+                statusCode: statusCodes.FORBIDDEN,
+                ...params
+            });
+        };
+
         ctx.res.notFound = (params = {}) => {
             ctx.res.fail({
                 statusCode: statusCodes.NOT_FOUND,

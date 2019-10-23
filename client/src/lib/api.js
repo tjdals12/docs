@@ -120,3 +120,5 @@ export const getRoles = () => axios.get(`${real}/api/roles`);
 
 /** Account */
 export const login = (param) => axios.post(`${real}/api/accounts/login`, { ...param });
+export const check = () => axios.get(`${real}/api/accounts/check`);
+export const logout = () => axios.post(`${real}/api/accounts/logout`);

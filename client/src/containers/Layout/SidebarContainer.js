@@ -16,7 +16,5 @@ export default connect(
     (state) => ({
         roles: state.role.get('roles')
     }),
-    (dispatch) => ({
-
-    })
+    null
 )(SidebarContainer);

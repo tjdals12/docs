@@ -7,6 +7,7 @@ import * as roleActions from 'store/modules/role';
 class AccessibleRoutesContainer extends React.Component {
     getRoles = () => {
         const { RoleActions } = this.props;
+
         RoleActions.getRoles();
     }
 
