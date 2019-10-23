@@ -13,15 +13,16 @@ import queryString from 'query-string';
 
 const InternalTransmittalPage = (props) => {
 	const { page } = queryString.parse(props.location.search);
+	const { writable } = props;
 
 	return (
 		<ScrollToTop>
 			<Page
 				title="Internal Letters"
-				breadcrumbs={[ { name: 'Letters', active: false }, { name: 'Internal', active: true } ]}
+				breadcrumbs={[{ name: 'Letters', active: false }, { name: 'Internal', active: true }]}
 			>
 				<LetterSearchFormContainer />
-				<LetterTableContainer page={parseInt(page || 1, 10)} />
+				<LetterTableContainer writable={writable} page={parseInt(page || 1, 10)} />
 				<LetterAddModalContainer />
 				<LetterDetailModalContainer />
 				<LetterEditModalContainer />

@@ -34,7 +34,7 @@ class Sidebar extends React.Component {
 	};
 
 	render() {
-		const { roles } = this.props;
+		const { roles, myRoles } = this.props;
 
 		return (
 			<aside className={bem.b()} data-image={sidebarBgImg}>
@@ -49,7 +49,7 @@ class Sidebar extends React.Component {
 					</Navbar>
 					<Nav vertical>
 						{
-							roles.map(({ to, name, icon, dispGb, sub }, index) => {
+							roles.filter(({ roleId }) => myRoles.includes(roleId['READ'])).map(({ to, name, icon, dispGb, sub }, index) => {
 								const Icon = MaterialDesign[icon];
 
 								return sub.length > 0 ? ([
@@ -75,7 +75,7 @@ class Sidebar extends React.Component {
 												const SubIcon = MaterialDesign[subIcon];
 
 												return (
-													<NavItem key={`${index}-${subIndex}`} className={bem.e('nav-item')}>
+													<NavItem key={`${index}-${subIndex}`} className={bem.e('nav-item', 'pl-3')}>
 														<BSNavLink
 															id={`navItem-${name}-${index}`}
 															className="text-uppercase"
@@ -111,7 +111,7 @@ class Sidebar extends React.Component {
 
 					<Nav vertical className="nav-bottom">
 						{
-							roles.filter(({ dispGb }) => dispGb === '99').map(({ to, name, icon }, index) => {
+							roles.filter(({ dispGb, roleId }) => dispGb === '99' && myRoles.includes(roleId['READ'])).map(({ to, name, icon }, index) => {
 								const Icon = MaterialDesign[icon];
 
 								return (

@@ -4,19 +4,21 @@ import PropTypes from 'prop-types';
 import VendorCard from 'components/Card/VendorCard';
 import Pagination from 'components/Pagination';
 
-const VendorList = ({ page, lastPage, data, onPage, onOpenAdd, onOpenPersonAdd, onOpenDetail }) => {
+const VendorList = ({ writable, page, lastPage, data, onPage, onOpenAdd, onOpenPersonAdd, onOpenDetail }) => {
 	return (
 		<React.Fragment>
-			<Row className="hidden-md hidden-sm hidden-xs">
-				<Col md={4}>
-					<Button color="primary" className="mr-2" onClick={onOpenAdd}>
-						생성
+			{
+				writable && <Row className="hidden-md hidden-sm hidden-xs">
+					<Col md={4}>
+						<Button color="primary" className="mr-2" onClick={onOpenAdd}>
+							생성
 					</Button>
-					<Button color="secondary" onClick={onOpenPersonAdd}>
-						구성원 추가
+						<Button color="secondary" onClick={onOpenPersonAdd}>
+							구성원 추가
 					</Button>
-				</Col>
-			</Row>
+					</Col>
+				</Row>
+			}
 			<Row className="mt-2">
 				{data.map((vendor, index) => (
 					<Col xs={12} md={6} lg={3} className="mb-4" key={index}>

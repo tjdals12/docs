@@ -3,18 +3,21 @@ import classNames from 'classnames';
 import { Row, Col, Button, Table } from 'reactstrap';
 import Pagination from 'components/Pagination';
 
-const LetterTable = ({ page, lastPage, data, onOpen, onOpenDetail, onPage, className, ...rest }) => {
+const LetterTable = ({ writable, page, lastPage, data, onOpen, onOpenDetail, onPage, className, ...rest }) => {
 	const classes = classNames('mt-2 mb-4 bg-white', classNames);
 
 	return (
 		<React.Fragment>
-			<Row className="hidden-md hidden-sm hidden-xs">
-				<Col md={4}>
-					<Button color="primary" className="mr-2" onClick={onOpen('letterAdd')}>
-						ADD
+			{
+				writable &&
+				<Row className="hidden-md hidden-sm hidden-xs">
+					<Col md={4}>
+						<Button color="primary" className="mr-2" onClick={onOpen('letterAdd')}>
+							ADD
 					</Button>
-				</Col>
-			</Row>
+					</Col>
+				</Row>
+			}
 			<Table className={classes} {...rest} bordered striped hover>
 				<colgroup>
 					<col width="3%" />
@@ -57,10 +60,10 @@ const LetterTable = ({ page, lastPage, data, onOpen, onOpenDetail, onPage, class
 											{transmittal.get('letterGb')}
 										</span>
 									) : (
-										<span className="text-secondary font-weight-bold">
-											{transmittal.get('letterGb')}
-										</span>
-									)}
+											<span className="text-secondary font-weight-bold">
+												{transmittal.get('letterGb')}
+											</span>
+										)}
 								</td>
 								<td className="text-center">{transmittal.get('officialNumber')}</td>
 								<td className="text-left">
@@ -81,8 +84,8 @@ const LetterTable = ({ page, lastPage, data, onOpen, onOpenDetail, onPage, class
 											{transmittal.get('targetDate').substr(0, 10)}
 										</span>
 									) : (
-										<span className="text-danger">회신 필요없음</span>
-									)}
+											<span className="text-danger">회신 필요없음</span>
+										)}
 								</td>
 								<td className="text-center">
 									{transmittal.get('replyRequired') === 'YES' ? transmittal.get('replyYn') : '-'}

@@ -16,7 +16,7 @@ import { MdAccessAlarm, MdSearch } from 'react-icons/md';
 import Typography from 'components/Typography';
 import PropTypes from 'prop-types';
 
-const IndexCard = ({ data, type, onDetail, onOpenQuestion, onTarget, onOpenEdit }) => {
+const IndexCard = ({ writable, data, type, onDetail, onOpenQuestion, onTarget, onOpenEdit }) => {
 	return (
 		<Card className="mb-3">
 			<CardHeader className="bg-white">
@@ -58,28 +58,33 @@ const IndexCard = ({ data, type, onDetail, onOpenQuestion, onTarget, onOpenEdit 
 
 					{type === 'list' && (
 						<Col md={4} className="d-flex align-items-center justify-content-end">
-							<ButtonGroup className="mr-4">
-								<Button
-									color="primary"
-									onClick={() => {
-										onTarget(data.get('_id'));
 
-										onOpenEdit(data.get('_id'))();
-									}}
-								>
-									수정
-								</Button>
-								<Button
-									color="danger"
-									onClick={() => {
-										onTarget(data.get('_id'));
+							{
+								writable &&
+								<ButtonGroup className="mr-4">
+									<Button
+										color="primary"
+										onClick={() => {
+											onTarget(data.get('_id'));
 
-										onOpenQuestion();
-									}}
-								>
-									삭제
+											onOpenEdit(data.get('_id'))();
+										}}
+									>
+										수정
 								</Button>
-							</ButtonGroup>
+									<Button
+										color="danger"
+										onClick={() => {
+											onTarget(data.get('_id'));
+
+											onOpenQuestion();
+										}}
+									>
+										삭제
+									</Button>
+								</ButtonGroup>
+							}
+
 							<MdSearch size={25} onClick={onDetail(data.get('_id'))} className="can-click hover" />
 						</Col>
 					)}

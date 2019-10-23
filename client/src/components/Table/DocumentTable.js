@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Pagination from 'components/Pagination';
 
 const DocumentTable = ({
+	writable,
 	search,
 	page,
 	lastPage,
@@ -25,7 +26,7 @@ const DocumentTable = ({
 
 	return (
 		<React.Fragment>
-			<Row className="hidden-md hidden-sm hidden-xs">
+			{writable && <Row className="hidden-md hidden-sm hidden-xs">
 				<Col md={4}>
 					<Button color="primary" className="mr-2" onClick={onOpenAdd}>
 						ADD
@@ -35,7 +36,7 @@ const DocumentTable = ({
 						DELETE
 					</Button>
 				</Col>
-			</Row>
+			</Row>}
 			<Table className={classes} {...rest}>
 				<thead>
 					<tr>
@@ -85,7 +86,7 @@ const DocumentTable = ({
 										onChange={onChecked}
 									/>
 								</td>
-								<td className="text-center">{item.getIn([ 'documentGb', 'cdSName' ])}</td>
+								<td className="text-center">{item.getIn(['documentGb', 'cdSName'])}</td>
 								<td>{item.get('documentNumber')}</td>
 								<td>
 									<span className="have-link" onClick={onOpenDetail({ id })}>
@@ -93,29 +94,29 @@ const DocumentTable = ({
 									</span>
 								</td>
 								<td className="text-center">{item.get('documentRev')}</td>
-								<td className="text-center">{item.getIn([ 'timestamp', 'regDt' ]).substr(0, 10)}</td>
+								<td className="text-center">{item.getIn(['timestamp', 'regDt']).substr(0, 10)}</td>
 								<td className="text-center">
-									{item.getIn([ 'documentStatus', -1, 'statusName' ])}
+									{item.getIn(['documentStatus', -1, 'statusName'])}
 									<br />
 									<small className="text-primary">
-										({item.getIn([ 'documentStatus', -1, 'timestamp', 'regDt' ]).substr(0, 10)})
+										({item.getIn(['documentStatus', -1, 'timestamp', 'regDt']).substr(0, 10)})
 									</small>
 								</td>
 								<td className="text-center">
-									{item.getIn([ 'holdYn', -1, 'yn' ])}
+									{item.getIn(['holdYn', -1, 'yn'])}
 									<br />
-									{item.getIn([ 'holdYn', -1, 'yn' ]) === 'YES' && (
+									{item.getIn(['holdYn', -1, 'yn']) === 'YES' && (
 										<small className="text-danger font-weight-bold">
-											({item.getIn([ 'holdYn', -1, 'effStaDt' ]).substr(0, 10)})
+											({item.getIn(['holdYn', -1, 'effStaDt']).substr(0, 10)})
 										</small>
 									)}
 								</td>
 								<td className="text-center">
-									{item.getIn([ 'deleteYn', 'yn' ])}
+									{item.getIn(['deleteYn', 'yn'])}
 									<br />
-									{item.getIn([ 'deleteYn', 'yn' ]) === 'YES' && (
+									{item.getIn(['deleteYn', 'yn']) === 'YES' && (
 										<small className="text-danger font-weight-bold">
-											({item.getIn([ 'deleteYn', 'deleteDt' ]).substr(0, 10)})
+											({item.getIn(['deleteYn', 'deleteDt']).substr(0, 10)})
 										</small>
 									)}
 								</td>
@@ -125,8 +126,8 @@ const DocumentTable = ({
 									) : level.number === 3 ? (
 										<span className="text-info">{level.description}</span>
 									) : (
-										<span className="text-success">{level.description}</span>
-									)}
+												<span className="text-success">{level.description}</span>
+											)}
 								</td>
 							</tr>
 						);

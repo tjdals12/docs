@@ -67,12 +67,13 @@ class DocumentTableContainer extends React.Component {
 	};
 
 	render() {
-		const { documents, checkedList, lastPage, page, loading } = this.props;
+		const { writable, documents, checkedList, lastPage, page, loading } = this.props;
 
 		if (loading) return null;
 
 		return (
 			<DocumentTable
+				writable={writable}
 				page={page}
 				lastPage={lastPage}
 				data={documents}
@@ -96,7 +97,7 @@ export default connect(
 		lastPage: state.document.get('lastPage'),
 		documents: state.document.get('documents'),
 		checkedList: state.document.get('checkedList'),
-		isSearch: state.document.getIn([ 'search', 'isSearch' ]),
+		isSearch: state.document.getIn(['search', 'isSearch']),
 		search: state.document.get('search'),
 		loading: state.pender.pending['document/GET_DOCUMENTS']
 	}),

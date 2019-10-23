@@ -3,21 +3,25 @@ import classNames from 'classnames';
 import { Row, Col, Button, Table } from 'reactstrap';
 import Pagination from 'components/Pagination';
 
-const VendorLetterTable = ({ page, lastPage, data, onPage, onTarget, onOpen, onOpenDetail, className, ...rest }) => {
+const VendorLetterTable = ({ writable, page, lastPage, data, onPage, onTarget, onOpen, onOpenDetail, className, ...rest }) => {
 	const classes = classNames('mt-2 mb-4 bg-white', className);
 
 	return (
 		<React.Fragment>
-			<Row className="hidden-md hidden-sm -hidden-xs">
-				<Col md={4}>
-					<Button color="primary" className="mr-2" onClick={onOpen('vendorLetterReceive')}>
-						RECEIVE
+			{
+				writable &&
+				<Row className="hidden-md hidden-sm -hidden-xs">
+					<Col md={4}>
+						<Button color="primary" className="mr-2" onClick={onOpen('vendorLetterReceive')}>
+							RECEIVE
 					</Button>
-					<Button color="secondary" className="mr-2" onClick={onOpen('vendorLetterAdditionalReceive')}>
-						ADD DOCUMENT
+						<Button color="secondary" className="mr-2" onClick={onOpen('vendorLetterAdditionalReceive')}>
+							ADD DOCUMENT
 					</Button>
-				</Col>
-			</Row>
+					</Col>
+				</Row>
+			}
+
 			<Table className={classes} {...rest} bordered striped hover>
 				<colgroup>
 					<col width="3%" />
@@ -60,13 +64,13 @@ const VendorLetterTable = ({ page, lastPage, data, onPage, onTarget, onOpen, onO
 									<span
 										className="have-link"
 										onClick={() => {
-											onTarget(transmittal.getIn([ 'vendor', '_id' ]));
+											onTarget(transmittal.getIn(['vendor', '_id']));
 											onOpen('vendorDetail')();
 										}}
 									>
-										{transmittal.getIn([ 'vendor', 'vendorName' ])} <br />
-										({transmittal.getIn([ 'vendor', 'partNumber' ])} /{' '}
-										{transmittal.getIn([ 'vendor', 'part', 'cdSName' ])})
+										{transmittal.getIn(['vendor', 'vendorName'])} <br />
+										({transmittal.getIn(['vendor', 'partNumber'])} /{' '}
+										{transmittal.getIn(['vendor', 'part', 'cdSName'])})
 									</span>
 								</td>
 								<td className="text-center">
@@ -92,18 +96,18 @@ const VendorLetterTable = ({ page, lastPage, data, onPage, onTarget, onOpen, onO
 									</span>
 								</td>
 								<td className="text-center">
-									{transmittal.getIn([ 'letterStatus', -1, 'statusName' ])} <br />
+									{transmittal.getIn(['letterStatus', -1, 'statusName'])} <br />
 									<span className="text-primary">
 										({transmittal
-											.getIn([ 'letterStatus', -1, 'timestamp', 'regDt' ])
+											.getIn(['letterStatus', -1, 'timestamp', 'regDt'])
 											.substr(0, 10)})
 									</span>
 								</td>
 								<td className="text-center">
-									{transmittal.getIn([ 'cancelYn', 'yn' ])} <br />
-									{transmittal.getIn([ 'cancelYn', 'yn' ]) === 'YES' && (
+									{transmittal.getIn(['cancelYn', 'yn'])} <br />
+									{transmittal.getIn(['cancelYn', 'yn']) === 'YES' && (
 										<span className="text-danger">
-											({transmittal.getIn([ 'cancelYn', 'deleteDt' ]).substr(0, 10)})
+											({transmittal.getIn(['cancelYn', 'deleteDt']).substr(0, 10)})
 										</span>
 									)}
 								</td>

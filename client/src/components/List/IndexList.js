@@ -6,6 +6,7 @@ import Pagination from 'components/Pagination';
 import PropTypes from 'prop-types';
 
 const IndexList = ({
+	writable,
 	page,
 	lastPage,
 	data,
@@ -40,21 +41,25 @@ const IndexList = ({
 				}
 			/>
 
-			<Row className="hidden-md hidden-sm hidden-xs">
-				<Col md={4}>
-					<Button color="primary" className="mr-2" onClick={onOpenAdd}>
-						생성
-					</Button>
-					<Button color="secondary" onClick={onOpenInfoAdd}>
-						문서 추가
-					</Button>
-				</Col>
-			</Row>
+			{
+				writable &&
+				<Row className="hidden-md hidden-sm hidden-xs">
+					<Col md={4}>
+						<Button color="primary" className="mr-2" onClick={onOpenAdd}>
+							생성
+						</Button>
+						<Button color="secondary" onClick={onOpenInfoAdd}>
+							문서 추가
+						</Button>
+					</Col>
+				</Row>
+			}
 			<Row className="mt-2 mb-2">
 				<Col md={12}>
 					{data.map((item, index) => {
 						return (
 							<IndexCard
+								writable={writable}
 								key={index}
 								data={item}
 								type="list"

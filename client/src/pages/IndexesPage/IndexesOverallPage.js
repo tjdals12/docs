@@ -10,15 +10,16 @@ import queryString from 'query-string';
 
 const IndexesOverallPage = (props) => {
 	const { page } = queryString.parse(props.location.search);
+	const { writable } = props;
 
 	return (
 		<ScrollToTop>
 			<Page
 				title="Indexes"
-				breadcrumbs={[ { name: 'Indexes', active: false }, { name: 'Overall', active: true } ]}
+				breadcrumbs={[{ name: 'Indexes', active: false }, { name: 'Overall', active: true }]}
 			>
 				<IndexesSearchFormContainer />
-				<IndexListContainer page={parseInt(page || 1, 10)} />
+				<IndexListContainer writable={writable} page={parseInt(page || 1, 10)} />
 				<DocumentIndexAddModalContainer />
 				<DocumentIndexEditModalContainer />
 				<DocumentInfoAddModalContainer />

@@ -44,12 +44,13 @@ class LetterTableContainer extends React.Component {
 	}
 
 	render() {
-		const { transmittals, page, lastPage, loading } = this.props;
+		const { writable, transmittals, page, lastPage, loading } = this.props;
 
 		if (loading || loading === 'undefined') return null;
 
 		return (
 			<LetterTable
+				writable={writable}
 				page={page}
 				lastPage={lastPage}
 				data={transmittals}
@@ -65,7 +66,7 @@ export default connect(
 	(state) => ({
 		transmittals: state.letter.get('letters'),
 		lastPage: state.letter.get('lastPage'),
-		isSearch: state.letter.getIn([ 'search', 'isSearch' ]),
+		isSearch: state.letter.getIn(['search', 'isSearch']),
 		search: state.letter.get('search'),
 		loading: state.pender.pending['letter/GET_LETTERS']
 	}),

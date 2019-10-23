@@ -47,12 +47,13 @@ class VendorListContainer extends React.Component {
 	}
 
 	render() {
-		const { vendors, lastPage, page, loading } = this.props;
+		const { writable, vendors, lastPage, page, loading } = this.props;
 
 		if (loading) return null;
 
 		return (
 			<VendorList
+				writable={writable}
 				page={page}
 				lastPage={lastPage}
 				data={vendors}
@@ -68,7 +69,7 @@ class VendorListContainer extends React.Component {
 export default connect(
 	(state) => ({
 		vendors: state.vendor.get('vendors'),
-		isSearch: state.vendor.getIn([ 'search', 'isSearch' ]),
+		isSearch: state.vendor.getIn(['search', 'isSearch']),
 		search: state.vendor.get('search'),
 		lastPage: state.vendor.get('lastPage'),
 		loading: state.pender.pending['vendor/GET_VENDORS']

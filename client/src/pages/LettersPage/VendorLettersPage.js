@@ -14,15 +14,16 @@ import queryString from 'query-string';
 
 const VendorTransmittalsPage = (props) => {
 	const { page } = queryString.parse(props.location.search);
+	const { writable } = props;
 
 	return (
 		<ScrollToTop>
 			<Page
 				title="Vendor Letters"
-				breadcrumbs={[ { name: 'Letters', active: false }, { name: 'Vendor', active: true } ]}
+				breadcrumbs={[{ name: 'Letters', active: false }, { name: 'Vendor', active: true }]}
 			>
 				<VendorLetterSearchFormContainer />
-				<VendorLetterTableContainer page={parseInt(page || 1, 10)} />
+				<VendorLetterTableContainer writable={writable} page={parseInt(page || 1, 10)} />
 				<VendorDetailModalContainer />
 				<VendorEditModalContainer />
 				<VendorLetterReceiveModalContainer />

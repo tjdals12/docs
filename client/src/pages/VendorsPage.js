@@ -11,12 +11,13 @@ import queryString from 'query-string';
 
 const VendorsPage = (props) => {
 	const { page } = queryString.parse(props.location.search);
+	const { writable } = props;
 
 	return (
 		<ScrollToTop>
-			<Page title="Vendors" breadcrumbs={[ { name: 'Vendors', active: true } ]}>
+			<Page title="Vendors" breadcrumbs={[{ name: 'Vendors', active: true }]}>
 				<VendorSearchFormContainer />
-				<VendorListContainer page={parseInt(page || 1, 10)} />
+				<VendorListContainer writable={writable} page={parseInt(page || 1, 10)} />
 				<VendorAddModalContainer />
 				<VendorDetailModalContainer />
 				<VendorEditModalContainer />

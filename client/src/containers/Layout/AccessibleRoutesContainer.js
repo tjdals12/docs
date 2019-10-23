@@ -16,17 +16,18 @@ class AccessibleRoutesContainer extends React.Component {
     }
 
     render() {
-        const { roles } = this.props;
+        const { roles, myRoles } = this.props;
 
         return (
-            <AccessibleRoutes roles={roles.toJS()} />
+            <AccessibleRoutes roles={roles.toJS()} myRoles={myRoles ? myRoles.toJS() : []} />
         )
     }
 }
 
 export default connect(
     (state) => ({
-        roles: state.role.get('roles')
+        roles: state.role.get('roles'),
+        myRoles: state.account.getIn(['userInfo', 'roles'])
     }),
     (dispatch) => ({
         RoleActions: bindActionCreators(roleActions, dispatch)
