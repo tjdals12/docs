@@ -186,15 +186,33 @@ DocumentSchema.statics.searchDocumentsCount = function (param) {
 
     return this.aggregate([
         {
+            $lookup: {
+                from: 'cdminors',
+                localField: 'part',
+                foreignField: '_id',
+                as: 'part'
+            }
+        },
+        {
+            $lookup: {
+                from: 'cdminors',
+                localField: 'documentGb',
+                foreignField: '_id',
+                as: 'documentGb'
+            }
+        },
+        { $unwind: '$part' },
+        { $unwind: '$documentGb' },
+        {
             $project: {
                 vendor: 1,
-                part: 1,
+                part: '$part',
                 documentNumber: 1,
                 documentTitle: 1,
                 documentInOut: {
                     $slice: ['$documentInOut', -1]
                 },
-                documentGb: 1,
+                documentGb: '$documentGb',
                 documentStatus: {
                     $slice: ['$documentStatus', -1]
                 },
@@ -204,7 +222,7 @@ DocumentSchema.statics.searchDocumentsCount = function (param) {
                 holdYn: 1,
                 deleteYn: 1,
                 chainingDocument: 1,
-                timestamp: 1,
+                timestamp: 1
             },
         },
         {
@@ -225,10 +243,7 @@ DocumentSchema.statics.searchDocumentsCount = function (param) {
                     {
                         holdYn: {
                             $elemMatch: {
-                                $and: [
-                                    { effEndDt: new Date(DEFINE.COMMON.MAX_END_DT) },
-                                    { yn: { $regex: holdYn + '.*', $options: 'i' } }
-                                ]
+                                yn: { $regex: holdYn + '.*', $options: 'i' }
                             }
                         }
                     },
@@ -238,7 +253,7 @@ DocumentSchema.statics.searchDocumentsCount = function (param) {
                             { 'timestamp.regDt': { $lte: new Date(regDtEnd) } }
                         ]
                     },
-                    { level: level === -1 ? { $gt: level } : level }
+                    { level: level === -1 ? { $gte: level } : level }
                 ]
             },
         },

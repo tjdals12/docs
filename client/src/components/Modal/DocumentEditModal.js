@@ -63,7 +63,7 @@ const DocumentEditModal = ({
 				<Form>
 					<FormGroup row>
 						<Col md={6}>
-							<Label for="vendor">VENDOR</Label>
+							<Label for="vendor">업체</Label>
 							<Input
 								type="select"
 								name="vendor"
@@ -74,7 +74,7 @@ const DocumentEditModal = ({
 								<option value="">------ 업체를 선택해주세요. ------</option>
 								{vendorList.map((vendor) => (
 									<option key={vendor.get('_id')} value={vendor.get('_id')}>
-										{vendor.get('vendorName')} ({vendor.getIn([ 'part', 'cdSName' ])},{' '}
+										{vendor.get('vendorName')} ({vendor.getIn(['part', 'cdSName'])},{' '}
 										{vendor.get('partNumber')})
 									</option>
 								))}
@@ -82,7 +82,7 @@ const DocumentEditModal = ({
 						</Col>
 
 						<Col md={6}>
-							<Label for="part">PART</Label>
+							<Label for="part">공종</Label>
 							<Input
 								type="select"
 								name="part"
@@ -101,7 +101,7 @@ const DocumentEditModal = ({
 					</FormGroup>
 
 					<FormGroup>
-						<Label for="title">TITLE</Label>
+						<Label for="title">문서명</Label>
 						<Input
 							name="documentTitle"
 							placeholder="Document Title.."
@@ -112,7 +112,7 @@ const DocumentEditModal = ({
 						/>
 					</FormGroup>
 					<FormGroup>
-						<Label for="number">NO.</Label>
+						<Label for="number">문서번호</Label>
 						<Input
 							name="documentNumber"
 							placeholder="Document Number.."
@@ -124,7 +124,7 @@ const DocumentEditModal = ({
 					</FormGroup>
 					<FormGroup row>
 						<Col md={6}>
-							<Label for="rev">REVISION</Label>
+							<Label for="rev">Revision</Label>
 							<InputGroup>
 								<InputGroupAddon addonType="prepend">Rev.</InputGroupAddon>
 								<Input
@@ -157,7 +157,7 @@ const DocumentEditModal = ({
 						</Col>
 					</FormGroup>
 					<FormGroup className="mb-5">
-						<Label for="level">LEVEL</Label>
+						<Label for="level">중요도</Label>
 						<Slider
 							min={1}
 							max={5}
@@ -180,7 +180,7 @@ const DocumentEditModal = ({
 						/>
 					</FormGroup>
 					<FormGroup>
-						<Label for="memo">MEMO</Label>
+						<Label for="memo">메모</Label>
 						<Input
 							type="textarea"
 							bsSize="lg"
@@ -196,9 +196,9 @@ const DocumentEditModal = ({
 			</ModalBody>
 			<ModalFooter className="bg-light">
 				<Button color="primary" onClick={onEdit}>
-					EDIT
+					수정
 				</Button>
-				<Button onClick={onClose}>CANCEL</Button>
+				<Button onClick={onClose}>닫기</Button>
 			</ModalFooter>
 		</Modal>
 	);

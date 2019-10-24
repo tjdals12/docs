@@ -20,6 +20,7 @@ import QuestionModal from 'components/Modal/QuestionModal';
 import Typography from 'components/Typography';
 
 const DocumentDetailModal = ({
+	writable,
 	codes,
 	date,
 	isOpen,
@@ -62,12 +63,12 @@ const DocumentDetailModal = ({
 				}
 				footer={
 					<Button color="primary" onClick={onDeleteStatus}>
-						DELETE
+						삭제
 					</Button>
 				}
 			/>
 			<ModalHeader toggle={onClose('documentDetail')} className="bg-light">
-				Document 상세{' '}
+				문서 상세{' '}
 				<span className="text-primary">
 					({data.get('documentNumber')}_{data.get('documentTitle')}_Rev.{data.get('documentRev')})
 				</span>
@@ -89,19 +90,19 @@ const DocumentDetailModal = ({
 								<span
 									className="have-link"
 									onClick={() => {
-										onTargetVendor({ id: data.getIn([ 'vendor', '_id' ]) });
+										onTargetVendor({ id: data.getIn(['vendor', '_id']) });
 										onOpen('vendorDetail')();
 									}}
 								>
-									{data.getIn([ 'vendor', 'vendorName' ])}
-									({data.getIn([ 'vendor', 'partNumber' ])} /{' '}
-									{data.getIn([ 'vendor', 'part', 'cdSName' ])})
+									{data.getIn(['vendor', 'vendorName'])}
+									({data.getIn(['vendor', 'partNumber'])} /{' '}
+									{data.getIn(['vendor', 'part', 'cdSName'])})
 								</span>
 							</td>
 							<th scope="row" className="text-right bg-light">
-								문서 구분
+								구분
 							</th>
-							<td>{data.getIn([ 'documentGb', 'cdSName' ])}</td>
+							<td>{data.getIn(['documentGb', 'cdSName'])}</td>
 						</tr>
 						<tr className="border-bottom">
 							<th scope="row" className="text-right bg-light">
@@ -124,8 +125,8 @@ const DocumentDetailModal = ({
 								중요도
 							</th>
 							<td>
-								<div className="pb-1">{data.getIn([ 'level', 'description' ])} (Max: 5)</div>
-								<Progress max={5} value={data.getIn([ 'level', 'number' ])} />
+								<div className="pb-1">{data.getIn(['level', 'description'])} (Max: 5)</div>
+								<Progress max={5} value={data.getIn(['level', 'number'])} />
 							</td>
 						</tr>
 						<tr className="border-bottom">
@@ -133,14 +134,14 @@ const DocumentDetailModal = ({
 								삭제여부
 							</th>
 							<td>
-								{data.getIn([ 'deleteYn', 'yn' ])}{' '}
-								{data.getIn([ 'deleteYn', 'yn' ]) === 'YES' && (
+								{data.getIn(['deleteYn', 'yn'])}{' '}
+								{data.getIn(['deleteYn', 'yn']) === 'YES' && (
 									<React.Fragment>
 										<Typography tag="span" className="text-danger">
-											({data.getIn([ 'deleteYn', 'deleteDt' ])})
+											({data.getIn(['deleteYn', 'deleteDt'])})
 										</Typography>
 										<Typography type="p" className="m-0 pt-2">
-											사유: {data.getIn([ 'deleteYn', 'reason' ])}
+											사유: {data.getIn(['deleteYn', 'reason'])}
 										</Typography>
 									</React.Fragment>
 								)}
@@ -149,19 +150,19 @@ const DocumentDetailModal = ({
 								보류여부
 							</th>
 							<td>
-								{data.getIn([ 'holdYn', -1, 'yn' ])}{' '}
-								{data.getIn([ 'holdYn', -1, 'yn' ]) === 'YES' && (
+								{data.getIn(['holdYn', -1, 'yn'])}{' '}
+								{data.getIn(['holdYn', -1, 'yn']) === 'YES' && (
 									<React.Fragment>
 										<Typography tag="span" className="text-danger">
-											({data.getIn([ 'holdYn', -1, 'effStaDt' ]).substr(0, 10)} ~{' '}
-											{data.getIn([ 'holdYn', -1, 'effEndDt' ]).substr(0, 10) === '9999-12-31' ? (
+											({data.getIn(['holdYn', -1, 'effStaDt']).substr(0, 10)} ~{' '}
+											{data.getIn(['holdYn', -1, 'effEndDt']).substr(0, 10) === '9999-12-31' ? (
 												'진행중'
 											) : (
-												data.getIn([ 'holdYn', -1, 'effEndDt' ]).substr(0, 10)
-											)})
+													data.getIn(['holdYn', -1, 'effEndDt']).substr(0, 10)
+												)})
 										</Typography>
 										<Typography type="p" className="pt-2">
-											사유: {data.getIn([ 'holdYn', -1, 'reason' ])}
+											사유: {data.getIn(['holdYn', -1, 'reason'])}
 										</Typography>
 									</React.Fragment>
 								)}
@@ -187,7 +188,7 @@ const DocumentDetailModal = ({
 											<br />
 
 											<span className="text-danger">
-												({item.getIn([ 'timestamp', 'regDt' ]).substr(0, 10)})
+												({item.getIn(['timestamp', 'regDt']).substr(0, 10)})
 											</span>
 										</div>
 									);
@@ -217,7 +218,7 @@ const DocumentDetailModal = ({
 											<br />
 
 											<span className="text-danger">
-												({item.getIn([ 'timestamp', 'regDt' ]).substr(0, 10)})
+												({item.getIn(['timestamp', 'regDt']).substr(0, 10)})
 											</span>
 										</div>
 									);
@@ -236,11 +237,11 @@ const DocumentDetailModal = ({
 							</th>
 							<td colSpan="3">
 								<span className="text-secondary">
-									등록: {data.getIn([ 'timestamp', 'regId' ])} ({data.getIn([ 'timestamp', 'regDt' ])})
+									등록: {data.getIn(['timestamp', 'regId'])} ({data.getIn(['timestamp', 'regDt'])})
 								</span>
 								<br />
 								<span className="text-secondary">
-									수정: {data.getIn([ 'timestamp', 'updId' ])} ({data.getIn([ 'timestamp', 'updDt' ])})
+									수정: {data.getIn(['timestamp', 'updId'])} ({data.getIn(['timestamp', 'updDt'])})
 								</span>
 							</td>
 						</tr>
@@ -248,64 +249,70 @@ const DocumentDetailModal = ({
 				</Table>
 			</ModalBody>
 			<ModalFooter className="bg-light">
-				<Col className="pr-5">
-					<InputGroup>
-						<Input type="select" name="status" onChange={onChange} className="text-center">
-							<option value="">-- 변경할 상태 선택 --</option>
-							{codes.get('cdMinors').map((code) => (
-								<option key={code.get('_id')} value={JSON.stringify(code.get('cdRef1'))}>
-									{code.get('cdSName')}
-								</option>
-							))}
-						</Input>
-						<InputGroupAddon addonType="prepend">
-							<DatePicker
-								dateFormat="yyyy-MM-dd"
-								className="text-center"
-								name="date"
-								selected={date}
-								onChange={onDate}
-							/>
-						</InputGroupAddon>
-						<InputGroupAddon addonType="append">
-							<Button onClick={onStatus({ id: data.get('id') })}>변경</Button>
-						</InputGroupAddon>
-					</InputGroup>
-				</Col>
-				<Input
-					type="text"
-					name="reason"
-					placeholder="Hold 또는 Delete 사유 (필수)"
-					className="w-25"
-					onChange={onChange}
-					value={reason}
-					invalid={reasonError}
-				/>
-				<ButtonGroup>
-					{data.getIn([ 'deleteYn', 'yn' ]) === 'NO' ? (
-						<Button color="danger" onClick={onDelete({ id: data.get('id'), yn: 'YES' })}>
-							DELETE
+				{
+					writable &&
+					[
+						<Col className="pr-5" key={1}>
+							<InputGroup>
+								<Input type="select" name="status" onChange={onChange} className="text-center">
+									<option value="">-- 변경할 상태 선택 --</option>
+									{codes.get('cdMinors').map((code) => (
+										<option key={code.get('_id')} value={JSON.stringify(code.get('cdRef1'))}>
+											{code.get('cdSName')}
+										</option>
+									))}
+								</Input>
+								<InputGroupAddon addonType="prepend">
+									<DatePicker
+										dateFormat="yyyy-MM-dd"
+										className="text-center"
+										name="date"
+										selected={date}
+										onChange={onDate}
+									/>
+								</InputGroupAddon>
+								<InputGroupAddon addonType="append">
+									<Button onClick={onStatus({ id: data.get('id') })}>변경</Button>
+								</InputGroupAddon>
+							</InputGroup>
+						</Col>,
+						<Input
+							key={2}
+							type="text"
+							name="reason"
+							placeholder="Hold 또는 Delete 사유 (필수)"
+							className="w-25"
+							onChange={onChange}
+							value={reason}
+							invalid={reasonError}
+						/>,
+						<ButtonGroup key={3}>
+							{data.getIn(['deleteYn', 'yn']) === 'NO' ? (
+								<Button color="danger" onClick={onDelete({ id: data.get('id'), yn: 'YES' })}>
+									삭제
+							</Button>
+							) : (
+									<Button color="danger" onClick={onDelete({ id: data.get('id'), yn: 'NO' })}>
+										삭제 취소
+							</Button>
+								)}
+							{data.getIn(['holdYn', -1, 'yn']) === 'NO' ? (
+								<Button color="info" onClick={onHold({ id: data.get('id'), yn: 'YES' })}>
+									보류
+							</Button>
+							) : (
+									<Button color="info" onClick={onHold({ id: data.get('id'), yn: 'NO' })}>
+										보류 취소
+							</Button>
+								)}
+						</ButtonGroup>,
+						<Button color="primary" onClick={onOpen('documentEdit')} key={4}>
+							수정
 						</Button>
-					) : (
-						<Button color="danger" onClick={onDelete({ id: data.get('id'), yn: 'NO' })}>
-							DELETE 취소
-						</Button>
-					)}
-					{data.getIn([ 'holdYn', -1, 'yn' ]) === 'NO' ? (
-						<Button color="info" onClick={onHold({ id: data.get('id'), yn: 'YES' })}>
-							HOLD
-						</Button>
-					) : (
-						<Button color="info" onClick={onHold({ id: data.get('id'), yn: 'NO' })}>
-							HOLD 취소
-						</Button>
-					)}
-				</ButtonGroup>
-				<Button color="primary" onClick={onOpen('documentEdit')}>
-					EDIT
-				</Button>
+					]
+				}
 				<Button color="secondary" onClick={onClose('documentDetail')}>
-					CANCEL
+					닫기
 				</Button>
 			</ModalFooter>
 		</Modal>
@@ -313,6 +320,7 @@ const DocumentDetailModal = ({
 };
 
 DocumentDetailModal.propTypes = {
+	writable: PropTypes.bool,
 	isOpen: PropTypes.bool,
 	isOpenQuestion: PropTypes.bool,
 	reason: PropTypes.string,
@@ -329,6 +337,7 @@ DocumentDetailModal.propTypes = {
 };
 
 DocumentDetailModal.defaultProps = {
+	writable: false,
 	isOpen: false,
 	isOpenQuestion: false,
 	reason: '',

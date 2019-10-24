@@ -140,7 +140,7 @@ export default handleActions(
 				return state
 					.set('vendorLetters', fromJS(vendorLetters))
 					.set('lastPage', parseInt(lastPage, 10))
-					.setIn([ 'search', 'isSearch' ], true);
+					.setIn(['search', 'isSearch'], true);
 			}
 		}),
 		...pender({
@@ -151,8 +151,8 @@ export default handleActions(
 				return state
 					.set('vendorLetter', fromJS(vendorLetter))
 					.set('edit', fromJS(vendorLetter))
-					.setIn([ 'edit', 'vendor' ], vendorLetter.vendor._id)
-					.setIn([ 'edit', 'deleteDocuments' ], List());
+					.setIn(['edit', 'vendor'], vendorLetter.vendor._id)
+					.setIn(['edit', 'deleteDocuments'], List());
 			}
 		}),
 		...pender({
@@ -168,15 +168,15 @@ export default handleActions(
 				const receive = state.get('receive');
 
 				return state
-					.setIn([ 'errors', 'vendorError' ], receive.get('vendor') === '')
-					.setIn([ 'errors', 'senderGbError' ], receive.get('senderGb') === '')
-					.setIn([ 'errors', 'senderError' ], receive.get('sender') === '')
-					.setIn([ 'errors', 'receiverGbError' ], receive.get('receiverGb') === '')
-					.setIn([ 'errors', 'receiverError' ], receive.get('receiver') === '')
-					.setIn([ 'errors', 'officialNumberError' ], receive.get('officialNumber') === '')
-					.setIn([ 'errors', 'receiveDocumentsErrorList' ], Array.isArray(data) ? data : List())
-					.setIn([ 'errors', 'receiveDateError' ], receive.get('receiveDate') === '')
-					.setIn([ 'errors', 'targetDateError' ], receive.get('targetDate') === '');
+					.setIn(['errors', 'vendorError'], receive.get('vendor') === '')
+					.setIn(['errors', 'senderGbError'], receive.get('senderGb') === '')
+					.setIn(['errors', 'senderError'], receive.get('sender') === '')
+					.setIn(['errors', 'receiverGbError'], receive.get('receiverGb') === '')
+					.setIn(['errors', 'receiverError'], receive.get('receiver') === '')
+					.setIn(['errors', 'officialNumberError'], receive.get('officialNumber') === '')
+					.setIn(['errors', 'receiveDocumentsErrorList'], Array.isArray(data) ? data : List())
+					.setIn(['errors', 'receiveDateError'], receive.get('receiveDate') === '')
+					.setIn(['errors', 'targetDateError'], receive.get('targetDate') === '');
 			}
 		}),
 		...pender({
@@ -187,22 +187,22 @@ export default handleActions(
 				return state
 					.set('vendorLetter', fromJS(vendorLetter))
 					.set('edit', fromJS(vendorLetter))
-					.setIn([ 'edit', 'vendor' ], vendorLetter.vendor._id)
-					.setIn([ 'edit', 'deleteDocuments' ], List());
+					.setIn(['edit', 'vendor'], vendorLetter.vendor._id)
+					.setIn(['edit', 'deleteDocuments'], List());
 			},
 			onFailure: (state, action) => {
 				const receive = state.get('edit');
 
 				return state
-					.setIn([ 'errors', 'vendorError' ], receive.get('vendor') === '')
-					.setIn([ 'errors', 'senderGbError' ], receive.get('senderGb') === '')
-					.setIn([ 'errors', 'senderError' ], receive.get('sender') === '')
-					.setIn([ 'errors', 'receiverGbError' ], receive.get('receiverGb') === '')
-					.setIn([ 'errors', 'receiverError' ], receive.get('receiver') === '')
-					.setIn([ 'errors', 'officialNumberError' ], receive.get('officialNumber') === '')
-					.setIn([ 'errors', 'receiveDocumentsError' ], receive.get('documents').size === 0)
-					.setIn([ 'errors', 'receiveDateError' ], receive.get('receiveDate') === '')
-					.setIn([ 'errors', 'targetDateError' ], receive.get('targetDate') === '');
+					.setIn(['errors', 'vendorError'], receive.get('vendor') === '')
+					.setIn(['errors', 'senderGbError'], receive.get('senderGb') === '')
+					.setIn(['errors', 'senderError'], receive.get('sender') === '')
+					.setIn(['errors', 'receiverGbError'], receive.get('receiverGb') === '')
+					.setIn(['errors', 'receiverError'], receive.get('receiver') === '')
+					.setIn(['errors', 'officialNumberError'], receive.get('officialNumber') === '')
+					.setIn(['errors', 'receiveDocumentsError'], receive.get('documents').size === 0)
+					.setIn(['errors', 'receiveDateError'], receive.get('receiveDate') === '')
+					.setIn(['errors', 'targetDateError'], receive.get('targetDate') === '');
 			}
 		}),
 		...pender({
@@ -218,8 +218,8 @@ export default handleActions(
 				const additionalReceive = state.get('additionalReceive');
 
 				return state
-					.setIn([ 'errors', 'officialNumberError' ], additionalReceive.get('id') === '')
-					.setIn([ 'errors', 'receiveDocumentsErrorList' ], Array.isArray(data) ? data : List());
+					.setIn(['errors', 'officialNumberError'], additionalReceive.get('id') === '')
+					.setIn(['errors', 'receiveDocumentsErrorList'], Array.isArray(data) ? data : List());
 			}
 		}),
 		...pender({
@@ -252,7 +252,7 @@ export default handleActions(
 		[ON_CHANGE]: (state, action) => {
 			const { target, name, value } = action.payload;
 
-			return !target ? state.set(name, value) : state.setIn([ target, name ], fromJS(value));
+			return !target ? state.set(name, value) : state.setIn([target, name], fromJS(value));
 		},
 		[SET_TARGET]: (state, action) => {
 			const { payload } = action;
@@ -261,21 +261,21 @@ export default handleActions(
 		},
 		[SET_DELETE_DOCUMENT]: (state, action) => {
 			const { payload: id } = action;
-			const receiveDocuments = state.getIn([ 'edit', 'documents' ]);
+			const receiveDocuments = state.getIn(['edit', 'documents']);
 			const index = receiveDocuments.findIndex((document) => document.get('_id') === id);
 
 			return state
-				.updateIn([ 'edit', 'documents' ], (receiveDocuments) =>
-					receiveDocuments.setIn([ index, 'deleted' ], true)
+				.updateIn(['edit', 'documents'], (receiveDocuments) =>
+					receiveDocuments.setIn([index, 'deleted'], true)
 				)
-				.updateIn([ 'edit', 'deleteDocuments' ], (deleteDocuments) => deleteDocuments.push(id));
+				.updateIn(['edit', 'deleteDocuments'], (deleteDocuments) => deleteDocuments.push(id));
 		},
 		[DELETE_RECEIVE_DOCUMENT]: (state, action) => {
 			const { id, target } = action.payload;
-			const receiveDocuments = state.getIn([ target, 'receiveDocuments' ]);
+			const receiveDocuments = state.getIn([target, 'receiveDocuments']);
 			const index = receiveDocuments.findIndex((document) => document.get('id') === id);
 
-			return state.updateIn([ target, 'receiveDocuments' ], (receiveDocuments) => receiveDocuments.remove(index));
+			return state.updateIn([target, 'receiveDocuments'], (receiveDocuments) => receiveDocuments.remove(index));
 		},
 		[INITIALIZE]: (state, action) => {
 			const { payload } = action;

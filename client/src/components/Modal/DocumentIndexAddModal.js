@@ -87,9 +87,9 @@ const DocumentIndexAddModal = ({
 						<thead>
 							<tr style={{ background: '#e7f5ff' }}>
 								<th className="text-right">#</th>
-								<th>Number</th>
-								<th>Title</th>
-								<th>Gb</th>
+								<th>문서번호</th>
+								<th>문서명</th>
+								<th>구분</th>
 								<th className="text-center">Plan</th>
 							</tr>
 						</thead>

@@ -22,7 +22,7 @@ const DocumentInfoDetailModal = ({
 			size="xl"
 		>
 			<ModalHeader className="bg-light" toggle={onClose}>
-				Document Info 상세
+				문서 목록 > 문서 상세
 			</ModalHeader>
 			<ModalBody className="p-0">
 				<Table borderless className="rounded m-0">
@@ -41,18 +41,18 @@ const DocumentInfoDetailModal = ({
 								<span
 									className="have-link"
 									onClick={() => {
-										onTarget(data.getIn([ 'vendor', '_id' ]));
+										onTarget(data.getIn(['vendor', '_id']));
 										onOpenVendor();
 									}}
 								>
-									{data.getIn([ 'vendor', 'vendorName' ])} ({data.getIn([ 'vendor', 'partNumber' ])} /{' '}
-									{data.getIn([ 'vendor', 'part', 'cdSName' ])}){' '}
+									{data.getIn(['vendor', 'vendorName'])} ({data.getIn(['vendor', 'partNumber'])} /{' '}
+									{data.getIn(['vendor', 'part', 'cdSName'])}){' '}
 								</span>
 							</td>
 							<th scope="row" className="text-right bg-light">
 								문서 구분
 							</th>
-							<td>{data.getIn([ 'documentGb', 'cdSName' ])}</td>
+							<td>{data.getIn(['documentGb', 'cdSName'])}</td>
 						</tr>
 						<tr className="border-bottom">
 							<th scope="row" className="text-right bg-light">
@@ -75,9 +75,9 @@ const DocumentInfoDetailModal = ({
 								삭제여부
 							</th>
 							<td>
-								{data.getIn([ 'removeYn', 'yn' ])}{' '}
-								{data.getIn([ 'removeYn', 'yn' ]) === 'YES' && (
-									<span className="text-danger">({data.getIn([ 'removeYn', 'deleteDt' ])})</span>
+								{data.getIn(['removeYn', 'yn'])}{' '}
+								{data.getIn(['removeYn', 'yn']) === 'YES' && (
+									<span className="text-danger">({data.getIn(['removeYn', 'deleteDt'])})</span>
 								)}
 							</td>
 						</tr>
@@ -101,32 +101,32 @@ const DocumentInfoDetailModal = ({
 												</td>
 											</tr>
 										) : (
-											data.get('trackingDocument').map((document, index) => (
-												<tr key={index} className="border-bottom">
-													<td className="text-center">{document.get('documentNumber')}</td>
-													<td className="text-center">
-														<span
-															className="have-link"
-															onClick={onOpenDetail(document.get('_id'))}
-														>
-															{document.get('documentTitle')}
+												data.get('trackingDocument').map((document, index) => (
+													<tr key={index} className="border-bottom">
+														<td className="text-center">{document.get('documentNumber')}</td>
+														<td className="text-center">
+															<span
+																className="have-link"
+																onClick={onOpenDetail(document.get('_id'))}
+															>
+																{document.get('documentTitle')}
+															</span>
+														</td>
+														<td className="text-center">{document.get('documentRev')}</td>
+														<td className="text-center">
+															{document.getIn(['timestamp', 'regDt']).substr(0, 10)}
+														</td>
+														<td className="text-right">
+															{document.getIn(['documentStatus', -1, 'statusName'])}{' '}
+															<span className="text-danger">
+																({document
+																	.getIn(['documentStatus', -1, 'timestamp', 'regDt'])
+																	.substr(0, 10)})
 														</span>
-													</td>
-													<td className="text-center">{document.get('documentRev')}</td>
-													<td className="text-center">
-														{document.getIn([ 'timestamp', 'regDt' ]).substr(0, 10)}
-													</td>
-													<td className="text-right">
-														{document.getIn([ 'documentStatus', -1, 'statusName' ])}{' '}
-														<span className="text-danger">
-															({document
-																.getIn([ 'documentStatus', -1, 'timestamp', 'regDt' ])
-																.substr(0, 10)})
-														</span>
-													</td>
-												</tr>
-											))
-										)}
+														</td>
+													</tr>
+												))
+											)}
 									</tbody>
 								</Table>
 							</td>
@@ -137,11 +137,11 @@ const DocumentInfoDetailModal = ({
 							</th>
 							<td colSpan={3}>
 								<span className="text-danger">
-									등록: {data.getIn([ 'timestamp', 'regId' ])} ({data.getIn([ 'timestamp', 'regDt' ])})
+									등록: {data.getIn(['timestamp', 'regId'])} ({data.getIn(['timestamp', 'regDt'])})
 								</span>
 								<br />
 								<span className="text-danger">
-									수정: {data.getIn([ 'timestamp', 'updId' ])} ({data.getIn([ 'timestamp', 'updDt' ])})
+									수정: {data.getIn(['timestamp', 'updId'])} ({data.getIn(['timestamp', 'updDt'])})
 								</span>
 							</td>
 						</tr>
@@ -150,7 +150,7 @@ const DocumentInfoDetailModal = ({
 			</ModalBody>
 			<ModalFooter className="bg-light">
 				<Button className="secondary" onClick={onClose}>
-					CANCEL
+					닫기
 				</Button>
 			</ModalFooter>
 		</Modal>

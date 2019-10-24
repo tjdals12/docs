@@ -19,7 +19,7 @@ const LatestDocumentsModal = ({
 	return (
 		<Modal isOpen={isOpen} toggle={onClose} className={className} contentClassName="rounded" {...rest} size="xl">
 			<ModalHeader toggle={onClose} className="bg-light">
-				Latest Document 목록{' '}
+				최신 문서 목록{' '}
 				<span className="have-link" onClick={onOpenVendorDetail}>
 					({`${vendor.get('partNumber')} / ${vendor.get('itemName')} / ${vendor.get('vendorName')}`})
 				</span>
@@ -37,8 +37,8 @@ const LatestDocumentsModal = ({
 					<thead>
 						<tr>
 							<th className="text-right">#</th>
-							<th>No.</th>
-							<th>Title</th>
+							<th>문서번호</th>
+							<th>문서명</th>
 							<th className="text-center">Rev.</th>
 							<th>접수</th>
 							<th>현재 상태</th>
@@ -61,8 +61,8 @@ const LatestDocumentsModal = ({
 										{documentInOut ? (
 											documentInOut.timestamp.regDt.substr(0, 10)
 										) : (
-											<span className="text-danger">접수되지 않음</span>
-										)}
+												<span className="text-danger">접수되지 않음</span>
+											)}
 									</td>
 									<td>
 										{documentStatus ? (
@@ -71,8 +71,8 @@ const LatestDocumentsModal = ({
 												10
 											)})`
 										) : (
-											'-'
-										)}
+												'-'
+											)}
 									</td>
 								</tr>
 							);
@@ -88,7 +88,7 @@ const LatestDocumentsModal = ({
 					aria-label="Page navigation"
 					listClassName="flex-row justify-content-end mb-0 ml-auto"
 				/>
-				<Button onClick={onClose}>CANCEL</Button>
+				<Button onClick={onClose}>닫기</Button>
 			</ModalFooter>
 		</Modal>
 	);

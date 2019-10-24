@@ -19,7 +19,7 @@ const VendorsPage = (props) => {
 				<VendorSearchFormContainer />
 				<VendorListContainer writable={writable} page={parseInt(page || 1, 10)} />
 				<VendorAddModalContainer />
-				<VendorDetailModalContainer />
+				<VendorDetailModalContainer writable={writable} />
 				<VendorEditModalContainer />
 				<VendorPersonAddModalContainer />
 			</Page>

@@ -86,6 +86,7 @@ const IndexList = ({
 };
 
 IndexList.propTypes = {
+	writable: PropTypes.bool,
 	isOpenQuestion: PropTypes.bool,
 	onOpenQuestion: PropTypes.func,
 	onClose: PropTypes.func,
@@ -98,6 +99,7 @@ IndexList.propTypes = {
 };
 
 IndexList.defaultProps = {
+	writable: false,
 	onOpenQuestion: () => console.warn('Warning: onOpenQuestion is not defined'),
 	onClose: () => console.warn('Warning: onClose is not defined'),
 	onOpenAdd: () => console.warn('Warning: onOpenAdd is not defined'),

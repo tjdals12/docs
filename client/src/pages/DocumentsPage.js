@@ -19,7 +19,7 @@ const DocumentsPage = (props) => {
 				<DocumentSearchFormContainer />
 				<DocumentTableContainer writable={writable} page={parseInt(page || 1, 10)} />
 				<DocumentAddModalContainer />
-				<DocumentDetailModalContainer />
+				<DocumentDetailModalContainer writable={writable} />
 				<DocumentEditModalContainer />
 				<VendorDetailModalContainer />
 			</Page>

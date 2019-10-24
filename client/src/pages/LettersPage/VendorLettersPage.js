@@ -27,7 +27,7 @@ const VendorTransmittalsPage = (props) => {
 				<VendorDetailModalContainer />
 				<VendorEditModalContainer />
 				<VendorLetterReceiveModalContainer />
-				<VendorLetterDetailModalContainer />
+				<VendorLetterDetailModalContainer writable={writable} />
 				<VendorLetterEditModalContainer />
 				<VendorLetterAdditionalReceiveModalContainer />
 				<DocumentDetailModalContainer />

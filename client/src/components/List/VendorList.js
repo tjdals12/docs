@@ -39,6 +39,7 @@ const VendorList = ({ writable, page, lastPage, data, onPage, onOpenAdd, onOpenP
 };
 
 VendorList.propTypes = {
+	writable: PropTypes.bool,
 	page: PropTypes.number,
 	lastPage: PropTypes.number,
 	onPage: PropTypes.func,
@@ -48,6 +49,7 @@ VendorList.propTypes = {
 };
 
 VendorList.defaultProps = {
+	writable: false,
 	page: 1,
 	lastPage: 1,
 	onPage: () => console.warn('Warning: onPage is not defined'),

@@ -29,11 +29,11 @@ const DocumentTable = ({
 			{writable && <Row className="hidden-md hidden-sm hidden-xs">
 				<Col md={4}>
 					<Button color="primary" className="mr-2" onClick={onOpenAdd}>
-						ADD
+						추가
 					</Button>
 
 					<Button color="secondary" onClick={onDelete}>
-						DELETE
+						삭제
 					</Button>
 				</Col>
 			</Row>}
@@ -148,9 +148,15 @@ const DocumentTable = ({
 };
 
 DocumentTable.propTypes = {
+	writable: PropTypes.bool,
 	page: PropTypes.number,
-	lastPage: PropTypes.number,
-	data: PropTypes.object
+	lastPage: PropTypes.number
 };
+
+DocumentTable.defaultProps = {
+	writable: false,
+	page: 1,
+	lastPage: 1
+}
 
 export default DocumentTable;

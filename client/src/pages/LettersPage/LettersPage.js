@@ -24,7 +24,7 @@ const InternalTransmittalPage = (props) => {
 				<LetterSearchFormContainer />
 				<LetterTableContainer writable={writable} page={parseInt(page || 1, 10)} />
 				<LetterAddModalContainer />
-				<LetterDetailModalContainer />
+				<LetterDetailModalContainer writable={writable} />
 				<LetterEditModalContainer />
 				<ReferenceSearchModalContainer />
 				<DocumentDetailModalContainer />

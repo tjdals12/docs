@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { Row, Col, Button, Table } from 'reactstrap';
 import Pagination from 'components/Pagination';
+import PropTypes from 'prop-types';
 
 const VendorLetterTable = ({ writable, page, lastPage, data, onPage, onTarget, onOpen, onOpenDetail, className, ...rest }) => {
 	const classes = classNames('mt-2 mb-4 bg-white', className);
@@ -13,10 +14,10 @@ const VendorLetterTable = ({ writable, page, lastPage, data, onPage, onTarget, o
 				<Row className="hidden-md hidden-sm -hidden-xs">
 					<Col md={4}>
 						<Button color="primary" className="mr-2" onClick={onOpen('vendorLetterReceive')}>
-							RECEIVE
+							접수
 					</Button>
 						<Button color="secondary" className="mr-2" onClick={onOpen('vendorLetterAdditionalReceive')}>
-							ADD DOCUMENT
+							추가 접수
 					</Button>
 					</Col>
 				</Row>
@@ -128,5 +129,24 @@ const VendorLetterTable = ({ writable, page, lastPage, data, onPage, onTarget, o
 		</React.Fragment>
 	);
 };
+
+VendorLetterTable.propTypes = {
+	writable: PropTypes.bool,
+	page: PropTypes.number,
+	lastPage: PropTypes.number,
+	onPage: PropTypes.func, onTarget: PropTypes.func,
+	onOpen: PropTypes.func,
+	onOpenDetail: PropTypes.func,
+	className: PropTypes.string
+}
+
+VendorLetterTable.defaultProps = {
+	writable: false,
+	page: 1,
+	lastPage: 1,
+	onPage: () => console.warn('Warning: onPage is not defined'),
+	onOpen: () => console.warn('Warning: onOpen is not defined'),
+	onOpenDetail: () => console.warn('Warning: onOpenDetail is not defined')
+}
 
 export default VendorLetterTable;

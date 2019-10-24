@@ -59,12 +59,12 @@ const VendorLetterDetailModal = ({
 				}
 				footer={
 					<Button color="primary" onClick={onDeleteStatus}>
-						DELETE
+						삭제
 					</Button>
 				}
 			/>
 			<ModalHeader className="bg-light" toggle={onClose('vendorLetterDetail')}>
-				Transmittal 상세 <span className="text-primary">({data.get('officialNumber')})</span>
+				업체 공문 상세 <span className="text-primary">({data.get('officialNumber')})</span>
 			</ModalHeader>
 			<ModalBody className="p-0">
 				<Table borderless className="rounded m-0">
@@ -83,12 +83,12 @@ const VendorLetterDetailModal = ({
 								<span
 									className="have-link"
 									onClick={() => {
-										onTargetVendor(data.getIn([ 'vendor', '_id' ]));
+										onTargetVendor(data.getIn(['vendor', '_id']));
 										onOpen('vendorDetail')();
 									}}
 								>
-									{data.getIn([ 'vendor', 'vendorName' ])} ({data.getIn([ 'vendor', 'partNumber' ])} /{' '}
-									{data.getIn([ 'vendor', 'part', 'cdSName' ])})
+									{data.getIn(['vendor', 'vendorName'])} ({data.getIn(['vendor', 'partNumber'])} /{' '}
+									{data.getIn(['vendor', 'part', 'cdSName'])})
 								</span>
 							</td>
 							<th scope="row" className="text-right bg-light">
@@ -133,23 +133,23 @@ const VendorLetterDetailModal = ({
 								지연여부
 							</th>
 							<td className="title-font">
-								{data.getIn([ 'isDelay', 'delayGb' ])}{' '}
+								{data.getIn(['isDelay', 'delayGb'])}{' '}
 								<Typography tag="span" className="text-danger">
-									({data.getIn([ 'isDelay', 'remain' ])})
+									({data.getIn(['isDelay', 'remain'])})
 								</Typography>
 							</td>
 							<th scope="row" className="text-right align-middle bg-light">
 								삭제여부
 							</th>
 							<td>
-								{data.getIn([ 'cancelYn', 'yn' ])}{' '}
-								{data.getIn([ 'cancelYn', 'yn' ]) === 'YES' && (
+								{data.getIn(['cancelYn', 'yn'])}{' '}
+								{data.getIn(['cancelYn', 'yn']) === 'YES' && (
 									<React.Fragment>
 										<Typography tag="span" className="text-danger">
-											({data.getIn([ 'cancelYn', 'deleteDt' ])})
+											({data.getIn(['cancelYn', 'deleteDt'])})
 										</Typography>
 										<Typography type="p" className="m-0 pt-2">
-											사유: {data.getIn([ 'cancelYn', 'reason' ])}
+											사유: {data.getIn(['cancelYn', 'reason'])}
 										</Typography>
 									</React.Fragment>
 								)}
@@ -180,7 +180,7 @@ const VendorLetterDetailModal = ({
 											<br />
 
 											<span className="text-danger">
-												({item.getIn([ 'timestamp', 'regDt' ]).substr(0, 10)})
+												({item.getIn(['timestamp', 'regDt']).substr(0, 10)})
 											</span>
 										</div>
 									);
@@ -207,32 +207,32 @@ const VendorLetterDetailModal = ({
 												</td>
 											</tr>
 										) : (
-											data.get('documents').map((document, index) => (
-												<tr key={index} className="border-bottom">
-													<td className="text-left">{document.get('documentNumber')}</td>
-													<td className="text-left">
-														<span
-															className="have-link"
-															onClick={onOpenDetail(document.get('_id'))}
-														>
-															{document.get('documentTitle')}
+												data.get('documents').map((document, index) => (
+													<tr key={index} className="border-bottom">
+														<td className="text-left">{document.get('documentNumber')}</td>
+														<td className="text-left">
+															<span
+																className="have-link"
+																onClick={onOpenDetail(document.get('_id'))}
+															>
+																{document.get('documentTitle')}
+															</span>
+														</td>
+														<td className="text-center">{document.get('documentRev')}</td>
+														<td className="text-center">
+															{document.getIn(['timestamp', 'regDt']).substr(0, 10)}
+														</td>
+														<td className="text-right">
+															{document.getIn(['documentStatus', -1, 'statusName'])}{' '}
+															<span className="text-danger">
+																({document
+																	.getIn(['documentStatus', -1, 'timestamp', 'regDt'])
+																	.substr(0, 10)})
 														</span>
-													</td>
-													<td className="text-center">{document.get('documentRev')}</td>
-													<td className="text-center">
-														{document.getIn([ 'timestamp', 'regDt' ]).substr(0, 10)}
-													</td>
-													<td className="text-right">
-														{document.getIn([ 'documentStatus', -1, 'statusName' ])}{' '}
-														<span className="text-danger">
-															({document
-																.getIn([ 'documentStatus', -1, 'timestamp', 'regDt' ])
-																.substr(0, 10)})
-														</span>
-													</td>
-												</tr>
-											))
-										)}
+														</td>
+													</tr>
+												))
+											)}
 									</tbody>
 								</Table>
 							</td>
@@ -243,11 +243,11 @@ const VendorLetterDetailModal = ({
 							</th>
 							<td colSpan={3}>
 								<span className="text-danger">
-									등록: {data.getIn([ 'timestamp', 'regId' ])} ({data.getIn([ 'timestamp', 'regDt' ])})
+									등록: {data.getIn(['timestamp', 'regId'])} ({data.getIn(['timestamp', 'regDt'])})
 								</span>
 								<br />
 								<span className="text-danger">
-									수정: {data.getIn([ 'timestamp', 'updId' ])} ({data.getIn([ 'timestamp', 'updDt' ])})
+									수정: {data.getIn(['timestamp', 'updId'])} ({data.getIn(['timestamp', 'updDt'])})
 								</span>
 							</td>
 						</tr>
@@ -287,20 +287,20 @@ const VendorLetterDetailModal = ({
 					onChange={onChange}
 					invalid={reasonError}
 				/>
-				{data.getIn([ 'cancelYn', 'yn' ]) === 'YES' ? (
+				{data.getIn(['cancelYn', 'yn']) === 'YES' ? (
 					<Button color="danger" onClick={onDelete({ id: data.get('_id'), yn: 'NO' })}>
-						DELETE 취소
+						삭제 취소
 					</Button>
 				) : (
-					<Button color="danger" onClick={onDelete({ id: data.get('_id'), yn: 'YES' })}>
-						DELETE
+						<Button color="danger" onClick={onDelete({ id: data.get('_id'), yn: 'YES' })}>
+							삭제
 					</Button>
-				)}
+					)}
 				<Button color="primary" onClick={onOpen('vendorLetterEdit')}>
-					EDIT
+					수정
 				</Button>
 				<Button color="secondary" onClick={onClose('vendorLetterDetail')}>
-					CANCEL
+					닫기
 				</Button>
 			</ModalFooter>
 		</Modal>

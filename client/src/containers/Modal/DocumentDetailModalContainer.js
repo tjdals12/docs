@@ -90,12 +90,13 @@ class DocumentDetailModalContainer extends React.Component {
 	}
 
 	render() {
-		const { codes, date, isOpen, isOpenQuestion, document, reason, reasonError, loading } = this.props;
+		const { writable, codes, date, isOpen, isOpenQuestion, document, reason, reasonError, loading } = this.props;
 
 		if (!codes || (loading === undefined || loading)) return null;
 
 		return (
 			<DocumentDetailModal
+				writable={writable}
 				codes={codes}
 				date={date}
 				isOpen={isOpen}

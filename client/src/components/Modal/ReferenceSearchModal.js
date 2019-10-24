@@ -41,40 +41,40 @@ const ReferenceSearchModal = ({
 						* 검색결과가 표시됩니다.
 					</Typography>
 				) : (
-					<Table bordered striped hover>
-						<colgroup>
-							<col width="90%" />
-							<col width="10%" />
-						</colgroup>
-						<tbody>
-							{references.map((reference) => {
-								const { _id, description } = reference.toJS();
-								const isChecked = selectedReferences.indexOf(_id) > -1;
+						<Table bordered striped hover>
+							<colgroup>
+								<col width="90%" />
+								<col width="10%" />
+							</colgroup>
+							<tbody>
+								{references.map((reference) => {
+									const { _id, description } = reference.toJS();
+									const isChecked = selectedReferences.indexOf(_id) > -1;
 
-								return (
-									<tr key={_id}>
-										<td>{description}</td>
-										<td className="text-center">
-											{isChecked ? (
-												<MdCheck className="text-success" onClick={() => onDeselect(_id)} />
-											) : (
-												<input type="checkbox" value={_id} onChange={onChecked} />
-											)}
-										</td>
-									</tr>
-								);
-							})}
-						</tbody>
-					</Table>
-				)}
+									return (
+										<tr key={_id}>
+											<td>{description}</td>
+											<td className="text-center">
+												{isChecked ? (
+													<MdCheck className="text-success" onClick={() => onDeselect(_id)} />
+												) : (
+														<input type="checkbox" value={_id} onChange={onChecked} />
+													)}
+											</td>
+										</tr>
+									);
+								})}
+							</tbody>
+						</Table>
+					)}
 			</ModalBody>
 
 			<ModalFooter className="bg-light">
 				<Button color="primary" onClick={onSelect}>
-					SELECT
+					선택
 				</Button>
 				<Button color="secondary" onClick={onClose}>
-					CLOSE
+					취소
 				</Button>
 			</ModalFooter>
 		</Modal>
