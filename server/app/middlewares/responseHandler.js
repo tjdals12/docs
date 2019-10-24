@@ -15,7 +15,7 @@ const responseHandler = () => {
 
             if (!!statusCode && statusCode < 400) {
                 ctx.status = statusCodes.OK;
-            } else if (!(statusCode < 400)) {
+            } else if (!(ctx.status < 400)) {
                 ctx.status = statusCodes.OK;
             }
 
