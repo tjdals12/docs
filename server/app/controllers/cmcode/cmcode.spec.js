@@ -15,7 +15,7 @@ describe(clc.bgGreen(clc.black('[ CMCODE ]')), () => {
             console.log(clc.yellow(`    Connected ${type}`));
 
             server = app.listen(4000, () => {
-                console.log(clc.yellow(' listening on port 4000'));
+                console.log(clc.yellow('    Server localhost:4000'));
                 done();
             });
         });

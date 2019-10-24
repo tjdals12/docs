@@ -1,18 +1,19 @@
+import clc from 'cli-color';
 import * as db from 'models';
 import app from 'app';
 import request from 'supertest';
 import { expect } from 'chai';
 
-describe('  [ Role ]', () => {
+describe(clc.bgGreen(clc.black('[ Role ]')), () => {
     let server;
     let id;
 
     before((done) => {
         db.connect().then((type) => {
-            console.log(`Connected ${type}`);
+            console.log(clc.yellow(`    Connected ${type}`));
 
             server = app.listen(4000, () => {
-                console.log('Server location:4000');
+                console.log(clc.yellow('    Server localhost:4000'));
                 done();
             });
         });
@@ -38,8 +39,7 @@ describe('  [ Role ]', () => {
                     name: 'Home',
                     icon: 'MdTest',
                     layout: 'MainLayout',
-                    component: 'HomePage',
-                    roleType: 'READ'
+                    component: 'HomePage'
                 })
                 .expect(200)
                 .end((err, ctx) => {
@@ -50,7 +50,8 @@ describe('  [ Role ]', () => {
                     expect(ctx.body.data.icon).to.equal('MdTest');
                     expect(ctx.body.data.layout).to.equal('MainLayout');
                     expect(ctx.body.data.component).to.equal('HomePage');
-                    expect(ctx.body.data.roleType).to.equal('READ');
+                    expect(ctx.body.data.roleId).haveOwnProperty('READ');
+                    expect(ctx.body.data.roleId).haveOwnProperty('WRITE');
                     done();
                 });
         });
@@ -92,7 +93,6 @@ describe('  [ Role ]', () => {
                     expect(ctx.body.data.icon).to.equal('MdIndex');
                     expect(ctx.body.data.layout).to.equal('MainLayout');
                     expect(ctx.body.data.component).to.equal('IndexesPage');
-                    expect(ctx.body.data.roleType).to.equal('ROOT');
                     done();
                 });
         });
@@ -120,7 +120,8 @@ describe('  [ Role ]', () => {
                     expect(sub.icon).to.equal('MdOverall');
                     expect(sub.layout).to.equal('MainLayout');
                     expect(sub.component).to.equal('IndexesOverallPage');
-                    expect(sub.roleType).to.equal('READ');
+                    expect(sub.roleId).haveOwnProperty('READ');
+                    expect(sub.roleId).haveOwnProperty('WRITE');
                     done();
                 });
         });
