@@ -80,25 +80,37 @@ DocumentSchema.statics.searchDocuments = async function (param, page) {
         level
     } = param;
 
+    // ! 튜닝
+    // TODO: 중요도 > getter, 지연여부 쿼리
     return this.aggregate([
         {
-            $lookup: {
-                from: 'cdminors',
-                localField: 'part',
-                foreignField: '_id',
-                as: 'part'
+            $match: {
+                $and: [
+                    { documentGb: documentGb === '' ? { $ne: DEFINE.COMMON.NONE_ID } : Types.ObjectId(documentGb) },
+                    { documentNumber: { $regex: documentNumber + '.*', $options: 'i' } },
+                    { documentTitle: { $regex: documentTitle + '.*', $options: 'i' } },
+                    { documentRev: { $regex: documentRev + '.*', $options: 'i' } },
+                    { 'deleteYn.yn': { $regex: deleteYn + '.*', $options: 'i' } },
+                    {
+                        holdYn: {
+                            $elemMatch: {
+                                yn: { $regex: holdYn + '.*', $options: 'i' }
+                            }
+                        }
+                    },
+                    {
+                        $and: [
+                            { 'timestamp.regDt': { $gte: new Date(regDtSta) } },
+                            { 'timestamp.regDt': { $lte: new Date(regDtEnd) } }
+                        ]
+                    },
+                    { level: level === -1 ? { $gte: level } : level }
+                ]
             }
         },
         {
-            $lookup: {
-                from: 'cdminors',
-                localField: 'documentGb',
-                foreignField: '_id',
-                as: 'documentGb'
-            }
+            $sort: { 'timestamp.regDt': -1 }
         },
-        { $unwind: '$part' },
-        { $unwind: '$documentGb' },
         {
             $project: {
                 vendor: 1,
@@ -123,44 +135,29 @@ DocumentSchema.statics.searchDocuments = async function (param, page) {
         },
         {
             $match: {
-                $and: [
-                    { documentGb: documentGb === '' ? { $ne: DEFINE.COMMON.NONE_ID } : Types.ObjectId(documentGb) },
-                    { documentNumber: { $regex: documentNumber + '.*', $options: 'i' } },
-                    { documentTitle: { $regex: documentTitle + '.*', $options: 'i' } },
-                    { documentRev: { $regex: documentRev + '.*', $options: 'i' } },
-                    {
-                        documentStatus: {
-                            $elemMatch: {
-                                status: { $regex: documentStatus + '.*', $options: 'i' }
-                            }
-                        }
-                    },
-                    { 'deleteYn.yn': { $regex: deleteYn + '.*', $options: 'i' } },
-                    {
-                        holdYn: {
-                            $elemMatch: {
-                                yn: { $regex: holdYn + '.*', $options: 'i' }
-                            }
-                        }
-                    },
-                    {
-                        $and: [
-                            { 'timestamp.regDt': { $gte: new Date(regDtSta) } },
-                            { 'timestamp.regDt': { $lte: new Date(regDtEnd) } }
-                        ]
-                    },
-                    { level: level === -1 ? { $gte: level } : level }
-                ]
-            },
+                documentStatus: {
+                    $elemMatch: {
+                        status: { $regex: documentStatus + '.*', $options: 'i' }
+                    }
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: 'cdminors',
+                localField: 'documentGb',
+                foreignField: '_id',
+                as: 'documentGb'
+            }
+        },
+        {
+            $unwind: '$documentGb'
         },
         {
             $skip: (page - 1) * 10
         },
         {
             $limit: 10
-        },
-        {
-            $sort: { 'timestamp.regDt': -1 }
         }
     ]);
 };
@@ -184,47 +181,8 @@ DocumentSchema.statics.searchDocumentsCount = function (param) {
         level
     } = param;
 
+    // ! 튜닝
     return this.aggregate([
-        {
-            $lookup: {
-                from: 'cdminors',
-                localField: 'part',
-                foreignField: '_id',
-                as: 'part'
-            }
-        },
-        {
-            $lookup: {
-                from: 'cdminors',
-                localField: 'documentGb',
-                foreignField: '_id',
-                as: 'documentGb'
-            }
-        },
-        { $unwind: '$part' },
-        { $unwind: '$documentGb' },
-        {
-            $project: {
-                vendor: 1,
-                part: '$part',
-                documentNumber: 1,
-                documentTitle: 1,
-                documentInOut: {
-                    $slice: ['$documentInOut', -1]
-                },
-                documentGb: '$documentGb',
-                documentStatus: {
-                    $slice: ['$documentStatus', -1]
-                },
-                documentRev: 1,
-                level: 1,
-                memo: 1,
-                holdYn: 1,
-                deleteYn: 1,
-                chainingDocument: 1,
-                timestamp: 1
-            },
-        },
         {
             $match: {
                 $and: [
@@ -255,7 +213,7 @@ DocumentSchema.statics.searchDocumentsCount = function (param) {
                     },
                     { level: level === -1 ? { $gte: level } : level }
                 ]
-            },
+            }
         },
         {
             $count: 'count'

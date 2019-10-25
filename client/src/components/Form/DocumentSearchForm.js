@@ -27,7 +27,7 @@ const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeri
 					<Input type="select" name="documentGb" id="documentGb" onChange={onChange}>
 						<option value="">-- Gb --</option>
 						{gb.get('cdMinors').map((code, index) => (
-							<option key={index} value={code.get('cdMinor')}>
+							<option key={index} value={code.get('_id')}>
 								{code.get('cdSName')}
 							</option>
 						))}
@@ -89,7 +89,7 @@ const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeri
 						<option value="">-- Status --</option>
 						{status.get('cdMinors').map((code, index) => {
 							let name = code.get('cdSName');
-							let value = code.getIn([ 'cdRef1', 'status' ]);
+							let value = code.getIn(['cdRef1', 'status']);
 
 							return (
 								<option key={index} value={value}>

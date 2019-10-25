@@ -78,6 +78,8 @@ export const search = async (ctx) => {
         level
     } = ctx.request.body;
 
+    console.log(ctx.request.body);
+
     const { ObjectId } = mongoose.Types;
 
     const query = {
