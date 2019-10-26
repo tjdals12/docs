@@ -152,24 +152,6 @@ const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeri
 						<option value="NO">NO</option>
 					</Input>
 				</Col>
-				<Label md={1} for="delayGb" className="text-right">
-					지연 여부
-				</Label>
-				<Col md={2}>
-					<Input
-						type="select"
-						name="delayGb"
-						id="delayGb"
-						defaultValue={search.get('delayGb')}
-						onChange={onChange}
-					>
-						<option value="">-- Delay --</option>
-						<option value="01">여유</option>
-						<option value="02">임박</option>
-						<option value="03">당일</option>
-						<option value="04">지연</option>
-					</Input>
-				</Col>
 				<Label md={1} for="level" className="text-right">
 					중요도
 				</Label>
@@ -184,7 +166,7 @@ const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeri
 					</Input>
 				</Col>
 
-				<Col md={3}>
+				<Col md={{ offset: 3, size: 3 }}>
 					<Button className="w-100" color="primary">
 						SEARCH
 					</Button>
