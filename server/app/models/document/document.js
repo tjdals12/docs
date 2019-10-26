@@ -80,8 +80,6 @@ DocumentSchema.statics.searchDocuments = async function (param, page) {
         level
     } = param;
 
-    // ! 튜닝
-    // TODO: 중요도 > getter, 지연여부 쿼리
     return this.aggregate([
         {
             $match: {
@@ -159,7 +157,14 @@ DocumentSchema.statics.searchDocuments = async function (param, page) {
         {
             $limit: 10
         }
-    ]);
+    ]).then((documents) => {
+        return documents.map((document) => (
+            {
+                ...document,
+                level: DEFINE.levelConverter(document.level)
+            }
+        ));
+    });
 };
 
 /**
@@ -181,7 +186,6 @@ DocumentSchema.statics.searchDocumentsCount = function (param) {
         level
     } = param;
 
-    // ! 튜닝
     return this.aggregate([
         {
             $match: {
@@ -190,13 +194,6 @@ DocumentSchema.statics.searchDocumentsCount = function (param) {
                     { documentNumber: { $regex: documentNumber + '.*', $options: 'i' } },
                     { documentTitle: { $regex: documentTitle + '.*', $options: 'i' } },
                     { documentRev: { $regex: documentRev + '.*', $options: 'i' } },
-                    {
-                        documentStatus: {
-                            $elemMatch: {
-                                status: { $regex: documentStatus + '.*', $options: 'i' }
-                            }
-                        }
-                    },
                     { 'deleteYn.yn': { $regex: deleteYn + '.*', $options: 'i' } },
                     {
                         holdYn: {
@@ -213,6 +210,40 @@ DocumentSchema.statics.searchDocumentsCount = function (param) {
                     },
                     { level: level === -1 ? { $gte: level } : level }
                 ]
+            }
+        },
+        {
+            $sort: { 'timestamp.regDt': -1 }
+        },
+        {
+            $project: {
+                vendor: 1,
+                part: '$part',
+                documentNumber: 1,
+                documentTitle: 1,
+                documentInOut: {
+                    $slice: ['$documentInOut', -1]
+                },
+                documentGb: '$documentGb',
+                documentStatus: {
+                    $slice: ['$documentStatus', -1]
+                },
+                documentRev: 1,
+                level: 1,
+                memo: 1,
+                holdYn: 1,
+                deleteYn: 1,
+                chainingDocument: 1,
+                timestamp: 1
+            },
+        },
+        {
+            $match: {
+                documentStatus: {
+                    $elemMatch: {
+                        status: { $regex: documentStatus + '.*', $options: 'i' }
+                    }
+                }
             }
         },
         {
