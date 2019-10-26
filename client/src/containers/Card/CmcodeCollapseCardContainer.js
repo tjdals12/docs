@@ -27,6 +27,7 @@ class CmcodeCollapseCardContainer extends React.Component {
 	getCdMinor = (id) => {
 		const { CmcodeActions } = this.props;
 
+		CmcodeActions.initialize('errors');
 		CmcodeActions.getCdMinor(id);
 	};
 
@@ -45,6 +46,7 @@ class CmcodeCollapseCardContainer extends React.Component {
 
 		CmcodeActions.initialize('cdMinor');
 		CmcodeActions.initialize('add');
+		CmcodeActions.initialize('errors');
 	};
 
 	handleChange = (e) => (target) => {
@@ -58,7 +60,6 @@ class CmcodeCollapseCardContainer extends React.Component {
 		const { CmcodeActions, add, minorPage } = this.props;
 
 		CmcodeActions.addCdMinor(id, { ...add.toJS() });
-		CmcodeActions.initialize('add');
 		this.getCdMinors(id, minorPage);
 	};
 
@@ -95,6 +96,7 @@ class CmcodeCollapseCardContainer extends React.Component {
 			cdMajor,
 			cdMinor,
 			add,
+			errors,
 			majorCount,
 			majorPage,
 			majorLastPage,
@@ -118,6 +120,7 @@ class CmcodeCollapseCardContainer extends React.Component {
 						cdMajor={cdMajor}
 						cdMinor={cdMinor}
 						add={add}
+						errors={errors}
 						majorCount={majorCount}
 						majorPage={majorPage}
 						majorLastPage={majorLastPage}
@@ -146,6 +149,7 @@ export default connect(
 		cdMajor: state.cmcode.get('cdMajor'),
 		cdMinor: state.cmcode.get('cdMinor'),
 		add: state.cmcode.get('add'),
+		errors: state.cmcode.get('errors'),
 		majorCount: state.cmcode.get('majorCount'),
 		majorPage: state.cmcode.get('majorPage'),
 		majorLastPage: state.cmcode.get('majorLastPage'),
