@@ -2,6 +2,7 @@
 
 @import '~bootstrap/scss/bootstrap.scss';
 @import '~react-datepicker/dist/react-datepicker.css';
+@import "~react-infinite-calendar/styles";
 
 /* base */
 @import 'base';
@@ -18,3 +19,4 @@
 @import 'components/header';
 @import 'components/search-form';
 @import 'components/page';
+@import 'components/widget';

@@ -20,7 +20,7 @@ class StatisticsByTransmittalBarChartCardContainer extends React.Component {
 
 		if (!statisticsByTransmittal) return null;
 
-		return <BarChartCard data={statisticsByTransmittal} title="Transmittal Receive / Reply" />;
+		return <BarChartCard data={statisticsByTransmittal.toJS()} title="Transmittal Receive / Reply" />;
 	}
 }
 

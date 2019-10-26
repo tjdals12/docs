@@ -19,7 +19,7 @@ const VendorList = ({ writable, page, lastPage, data, onPage, onOpenAdd, onOpenP
 					</Col>
 				</Row>
 			}
-			<Row className="mt-2">
+			<Row>
 				{data.map((vendor, index) => (
 					<Col xs={12} md={6} lg={3} className="mb-4" key={index}>
 						<VendorCard vendor={vendor} onOpen={onOpenDetail(vendor.get('_id'))} />

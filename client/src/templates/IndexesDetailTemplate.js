@@ -3,13 +3,13 @@ import { Row, Col } from 'reactstrap';
 import UserCard from 'components/Card/UserCard';
 import userImg from 'assets/img/users/105.png';
 import DocumentIndexOverallCardContainer from 'containers/Card/DocumentIndexOverallCardContainer';
-import StatisticsByStatusBarCharCardContainer from 'containers/Card/StatisticsByStatusBarCharCardContainer';
+import StatisticsByStatusBarCharCardContainer from 'containers/Card/StatisticsByStatusBarChartCardContainer';
 import TransmittalCardContainer from 'containers/Card/TransmittalCardContainer';
-import StatisticsByTransmittalBarCharCardContainer from 'containers/Card/StatisticsByTransmittalBarCharCardContainer';
+import StatisticsByTransmittalBarCharCardContainer from 'containers/Card/StatisticsByTransmittalBarChartCardContainer';
 import DocumentInfoCardContainer from 'containers/Card/DocumentInfoCardContainer';
 import VendorLetterDetailModalContainer from 'containers/Modal/VendorLetterDetailModalContainer';
 
-const IndexesDetailTemplate = ({ id, vendor, currentPage, onPage }) => {
+const IndexesDetailTemplate = ({ id, vendor, currentPage }) => {
 	return (
 		<React.Fragment>
 			<Row>

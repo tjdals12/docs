@@ -14,7 +14,7 @@ const DocumentInfoTable = ({
 	className,
 	...rest
 }) => {
-	const classes = classNames('mt-2 mb-4 bg-white', className);
+	const classes = classNames('mb-4 bg-white', className);
 
 	return (
 		<React.Fragment>

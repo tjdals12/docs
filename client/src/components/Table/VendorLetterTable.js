@@ -5,7 +5,7 @@ import Pagination from 'components/Pagination';
 import PropTypes from 'prop-types';
 
 const VendorLetterTable = ({ writable, page, lastPage, data, onPage, onTarget, onOpen, onOpenDetail, className, ...rest }) => {
-	const classes = classNames('mt-2 mb-4 bg-white', className);
+	const classes = classNames('mb-4 bg-white', className);
 
 	return (
 		<React.Fragment>

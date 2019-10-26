@@ -54,7 +54,7 @@ const IndexList = ({
 					</Col>
 				</Row>
 			}
-			<Row className="mt-2 mb-2">
+			<Row className="mb-2">
 				<Col md={12}>
 					{data.map((item, index) => {
 						return (
