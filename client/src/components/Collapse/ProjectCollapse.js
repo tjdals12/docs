@@ -4,6 +4,12 @@ import { Collapse, Row, Col, Button, Form, FormGroup, Label, Input } from 'react
 import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
 import PropTypes from 'prop-types';
 
+const colStyle = {
+	maxHeight: '600px',
+	overflow: 'scroll',
+	margin: 0
+};
+
 const makeHeaderCell = ({ title, className }) => {
 	const classes = classNames('k-link title-font', className);
 
@@ -40,7 +46,7 @@ const ProjectCollapse = ({
 	return (
 		<Collapse isOpen={isOpen} className="mt-3 pt-4 border-top">
 			<Row style={{ minHeight: '600px' }}>
-				<Col md={6} style={{ maxHeight: '600px', overflow: 'scroll' }}>
+				<Col md={6} style={colStyle}>
 					<Grid
 						pageable
 						data={data.toJS()}
@@ -87,7 +93,7 @@ const ProjectCollapse = ({
 				<Col
 					md={6}
 					className={`pl-4 pr-4 pt-4 pb-1 border rounded bg-light ${isAdd && 'border-danger'}`}
-					style={{ maxHeight: '600px', overflow: 'scroll' }}
+					style={colStyle}
 				>
 					<Form
 						onSubmit={(e) => {

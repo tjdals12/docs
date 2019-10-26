@@ -11,7 +11,7 @@ const CollapseCard = ({ title, description, onToggle, onAddForm, collapse: Colla
 	return (
 		<Card className={classes}>
 			<Row onClick={onToggle} className="align-items-center">
-				<Col md={3}>
+				<Col md={3} className="m-0">
 					<Typography type="h2" className="m-0 title-font">
 						<FaCircle size={10} className="mr-2" /> {title}
 					</Typography>
@@ -19,7 +19,7 @@ const CollapseCard = ({ title, description, onToggle, onAddForm, collapse: Colla
 				<Col md={6}>
 					<small className="text-danger">* {description}</small>
 				</Col>
-				<Col md={3} className="d-flex align-items-center justify-content-end">
+				<Col md={3} className="d-flex align-items-center justify-content-end m-0">
 					<Button
 						color="secondary"
 						className="mr-2"
