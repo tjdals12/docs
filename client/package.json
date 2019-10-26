@@ -28,6 +28,7 @@
 		"react-router-dom": "^5.0.1",
 		"react-scripts": "3.0.1",
 		"react-sizeme": "^2.6.7",
+		"react-spinners": "^0.6.1",
 		"reactstrap": "^8.0.1",
 		"recharts": "^1.7.1",
 		"redux": "^4.0.4",

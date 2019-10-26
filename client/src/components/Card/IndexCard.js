@@ -35,7 +35,7 @@ const IndexCard = ({ writable, data, type, onDetail, onOpenQuestion, onTarget, o
 					<Col md={8} lg={4}>
 						<div className="d-flex justify-content-between">
 							<CardSubtitle className="pb-2 title-font">
-								<FaCaretRight size={20} className="pb-1" />계약기간 진행율
+								<FaCaretRight size={20} className="pb-1" />계약기간
 							</CardSubtitle>
 							<CardSubtitle className="text-secondary small">
 								<MdAccessAlarm size={20} className="pb-1 mr-1" />
