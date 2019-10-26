@@ -35,6 +35,10 @@ const initialState = Map({
 		cdMinor: '',
 		cdSName: ''
 	}),
+	errors: Map({
+		cdMinorError: false,
+		cdSNameError: false
+	}),
 	majorCount: 0,
 	majorPage: 1,
 	majorLastPage: null,
@@ -116,10 +120,30 @@ export default handleActions(
 			}
 		}),
 		...pender({
-			type: ADD_CDMINOR
+			type: ADD_CDMINOR,
+			onSuccess: (state, action) => {
+				return state.set('add', initialState.get('add')).set('errors', initialState.get('errors'));
+			},
+			onFailure: (state, action) => {
+				const add = state.get('add');
+
+				return state
+					.setIn(['errors', 'cdMinorError'], add.get('cdMinor') === '')
+					.setIn(['errors', 'cdSNameError'], add.get('cdSName') === '');
+			}
 		}),
 		...pender({
-			type: EDIT_CDMINOR
+			type: EDIT_CDMINOR,
+			onSuccess: (state, action) => {
+				return state.set('errors', initialState.get('errors'))
+			},
+			onFailure: (state, action) => {
+				const edit = state.get('cdMinor');
+
+				return state
+					.setIn(['errors', 'cdMinorError'], edit.get('cdMinor') === '')
+					.setIn(['errors', 'cdSNameError'], edit.get('cdSName') === '');
+			}
 		}),
 		...pender({
 			type: DELETE_CDMINOR,

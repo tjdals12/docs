@@ -6,7 +6,8 @@ import PropTypes from 'prop-types';
 
 const colStyle = {
 	maxHeight: '400px',
-	overflow: 'scroll'
+	overflow: 'scroll',
+	margin: 0
 };
 
 const makeHeaderCell = ({ title, className }) => {
@@ -20,6 +21,7 @@ const CmcodeCollapse = ({
 	cdMajor,
 	cdMinor,
 	add,
+	errors,
 	majorCount,
 	majorPage,
 	minorCount,
@@ -147,6 +149,7 @@ const CmcodeCollapse = ({
 									name="cdMinor"
 									value={isAdd ? add.get('cdMinor') : cdMinor.get('cdMinor')}
 									onChange={(e) => onChange(e)(isAdd ? 'add' : 'cdMinor')}
+									invalid={errors.get('cdMinorError')}
 								/>
 							</Col>
 						</FormGroup>
@@ -161,6 +164,7 @@ const CmcodeCollapse = ({
 									name="cdSName"
 									value={isAdd ? add.get('cdSName') : cdMinor.get('cdSName')}
 									onChange={(e) => onChange(e)(isAdd ? 'add' : 'cdMinor')}
+									invalid={errors.get('cdSNameError')}
 								/>
 							</Col>
 						</FormGroup>
