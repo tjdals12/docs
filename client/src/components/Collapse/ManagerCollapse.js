@@ -16,9 +16,9 @@ const makeHeaderCell = ({ title, className }) => {
     return <span className={classes}>{title}</span>;
 };
 
-const ManagerCollapse = ({ parts, teams, team, manager, isOpen, onSelectTeam, onSelectManager, onChange }) => {
-    const isTeamAdd = team.size === 0;
-    const isManagerAdd = manager.size === 0;
+const ManagerCollapse = ({ parts, teams, team, edit, manager, editManager, isOpen, onSelectTeam, onSelectManager, onChange, onEdit, onEditManager }) => {
+    const isAddTeam = team.size === 0;
+    const isAddManager = manager.size === 0;
 
     const teamRowRender = (Row, props) => {
         const isActive = props.dataItem._id === team.get('_id');
@@ -128,7 +128,7 @@ const ManagerCollapse = ({ parts, teams, team, manager, isOpen, onSelectTeam, on
                                 공종
                             </Label>
                             <Col md={3}>
-                                <Input type='select' id='part' name='part' value={team.getIn(['part', '_id'])} onChange={onChange}>
+                                <Input type='select' id='part' name='part' value={isAddTeam ? team.get('part') : edit.get('part')} onChange={onChange(isAddTeam ? 'team' : 'edit')}>
                                     <option>-- 공종 --</option>
                                     {
                                         parts.get('cdMinors').map((code) => (
@@ -139,19 +139,19 @@ const ManagerCollapse = ({ parts, teams, team, manager, isOpen, onSelectTeam, on
                                     }
                                 </Input>
                             </Col>
-                            <Label md={2} for='team' className='text-right'>
+                            <Label md={2} for='teamName' className='text-right'>
                                 팀명
                             </Label>
                             <Col md={5}>
-                                <Input type='text' id='team' name='team' defaultValue={team.get('teamName')} onChange={onChange} />
+                                <Input type='text' id='teamName' name='teamName' value={isAddTeam ? team.get('teamName') : edit.get('teamName')} onChange={onChange(isAddManager ? 'manager' : 'edit')} />
                             </Col>
                         </FormGroup>
                         <FormGroup row>
                             <Col className="d-flex align-items-center justify-content-end">
-                                {isTeamAdd ?
+                                {isAddTeam ?
                                     (<Button color="primary">팀 추가</Button>) :
                                     (<React.Fragment>
-                                        <Button color="primary" className="mr-2">수정</Button>
+                                        <Button color="primary" className="mr-2" onClick={() => onEdit(team.get('_id'))}>수정</Button>
                                         <Button color="danger">삭제</Button>
                                     </React.Fragment>
                                     )}
@@ -167,31 +167,31 @@ const ManagerCollapse = ({ parts, teams, team, manager, isOpen, onSelectTeam, on
                         <FormGroup row>
                             <Label md={3} for='name' className='text-right'>이름</Label>
                             <Col md={4}>
-                                <Input type='text' id='name' name='name' defaultValue={manager.get('name')} onChange={onChange} />
+                                <Input type='text' id='name' name='name' value={isAddManager ? '' : editManager.get('name')} onChange={onChange('editManager')} />
                             </Col>
                             <Label md={2} for='position' className='text-right'>직책</Label>
                             <Col md={3}>
-                                <Input type='text' id='position' name='position' defaultValue={manager.get('position')} onChange={onChange} />
+                                <Input type='text' id='position' name='position' value={isAddManager ? '' : editManager.get('position')} onChange={onChange('editManager')} />
                             </Col>
                         </FormGroup>
                         <FormGroup row>
                             <Label md={3} for='effStaDt' className='text-right'>시작일</Label>
                             <Col md={9}>
-                                <Input type='date' id='effStaDt' name='effStaDt' defaultValue={manager.get('effStaDt')} onChange={onChange} />
+                                <Input type='date' id='effStaDt' name='effStaDt' value={isAddManager ? '' : editManager.get('effStaDt')} onChange={onChange('editManager')} />
                             </Col>
                         </FormGroup>
                         <FormGroup row>
                             <Label md={3} for='effEndDt' className='text-right'>종료일</Label>
                             <Col md={9}>
-                                <Input type='date' id='effEndDt' name='effEndDt' defaultValue={manager.get('effEndDt')} onChange={onChange} />
+                                <Input type='date' id='effEndDt' name='effEndDt' value={isAddManager ? '' : editManager.get('effEndDt')} onChange={onChange('editManager')} />
                             </Col>
                         </FormGroup>
                         <FormGroup row>
                             <Col className="d-flex align-items-center justify-content-end">
-                                {isManagerAdd ?
+                                {isAddManager ?
                                     (<Button color="primary">담당자 추가</Button>) :
                                     (<React.Fragment>
-                                        <Button color="primary" className="mr-2">수정</Button>
+                                        <Button color="primary" className="mr-2" onClick={() => onEditManager(team.get('_id'))}>수정</Button>
                                         <Button color="danger">삭제</Button>
                                     </React.Fragment>
                                     )}

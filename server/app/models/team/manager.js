@@ -69,7 +69,7 @@ ManagerSchema.statics.editManager = function (params) {
                 name,
                 position,
                 effStaDt,
-                effEndDt
+                effEndDt: effEndDt === '' ? '9999-12-31' : effEndDt
             }
         }
     );

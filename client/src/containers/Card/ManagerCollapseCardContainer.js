@@ -45,6 +45,35 @@ class ManagerCollaseCardContainer extends React.Component {
         })
     }
 
+    handleAddForm = () => {
+        const { TeamActions } = this.props;
+
+        TeamActions.initialize('team');
+        TeamActions.initialize('manager');
+    }
+
+    handleChange = (target) => (e) => {
+        const { TeamActions } = this.props;
+        const { name, value } = e.target;
+
+        TeamActions.onChange({ target, name, value });
+    }
+
+    handleEdit = async (id) => {
+        const { TeamActions, edit } = this.props;
+
+        await TeamActions.editTeam({ id, param: edit.toJS() });
+        this.getTeams();
+    }
+
+    handleEditManager = async (id) => {
+        const { TeamActions, editManager } = this.props;
+        const { _id, name, position, effStaDt, effEndDt } = editManager.toJS();
+
+        await TeamActions.editManager({ id, param: { managerId: _id, name, position, effStaDt, effEndDt } });
+        this.getTeam(id);
+    }
+
     componentDidMount() {
         this.getCmcodes('0001');
         this.getTeams();
@@ -52,7 +81,7 @@ class ManagerCollaseCardContainer extends React.Component {
 
     render() {
         const { isOpen } = this.state;
-        const { parts, teams, team, manager, loading } = this.props;
+        const { parts, teams, team, edit, manager, editManager, loading } = this.props;
 
         if (loading || loading === undefined || !parts) return null;
 
@@ -61,15 +90,21 @@ class ManagerCollaseCardContainer extends React.Component {
                 title="담당자 관리"
                 description="담당자 관리"
                 onToggle={this.handleToggle}
+                onAddForm={this.handleAddForm}
                 collapse={
                     <ManagerCollapse
                         parts={parts}
                         teams={teams}
                         team={team}
+                        edit={edit}
                         manager={manager}
+                        editManager={editManager}
                         isOpen={isOpen}
                         onSelectTeam={this.getTeam}
                         onSelectManager={this.getManager}
+                        onChange={this.handleChange}
+                        onEdit={this.handleEdit}
+                        onEditManager={this.handleEditManager}
                     />
                 }
             />
@@ -82,7 +117,9 @@ export default connect(
         parts: state.cmcode.get('0001'),
         teams: state.team.get('teams'),
         team: state.team.get('team'),
+        edit: state.team.get('edit'),
         manager: state.team.get('manager'),
+        editManager: state.team.get('editManager'),
         loading: state.pender.pending['team/GET_TEAMS']
     }),
     (dispatch) => ({

@@ -192,7 +192,7 @@ export const editManager = async (ctx) => {
         name: Joi.string().required(),
         position: Joi.string().required(),
         effStaDt: Joi.string().required(),
-        effEndDt: Joi.string().required()
+        effEndDt: Joi.string().allow('').required()
     });
 
     const result = Joi.validate(ctx.request.body, schema);
