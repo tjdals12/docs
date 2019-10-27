@@ -122,3 +122,7 @@ export const getRoles = () => axios.get(`${real}/api/roles`);
 export const login = (param) => axios.post(`${real}/api/accounts/login`, { ...param });
 export const check = () => axios.get(`${real}/api/accounts/check`);
 export const logout = () => axios.post(`${real}/api/accounts/logout`);
+
+/** Team */
+export const getTeams = () => axios.get(`${real}/api/teams`);
+export const getTeam = ({ id }) => axios.get(`${real}/api/teams/${id}`);
