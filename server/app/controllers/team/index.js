@@ -157,7 +157,7 @@ team.get('/:id', commonCtrl.checkObjectId, teamCtrl.one);
  *          200:
  *              description: Successful operation
  *              schema:
- *                  $ref: '#/defintions/team'
+ *                  $ref: '#/definitions/team'
  */
 team.patch('/:id/edit', commonCtrl.checkObjectId, teamCtrl.edit);
 
