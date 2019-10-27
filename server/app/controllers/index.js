@@ -11,6 +11,7 @@ import project from 'controllers/project';
 import role from 'controllers/role';
 import template from 'controllers/template';
 import account from 'controllers/account';
+import team from 'controllers/team';
 
 const api = new Router();
 
@@ -54,5 +55,6 @@ api.use('/projects', project.routes());
 api.use('/roles', role.routes());
 api.use('/templates', template.routes());
 api.use('/accounts', account.routes());
+api.use('/teams', team.routes());
 
 export default api;
