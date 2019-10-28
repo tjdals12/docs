@@ -1,4 +1,6 @@
 .cr-page {
+	display: flex;
+	flex-direction: column;
 	min-height: 100vh;
 
 	&__header {
@@ -8,7 +10,7 @@
 		}
 		display: flex;
 		align-items: flex-end;
-		align-self: center;
+		align-self: start;
 	}
 
 	&__title {
@@ -27,5 +29,18 @@
 		padding: 0;
 		text-transform: capitalize;
 		background: theme-color('light');
+	}
+
+	.row {
+		// stylelint-disable-next-line
+		.col, > [class^="col-"] {
+		  margin-bottom: 1rem;
+		}
+	  }
+
+	.form-group {
+		.col, > [class^="col-"] {
+			margin-bottom: 0;
+		}
 	}
 }

@@ -1,9 +1,10 @@
+import clc from 'cli-color';
 import * as db from 'models';
 import app from 'app';
 import request from 'supertest';
 import { expect } from 'chai';
 
-describe('  [ Document Index ]', () => {
+describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
     let server;
     let vendorId;
     let documentGb;
@@ -13,11 +14,11 @@ describe('  [ Document Index ]', () => {
     let documentInfoId2;
 
     before((done) => {
-        db.connect().then((type) => {
-            console.log(`Connected ${type}`);
+        db.connect().then(type => {
+            console.log(clc.yellow(`    Connected ${type}`));
 
             server = app.listen(4000, () => {
-                console.log('Server localhost:4000');
+                console.log(clc.yellow('    Server localhost:4000'));
                 done();
             });
         });

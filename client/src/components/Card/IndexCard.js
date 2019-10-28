@@ -16,7 +16,7 @@ import { MdAccessAlarm, MdSearch } from 'react-icons/md';
 import Typography from 'components/Typography';
 import PropTypes from 'prop-types';
 
-const IndexCard = ({ data, type, onDetail, onOpenQuestion, onTarget, onOpenEdit }) => {
+const IndexCard = ({ writable, data, type, onDetail, onOpenQuestion, onTarget, onOpenEdit }) => {
 	return (
 		<Card className="mb-3">
 			<CardHeader className="bg-white">
@@ -35,7 +35,7 @@ const IndexCard = ({ data, type, onDetail, onOpenQuestion, onTarget, onOpenEdit 
 					<Col md={8} lg={4}>
 						<div className="d-flex justify-content-between">
 							<CardSubtitle className="pb-2 title-font">
-								<FaCaretRight size={20} className="pb-1" />계약기간 진행율
+								<FaCaretRight size={20} className="pb-1" />계약기간
 							</CardSubtitle>
 							<CardSubtitle className="text-secondary small">
 								<MdAccessAlarm size={20} className="pb-1 mr-1" />
@@ -58,28 +58,33 @@ const IndexCard = ({ data, type, onDetail, onOpenQuestion, onTarget, onOpenEdit 
 
 					{type === 'list' && (
 						<Col md={4} className="d-flex align-items-center justify-content-end">
-							<ButtonGroup className="mr-4">
-								<Button
-									color="primary"
-									onClick={() => {
-										onTarget(data.get('_id'));
 
-										onOpenEdit(data.get('_id'))();
-									}}
-								>
-									수정
-								</Button>
-								<Button
-									color="danger"
-									onClick={() => {
-										onTarget(data.get('_id'));
+							{
+								writable &&
+								<ButtonGroup className="mr-4">
+									<Button
+										color="primary"
+										onClick={() => {
+											onTarget(data.get('_id'));
 
-										onOpenQuestion();
-									}}
-								>
-									삭제
+											onOpenEdit(data.get('_id'))();
+										}}
+									>
+										수정
 								</Button>
-							</ButtonGroup>
+									<Button
+										color="danger"
+										onClick={() => {
+											onTarget(data.get('_id'));
+
+											onOpenQuestion();
+										}}
+									>
+										삭제
+									</Button>
+								</ButtonGroup>
+							}
+
 							<MdSearch size={25} onClick={onDetail(data.get('_id'))} className="can-click hover" />
 						</Col>
 					)}

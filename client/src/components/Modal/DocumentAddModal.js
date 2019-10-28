@@ -37,18 +37,18 @@ const DocumentAddModal = ({
 			size="lg"
 		>
 			<ModalHeader toggle={onClose} className="bg-light">
-				Document 추가
+				문서 추가
 			</ModalHeader>
 			<ModalBody>
 				<Form>
 					<FormGroup row>
 						<Col md={6}>
-							<Label for="vendor">VENDOR</Label>
+							<Label for="vendor">업체</Label>
 							<Input type="select" name="vendor" onChange={onChange} invalid={errors.get('vendorError')}>
 								<option value="">------ 업체를 선택해주세요. ------</option>
 								{vendorList.map((vendor) => (
 									<option key={vendor.get('_id')} value={vendor.get('_id')}>
-										{vendor.get('vendorName')} ({vendor.getIn([ 'part', 'cdSName' ])},{' '}
+										{vendor.get('vendorName')} ({vendor.getIn(['part', 'cdSName'])},{' '}
 										{vendor.get('partNumber')})
 									</option>
 								))}
@@ -56,7 +56,7 @@ const DocumentAddModal = ({
 						</Col>
 
 						<Col md={6}>
-							<Label for="part">PART</Label>
+							<Label for="part">공종</Label>
 							<Input type="select" name="part" onChange={onChange} invalid={errors.get('partError')}>
 								<option value="">------ 공종을 선택해주세요. ------</option>
 								{parts.get('cdMinors').map((part) => (
@@ -69,7 +69,7 @@ const DocumentAddModal = ({
 					</FormGroup>
 
 					<FormGroup>
-						<Label for="title">TITLE</Label>
+						<Label for="title">문서명</Label>
 						<Input
 							name="documentTitle"
 							placeholder="Document Title.."
@@ -78,7 +78,7 @@ const DocumentAddModal = ({
 						/>
 					</FormGroup>
 					<FormGroup>
-						<Label for="number">NO.</Label>
+						<Label for="number">문서번호</Label>
 						<Input
 							name="documentNumber"
 							placeholder="Document Number.."
@@ -88,7 +88,7 @@ const DocumentAddModal = ({
 					</FormGroup>
 					<FormGroup row>
 						<Col md={6}>
-							<Label for="rev">REVISION</Label>
+							<Label for="rev">Revision</Label>
 							<InputGroup>
 								<InputGroupAddon addonType="prepend">Rev.</InputGroupAddon>
 								<Input
@@ -127,7 +127,7 @@ const DocumentAddModal = ({
 						/>
 					</FormGroup>
 					<FormGroup>
-						<Label for="memo">MEMO</Label>
+						<Label for="memo">메모</Label>
 						<Input
 							type="textarea"
 							bsSize="lg"
@@ -140,10 +140,10 @@ const DocumentAddModal = ({
 			</ModalBody>
 			<ModalFooter className="bg-light">
 				<Button color="primary" onClick={onInsert}>
-					ADD
+					추가
 				</Button>
 				<Button color="secondary" onClick={onClose}>
-					CANCEL
+					닫기
 				</Button>
 			</ModalFooter>
 		</Modal>

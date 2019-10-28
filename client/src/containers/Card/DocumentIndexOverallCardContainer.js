@@ -20,13 +20,13 @@ class DocumentIndexOverallCardContainer extends React.Component {
 
 		if (!overall) return null;
 
-		return <OverallCard data={overall} description="Document 기준" />;
+		return <OverallCard data={overall.toJS()} description="Document 기준" />;
 	}
 }
 
 export default connect(
 	(state) => ({
-		overall: state.indexes.getIn([ 'indexDetail', 'overall' ])
+		overall: state.indexes.getIn(['indexDetail', 'overall'])
 	}),
 	(dispatch) => ({
 		IndexesActions: bindActionCreators(indexesActions, dispatch)

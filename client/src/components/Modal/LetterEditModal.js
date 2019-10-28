@@ -26,7 +26,7 @@ const LetterEditModal = ({ data, errors, isOpen, onClose, onChange, onEdit, onOp
 			size="lg"
 		>
 			<ModalHeader toggle={onClose} className="bg-light">
-				Letter 수정
+				내부 공문 수정
 			</ModalHeader>
 			<ModalBody>
 				<Form>
@@ -88,8 +88,8 @@ const LetterEditModal = ({ data, errors, isOpen, onClose, onChange, onEdit, onOp
 											) : data.get('senderGb') === 'VENDOR' ? (
 												'03'
 											) : (
-												data.get('senderGb')
-											)
+															data.get('senderGb')
+														)
 										}
 										onChange={onChange}
 										invalid={errors.get('senderGbError')}
@@ -125,8 +125,8 @@ const LetterEditModal = ({ data, errors, isOpen, onClose, onChange, onEdit, onOp
 											) : data.get('receiverGb') === 'VENDOR' ? (
 												'03'
 											) : (
-												data.get('receiverGb')
-											)
+															data.get('receiverGb')
+														)
 										}
 										onChange={onChange}
 										invalid={errors.get('receiverGbError')}
@@ -206,10 +206,10 @@ const LetterEditModal = ({ data, errors, isOpen, onClose, onChange, onEdit, onOp
 			</ModalBody>
 			<ModalFooter className="bg-light">
 				<Button color="primary" onClick={onEdit}>
-					EDIT
+					수정
 				</Button>
 				<Button color="secondary" onClick={onClose}>
-					CANCEL
+					취소
 				</Button>
 			</ModalFooter>
 		</Modal>

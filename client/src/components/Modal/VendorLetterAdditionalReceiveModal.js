@@ -57,7 +57,7 @@ const VendorLetterAdditionalReceiveModal = ({
 								<option value="">-- 업체 --</option>
 								{vendorList.map((vendor) => (
 									<option key={vendor.get('_id')} value={vendor.get('_id')}>
-										{vendor.get('vendorName')} ({vendor.getIn([ 'part', 'cdSName' ])},{' '}
+										{vendor.get('vendorName')} ({vendor.getIn(['part', 'cdSName'])},{' '}
 										{vendor.get('partNumber')})
 									</option>
 								))}
@@ -112,8 +112,8 @@ const VendorLetterAdditionalReceiveModal = ({
 						<thead>
 							<tr style={{ background: '#e7f5ff' }}>
 								<th className="text-right">#</th>
-								<th>No.</th>
-								<th>Title</th>
+								<th>문서번호</th>
+								<th>문서명</th>
 								<th className="text-center">Rev.</th>
 								<th />
 							</tr>
@@ -126,28 +126,28 @@ const VendorLetterAdditionalReceiveModal = ({
 									</td>
 								</tr>
 							) : (
-								data.get('receiveDocuments').map((document, index) => {
-									const { id, documentNumber, documentTitle, documentRev } = document.toJS();
-									const isError = receiveDocumentsErrorList.indexOf(documentNumber) > -1;
+									data.get('receiveDocuments').map((document, index) => {
+										const { id, documentNumber, documentTitle, documentRev } = document.toJS();
+										const isError = receiveDocumentsErrorList.indexOf(documentNumber) > -1;
 
-									return (
-										<tr key={index} className={isError ? 'bg-secondary' : ''}>
-											<td className="text-right">{index + 1}</td>
-											<td>{documentNumber}</td>
-											<td>{documentTitle}</td>
-											<td className="text-center">{documentRev}</td>
-											<td className="text-center">
-												<MdClose
-													className={
-														isError ? 'can-click text-warning' : 'can-click text-danger'
-													}
-													onClick={onDeleteReceiveDocument(id)}
-												/>
-											</td>
-										</tr>
-									);
-								})
-							)}
+										return (
+											<tr key={index} className={isError ? 'bg-secondary' : ''}>
+												<td className="text-right">{index + 1}</td>
+												<td>{documentNumber}</td>
+												<td>{documentTitle}</td>
+												<td className="text-center">{documentRev}</td>
+												<td className="text-center">
+													<MdClose
+														className={
+															isError ? 'can-click text-warning' : 'can-click text-danger'
+														}
+														onClick={onDeleteReceiveDocument(id)}
+													/>
+												</td>
+											</tr>
+										);
+									})
+								)}
 						</tbody>
 					</Table>
 
@@ -160,10 +160,10 @@ const VendorLetterAdditionalReceiveModal = ({
 			</ModalBody>
 			<ModalFooter>
 				<Button color="primary" onClick={onAdditionalReceive}>
-					ADD
+					추가
 				</Button>
 				<Button color="secondary" onClick={onClose}>
-					CANCEL
+					취소
 				</Button>
 			</ModalFooter>
 		</Modal>

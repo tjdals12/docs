@@ -5,6 +5,7 @@ import QuestionModal from 'components/Modal/QuestionModal';
 import Typography from 'components/Typography';
 
 const VendorDetailModal = ({
+	writable,
 	data,
 	reasonError,
 	isOpen,
@@ -37,7 +38,7 @@ const VendorDetailModal = ({
 					<div>
 						<p className="m-0">해당 업체를 삭제하시겠습니까?</p>
 						<p className="m-0 text-danger">(* 삭제된 데이터 복구되지 않습니다.)</p>
-						<Input type='text' name='reason' className="mt-2" placeholder={isDelete ? '복구 사유 (필수)' : '삭제 사유 (필수)'} onChange={onChange} invalid={reasonError}/>
+						<Input type='text' name='reason' className="mt-2" placeholder={isDelete ? '복구 사유 (필수)' : '삭제 사유 (필수)'} onChange={onChange} invalid={reasonError} />
 					</div>
 				}
 				footer={
@@ -173,19 +174,25 @@ const VendorDetailModal = ({
 				</Table>
 			</ModalBody>
 			<ModalFooter className="bg-light">
-				<Button
-					color="danger"
-					className="mr-auto"
-					onClick={() => {
-						onTarget({ id: data.get('_id') });
-						onOpen('question')();
-					}}
-				>
-					삭제/복구
-				</Button>
-				<Button color="primary" onClick={onOpen('vendorEdit')}>
-					수정
-				</Button>
+				{
+					writable &&
+					([
+						<Button
+							key={1}
+							color="danger"
+							className="mr-auto"
+							onClick={() => {
+								onTarget({ id: data.get('_id') });
+								onOpen('question')();
+							}}
+						>
+							삭제/복구
+						</Button>,
+						<Button color="primary" onClick={onOpen('vendorEdit')} key={2}>
+							수정
+						</Button>
+					])
+				}
 				<Button color="secondary" onClick={onClose('vendorDetail')}>
 					닫기
 				</Button>
@@ -195,6 +202,7 @@ const VendorDetailModal = ({
 };
 
 VendorDetailModal.propTypes = {
+	writable: PropTypes.bool,
 	isOpen: PropTypes.bool,
 	isOpenQuestion: PropTypes.bool,
 	onOpen: PropTypes.func,
@@ -204,6 +212,7 @@ VendorDetailModal.propTypes = {
 };
 
 VendorDetailModal.defaultProps = {
+	writable: false,
 	isOpen: false,
 	isOpenQuestion: false,
 	onOpen: () => console.warn('Warning: onOpen is not defined'),

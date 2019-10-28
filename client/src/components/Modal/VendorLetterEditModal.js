@@ -38,7 +38,7 @@ const VendorLetterEditModal = ({
 			{...rest}
 			size="lg"
 		>
-			<ModalHeader toggle={onClose}>Transmittal 수정</ModalHeader>
+			<ModalHeader toggle={onClose}>업체 공문 수정</ModalHeader>
 			<ModalBody>
 				<Form>
 					<FormGroup row>
@@ -55,7 +55,7 @@ const VendorLetterEditModal = ({
 								<option value="">-- 업체 --</option>
 								{vendorList.map((vendor) => (
 									<option key={vendor.get('_id')} value={vendor.get('_id')}>
-										{vendor.get('vendorName')} ({vendor.getIn([ 'part', 'cdSName' ])},{' '}
+										{vendor.get('vendorName')} ({vendor.getIn(['part', 'cdSName'])},{' '}
 										{vendor.get('partNumber')})
 									</option>
 								))}
@@ -91,8 +91,8 @@ const VendorLetterEditModal = ({
 											) : data.get('senderGb') === 'VENDOR' ? (
 												'03'
 											) : (
-												data.get('senderGb')
-											)
+															data.get('senderGb')
+														)
 										}
 										onChange={onChange}
 										invalid={errors.get('senderGbError')}
@@ -129,8 +129,8 @@ const VendorLetterEditModal = ({
 											) : data.get('receiverGb') === 'VENDOR' ? (
 												'03'
 											) : (
-												data.get('receiverGb')
-											)
+															data.get('receiverGb')
+														)
 										}
 										onChange={onChange}
 										invalid={errors.get('receiverGbError')}
@@ -182,38 +182,38 @@ const VendorLetterEditModal = ({
 											</td>
 										</tr>
 									) : (
-										data.get('documents').map((document, index) => {
-											const deleted = document.get('deleted');
+											data.get('documents').map((document, index) => {
+												const deleted = document.get('deleted');
 
-											return (
-												<tr key={index} className={deleted && 'bg-danger'}>
-													<td className="text-right">{index + 1}</td>
-													<td className={deleted && 'text-line-through'}>
-														{document.get('documentNumber')}
-													</td>
-													<td className={deleted && 'text-line-through'}>
-														{document.get('documentTitle')}
-													</td>
-													<td
-														className={[
-															'text-center',
-															deleted && 'text-line-through'
-														].join(' ')}
-													>
-														{document.get('documentRev')}
-													</td>
-													<td className="text-center">
-														{!deleted && (
-															<MdClose
-																className="can-click text-danger"
-																onClick={onSetDeleteDocument(document.get('_id'))}
-															/>
-														)}
-													</td>
-												</tr>
-											);
-										})
-									)}
+												return (
+													<tr key={index} className={deleted && 'bg-danger'}>
+														<td className="text-right">{index + 1}</td>
+														<td className={deleted && 'text-line-through'}>
+															{document.get('documentNumber')}
+														</td>
+														<td className={deleted && 'text-line-through'}>
+															{document.get('documentTitle')}
+														</td>
+														<td
+															className={[
+																'text-center',
+																deleted && 'text-line-through'
+															].join(' ')}
+														>
+															{document.get('documentRev')}
+														</td>
+														<td className="text-center">
+															{!deleted && (
+																<MdClose
+																	className="can-click text-danger"
+																	onClick={onSetDeleteDocument(document.get('_id'))}
+																/>
+															)}
+														</td>
+													</tr>
+												);
+											})
+										)}
 								</tbody>
 							</Table>
 						</Col>
@@ -247,10 +247,10 @@ const VendorLetterEditModal = ({
 			</ModalBody>
 			<ModalFooter>
 				<Button color="primary" onClick={onEdit}>
-					EDIT
+					수정
 				</Button>
 				<Button color="secondary" onClick={onClose}>
-					CANCEL
+					취소
 				</Button>
 			</ModalFooter>
 		</Modal>

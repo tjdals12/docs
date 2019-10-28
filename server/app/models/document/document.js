@@ -57,6 +57,7 @@ const DocumentSchema = new Schema({
 });
 
 DocumentSchema.set('toJSON', { getters: true });
+DocumentSchema.index({ 'timestamp.regDt': 1 });
 
 /**
  * @author      minz-logger
@@ -81,23 +82,33 @@ DocumentSchema.statics.searchDocuments = async function (param, page) {
 
     return this.aggregate([
         {
-            $lookup: {
-                from: 'cdminors',
-                localField: 'part',
-                foreignField: '_id',
-                as: 'part'
+            $match: {
+                $and: [
+                    { documentGb: documentGb === '' ? { $ne: DEFINE.COMMON.NONE_ID } : Types.ObjectId(documentGb) },
+                    { documentNumber: { $regex: documentNumber + '.*', $options: 'i' } },
+                    { documentTitle: { $regex: documentTitle + '.*', $options: 'i' } },
+                    { documentRev: { $regex: documentRev + '.*', $options: 'i' } },
+                    { 'deleteYn.yn': { $regex: deleteYn + '.*', $options: 'i' } },
+                    {
+                        holdYn: {
+                            $elemMatch: {
+                                yn: { $regex: holdYn + '.*', $options: 'i' }
+                            }
+                        }
+                    },
+                    {
+                        $and: [
+                            { 'timestamp.regDt': { $gte: new Date(regDtSta) } },
+                            { 'timestamp.regDt': { $lte: new Date(regDtEnd) } }
+                        ]
+                    },
+                    { level: level === -1 ? { $gte: level } : level }
+                ]
             }
         },
         {
-            $lookup: {
-                from: 'cdminors',
-                localField: 'documentGb',
-                foreignField: '_id',
-                as: 'documentGb'
-            }
+            $sort: { 'timestamp.regDt': -1 }
         },
-        { $unwind: '$part' },
-        { $unwind: '$documentGb' },
         {
             $project: {
                 vendor: 1,
@@ -122,46 +133,38 @@ DocumentSchema.statics.searchDocuments = async function (param, page) {
         },
         {
             $match: {
-                $and: [
-                    { documentGb: documentGb === '' ? { $ne: DEFINE.COMMON.NONE_ID } : Types.ObjectId(documentGb) },
-                    { documentNumber: { $regex: documentNumber + '.*', $options: 'i' } },
-                    { documentTitle: { $regex: documentTitle + '.*', $options: 'i' } },
-                    { documentRev: { $regex: documentRev + '.*', $options: 'i' } },
-                    {
-                        documentStatus: {
-                            $elemMatch: {
-                                status: { $regex: documentStatus + '.*', $options: 'i' }
-                            }
-                        }
-                    },
-                    { 'deleteYn.yn': { $regex: deleteYn + '.*', $options: 'i' } },
-                    {
-                        holdYn: {
-                            $elemMatch: {
-                                yn: { $regex: holdYn + '.*', $options: 'i' }
-                            }
-                        }
-                    },
-                    {
-                        $and: [
-                            { 'timestamp.regDt': { $gte: new Date(regDtSta) } },
-                            { 'timestamp.regDt': { $lte: new Date(regDtEnd) } }
-                        ]
-                    },
-                    { level: level === -1 ? { $gte: level } : level }
-                ]
-            },
+                documentStatus: {
+                    $elemMatch: {
+                        status: { $regex: documentStatus + '.*', $options: 'i' }
+                    }
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: 'cdminors',
+                localField: 'documentGb',
+                foreignField: '_id',
+                as: 'documentGb'
+            }
+        },
+        {
+            $unwind: '$documentGb'
         },
         {
             $skip: (page - 1) * 10
         },
         {
             $limit: 10
-        },
-        {
-            $sort: { 'timestamp.regDt': -1 }
         }
-    ]);
+    ]).then((documents) => {
+        return documents.map((document) => (
+            {
+                ...document,
+                level: DEFINE.levelConverter(document.level)
+            }
+        ));
+    });
 };
 
 /**
@@ -185,49 +188,17 @@ DocumentSchema.statics.searchDocumentsCount = function (param) {
 
     return this.aggregate([
         {
-            $project: {
-                vendor: 1,
-                part: 1,
-                documentNumber: 1,
-                documentTitle: 1,
-                documentInOut: {
-                    $slice: ['$documentInOut', -1]
-                },
-                documentGb: 1,
-                documentStatus: {
-                    $slice: ['$documentStatus', -1]
-                },
-                documentRev: 1,
-                level: 1,
-                memo: 1,
-                holdYn: 1,
-                deleteYn: 1,
-                chainingDocument: 1,
-                timestamp: 1,
-            },
-        },
-        {
             $match: {
                 $and: [
                     { documentGb: documentGb === '' ? { $ne: DEFINE.COMMON.NONE_ID } : Types.ObjectId(documentGb) },
                     { documentNumber: { $regex: documentNumber + '.*', $options: 'i' } },
                     { documentTitle: { $regex: documentTitle + '.*', $options: 'i' } },
                     { documentRev: { $regex: documentRev + '.*', $options: 'i' } },
-                    {
-                        documentStatus: {
-                            $elemMatch: {
-                                status: { $regex: documentStatus + '.*', $options: 'i' }
-                            }
-                        }
-                    },
                     { 'deleteYn.yn': { $regex: deleteYn + '.*', $options: 'i' } },
                     {
                         holdYn: {
                             $elemMatch: {
-                                $and: [
-                                    { effEndDt: new Date(DEFINE.COMMON.MAX_END_DT) },
-                                    { yn: { $regex: holdYn + '.*', $options: 'i' } }
-                                ]
+                                yn: { $regex: holdYn + '.*', $options: 'i' }
                             }
                         }
                     },
@@ -237,9 +208,43 @@ DocumentSchema.statics.searchDocumentsCount = function (param) {
                             { 'timestamp.regDt': { $lte: new Date(regDtEnd) } }
                         ]
                     },
-                    { level: level === -1 ? { $gt: level } : level }
+                    { level: level === -1 ? { $gte: level } : level }
                 ]
+            }
+        },
+        {
+            $sort: { 'timestamp.regDt': -1 }
+        },
+        {
+            $project: {
+                vendor: 1,
+                part: '$part',
+                documentNumber: 1,
+                documentTitle: 1,
+                documentInOut: {
+                    $slice: ['$documentInOut', -1]
+                },
+                documentGb: '$documentGb',
+                documentStatus: {
+                    $slice: ['$documentStatus', -1]
+                },
+                documentRev: 1,
+                level: 1,
+                memo: 1,
+                holdYn: 1,
+                deleteYn: 1,
+                chainingDocument: 1,
+                timestamp: 1
             },
+        },
+        {
+            $match: {
+                documentStatus: {
+                    $elemMatch: {
+                        status: { $regex: documentStatus + '.*', $options: 'i' }
+                    }
+                }
+            }
         },
         {
             $count: 'count'

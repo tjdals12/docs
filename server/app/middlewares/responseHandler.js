@@ -15,7 +15,7 @@ const responseHandler = () => {
 
             if (!!statusCode && statusCode < 400) {
                 ctx.status = statusCodes.OK;
-            } else if (!(statusCode < 400)) {
+            } else if (!(ctx.status < 400)) {
                 ctx.status = statusCodes.OK;
             }
 
@@ -65,9 +65,23 @@ const responseHandler = () => {
             });
         };
 
+        ctx.res.noContent = (params = {}) => {
+            ctx.res.success({
+                statusCode: statusCodes.NO_CONTENT,
+                ...params
+            });
+        };
+
         ctx.res.badRequest = (params = {}) => {
             ctx.res.fail({
                 statusCode: statusCodes.BAD_REQUEST,
+                ...params
+            });
+        };
+
+        ctx.res.forbidden = (params = {}) => {
+            ctx.res.fail({
+                statusCode: statusCodes.FORBIDDEN,
                 ...params
             });
         };

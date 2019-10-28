@@ -3,6 +3,7 @@ import '@babel/polyfill';
 import Koa from 'koa';
 import errorHandler from 'middlewares/errorHandler';
 import responseHandler from 'middlewares/responseHandler';
+import jwtMiddleware from './middlewares/jwtMiddleware';
 import requestId from 'koa-requestid';
 import serve from 'koa-static-server';
 import bodyParser from 'koa-bodyparser';
@@ -16,6 +17,7 @@ const app = new Koa();
 
 app.use(responseHandler());
 app.use(errorHandler());
+app.use(jwtMiddleware());
 app.use(requestId());
 app.use(serve({ rootDir: 'upload', rootPath: '/upload' }));
 app.use(bodyParser({

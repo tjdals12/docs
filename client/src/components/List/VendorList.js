@@ -4,20 +4,22 @@ import PropTypes from 'prop-types';
 import VendorCard from 'components/Card/VendorCard';
 import Pagination from 'components/Pagination';
 
-const VendorList = ({ page, lastPage, data, onPage, onOpenAdd, onOpenPersonAdd, onOpenDetail }) => {
+const VendorList = ({ writable, page, lastPage, data, onPage, onOpenAdd, onOpenPersonAdd, onOpenDetail }) => {
 	return (
 		<React.Fragment>
-			<Row className="hidden-md hidden-sm hidden-xs">
-				<Col md={4}>
-					<Button color="primary" className="mr-2" onClick={onOpenAdd}>
-						생성
+			{
+				writable && <Row className="hidden-md hidden-sm hidden-xs">
+					<Col md={4}>
+						<Button color="primary" className="mr-2" onClick={onOpenAdd}>
+							생성
 					</Button>
-					<Button color="secondary" onClick={onOpenPersonAdd}>
-						구성원 추가
+						<Button color="secondary" onClick={onOpenPersonAdd}>
+							구성원 추가
 					</Button>
-				</Col>
-			</Row>
-			<Row className="mt-2">
+					</Col>
+				</Row>
+			}
+			<Row>
 				{data.map((vendor, index) => (
 					<Col xs={12} md={6} lg={3} className="mb-4" key={index}>
 						<VendorCard vendor={vendor} onOpen={onOpenDetail(vendor.get('_id'))} />
@@ -37,6 +39,7 @@ const VendorList = ({ page, lastPage, data, onPage, onOpenAdd, onOpenPersonAdd, 
 };
 
 VendorList.propTypes = {
+	writable: PropTypes.bool,
 	page: PropTypes.number,
 	lastPage: PropTypes.number,
 	onPage: PropTypes.func,
@@ -46,6 +49,7 @@ VendorList.propTypes = {
 };
 
 VendorList.defaultProps = {
+	writable: false,
 	page: 1,
 	lastPage: 1,
 	onPage: () => console.warn('Warning: onPage is not defined'),

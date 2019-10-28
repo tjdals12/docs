@@ -37,7 +37,7 @@ const LetterAddModal = ({
 			size="lg"
 		>
 			<ModalHeader toggle={onClose('letterAdd')} className="bg-light">
-				Letter 추가
+				내부 공문 추가
 			</ModalHeader>
 			<ModalBody>
 				<Form>
@@ -200,10 +200,10 @@ const LetterAddModal = ({
 			</ModalBody>
 			<ModalFooter className="bg-light">
 				<Button color="primary" onClick={onAdd}>
-					ADD
+					추가
 				</Button>
 				<Button color="secondary" onClick={onClose('letterAdd')}>
-					CANCEL
+					취소
 				</Button>
 			</ModalFooter>
 		</Modal>

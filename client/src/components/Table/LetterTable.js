@@ -2,19 +2,23 @@ import React from 'react';
 import classNames from 'classnames';
 import { Row, Col, Button, Table } from 'reactstrap';
 import Pagination from 'components/Pagination';
+import PropTypes from 'prop-types';
 
-const LetterTable = ({ page, lastPage, data, onOpen, onOpenDetail, onPage, className, ...rest }) => {
-	const classes = classNames('mt-2 mb-4 bg-white', classNames);
+const LetterTable = ({ writable, page, lastPage, data, onOpen, onOpenDetail, onPage, className, ...rest }) => {
+	const classes = classNames('mb-4 bg-white', classNames);
 
 	return (
 		<React.Fragment>
-			<Row className="hidden-md hidden-sm hidden-xs">
-				<Col md={4}>
-					<Button color="primary" className="mr-2" onClick={onOpen('letterAdd')}>
-						ADD
+			{
+				writable &&
+				<Row className="hidden-md hidden-sm hidden-xs">
+					<Col md={4}>
+						<Button color="primary" className="mr-2" onClick={onOpen('letterAdd')}>
+							ADD
 					</Button>
-				</Col>
-			</Row>
+					</Col>
+				</Row>
+			}
 			<Table className={classes} {...rest} bordered striped hover>
 				<colgroup>
 					<col width="3%" />
@@ -57,10 +61,10 @@ const LetterTable = ({ page, lastPage, data, onOpen, onOpenDetail, onPage, class
 											{transmittal.get('letterGb')}
 										</span>
 									) : (
-										<span className="text-secondary font-weight-bold">
-											{transmittal.get('letterGb')}
-										</span>
-									)}
+											<span className="text-secondary font-weight-bold">
+												{transmittal.get('letterGb')}
+											</span>
+										)}
 								</td>
 								<td className="text-center">{transmittal.get('officialNumber')}</td>
 								<td className="text-left">
@@ -81,8 +85,8 @@ const LetterTable = ({ page, lastPage, data, onOpen, onOpenDetail, onPage, class
 											{transmittal.get('targetDate').substr(0, 10)}
 										</span>
 									) : (
-										<span className="text-danger">회신 필요없음</span>
-									)}
+											<span className="text-danger">회신 필요없음</span>
+										)}
 								</td>
 								<td className="text-center">
 									{transmittal.get('replyRequired') === 'YES' ? transmittal.get('replyYn') : '-'}
@@ -104,5 +108,24 @@ const LetterTable = ({ page, lastPage, data, onOpen, onOpenDetail, onPage, class
 		</React.Fragment>
 	);
 };
+
+LetterTable.propTypes = {
+	writable: PropTypes.bool,
+	page: PropTypes.number,
+	lastPage: PropTypes.number,
+	onOpen: PropTypes.func,
+	onOpenDetail: PropTypes.func,
+	onPage: PropTypes.func,
+	className: PropTypes.string
+}
+
+LetterTable.defaultProps = {
+	writable: false,
+	page: 1,
+	lastPage: 1,
+	onOpen: () => console.warn('Warning: onOpen is not defined'),
+	onOpenDetail: () => console.warn('Warning: onOpenDetail is not defined'),
+	onPage: () => console.warn('Warning: onPage is not defined')
+}
 
 export default LetterTable;

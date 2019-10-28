@@ -44,7 +44,7 @@ const DocumentInfoAddModal = ({
 			size="xl"
 		>
 			<ModalHeader toggle={onClose} className="bg-light">
-				문서목록 > 문서 추가
+				문서 목록 > 문서 추가
 			</ModalHeader>
 			<ModalBody>
 				<Form onSubmit={(e) => e.preventDefault()}>
@@ -89,9 +89,9 @@ const DocumentInfoAddModal = ({
 						</colgroup>
 						<thead>
 							<tr style={{ background: '#e7f5ff' }}>
-								<th>Number</th>
-								<th>Title</th>
-								<th>Gb</th>
+								<th>문서번호</th>
+								<th>문서명</th>
+								<th>구분</th>
 								<th>Plan</th>
 								<th />
 							</tr>

@@ -155,7 +155,7 @@ const DocumentIndexAddModal = ({
 							<tr style={{ background: '#e7f5ff' }}>
 								<th>#</th>
 								<th>문서번호</th>
-								<th>문서제목</th>
+								<th>문서명</th>
 								<th>구분</th>
 								<th className="text-center">Plan</th>
 								<th />
@@ -214,7 +214,7 @@ const DocumentIndexAddModal = ({
 						<thead>
 							<tr style={{ background: '#ffe3e3' }}>
 								<th>#</th>
-								<th>문서번호</th>
+								<th>문서명</th>
 								<th>문서제목</th>
 								<th className="text-center">Plan</th>
 								<th />

@@ -20,13 +20,13 @@ class StatisticsByStatusBarChartContainer extends React.Component {
 
 		if (!statisticsByStatus) return null;
 
-		return <BarChartCard data={statisticsByStatus} title="Status" color1="#6a82fb" color2="#00c9ff" />;
+		return <BarChartCard data={statisticsByStatus.toJS()} title="Status" color1="#6a82fb" color2="#00c9ff" />;
 	}
 }
 
 export default connect(
 	(state) => ({
-		statisticsByStatus: state.indexes.getIn([ 'indexDetail', 'statisticsByStatus' ])
+		statisticsByStatus: state.indexes.getIn(['indexDetail', 'statisticsByStatus'])
 	}),
 	(dispatch) => ({
 		IndexesActions: bindActionCreators(indexesActions, dispatch)

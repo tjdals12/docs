@@ -56,12 +56,13 @@ class VendorDetailModalContainer extends React.Component {
 	}
 
 	render() {
-		const { isOpen, isOpenQuestion, vendor, reasonError, loading } = this.props;
+		const { writable, isOpen, isOpenQuestion, vendor, reasonError, loading } = this.props;
 
 		if (loading === undefined || loading) return null;
 
 		return (
 			<VendorDetailModal
+				writable={writable}
 				isOpen={isOpen}
 				isOpenQuestion={isOpenQuestion}
 				data={vendor}

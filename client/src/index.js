@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'styles/reduction.scss';
-import App from './App';
+import Root from './Root';
 import * as serviceWorker from './serviceWorker';
 
 import configure from 'store/configure';
@@ -11,7 +11,7 @@ const store = configure();
 
 ReactDOM.render(
 	<Provider store={store}>
-		<App />
+		<Root />
 	</Provider>,
 	document.getElementById('root')
 );

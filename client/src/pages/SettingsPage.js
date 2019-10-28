@@ -4,6 +4,7 @@ import Page from 'components/Page';
 import ProjectCollapseCardContainer from 'containers/Card/ProjectCollapseCardContainer';
 import TemplateCollapseCardContainer from 'containers/Card/TemplateCollapseCardContainer';
 import CmcodeCollapseCardContainer from 'containers/Card/CmcodeCollapseCardContainer';
+import ManagerCollapseCardContainer from 'containers/Card/ManagerCollapseCardContainer';
 
 const SettingsPage = () => {
 	return (
@@ -12,6 +13,7 @@ const SettingsPage = () => {
 				<ProjectCollapseCardContainer />
 				<TemplateCollapseCardContainer />
 				<CmcodeCollapseCardContainer />
+				<ManagerCollapseCardContainer />
 			</ScrollToTop>
 		</Page>
 	);

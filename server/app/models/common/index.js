@@ -356,6 +356,12 @@ const DEFINE = {
                     description: '높음'
                 };
         }
+    },
+
+    USER_TYPE: {
+        ADMIN: 'Admin',
+        MANAGER: 'Manager',
+        GUEST: 'Guest'
     }
 };
 
