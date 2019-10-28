@@ -73,6 +73,21 @@ TeamSchema.statics.editTeam = function (params) {
 
 /**
  * @author      minz-logger
+ * @date        2019. 10. 28
+ * @description 팀 삭제
+ */
+TeamSchema.statics.deleteTeam = async function (id) {
+    const team = await this.findOne({ _id: id });
+
+    if (team.managers.length > 0) {
+        return;
+    }
+
+    return this.deleteOne({ _id: id });
+};
+
+/**
+ * @author      minz-logger
  * @date        2019. 10. 26
  * @description 담당자 추가
  * @param       {Object} param
@@ -122,6 +137,31 @@ TeamSchema.statics.editManager = async function (params) {
     await Manager.editManager({ managerId, name, position, effStaDt, effEndDt });
 
     return this.findOne({ _id: id })
+        .populate({ path: 'part' })
+        .populate({ path: 'managers' });
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 28
+ * @description 담당자 삭제
+ */
+TeamSchema.statics.deleteManager = async function (params) {
+    let { id, managerId } = params;
+
+    await Manager.deleteManager(managerId);
+
+    return this.findOneAndUpdate(
+        { _id: id },
+        {
+            $pull: {
+                managers: managerId
+            }
+        },
+        {
+            new: true
+        }
+    )
         .populate({ path: 'part' })
         .populate({ path: 'managers' });
 };

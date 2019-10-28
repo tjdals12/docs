@@ -20,6 +20,10 @@ const ManagerSchema = new Schema({
         default: DEFINE.COMMON.MAX_END_DT,
         get: DEFINE.dateConverter
     },
+    deleteYn: {
+        type: String,
+        default: DEFINE.COMMON.DEFAULT_NO
+    },
     timestamp: {
         type: Timestamp.schema,
         default: Timestamp
@@ -71,6 +75,25 @@ ManagerSchema.statics.editManager = function (params) {
                 effStaDt,
                 effEndDt: effEndDt === '' ? '9999-12-31' : effEndDt
             }
+        }
+    );
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 28
+ * @description 담당자 삭제
+ */
+ManagerSchema.statics.deleteManager = function (id) {
+    return this.findOneAndUpdate(
+        { _id: id },
+        {
+            $set: {
+                deleteYn: DEFINE.COMMON.DEFAULT_YES
+            }
+        },
+        {
+            new: true
         }
     );
 };

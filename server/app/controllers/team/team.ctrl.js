@@ -49,11 +49,28 @@ export const create = async (ctx) => {
  * @description 팀 목록 조회
  */
 export const list = async (ctx) => {
+    let page = parseInt(ctx.query.page || 1, 10);
+
+    if (page < 1) {
+        ctx.res.badRequest({
+            data: page,
+            message: 'Page can\'t be less than 1'
+        });
+
+        return;
+    }
+
     try {
         const teams = await Team.find()
             .sort({ 'timestamp.regDt': -1 })
+            .skip((page - 1) * 10)
+            .limit(10)
             .populate({ path: 'part' })
             .populate({ path: 'managers' });
+
+        const count = await Team.countDocuments();
+
+        ctx.set('Last-Page', Math.ceil(count / 10));
 
         ctx.res.ok({
             data: teams,
@@ -127,6 +144,35 @@ export const edit = async (ctx) => {
         ctx.res.internalServerError({
             data: { id: id, ...ctx.request.body },
             message: `Error - teamCtrl > edit: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 28
+ * @description 팀 삭제
+ */
+export const deleteTeam = async (ctx) => {
+    let { id } = ctx.params;
+
+    try {
+        const result = await Team.deleteTeam(id);
+
+        if (result) {
+            ctx.res.ok({
+                data: result,
+                message: 'Success - teamCtrl > deleteTeam'
+            });
+        } else {
+            ctx.res.badRequest({
+                message: 'Fail - teamCtrl > deleteTeam'
+            });
+        }
+    } catch (e) {
+        ctx.res.internalServerError({
+            data: { id: id },
+            message: `Error - teamCtrl > deleteTeam: ${e.message}`
         });
     }
 };
@@ -217,6 +263,45 @@ export const editManager = async (ctx) => {
         ctx.res.internalServerError({
             data: { id: id, ...ctx.request.body },
             message: `Error - teamCtrl > editManager: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 28
+ * @description 담당자 삭제
+ */
+export const deleteManager = async (ctx) => {
+    let { id } = ctx.params;
+    let { managerId } = ctx.request.body;
+
+    const schema = Joi.object().keys({
+        managerId: Joi.string().required()
+    });
+
+    const result = Joi.validate(ctx.request.body, schema);
+
+    if (result.error) {
+        ctx.data.badRequest({
+            data: result.error,
+            message: 'Fail - teamCtrl > deleteManager'
+        });
+
+        return;
+    }
+
+    try {
+        const team = await Team.deleteManager({ id, managerId });
+
+        ctx.res.ok({
+            data: team,
+            message: 'Success - teamCtrl > deleteManager'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            data: ctx.request.body,
+            message: `Error - teamCtrl > deleteManager: ${e.message}`
         });
     }
 };
