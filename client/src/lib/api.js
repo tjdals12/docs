@@ -124,9 +124,11 @@ export const check = () => axios.get(`${real}/api/accounts/check`);
 export const logout = () => axios.post(`${real}/api/accounts/logout`);
 
 /** Team */
-export const getTeams = () => axios.get(`${real}/api/teams`);
+export const getTeams = (page) => axios.get(`${real}/api/teams?page=${page}`);
 export const getTeam = ({ id }) => axios.get(`${real}/api/teams/${id}`);
 export const addTeam = (param) => axios.post(`${real}/api/teams`, { ...param });
 export const editTeam = ({ id, param }) => axios.patch(`${real}/api/teams/${id}/edit`, { ...param });
+export const deleteTeam = (id) => axios.delete(`${real}/api/teams/${id}/delete`);
 export const addManager = ({ id, param }) => axios.post(`${real}/api/teams/${id}/add`, { ...param });
 export const editManager = ({ id, param }) => axios.patch(`${real}/api/teams/${id}/edit/manager`, { ...param });
+export const deleteManager = ({ id, param }) => axios.patch(`${real}/api/teams/${id}/delete/manager`, { ...param });

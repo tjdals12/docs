@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as cmcodeActions from 'store/modules/cmcode';
 import * as teamActions from 'store/modules/team';
+import * as modalActions from 'store/modules/modal';
 
 class ManagerCollaseCardContainer extends React.Component {
     state = {
@@ -17,10 +18,11 @@ class ManagerCollaseCardContainer extends React.Component {
         CmcodeActions.getCmcodeByMajorExcludeRemoved({ major: major });
     }
 
-    getTeams = () => {
+    getTeams = (page) => {
         const { TeamActions } = this.props;
 
-        TeamActions.getTeams();
+        TeamActions.onChange({ name: 'page', value: page });
+        TeamActions.getTeams(page);
     }
 
     getTeam = (id) => {
@@ -65,21 +67,30 @@ class ManagerCollaseCardContainer extends React.Component {
         const { TeamActions, add } = this.props;
 
         await TeamActions.addTeam({ ...add.toJS() });
-        this.getTeams();
+        this.getTeams(1);
     }
 
     handleEdit = async (id) => {
-        const { TeamActions, edit } = this.props;
+        const { TeamActions, edit, page } = this.props;
 
         await TeamActions.editTeam({ id, param: edit.toJS() });
-        this.getTeams();
+        this.getTeams(page);
+    }
+
+    handleDelete = async (id) => {
+        const { TeamActions } = this.props;
+
+        await TeamActions.deleteTeam(id);
+        TeamActions.initialize('team');
+        TeamActions.initialize('edit');
+        this.getTeams(1);
     }
 
     handleSaveManager = async (id) => {
-        const { TeamActions, addManager } = this.props;
+        const { TeamActions, addManager, page } = this.props;
 
         await TeamActions.addManager({ id, param: { ...addManager.toJS() } });
-        this.getTeams();
+        this.getTeams(page);
         this.getTeam(id);
     }
 
@@ -91,14 +102,37 @@ class ManagerCollaseCardContainer extends React.Component {
         this.getTeam(id);
     }
 
+    handleDeleteManager = (id) => async () => {
+        const { ModalActions, TeamActions, manager, page } = this.props;
+
+        await TeamActions.deleteManager({ id, param: { managerId: manager.get('_id') } });
+        ModalActions.close('question');
+        TeamActions.initialize('manager');
+        TeamActions.initialize('editManager');
+        this.getTeams(page);
+        this.getTeam();
+    }
+
+    handleOpen = (name) => {
+        const { ModalActions } = this.props;
+
+        ModalActions.open(name);
+    }
+
+    handleClose = (name) => () => {
+        const { ModalActions } = this.props;
+
+        ModalActions.close(name);
+    }
+
     componentDidMount() {
         this.getCmcodes('0001');
-        this.getTeams();
+        this.getTeams(1);
     }
 
     render() {
         const { isOpen } = this.state;
-        const { parts, teams, team, add, edit, manager, addManager, editManager, loading } = this.props;
+        const { isOpenQuestion, parts, teams, team, add, edit, manager, addManager, editManager, count, page, loading } = this.props;
 
         if (loading || loading === undefined || !parts) return null;
 
@@ -110,6 +144,7 @@ class ManagerCollaseCardContainer extends React.Component {
                 onAddForm={this.handleAddForm}
                 collapse={
                     <ManagerCollapse
+                        isOpenQuestion={isOpenQuestion}
                         parts={parts}
                         teams={teams}
                         team={team}
@@ -118,14 +153,21 @@ class ManagerCollaseCardContainer extends React.Component {
                         manager={manager}
                         addManager={addManager}
                         editManager={editManager}
+                        count={count}
+                        page={page}
                         isOpen={isOpen}
+                        onPage={this.getTeams}
                         onSelectTeam={this.getTeam}
                         onSelectManager={this.getManager}
                         onChange={this.handleChange}
                         onSave={this.handleSave}
                         onEdit={this.handleEdit}
+                        onDelete={this.handleDelete}
                         onSaveManager={this.handleSaveManager}
                         onEditManager={this.handleEditManager}
+                        onDeleteManager={this.handleDeleteManager}
+                        onOpen={this.handleOpen}
+                        onClose={this.handleClose}
                     />
                 }
             />
@@ -135,6 +177,7 @@ class ManagerCollaseCardContainer extends React.Component {
 
 export default connect(
     (state) => ({
+        isOpenQuestion: state.modal.get('questionModal'),
         parts: state.cmcode.get('0001'),
         teams: state.team.get('teams'),
         team: state.team.get('team'),
@@ -143,10 +186,13 @@ export default connect(
         manager: state.team.get('manager'),
         addManager: state.team.get('addManager'),
         editManager: state.team.get('editManager'),
+        count: state.team.get('count'),
+        page: state.team.get('page'),
         loading: state.pender.pending['team/GET_TEAMS']
     }),
     (dispatch) => ({
         CmcodeActions: bindActionCreators(cmcodeActions, dispatch),
-        TeamActions: bindActionCreators(teamActions, dispatch)
+        TeamActions: bindActionCreators(teamActions, dispatch),
+        ModalActions: bindActionCreators(modalActions, dispatch)
     })
 )(ManagerCollaseCardContainer);

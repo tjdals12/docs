@@ -23,7 +23,7 @@ const IconWidget = ({ bgColor, icon: Icon, iconProps, title, subtitle, className
 
 IconWidget.propTypes = {
     bgColor: PropTypes.string,
-    icon: PropTypes.node,
+    icon: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.node]),
     iconProps: PropTypes.object,
     title: PropTypes.string,
     subtitle: PropTypes.string
