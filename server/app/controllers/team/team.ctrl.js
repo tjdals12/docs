@@ -70,6 +70,7 @@ export const list = async (ctx) => {
 
         const count = await Team.countDocuments();
 
+        ctx.set('Total', count);
         ctx.set('Last-Page', Math.ceil(count / 10));
 
         ctx.res.ok({
