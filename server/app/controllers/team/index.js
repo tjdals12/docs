@@ -86,6 +86,12 @@ team.post('/', teamCtrl.create);
  *      description: 팀 목록 조회
  *      produces:
  *          - application/json
+ *      parameters:
+ *          - in: query
+ *            name: page
+ *            description: page number
+ *            type: string
+ *            example: 1
  *      responses:
  *          200:
  *              description: Successful operation
@@ -160,6 +166,29 @@ team.get('/:id', commonCtrl.checkObjectId, teamCtrl.one);
  *                  $ref: '#/definitions/team'
  */
 team.patch('/:id/edit', commonCtrl.checkObjectId, teamCtrl.edit);
+
+/**
+ * @swagger
+ * /api/teams/{id}/delete:
+ *  delete:
+ *      tags:
+ *          - Team
+ *      summary: 팀 삭제
+ *      description: 팀 삭제
+ *      produces:
+ *          - application/json
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            description: team id
+ *            required: true
+ *            type: string
+ *            example: '5db4615c55e63f0e010f119d'
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ */
+team.delete('/:id/delete', commonCtrl.checkObjectId, teamCtrl.deleteTeam);
 
 /**
  * @swagger
@@ -255,5 +284,41 @@ team.post('/:id/add', commonCtrl.checkObjectId, teamCtrl.add);
  *                  $ref: '#/definitions/team'
  */
 team.patch('/:id/edit/manager', commonCtrl.checkObjectId, teamCtrl.editManager);
+
+/**
+ * @swagger
+ * /api/teams/{id}/delete/manager:
+ *  patch:
+ *      tags:
+ *          - Team
+ *      summary: 담당자 삭제
+ *      description: 담당자 삭제
+ *      consumes:
+ *          - application/json
+ *      produces:
+ *          - application/json
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            description: team id
+ *            required: true
+ *            type: string
+ *            example: '5db4615c55e63f0e010f119d'
+ *          - in: body
+ *            name: body
+ *            description: delete parameters
+ *            schema:
+ *              type: object
+ *              properties:
+ *                  managerId:
+ *                      type: string
+ *                      example: '5db4615c55e63f0e010f119d'
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ *              schema:
+ *                  $ref: '#/definitions/team'
+ */
+team.patch('/:id/delete/manager', commonCtrl.checkObjectId, teamCtrl.deleteManager);
 
 export default team;
