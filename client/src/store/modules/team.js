@@ -5,7 +5,9 @@ import { pender } from 'redux-pender';
 
 const GET_TEAMS = 'team/GET_TEAMS';
 const GET_TEAM = 'team/GET_TEAM';
+const ADD_TEAM = 'team/ADD_TEAM';
 const EDIT_TEAM = 'team/EDIT_TEAE';
+const ADD_MANAGER = 'team/ADD_MANAGER';
 const EDIT_MANAGER = 'team/EDIT_MANAGER';
 const SELECT_MANAGER = 'team/SELECT_MANAGER';
 const ON_CHANGE = 'team/ON_CHANGE';
@@ -13,7 +15,9 @@ const INITIALIZE = 'team/INITIALIZE';
 
 export const getTeams = createAction(GET_TEAMS, api.getTeams);
 export const getTeam = createAction(GET_TEAM, api.getTeam);
+export const addTeam = createAction(ADD_TEAM, api.addTeam);
 export const editTeam = createAction(EDIT_TEAM, api.editTeam);
+export const addManager = createAction(ADD_MANAGER, api.addManager);
 export const editManager = createAction(EDIT_MANAGER, api.editManager);
 export const selectManager = createAction(SELECT_MANAGER);
 export const onChange = createAction(ON_CHANGE);
@@ -28,6 +32,16 @@ const initialState = Map({
         teamName: ''
     }),
     editManager: Map({
+        name: '',
+        position: '',
+        effStaDt: '',
+        effEndDt: '9999-12-31'
+    }),
+    add: Map({
+        part: '',
+        teamName: ''
+    }),
+    addManager: Map({
         name: '',
         position: '',
         effStaDt: '',
@@ -69,6 +83,12 @@ export default handleActions({
         }
     }),
     ...pender({
+        type: ADD_TEAM,
+        onSuccess: (state, action) => {
+            return state.set('add', initialState.get('add'));
+        }
+    }),
+    ...pender({
         type: EDIT_TEAM,
         onSuccess: (state, action) => {
             let { data: team } = action.paylod.data;
@@ -92,6 +112,12 @@ export default handleActions({
     }),
     ...pender({
         type: EDIT_MANAGER
+    }),
+    ...pender({
+        type: ADD_MANAGER,
+        onSuccess: (state, action) => {
+            return state.set('addManager', initialState.get('addManager'));
+        }
     }),
     [SELECT_MANAGER]: (state, action) => {
         const { payload: id } = action;
