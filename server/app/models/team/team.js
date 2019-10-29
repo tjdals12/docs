@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import { Timestamp } from 'models/common/schema';
 import Manager from './manager';
 
@@ -84,6 +84,54 @@ TeamSchema.statics.deleteTeam = async function (id) {
     }
 
     return this.deleteOne({ _id: id });
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 10. 29
+ * @description 담당자 조회
+ * @param       {String} id
+ */
+TeamSchema.statics.findManager = async function (id) {
+    let managerId = Types.ObjectId(id);
+
+    return this.aggregate([
+        {
+            $match: {
+                managers: { $in: [managerId] }
+            }
+        },
+        {
+            $project: {
+                part: 1,
+                teamName: 1,
+                manager: { $arrayElemAt: ['$managers', { $indexOfArray: ['$managers', managerId] }] },
+                timestamp: 1
+            }
+        },
+        {
+            $lookup: {
+                from: 'cdminors',
+                localField: 'part',
+                foreignField: '_id',
+                as: 'part'
+            }
+        },
+        {
+            $unwind: '$part'
+        },
+        {
+            $lookup: {
+                from: 'managers',
+                localField: 'manager',
+                foreignField: '_id',
+                as: 'manager'
+            }
+        },
+        {
+            $unwind: '$manager'
+        }
+    ]);
 };
 
 /**

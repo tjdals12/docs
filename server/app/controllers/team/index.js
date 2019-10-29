@@ -104,6 +104,33 @@ team.get('/', teamCtrl.list);
 
 /**
  * @swagger
+ * /api/teams/forselect:
+ *  get:
+ *      tags:
+ *          - Team
+ *      summary: 팀 목록 조회 (For select)
+ *      description: 팀 목록 조회 (For select)
+ *      produces:
+ *          - application/json
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      _id:
+ *                          type: string
+ *                      teamName:
+ *                          type: project
+ *                      managers:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/definitions/manager'
+ */
+team.get('/forselect', teamCtrl.listForSelect);
+
+/**
+ * @swagger
  * /api/teams/{id}:
  *  get:
  *      tags:
@@ -189,6 +216,40 @@ team.patch('/:id/edit', commonCtrl.checkObjectId, teamCtrl.edit);
  *              description: Successful operation
  */
 team.delete('/:id/delete', commonCtrl.checkObjectId, teamCtrl.deleteTeam);
+
+/**
+ * @swagger
+ * /api/teams/{id}/manager:
+ *  get:
+ *      tags:
+ *          - Team
+ *      summary: 담당자 조회
+ *      description: 담당자 조회
+ *      produces:
+ *          - application/json
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            description: manager id
+ *            rquired: true
+ *            type: string
+ *            example: '5db537851a4fa00ee8d5458b'
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      _id:
+ *                          type: string
+ *                      part:
+ *                          $ref: '#/definitions/cdminor'
+ *                      teamName:
+ *                          type: string
+ *                      manager:
+ *                          $ref: '#/definitions/manager'
+ */
+team.get('/:id/manager', commonCtrl.checkObjectId, teamCtrl.oneManager);
 
 /**
  * @swagger
