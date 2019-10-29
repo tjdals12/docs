@@ -47,27 +47,31 @@ const initialState = Map({
 	vendorList: List(),
 	vendor: Map(),
 	add: Map({
+		project: '',
 		vendorGb: '',
 		countryCd: '',
 		vendorName: '',
 		itemName: '',
-		effStaDt: '',
-		effEndDt: '',
 		part: '',
 		partNumber: '',
 		officialName: '',
+		manager: '',
+		effStaDt: '',
+		effEndDt: '',
 		persons: []
 	}),
 	edit: Map({
+		project: '',
 		vendorGb: '',
 		countryCd: '',
 		vendorName: '',
 		itemName: '',
-		effStaDt: '',
-		effEndDt: '',
 		part: '',
 		partNumber: '',
 		officialName: '',
+		manager: '',
+		effStaDt: '',
+		effEndDt: '',
 		vendorPerson: List()
 	}),
 	search: Map({
@@ -82,12 +86,14 @@ const initialState = Map({
 		isSearch: false
 	}),
 	errors: Map({
+		projectError: false,
 		vendorGbError: false,
 		countryCdError: false,
 		vendorNameError: false,
 		officialNameError: false,
 		partError: false,
 		partNumberError: false,
+		managerError: false,
 		effStaDtError: false,
 		effEndDtError: false,
 		vendorPersonError: List()
@@ -180,15 +186,17 @@ export default handleActions(
 				const vendor = state.get('add');
 
 				return state
+					.setIn(['errors', 'projectError'], vendor.get('project') === '')
 					.setIn(['errors', 'vendorGbError'], vendor.get('vendorGb') === '')
 					.setIn(['errors', 'countryCdError'], vendor.get('countryCd') === '')
 					.setIn(['errors', 'vendorNameError'], vendor.get('vendorName') === '')
 					.setIn(['errors', 'itemNameError'], vendor.get('itemName') === '')
-					.setIn(['errors', 'effStaDtError'], vendor.get('effStaDt') === '')
-					.setIn(['errors', 'effEndDtError'], vendor.get('effEndDt') === '')
 					.setIn(['errors', 'partError'], vendor.get('part') === '')
 					.setIn(['errors', 'partNumberError'], vendor.get('partNumber') === '')
-					.setIn(['errors', 'officialNameError'], vendor.get('officialName') === '');
+					.setIn(['errors', 'officialNameError'], vendor.get('officialName') === '')
+					.setIn(['errors', 'managerError'], vendor.get('manager') === '')
+					.setIn(['errors', 'effStaDtError'], vendor.get('effStaDt') === '')
+					.setIn(['errors', 'effEndDtError'], vendor.get('effEndDt') === '');
 			}
 		}),
 		...pender({
@@ -218,15 +226,17 @@ export default handleActions(
 				}).map(person => person.get('_id'));
 
 				return state
+					.setIn(['errors', 'projectError'], vendor.get('project') === '')
 					.setIn(['errors', 'vendorGbError'], vendor.get('vendorGb') === '')
 					.setIn(['errors', 'countryCdError'], vendor.get('countryCd') === '')
 					.setIn(['errors', 'vendorNameError'], vendor.get('vendorName') === '')
 					.setIn(['errors', 'itemNameError'], vendor.get('itemName') === '')
-					.setIn(['errors', 'effStaDtError'], vendor.get('effStaDt') === '')
-					.setIn(['errors', 'effEndDtError'], vendor.get('effEndDt') === '')
 					.setIn(['errors', 'partError'], vendor.get('part') === '')
 					.setIn(['errors', 'partNumberError'], vendor.get('partNumber') === '')
 					.setIn(['errors', 'officialNameError'], vendor.get('officialName') === '')
+					.setIn(['errors', 'effStaDtError'], vendor.get('effStaDt') === '')
+					.setIn(['errors', 'effEndDtError'], vendor.get('effEndDt') === '')
+					.setIn(['errors', 'managerError'], vendor.get('manager') === '')
 					.setIn(['errors', 'vendorPersonError'], vendorPerson);
 			}
 		}),

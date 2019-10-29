@@ -125,6 +125,7 @@ export const logout = () => axios.post(`${real}/api/accounts/logout`);
 
 /** Team */
 export const getTeams = (page) => axios.get(`${real}/api/teams?page=${page}`);
+export const getTeamsForSelect = () => axios.get(`${real}/api/teams/forselect`);
 export const getTeam = ({ id }) => axios.get(`${real}/api/teams/${id}`);
 export const addTeam = (param) => axios.post(`${real}/api/teams`, { ...param });
 export const editTeam = ({ id, param }) => axios.patch(`${real}/api/teams/${id}/edit`, { ...param });

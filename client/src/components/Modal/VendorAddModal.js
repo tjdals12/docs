@@ -14,7 +14,7 @@ import {
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 
-const VendorAddModal = ({ parts, errors, isOpen, onClose, onChange, onInsert, className, ...rest }) => {
+const VendorAddModal = ({ projectList, parts, managerList, errors, isOpen, onClose, onChange, onInsert, className, ...rest }) => {
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -29,6 +29,17 @@ const VendorAddModal = ({ parts, errors, isOpen, onClose, onChange, onInsert, cl
 			</ModalHeader>
 			<ModalBody>
 				<Form>
+					<FormGroup row>
+						<Col md={12}>
+							<Label for='project'>프로젝트</Label>
+							<Input type='select' id='project' name='project' onChange={onChange} invalid={errors.get('projectError')}>
+								<option value=''>-- 프로젝트 --</option>
+								{projectList.map((project) => (
+									<option key={project.get('_id')} value={project.get('_id')}>[{project.get('projectCode')}] {project.get('projectName')}</option>
+								))}
+							</Input>
+						</Col>
+					</FormGroup>
 					<FormGroup row>
 						<Col md={6}>
 							<Label for="vendorGb">구분</Label>
@@ -123,6 +134,19 @@ const VendorAddModal = ({ parts, errors, isOpen, onClose, onChange, onInsert, cl
 						</Col>
 					</FormGroup>
 					<FormGroup row>
+						<Col md={4}>
+							<Label for='manager'>담당자</Label>
+							<Input type='select' id='manager' name='manager' onChange={onChange} invalid={errors.get('managerError')}>
+								<option value=''>-- 담당자 --</option>
+								{managerList.map(team => {
+									const { teamName, managers } = team.toJS();
+
+									return (managers.map((manager) => (
+										<option key={manager._id} value={manager._id}>[{teamName}] {manager.name} {manager.position}</option>
+									)))
+								})}
+							</Input>
+						</Col>
 						<Col md={8}>
 							<Label for="effDt">계약기간</Label>
 							<InputGroup id="effDt">

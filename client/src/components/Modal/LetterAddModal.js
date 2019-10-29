@@ -54,7 +54,7 @@ const LetterAddModal = ({
 								<option value="">-- 프로젝트 --</option>
 								{projectList.map((project) => (
 									<option key={project.get('_id')} value={project.get('_id')}>
-										{project.get('projectName')} ({project.get('projectCode')})
+										[{project.get('projectCode')}] {project.get('projectName')}
 									</option>
 								))}
 							</Input>
