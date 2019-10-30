@@ -75,6 +75,8 @@ const initialState = Map({
 		vendorPerson: List()
 	}),
 	search: Map({
+		project: '',
+		manager: '',
 		vendorGb: '',
 		countryCd: '',
 		vendorName: '',

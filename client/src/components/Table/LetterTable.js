@@ -14,7 +14,7 @@ const LetterTable = ({ writable, page, lastPage, data, onOpen, onOpenDetail, onP
 				<Row className="hidden-md hidden-sm hidden-xs">
 					<Col md={4}>
 						<Button color="primary" className="mr-2" onClick={onOpen('letterAdd')}>
-							ADD
+							추가
 					</Button>
 					</Col>
 				</Row>
