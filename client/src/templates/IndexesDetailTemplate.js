@@ -9,7 +9,7 @@ import StatisticsByTransmittalBarCharCardContainer from 'containers/Card/Statist
 import DocumentInfoCardContainer from 'containers/Card/DocumentInfoCardContainer';
 import VendorLetterDetailModalContainer from 'containers/Modal/VendorLetterDetailModalContainer';
 
-const IndexesDetailTemplate = ({ id, vendor, currentPage }) => {
+const IndexesDetailTemplate = ({ id, vendor, manager, currentPage }) => {
 	return (
 		<React.Fragment>
 			<Row>
@@ -19,8 +19,8 @@ const IndexesDetailTemplate = ({ id, vendor, currentPage }) => {
 							<UserCard
 								avatar={userImg}
 								avatarSize={150}
-								title="이성민 사원"
-								subtitle="seongmin@minzlog.info"
+								title={`${manager.get('name')} ${manager.get('position')}`}
+								subtitle={`${manager.get('effStaDt').substr(0, 10)} ~ ${manager.get('effEndDt').substr(0, 10)}`}
 								text="담당자"
 							/>
 						</Col>

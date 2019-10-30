@@ -86,6 +86,27 @@ export const list = async (ctx) => {
 
 /**
  * @author      minz-logger
+ * @date        2019. 10. 29
+ * @description 팀 목록 조회 for select
+ */
+export const listForSelect = async (ctx) => {
+    try {
+        const teams = await Team.find({}, { teamName: 1, managers: 1 })
+            .populate({ path: 'managers' });
+
+        ctx.res.ok({
+            data: teams,
+            message: 'Success - teamCtrl > listForSelect'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            message: `Error - teamCtrl > listForSelect: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
  * @date        2019. 10. 26
  * @description 팀 조회
  */
@@ -174,6 +195,29 @@ export const deleteTeam = async (ctx) => {
         ctx.res.internalServerError({
             data: { id: id },
             message: `Error - teamCtrl > deleteTeam: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author minz-logger
+ * @date 2019. 10. 29
+ * @description 담당자 조회
+ */
+export const oneManager = async (ctx) => {
+    let { id } = ctx.params;
+
+    try {
+        const manager = await Team.findManager(id);
+
+        ctx.res.ok({
+            data: manager,
+            message: 'Success - teamCtrl > oneManager'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            data: { id: id },
+            message: `Error - teamCtrl > oneManager: ${e.message}`
         });
     }
 };

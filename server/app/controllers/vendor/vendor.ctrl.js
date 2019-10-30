@@ -77,6 +77,8 @@ export const search = async (ctx) => {
     let page = parseInt(ctx.query.page || 1, 10);
 
     const {
+        project,
+        manager,
         vendorGb,
         countryCd,
         vendorName,
@@ -90,6 +92,8 @@ export const search = async (ctx) => {
     const { ObjectId } = Types;
 
     const query = {
+        project: ObjectId.isValid(project) ? project : '',
+        manager: ObjectId.isValid(manager) ? manager : '',
         vendorGb: vendorGb ? vendorGb : '',
         countryCd: countryCd ? countryCd : '',
         vendorName: vendorName ? vendorName : '',
@@ -127,7 +131,12 @@ export const getVendor = async (ctx) => {
     let { id } = ctx.params;
 
     try {
-        const vendor = await Vendor.findOne({ _id: id }).populate({ path: 'part' }).populate({ path: 'vendorPerson' });
+        const vendor = await Vendor
+            .findOne({ _id: id })
+            .populate({ path: 'project' })
+            .populate({ path: 'manager' })
+            .populate({ path: 'part' })
+            .populate({ path: 'vendorPerson' });
 
         ctx.res.ok({
             data: vendor,
@@ -148,6 +157,8 @@ export const getVendor = async (ctx) => {
  */
 export const create = async (ctx) => {
     let {
+        project,
+        manager,
         vendorGb,
         countryCd,
         part,
@@ -161,6 +172,8 @@ export const create = async (ctx) => {
     } = ctx.request.body;
 
     const schema = Joi.object().keys({
+        project: Joi.string().required(),
+        manager: Joi.string().required(),
         vendorGb: Joi.string().required(),
         countryCd: Joi.string().required(),
         part: Joi.string().required(),
@@ -186,6 +199,8 @@ export const create = async (ctx) => {
 
     try {
         const vendor = await Vendor.saveVendor({
+            project,
+            manager,
             vendorGb,
             countryCd,
             part,
@@ -218,6 +233,8 @@ export const create = async (ctx) => {
 export const editVendor = async (ctx) => {
     let { id } = ctx.params;
     let {
+        project,
+        manager,
         vendorGb,
         countryCd,
         part,
@@ -231,6 +248,8 @@ export const editVendor = async (ctx) => {
     } = ctx.request.body;
 
     const schema = Joi.object().keys({
+        project: Joi.string().required(),
+        manager: Joi.string().required(),
         vendorGb: Joi.string().required(),
         countryCd: Joi.string().required(),
         part: Joi.string().required(),
@@ -263,6 +282,8 @@ export const editVendor = async (ctx) => {
 
     try {
         const vendor = await Vendor.editVendor(id, {
+            project,
+            manager,
             vendorGb,
             countryCd,
             part,

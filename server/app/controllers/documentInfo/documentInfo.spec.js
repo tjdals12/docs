@@ -35,6 +35,10 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
         let major;
         let part;
         let documentGb;
+        let projectGb;
+        let projectId;
+        let teamId;
+        let managerId;
 
         it('add Part', (done) => {
             request(server)
@@ -109,10 +113,122 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
                 });
         });
 
+        it('add ProjectGb', (done) => {
+            request(server)
+                .post('/api/cmcodes')
+                .send({
+                    cdMajor: '0000',
+                    cdFName: '프로젝트 구분'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if (err) throw err;
+
+                    major = ctx.body.data._id;
+
+                    expect(ctx.body.data.cdMajor).to.equal('0000');
+                    expect(ctx.body.data.cdFName).to.equal('프로젝트 구분');
+                    done();
+                });
+        });
+
+        it('add cdMinor', (done) => {
+            request(server)
+                .patch(`/api/cmcodes/${major}/add`)
+                .send({
+                    cdMinor: '0001',
+                    cdSName: '신규'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if (err) throw err;
+
+                    projectGb = ctx.body.data.cdMinors[0];
+
+                    expect(ctx.body.data.cdMinors).have.length(1);
+                    done();
+                });
+        });
+
+        it('add Project', (done) => {
+            request(server)
+                .post('/api/projects')
+                .send({
+                    projectGb: projectGb,
+                    projectName: 'Methane Gas Sales & CFU/ARO2 Project',
+                    projectCode: 'NCC',
+                    effStaDt: '2017-03-01',
+                    effEndDt: '2018-10-31',
+                    client: '한화토탈',
+                    clientCode: 'HTC',
+                    contractor: '한화건설',
+                    contractorCode: 'HENC',
+                    memo: '프로젝트 설명'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if (err) throw err;
+
+                    projectId = ctx.body.data._id;
+
+                    expect(ctx.body.data.projectGb._id).to.equal(projectGb);
+                    expect(ctx.body.data.projectName).to.equal('Methane Gas Sales & CFU/ARO2 Project');
+                    expect(ctx.body.data.memo).to.equal('프로젝트 설명');
+                    done();
+                });
+        });
+
+        it('create team', (done) => {
+            request(server)
+                .post('/api/teams')
+                .send({
+                    part: part,
+                    teamName: '기계설계팀'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if (err) throw err;
+
+                    teamId = ctx.body.data._id;
+
+                    expect(ctx.body.data.part).instanceOf(Object);
+                    expect(ctx.body.data.part._id).to.equal(part);
+                    expect(ctx.body.data.teamName).to.equal('기계설계팀');
+                    expect(ctx.body.data.managers).have.length(0);
+                    done();
+                });
+        });
+
+        it('add manager', (done) => {
+            request(server)
+                .post(`/api/teams/${teamId}/add`)
+                .send({
+                    name: '홍길동',
+                    position: '사원',
+                    effStaDt: '2019-10-26',
+                    effEndDt: '9999-12-31'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if (err) throw err;
+
+                    const manager = ctx.body.data.managers[0];
+                    managerId = manager._id;
+
+                    expect(ctx.body.data).instanceOf(Object);
+                    expect(ctx.body.data.managers).have.length(1);
+                    expect(manager.name).to.equal('홍길동');
+                    expect(manager.position).to.equal('사원');
+                    done();
+                });
+        });
+
         it('add vendor', (done) => {
             request(server)
                 .post('/api/vendors')
                 .send({
+                    project: projectId,
+                    manager: managerId,
                     vendorGb: '01',
                     countryCd: '01',
                     part: part,
@@ -153,6 +269,8 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
 
                     vendorId = ctx.body.data._id;
 
+                    expect(ctx.body.data.project).to.equal(projectId);
+                    expect(ctx.body.data.manager).to.equal(managerId);
                     expect(ctx.body.data.part._id).to.equal(part);
                     expect(ctx.body.data.partNumber).to.equals('R-002');
                     expect(ctx.body.data.vendorPerson).have.length(3);

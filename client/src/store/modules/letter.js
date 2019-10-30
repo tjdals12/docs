@@ -65,6 +65,8 @@ const initialState = Map({
 		isSearch: false
 	}),
 	references: List(),
+	referencesPage: 1,
+	referencesLastPage: 1,
 	errors: Map({
 		projectError: false,
 		letterGbError: false,
@@ -159,8 +161,9 @@ export default handleActions(
 			type: REFERENCE_SEARCH,
 			onSuccess: (state, action) => {
 				const { data: references } = action.payload.data;
+				const lastPage = action.payload.headers['last-page'];
 
-				return state.set('references', fromJS(references)).set('keywordError', false);
+				return state.set('references', fromJS(references)).set('referencesLastPage', parseInt(lastPage || 1, 10)).set('keywordError', false);
 			},
 
 			onFailure: (state, action) => {

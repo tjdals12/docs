@@ -15,7 +15,7 @@ import {
 import PropTypes from 'prop-types';
 import VendorPersonEditForm from 'components/Form/VendorPersonEditForm';
 
-const VendorEditModal = ({ parts, data, errors, isOpen, onClose, onChange, onChangePerson, onDeletePerson, onEdit, className, ...rest }) => {
+const VendorEditModal = ({ projectList, parts, managerList, data, errors, isOpen, onClose, onChange, onChangePerson, onDeletePerson, onEdit, className, ...rest }) => {
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -30,6 +30,23 @@ const VendorEditModal = ({ parts, data, errors, isOpen, onClose, onChange, onCha
 			</ModalHeader>
 			<ModalBody>
 				<Form>
+					<FormGroup row>
+						<Col md={12}>
+							<Label for="project">프로젝트</Label>
+							<Input
+								type='select'
+								id='project'
+								name='project'
+								onChange={onChange}
+								value={data.get('project')}
+								invalid={errors.get('projectError')}>
+								<option value="">-- 프로젝트 --</option>
+								{projectList.map((project) =>
+									<option key={project.get('_id')} value={project.get('_id')}>[{project.get('projectCode')}] {project.get('projectName')}</option>
+								)}
+							</Input>
+						</Col>
+					</FormGroup>
 					<FormGroup row>
 						<Col md={6}>
 							<Label for="vendorGb">구분</Label>
@@ -135,6 +152,19 @@ const VendorEditModal = ({ parts, data, errors, isOpen, onClose, onChange, onCha
 						</Col>
 					</FormGroup>
 					<FormGroup row>
+						<Col md={4}>
+							<Label for="manager">담당자</Label>
+							<Input type="select" id="manager" name="manager" onChange={onChange} value={data.get('manager')} invalid={errors.get('managerError')}>
+								<option value="">-- 담당자 --</option>
+								{managerList.map((team) => {
+									const { teamName, managers } = team.toJS();
+
+									return (managers.map(manager => (
+										<option key={manager._id} value={manager._id}>[{teamName}] {manager.name} {manager.position}</option>
+									)))
+								})}
+							</Input>
+						</Col>
 						<Col md={8}>
 							<Label for="effDt">계약기간</Label>
 							<InputGroup id="effDt">
@@ -164,8 +194,8 @@ const VendorEditModal = ({ parts, data, errors, isOpen, onClose, onChange, onCha
 					data.get('vendorPerson').map((person, index) => {
 						const _id = person.get('_id');
 						const isError = errors.get('vendorPersonError').indexOf(_id) > -1;
-						
-						return <VendorPersonEditForm key={index} index={index} data={person} onChange={onChangePerson} onDelete={onDeletePerson} className={isError ? 'border-danger' : ''}/>
+
+						return <VendorPersonEditForm key={index} index={index} data={person} onChange={onChangePerson} onDelete={onDeletePerson} className={isError ? 'border-danger' : ''} />
 					})
 				}
 			</ModalBody>

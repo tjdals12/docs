@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import CdMinor from './cdMinor';
 import Timestamp from 'models/common/schema/Timestamp';
 import DEFINE from 'models/common';
@@ -59,7 +59,7 @@ CmcodeSchema.statics.saveCmcodeMajor = function (param) {
  * @description 하위 공통코드 추가
  * @param       {Object} param
  */
-CmcodeSchema.statics.saveCmcodeMinor = function (param) {
+CmcodeSchema.statics.saveCmcodeMinor = async function (param) {
     let {
         id,
         cdMinor,
@@ -67,16 +67,13 @@ CmcodeSchema.statics.saveCmcodeMinor = function (param) {
         cdRef1
     } = param;
 
-    const _id = CdMinor.saveCdMinor({ cdMinor, cdSName, cdRef1 });
+    const { _id: newId } = await CdMinor.saveCdMinor({ cdMinor, cdSName, cdRef1 });
 
-    return this.findOneAndUpdate(
-        { _id: id },
+    return this.findByIdAndUpdate(
+        id,
         {
             $push: {
-                cdMinors: _id
-            },
-            $set: {
-                'timestamp.updDt': DEFINE.dateNow()
+                cdMinors: newId
             }
         },
         {

@@ -10,6 +10,8 @@ const vendor = new Router();
  *  vendor:
  *      type: object
  *      required:
+ *          - project
+ *          - manager
  *          - vendorGb
  *          - vendorName
  *          - officialName
@@ -19,6 +21,14 @@ const vendor = new Router();
  *          - effStaDt
  *          - effEndDt
  *      properties:
+ *          project:
+ *              type: string
+ *              format: ObjectId
+ *              example: 5d33ef877cceb91244d16fdd
+ *          manager:
+ *              type: string
+ *              format: ObjectId
+ *              example: 5d33ef877cceb91244d16fdd
  *          vendorGb:
  *              type: string
  *              example: '01'
@@ -214,6 +224,12 @@ vendor.get('/:id', commonCtrl.checkObjectId, vendorCtrl.getVendor);
  *            schema:
  *              type: object
  *              properties:
+ *                  project:
+ *                      type: string
+ *                      example: 5d88b3766ac54e407a63ac64
+ *                  manager:
+ *                      type: string
+ *                      example: 5db537851a4fa00ee8d5458b
  *                  vendorGb:
  *                      type: string
  *                      example: '01'
@@ -286,6 +302,12 @@ vendor.post('/', vendorCtrl.create);
  *            schema: 
  *              type: object
  *              properties:
+ *                  project:
+ *                      type: string
+ *                      example: 5d88b3766ac54e407a63ac64
+ *                  manager:
+ *                      type: string
+ *                      example: 5db537851a4fa00ee8d5458b
  *                  vendorGb:
  *                      type: string
  *                      example: '02'

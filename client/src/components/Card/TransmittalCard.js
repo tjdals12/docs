@@ -3,12 +3,6 @@ import classNames from 'classnames';
 import { Card, CardHeader, CardBody, Table } from 'reactstrap';
 import PropTypes from 'prop-types';
 
-const tableStyle = {
-	display: 'block',
-	height: '100%',
-	overflow: 'scroll'
-};
-
 const heightMap = {
 	sm: {
 		height: '200px'
@@ -27,8 +21,8 @@ const TransmittalCard = ({ data, onOpenDetail, height, className, ...rest }) => 
 	return (
 		<Card className={classes} {...rest}>
 			<CardHeader className="title-font">Transmittal</CardHeader>
-			<CardBody className="p-2" style={{ ...heightMap[height] }}>
-				<Table striped style={{ ...tableStyle }}>
+			<CardBody className="p-2 overflow-scroll" style={{ ...heightMap[height] }}>
+				<Table striped>
 					<colgroup>
 						<col width="30%" />
 						<col width="5%" />
@@ -62,7 +56,7 @@ const TransmittalCard = ({ data, onOpenDetail, height, className, ...rest }) => 
 										<td className="have-link" onClick={() => onOpenDetail(_id)}>
 											{officialNumber}
 										</td>
-										<td className="text-center">{documents.length}</td>
+										<td className="text-right">{documents.length}</td>
 										<td className="text-center">{receiveDate.substr(0, 10)}</td>
 										<td className="text-center">{targetDate.substr(0, 10)}</td>
 										<td className="text-right">
@@ -75,12 +69,12 @@ const TransmittalCard = ({ data, onOpenDetail, height, className, ...rest }) => 
 								);
 							})
 						) : (
-							<tr>
-								<td colSpan="6" className="text-center text-muted font-italic">
-									접수된 이력이 없습니다.
-								</td>
-							</tr>
-						)}
+								<tr>
+									<td colSpan="5" className="text-center text-muted font-italic">
+										접수된 이력이 없습니다.
+									</td>
+								</tr>
+							)}
 					</tbody>
 				</Table>
 			</CardBody>

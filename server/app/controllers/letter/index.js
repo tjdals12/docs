@@ -220,6 +220,11 @@ letter.post('/', letterCtrl.add);
  *          - application/json
  *      parameters:
  *          - in: query
+ *            name: page
+ *            description: page number
+ *            type: string
+ *            example: 1
+ *          - in: query
  *            name: keyword
  *            description: search keyword
  *            required: true

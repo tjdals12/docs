@@ -26,7 +26,11 @@ class LetterTableContainer extends React.Component {
 	};
 
 	handleOpen = (name) => () => {
-		const { ModalActions } = this.props;
+		const { LetterActions, ModalActions } = this.props;
+
+		if (name === 'letterAdd') {
+			LetterActions.initialize('add');
+		}
 
 		ModalActions.open(name);
 	};

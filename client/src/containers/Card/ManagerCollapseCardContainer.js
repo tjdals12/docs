@@ -29,6 +29,7 @@ class ManagerCollaseCardContainer extends React.Component {
         const { TeamActions } = this.props;
 
         TeamActions.getTeam({ id });
+        TeamActions.initialize('teamErrors');
     }
 
     getManager = (id) => {
@@ -132,7 +133,7 @@ class ManagerCollaseCardContainer extends React.Component {
 
     render() {
         const { isOpen } = this.state;
-        const { isOpenQuestion, parts, teams, team, add, edit, manager, addManager, editManager, count, page, loading } = this.props;
+        const { isOpenQuestion, parts, teams, team, add, edit, teamErrors, manager, addManager, editManager, managerErrors, count, page, loading } = this.props;
 
         if (loading || loading === undefined || !parts) return null;
 
@@ -150,9 +151,11 @@ class ManagerCollaseCardContainer extends React.Component {
                         team={team}
                         add={add}
                         edit={edit}
+                        teamErrors={teamErrors}
                         manager={manager}
                         addManager={addManager}
                         editManager={editManager}
+                        managerErrors={managerErrors}
                         count={count}
                         page={page}
                         isOpen={isOpen}
@@ -183,9 +186,11 @@ export default connect(
         team: state.team.get('team'),
         add: state.team.get('add'),
         edit: state.team.get('edit'),
+        teamErrors: state.team.get('teamErrors'),
         manager: state.team.get('manager'),
         addManager: state.team.get('addManager'),
         editManager: state.team.get('editManager'),
+        managerErrors: state.team.get('managerErrors'),
         count: state.team.get('count'),
         page: state.team.get('page'),
         loading: state.pender.pending['team/GET_TEAMS']

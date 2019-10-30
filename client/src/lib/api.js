@@ -74,7 +74,7 @@ export const getLetters = ({ page }) => axios.get(`/api/letters?page=${page}`);
 export const searchLetters = (page, param) => axios.post(`/api/letters/search?page=${page}`, { ...param });
 export const getLetter = ({ id }) => axios.get(`${real}/api/letters/${id}`);
 export const addLetter = (param) => axios.post(`${real}/api/letters`, { ...param });
-export const referenceSearch = ({ keyword }) => axios.get(`${real}/api/letters/ref/search?keyword=${keyword}`);
+export const referenceSearch = ({ page, keyword }) => axios.get(`${real}/api/letters/ref/search?page=${page}&keyword=${keyword}`);
 export const editLetter = ({ id, param }) => axios.patch(`${real}/api/letters/${id}/edit`, { ...param });
 export const replyLetter = ({ id, yn, replyDate }) => axios.patch(`${real}/api/letters/${id}/reply`, { yn, replyDate });
 export const cancelLetter = ({ id, yn, reason }) => axios.patch(`${real}/api/letters/${id}/cancel`, { yn, reason });
@@ -116,6 +116,7 @@ export const logout = () => axios.post(`${real}/api/accounts/logout`);
 
 /** Team */
 export const getTeams = (page) => axios.get(`${real}/api/teams?page=${page}`);
+export const getTeamsForSelect = () => axios.get(`${real}/api/teams/forselect`);
 export const getTeam = ({ id }) => axios.get(`${real}/api/teams/${id}`);
 export const addTeam = (param) => axios.post(`${real}/api/teams`, { ...param });
 export const editTeam = ({ id, param }) => axios.patch(`${real}/api/teams/${id}/edit`, { ...param });

@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { Form, FormGroup, Label, Col, Input, InputGroup, InputGroupAddon, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 
-const VendorSearchForm = ({ parts, search, onChange, onSearch, onFullPeriod, className, ...rest }) => {
+const VendorSearchForm = ({ projectList, managerList, parts, search, onChange, onSearch, onFullPeriod, className, ...rest }) => {
 	const classes = classNames(
 		'bg-white mb-3 px-2 py-2 border rounded hidden-lg hidden-md hidden-sm hidden-xs',
 		className
@@ -20,6 +20,32 @@ const VendorSearchForm = ({ parts, search, onChange, onSearch, onFullPeriod, cla
 			{...rest}
 		>
 			<FormGroup row>
+				<Label md={1} className='text-right'>
+					프로젝트
+				</Label>
+				<Col md={2}>
+					<Input type='select' name='project' value={search.get('project')} onChange={onChange}>
+						<option value=''>-- 프로젝트 --</option>
+						{projectList.map((project) => (
+							<option key={project.get('_id')} value={project.get('_id')}>[{project.get('projectCode')}] {project.get('projectName')}</option>
+						))}
+					</Input>
+				</Col>
+				<Label md={1} className='text-right'>
+					담당자
+				</Label>
+				<Col md={2}>
+					<Input type='select' name='manager' value={search.get('manager')} onChange={onChange}>
+						<option value=''>-- 담당자 --</option>
+						{managerList.map(team => {
+							const { teamName, managers } = team.toJS();
+
+							return (managers.map((manager) => (
+								<option key={manager._id} value={manager._id}>[{teamName}] {manager.name} {manager.position}</option>
+							)))
+						})}
+					</Input>
+				</Col>
 				<Label md={1} className="text-right">
 					Gb
 				</Label>
@@ -39,30 +65,6 @@ const VendorSearchForm = ({ parts, search, onChange, onSearch, onFullPeriod, cla
 						<option value="01">국내</option>
 						<option value="02">해외</option>
 					</Input>
-				</Col>
-				<Label md={1} className="text-right">
-					업체명
-				</Label>
-				<Col md={2}>
-					<Input
-						type="text"
-						name="vendorName"
-						placeholder="ex) 한화건설"
-						value={search.get('vendorName')}
-						onChange={onChange}
-					/>
-				</Col>
-				<Label md={1} className="text-right">
-					관리번호
-				</Label>
-				<Col md={2}>
-					<Input
-						type="text"
-						name="officialName"
-						placeholder="ex) MCU"
-						value={search.get('officialName')}
-						onChange={onChange}
-					/>
 				</Col>
 			</FormGroup>
 
@@ -93,6 +95,33 @@ const VendorSearchForm = ({ parts, search, onChange, onSearch, onFullPeriod, cla
 					/>
 				</Col>
 				<Label md={1} className="text-right">
+					업체명
+				</Label>
+				<Col md={2}>
+					<Input
+						type="text"
+						name="vendorName"
+						placeholder="ex) 한화건설"
+						value={search.get('vendorName')}
+						onChange={onChange}
+					/>
+				</Col>
+				<Label md={1} className="text-right">
+					관리번호
+				</Label>
+				<Col md={2}>
+					<Input
+						type="text"
+						name="officialName"
+						placeholder="ex) MCU"
+						value={search.get('officialName')}
+						onChange={onChange}
+					/>
+				</Col>
+			</FormGroup>
+
+			<FormGroup row className="mb-0">
+				<Label md={1} className="text-right">
 					계약기간
 				</Label>
 				<Col md={4}>
@@ -111,10 +140,7 @@ const VendorSearchForm = ({ parts, search, onChange, onSearch, onFullPeriod, cla
 						전체기간
 					</Button>
 				</Col>
-			</FormGroup>
-
-			<FormGroup row className="mb-0">
-				<Col md={{ size: 3, offset: 9 }}>
+				<Col md={{ size: 3, offset: 3 }}>
 					<Button type="submit" color="primary" className="w-100" onClick={onSearch}>
 						SEARCH
 					</Button>

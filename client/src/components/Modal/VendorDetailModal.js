@@ -66,6 +66,22 @@ const VendorDetailModal = ({
 					<tbody>
 						<tr className="border-bottom">
 							<th scope="row" className="text-right bg-light">
+								프로젝트
+							</th>
+							<td colSpan="3">
+								[{data.getIn(['project', 'projectCode'])}] {data.getIn(['project', 'projectName'])}
+							</td>
+						</tr>
+						<tr className="border-bottom">
+							<th scope="row" className="text-right bg-light">
+								담당자
+							</th>
+							<td colSpan="3">
+								{data.getIn(['manager', 'name'])} {data.getIn(['manager', 'position'])}
+							</td>
+						</tr>
+						<tr className="border-bottom">
+							<th scope="row" className="text-right bg-light">
 								구분
 							</th>
 							<td>{data.get('vendorGb')}</td>

@@ -9,6 +9,14 @@ import Person from './person';
  * @description 업체
  */
 const VendorSchema = new Schema({
+    project: {
+        type: Schema.Types.ObjectId,
+        ref: 'Project'
+    },
+    manager: {
+        type: Schema.Types.ObjectId,
+        ref: 'Manager'
+    },
     vendorGb: {
         type: String,
         default: DEFINE.VENDOR_GB.CONTRACT,
@@ -86,6 +94,8 @@ VendorSchema.virtual('period').get(function () {
  */
 VendorSchema.statics.searchVendors = function (param, page) {
     const {
+        project,
+        manager,
         vendorGb,
         countryCd,
         vendorName,
@@ -98,24 +108,15 @@ VendorSchema.statics.searchVendors = function (param, page) {
 
     return this.aggregate([
         {
-            $lookup: {
-                from: 'cdminors',
-                localField: 'part',
-                foreignField: '_id',
-                as: 'part'
-            }
-        },
-        {
-            $unwind: '$part'
-        },
-        {
             $match: {
                 $and: [
+                    { project: project === '' ? { $ne: DEFINE.COMMON.NONE_ID } : Types.ObjectId(project) },
+                    { manager: manager === '' ? { $ne: DEFINE.COMMON.NONE_ID } : Types.ObjectId(manager) },
                     { vendorGb: { $regex: vendorGb + '.*', $options: 'i' } },
                     { countryCd: { $regex: countryCd + '.*', $options: 'i' } },
                     { vendorName: { $regex: vendorName + '.*', $options: 'i' } },
                     { officialName: { $regex: officialName + '.*', $options: 'i' } },
-                    { 'part._id': part === '' ? { $ne: DEFINE.COMMON.NONE_ID } : Types.ObjectId(part) },
+                    { part: part === '' ? { $ne: DEFINE.COMMON.NONE_ID } : Types.ObjectId(part) },
                     { partNumber: { $regex: partNumber + '.*', $options: 'i' } },
                     {
                         $and: [
@@ -127,7 +128,20 @@ VendorSchema.statics.searchVendors = function (param, page) {
             }
         },
         {
+            $lookup: {
+                from: 'cdminors',
+                localField: 'part',
+                foreignField: '_id',
+                as: 'part'
+            }
+        },
+        {
+            $unwind: '$part'
+        },
+        {
             $project: {
+                project: 1,
+                manager: 1,
                 vendorGb: {
                     $cond: {
                         if: { $eq: ['$vendorGb', '01'] },
@@ -171,6 +185,8 @@ VendorSchema.statics.searchVendors = function (param, page) {
  */
 VendorSchema.statics.searchVendorsCount = function (param) {
     const {
+        project,
+        manager,
         vendorGb,
         countryCd,
         vendorName,
@@ -183,32 +199,10 @@ VendorSchema.statics.searchVendorsCount = function (param) {
 
     return this.aggregate([
         {
-            $lookup: {
-                from: 'cdminors',
-                localField: 'part',
-                foreignField: '_id',
-                as: 'part'
-            }
-        },
-        {
-            $unwind: '$part'
-        },
-        {
-            $project: {
-                vendorGb: 1,
-                vendorName: 1,
-                vendorPerson: 1,
-                officialName: 1,
-                part: '$part',
-                partNumber: 1,
-                countryCd: 1,
-                effStaDt: 1,
-                effEndDt: 1
-            }
-        },
-        {
             $match: {
                 $and: [
+                    { project: project === '' ? { $ne: DEFINE.COMMON.NONE_ID } : Types.ObjectId(project) },
+                    { manager: manager === '' ? { $ne: DEFINE.COMMON.NONE_ID } : Types.ObjectId(manager) },
                     { vendorGb: { $regex: vendorGb + '.*', $options: 'i' } },
                     { countryCd: { $regex: countryCd + '.*', $options: 'i' } },
                     { vendorName: { $regex: vendorName + '.*', $options: 'i' } },
@@ -225,6 +219,32 @@ VendorSchema.statics.searchVendorsCount = function (param) {
             }
         },
         {
+            $lookup: {
+                from: 'cdminors',
+                localField: 'part',
+                foreignField: '_id',
+                as: 'part'
+            }
+        },
+        {
+            $unwind: '$part'
+        },
+        {
+            $project: {
+                project: 1,
+                manager: 1,
+                vendorGb: 1,
+                vendorName: 1,
+                vendorPerson: 1,
+                officialName: 1,
+                part: '$part',
+                partNumber: 1,
+                countryCd: 1,
+                effStaDt: 1,
+                effEndDt: 1
+            }
+        },
+        {
             $count: 'count'
         }
     ]);
@@ -238,6 +258,8 @@ VendorSchema.statics.searchVendorsCount = function (param) {
  */
 VendorSchema.statics.saveVendor = async function (param) {
     let {
+        project,
+        manager,
         vendorGb,
         countryCd,
         part,
@@ -255,7 +277,7 @@ VendorSchema.statics.saveVendor = async function (param) {
     if (persons.length > 0)
         ids = await Person.savePersons(persons);
 
-    const vendor = new this({ vendorGb, countryCd, part, partNumber, vendorName, officialName, itemName, effStaDt, effEndDt, vendorPerson: ids });
+    const vendor = new this({ project, manager, vendorGb, countryCd, part, partNumber, vendorName, officialName, itemName, effStaDt, effEndDt, vendorPerson: ids });
 
     await vendor.save();
 
@@ -271,6 +293,8 @@ VendorSchema.statics.saveVendor = async function (param) {
  */
 VendorSchema.statics.editVendor = async function (id, param) {
     let {
+        project,
+        manager,
         vendorGb,
         countryCd,
         part,
@@ -291,6 +315,8 @@ VendorSchema.statics.editVendor = async function (id, param) {
         { _id: id },
         {
             $set: {
+                project,
+                manager,
                 vendorGb,
                 countryCd,
                 part,

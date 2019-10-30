@@ -9,6 +9,7 @@ import LetterEditModalContainer from 'containers/Modal/LetterEditModalContainer'
 import ReferenceSearchModalContainer from 'containers/Modal/ReferenceSearchModalContainer';
 import DocumentDetailModalContainer from 'containers/Modal/DocumentDetailModalContainer';
 import VendorLetterDetailModalContainer from 'containers/Modal/VendorLetterDetailModalContainer';
+import VendorDetailModalContainer from 'containers/Modal/VendorDetailModalContainer';
 import queryString from 'query-string';
 
 const InternalTransmittalPage = (props) => {
@@ -29,6 +30,7 @@ const InternalTransmittalPage = (props) => {
 				<ReferenceSearchModalContainer />
 				<DocumentDetailModalContainer />
 				<VendorLetterDetailModalContainer />
+				<VendorDetailModalContainer />
 			</Page>
 		</ScrollToTop>
 	);
