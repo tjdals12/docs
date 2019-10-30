@@ -4,10 +4,13 @@ import { MdCheck } from 'react-icons/md';
 import PropTypes from 'prop-types';
 import SearchForm from 'components/SearchForm';
 import Typography from 'components/Typography';
+import Pagination from 'components/Pagination';
 
 const ReferenceSearchModal = ({
 	keywordError,
 	references,
+	page,
+	lastPage,
 	selectedReferences,
 	isOpen,
 	onClose,
@@ -41,7 +44,7 @@ const ReferenceSearchModal = ({
 						* 검색결과가 표시됩니다.
 					</Typography>
 				) : (
-						<Table bordered striped hover>
+						[<Table key="table" bordered striped hover>
 							<colgroup>
 								<col width="90%" />
 								<col width="10%" />
@@ -65,7 +68,17 @@ const ReferenceSearchModal = ({
 									);
 								})}
 							</tbody>
-						</Table>
+						</Table>,
+
+						<Pagination
+							key="pagination"
+							currentPage={page}
+							lastPage={lastPage}
+							onPage={onSearch}
+							size="md"
+							aria-label="Page navigation"
+							listClassName="flex-row justify-content-end ml-auto"
+						/>]
 					)}
 			</ModalBody>
 

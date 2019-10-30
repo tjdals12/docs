@@ -24,10 +24,11 @@ class ReferenceSearchModalContainer extends React.Component {
 		LetterActions.onChange({ name, value });
 	};
 
-	handleSearch = () => {
+	handleSearch = (page) => {
 		const { LetterActions, keyword } = this.props;
 
-		LetterActions.referenceSearch({ keyword });
+		LetterActions.referenceSearch({ page, keyword });
+		LetterActions.onChange({ name: 'referencesPage', value: page });
 	};
 
 	handleChecked = (e) => {
@@ -62,11 +63,19 @@ class ReferenceSearchModalContainer extends React.Component {
 	};
 
 	componentDidUpdate(prevProps, prevState) {
+		if (prevProps.isAdd === true && this.props.isAdd !== prevProps.isAdd) {
+			this.setState({
+				selectedReferences: []
+			})
+		}
+
 		if (prevProps.isEdit === false && this.props.isEdit !== prevProps.isEdit) {
 			this.setState({
 				selectedReferences: this.props.selectedReferences
 			});
-		} else if (prevProps.isEdit === true && this.props.isEdit !== prevProps.isEdit) {
+		}
+
+		if (prevProps.isEdit === true && this.props.isEdit !== prevProps.isEdit) {
 			this.setState({
 				selectedReferences: []
 			});
@@ -74,12 +83,14 @@ class ReferenceSearchModalContainer extends React.Component {
 	}
 
 	render() {
-		const { isOpen, keywordError, references } = this.props;
+		const { isOpen, keywordError, references, page, lastPage } = this.props;
 
 		return (
 			<ReferenceSearchModal
 				keywordError={keywordError}
 				references={references}
+				page={page}
+				lastPage={lastPage}
 				selectedReferences={this.state.selectedReferences}
 				isOpen={isOpen}
 				onClose={this.handleClose}
@@ -95,11 +106,14 @@ class ReferenceSearchModalContainer extends React.Component {
 
 export default connect(
 	(state) => ({
+		isAdd: state.modal.get('letterAddModal'),
 		isEdit: state.modal.get('letterEditModal'),
 		keyword: state.letter.get('keyword'),
 		keywordError: state.letter.get('keywordError'),
 		references: state.letter.get('references'),
-		selectedReferences: state.letter.getIn([ 'edit', 'reference' ]),
+		page: state.letter.get('referencesPage'),
+		lastPage: state.letter.get('referencesLastPage'),
+		selectedReferences: state.letter.getIn(['edit', 'reference']),
 		isOpen: state.modal.get('referenceSearchModal')
 	}),
 	(dispatch) => ({
