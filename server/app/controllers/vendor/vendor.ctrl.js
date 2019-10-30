@@ -127,7 +127,12 @@ export const getVendor = async (ctx) => {
     let { id } = ctx.params;
 
     try {
-        const vendor = await Vendor.findOne({ _id: id }).populate({ path: 'part' }).populate({ path: 'vendorPerson' });
+        const vendor = await Vendor
+            .findOne({ _id: id })
+            .populate({ path: 'project' })
+            .populate({ path: 'manager' })
+            .populate({ path: 'part' })
+            .populate({ path: 'vendorPerson' });
 
         ctx.res.ok({
             data: vendor,
