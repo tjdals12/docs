@@ -208,8 +208,23 @@ LetterSchema.statics.saveLetter = async function (param) {
     return this.findOne({ _id: letter._id });
 };
 
-LetterSchema.statics.referenceSearch = async function (keyword) {
-    let documents = await Document.find({
+/**
+ * @author      minz-logger
+ * @date        2019. 09. 19
+ * @description 참조할 문서 검색
+ */
+LetterSchema.statics.referenceSearch = async function (page, keyword) {
+    let documents = await Document
+        .find({
+            $or: [
+                { documentNumber: { $regex: keyword + '.*', $options: 'i' } },
+                { documentTitle: { $regex: keyword + '.*', $options: 'i' } }
+            ]
+        })
+        .sort({ 'timestamp.regDt': -1 })
+        .skip((page - 1) * 10)
+        .limit(10);
+    let documentsCount = await Document.countDocuments({
         $or: [
             { documentNumber: { $regex: keyword + '.*', $options: 'i' } },
             { documentTitle: { $regex: keyword + '.*', $options: 'i' } }
@@ -223,7 +238,13 @@ LetterSchema.statics.referenceSearch = async function (keyword) {
         };
     });
 
-    let vendorLetters = await VendorLetter.find({ officialNumber: { $regex: keyword + '.*', $options: 'i' } }).populate({ path: 'vendor' });
+    let vendorLetters = await VendorLetter
+        .find({ officialNumber: { $regex: keyword + '.*', $options: 'i' } })
+        .sort({ 'timestamp.regDt': -1 })
+        .skip((page - 1) * 10)
+        .limit(10)
+        .populate({ path: 'vendor' });
+    let vendorLettersCount = await VendorLetter.countDocuments({ officialNumber: { $regex: keyword + '.*', $options: 'i' } });
 
     vendorLetters = vendorLetters.map(({ _id, vendor, officialNumber, timestamp }) => {
         return {
@@ -232,7 +253,10 @@ LetterSchema.statics.referenceSearch = async function (keyword) {
         };
     });
 
-    return documents.concat(vendorLetters);
+    return {
+        result: documents.concat(vendorLetters),
+        lastPage: Math.ceil((documentsCount > vendorLettersCount ? documentsCount : vendorLettersCount) / 10)
+    };
 };
 
 /**
