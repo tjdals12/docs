@@ -148,6 +148,8 @@ export const getVendor = async (ctx) => {
  */
 export const create = async (ctx) => {
     let {
+        project,
+        manager,
         vendorGb,
         countryCd,
         part,
@@ -161,6 +163,8 @@ export const create = async (ctx) => {
     } = ctx.request.body;
 
     const schema = Joi.object().keys({
+        project: Joi.string().required(),
+        manager: Joi.string().required(),
         vendorGb: Joi.string().required(),
         countryCd: Joi.string().required(),
         part: Joi.string().required(),
@@ -186,6 +190,8 @@ export const create = async (ctx) => {
 
     try {
         const vendor = await Vendor.saveVendor({
+            project,
+            manager,
             vendorGb,
             countryCd,
             part,
@@ -218,6 +224,8 @@ export const create = async (ctx) => {
 export const editVendor = async (ctx) => {
     let { id } = ctx.params;
     let {
+        project,
+        manager,
         vendorGb,
         countryCd,
         part,
@@ -231,6 +239,8 @@ export const editVendor = async (ctx) => {
     } = ctx.request.body;
 
     const schema = Joi.object().keys({
+        project: Joi.string().required(),
+        manager: Joi.string().required(),
         vendorGb: Joi.string().required(),
         countryCd: Joi.string().required(),
         part: Joi.string().required(),
@@ -263,6 +273,8 @@ export const editVendor = async (ctx) => {
 
     try {
         const vendor = await Vendor.editVendor(id, {
+            project,
+            manager,
             vendorGb,
             countryCd,
             part,

@@ -9,6 +9,14 @@ import Person from './person';
  * @description 업체
  */
 const VendorSchema = new Schema({
+    project: {
+        type: Schema.Types.ObjectId,
+        ref: 'Project'
+    },
+    manager: {
+        type: Schema.Types.ObjectId,
+        ref: 'Manager'
+    },
     vendorGb: {
         type: String,
         default: DEFINE.VENDOR_GB.CONTRACT,
@@ -238,6 +246,8 @@ VendorSchema.statics.searchVendorsCount = function (param) {
  */
 VendorSchema.statics.saveVendor = async function (param) {
     let {
+        project,
+        manager,
         vendorGb,
         countryCd,
         part,
@@ -255,7 +265,7 @@ VendorSchema.statics.saveVendor = async function (param) {
     if (persons.length > 0)
         ids = await Person.savePersons(persons);
 
-    const vendor = new this({ vendorGb, countryCd, part, partNumber, vendorName, officialName, itemName, effStaDt, effEndDt, vendorPerson: ids });
+    const vendor = new this({ project, manager, vendorGb, countryCd, part, partNumber, vendorName, officialName, itemName, effStaDt, effEndDt, vendorPerson: ids });
 
     await vendor.save();
 
@@ -271,6 +281,8 @@ VendorSchema.statics.saveVendor = async function (param) {
  */
 VendorSchema.statics.editVendor = async function (id, param) {
     let {
+        project,
+        manager,
         vendorGb,
         countryCd,
         part,
@@ -291,6 +303,8 @@ VendorSchema.statics.editVendor = async function (id, param) {
         { _id: id },
         {
             $set: {
+                project,
+                manager,
                 vendorGb,
                 countryCd,
                 part,
