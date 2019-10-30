@@ -186,6 +186,17 @@ export const add = async (ctx) => {
  * @description 참조할 문서 검색
  */
 export const referenceSearch = async (ctx) => {
+    let page = parseInt(ctx.query.page || 1, 10);
+
+    if (page < 1) {
+        ctx.res.badRequest({
+            data: page,
+            message: 'Page can\'t be less than 1'
+        });
+
+        return;
+    }
+
     let { keyword } = ctx.query;
 
     if (!keyword) {
@@ -198,7 +209,9 @@ export const referenceSearch = async (ctx) => {
     }
 
     try {
-        const result = await Letter.referenceSearch(keyword);
+        const { result, lastPage } = await Letter.referenceSearch(page, keyword);
+
+        ctx.set('Last-Page', lastPage);
 
         ctx.res.ok({
             data: result,
