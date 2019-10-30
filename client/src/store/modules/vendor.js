@@ -163,6 +163,8 @@ export default handleActions(
 
 				return state
 					.set('vendor', fromJS(vendor))
+					.setIn(['edit', 'project'], vendor.project._id)
+					.setIn(['edit', 'manager'], vendor.manager._id)
 					.setIn(['edit', 'vendorGb'], vendor.vendorGb === '계약' ? '01' : '02')
 					.setIn(['edit', 'countryCd'], vendor.countryCd === '국내' ? '01' : '02')
 					.setIn(['edit', 'vendorName'], vendor.vendorName)
