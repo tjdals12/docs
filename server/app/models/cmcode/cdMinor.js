@@ -32,7 +32,7 @@ const CdMinorSchema = new Schema({
  * @date 2019. 07. 30
  * @description 하위 공통코드 저장
  */
-CdMinorSchema.statics.saveCdMinor = function (param) {
+CdMinorSchema.statics.saveCdMinor = async function (param) {
     let {
         cdMinor,
         cdSName,
@@ -40,9 +40,7 @@ CdMinorSchema.statics.saveCdMinor = function (param) {
     } = param;
 
     const newCdMinor = this({ cdMinor, cdSName, cdRef1 });
-    newCdMinor.save();
-
-    return newCdMinor;
+    return newCdMinor.save();
 };
 
 /**
