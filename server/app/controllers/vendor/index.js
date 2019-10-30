@@ -10,6 +10,8 @@ const vendor = new Router();
  *  vendor:
  *      type: object
  *      required:
+ *          - project
+ *          - manager
  *          - vendorGb
  *          - vendorName
  *          - officialName
@@ -19,6 +21,14 @@ const vendor = new Router();
  *          - effStaDt
  *          - effEndDt
  *      properties:
+ *          project:
+ *              type: string
+ *              format: ObjectId
+ *              example: 5d33ef877cceb91244d16fdd
+ *          manager:
+ *              type: string
+ *              format: ObjectId
+ *              example: 5d33ef877cceb91244d16fdd
  *          vendorGb:
  *              type: string
  *              example: '01'
