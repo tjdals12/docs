@@ -77,6 +77,8 @@ export const search = async (ctx) => {
     let page = parseInt(ctx.query.page || 1, 10);
 
     const {
+        project,
+        manager,
         vendorGb,
         countryCd,
         vendorName,
@@ -90,6 +92,8 @@ export const search = async (ctx) => {
     const { ObjectId } = Types;
 
     const query = {
+        project: ObjectId.isValid(project) ? project : '',
+        manager: ObjectId.isValid(manager) ? manager : '',
         vendorGb: vendorGb ? vendorGb : '',
         countryCd: countryCd ? countryCd : '',
         vendorName: vendorName ? vendorName : '',
