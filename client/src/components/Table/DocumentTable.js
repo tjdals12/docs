@@ -9,14 +9,13 @@ import Pagination from 'components/Pagination';
 const DocumentTable = ({
 	loading,
 	writable,
-	search,
 	page,
 	lastPage,
-	data,
+	documents,
+	checkedList,
 	onOpenAdd,
 	onDelete,
 	onOpenDetail,
-	checkedList,
 	onChecked,
 	onCheckedAll,
 	onChange,
@@ -29,24 +28,24 @@ const DocumentTable = ({
 
 	return (
 		<React.Fragment>
-			{writable && <Row className="hidden-md hidden-sm hidden-xs">
-				<Col md={4}>
-					<Button color="primary" className="mr-2" onClick={onOpenAdd}>
-						추가
-					</Button>
+			{writable && (
+				<Row className="hidden-md hidden-sm hidden-xs">
+					<Col md={4}>
+						<Button color="primary" className="mr-2" onClick={onOpenAdd}>
+							추가
+						</Button>
 
-					<Button color="secondary" onClick={onDelete}>
-						삭제
-					</Button>
-				</Col>
-			</Row>}
-
-			{loading && (
-				<Loader size={20} margin={10} />
+						<Button color="secondary" onClick={onDelete}>
+							삭제
+						</Button>
+					</Col>
+				</Row>
 			)}
 
-			{!loading && ([
-				<Table className={classes} {...rest} key='table'>
+			{loading && <Loader size={20} margin={10} />}
+
+			{!loading && (
+				<Table className={classes} {...rest}>
 					<thead>
 						<tr>
 							<th width="3%" className="text-center">
@@ -54,98 +53,95 @@ const DocumentTable = ({
 							</th>
 							<th width="6%" className="text-center">
 								구분
-					</th>
+							</th>
 							<th width="15%" className="text-center">
 								문서번호
-					</th>
+							</th>
 							<th width="25%" className="text-center">
 								문서명
-					</th>
+							</th>
 							<th width="5%" className="text-center">
 								Rev.
-					</th>
+							</th>
 							<th width="10%" className="text-center">
 								접수일
-					</th>
+							</th>
 							<th width="" className="text-center">
 								상태
-					</th>
+							</th>
 							<th width="8%" className="text-center">
 								보류여부
-					</th>
+							</th>
 							<th width="7%" className="text-center">
 								삭제여부
-					</th>
+							</th>
 							<th width="6%" className="text-center">
 								중요도
-					</th>
+							</th>
 						</tr>
 					</thead>
 					<tbody>
-						{data.map((item) => {
-							let { _id: id, level } = item.toJS();
+						{documents.map((document) => {
+							let { _id, documentGb, documentNumber, documentTitle, documentRev, documentStatus, holdYn, deleteYn, level, timestamp } = document;
 
 							return (
-								<tr key={id}>
+								<tr key={_id}>
 									<td className="text-center">
 										<input
 											type="checkbox"
-											value={id}
-											checked={checkedList.includes(id)}
+											value={_id}
+											checked={checkedList.includes(_id)}
 											onChange={onChecked}
 										/>
 									</td>
-									<td className="text-center">{item.getIn(['documentGb', 'cdSName'])}</td>
-									<td>{item.get('documentNumber')}</td>
+									<td className="text-center">{documentGb.cdSName}</td>
+									<td>{documentNumber}</td>
 									<td>
-										<span className="have-link" onClick={onOpenDetail({ id })}>
-											{item.get('documentTitle')}
+										<span className="have-link" onClick={() => onOpenDetail(_id)}>
+											{documentTitle}
 										</span>
 									</td>
-									<td className="text-center">{item.get('documentRev')}</td>
-									<td className="text-center">{item.getIn(['timestamp', 'regDt']).substr(0, 10)}</td>
+									<td className="text-center">{documentRev}</td>
+									<td className="text-center">{timestamp.regDt.substr(0, 10)}</td>
 									<td className="text-center">
-										{item.getIn(['documentStatus', -1, 'statusName'])}
+										{documentStatus[documentStatus.length - 1].statusName}
 										<br />
 										<small className="text-primary">
-											({item.getIn(['documentStatus', -1, 'timestamp', 'regDt']).substr(0, 10)})
-								</small>
+											{documentStatus[documentStatus.length - 1].timestamp.regDt.substr(0, 10)}
+										</small>
 									</td>
 									<td className="text-center">
-										{item.getIn(['holdYn', -1, 'yn'])}
+										{holdYn[holdYn.length - 1].yn}
 										<br />
-										{item.getIn(['holdYn', -1, 'yn']) === 'YES' && (
+										{holdYn[holdYn.length - 1].yn === 'YES' && (
 											<small className="text-danger font-weight-bold">
-												({item.getIn(['holdYn', -1, 'effStaDt']).substr(0, 10)})
-									</small>
+												{holdYn[holdYn.length - 1].effStaDt.substr(0, 10)}
+											</small>
 										)}
 									</td>
 									<td className="text-center">
-										{item.getIn(['deleteYn', 'yn'])}
+										{deleteYn.yn}
 										<br />
-										{item.getIn(['deleteYn', 'yn']) === 'YES' && (
+										{deleteYn.yn === 'YES' && (
 											<small className="text-danger font-weight-bold">
-												({item.getIn(['deleteYn', 'deleteDt']).substr(0, 10)})
-									</small>
+												{deleteYn.deleteDt.substr(0, 10)}
+											</small>
 										)}
 									</td>
 									<td className="text-center">
-										{level.number > 3 ? (
-											<span className="text-danger">{level.description}</span>
-										) : level.number === 3 ? (
-											<span className="text-info">{level.description}</span>
-										) : (
-													<span className="text-success">{level.description}</span>
-												)}
+										{level.number > 3 ? <span className="text-danger">{level.description}</span>
+											: level.number === 3 ? <span className="text-info">{level.description}</span>
+												: <span className="text-success">{level.description}</span>}
 									</td>
 								</tr>
 							);
 						})}
 					</tbody>
-				</Table>,
+				</Table>
+			)}
 
+			{!loading && (
 				<Pagination
-					key="pagination"
 					currentPage={page}
 					lastPage={lastPage}
 					onPage={onPage}
@@ -153,22 +149,43 @@ const DocumentTable = ({
 					aria-label="Page navigation"
 					listClassName="flex-row justify-content-end ml-auto"
 				/>
-			])}
+			)}
 		</React.Fragment>
 	);
 };
 
 DocumentTable.propTypes = {
+	loading: PropTypes.bool,
 	writable: PropTypes.bool,
 	page: PropTypes.number,
-	lastPage: PropTypes.number
+	lastPage: PropTypes.number,
+	documents: PropTypes.array.isRequired,
+	checkedList: PropTypes.array,
+	onOpenAdd: PropTypes.func,
+	onDelete: PropTypes.func,
+	onOpenDetail: PropTypes.func,
+	onChecked: PropTypes.func,
+	onCheckedAll: PropTypes.func,
+	onChange: PropTypes.func,
+	onSearch: PropTypes.func,
+	onPage: PropTypes.func,
+	className: PropTypes.string
 };
 
 DocumentTable.defaultProps = {
 	loading: false,
 	writable: false,
 	page: 1,
-	lastPage: 1
+	lastPage: 1,
+	checkedList: [],
+	onOpenAdd: () => console.warn('Warning: onOpenAdd is not defined'),
+	onDelete: () => console.warn('Warning: onDelete is not defined'),
+	onOpenDetail: () => console.warn('Warning: onOpenDetail is not defined'),
+	onChecked: () => console.warn('Warning: onChecked is not defined'),
+	onCheckedAll: () => console.warn('Warning: onCheckedAll is not defined'),
+	onChange: () => console.warn('Warning: onChange is not defined'),
+	onSearch: () => console.warn('Warning: onSearch is not defined'),
+	onPage: () => console.warn('Warning: onPage is not defined')
 }
 
 export default DocumentTable;

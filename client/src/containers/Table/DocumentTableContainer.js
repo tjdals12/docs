@@ -1,6 +1,6 @@
 import React from 'react';
-import DocumentTable from 'components/Table/DocumentTable';
 import { withRouter } from 'react-router-dom';
+import DocumentTable from 'components/Table/DocumentTable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as documentActions from 'store/modules/document';
@@ -41,7 +41,7 @@ class DocumentTableContainer extends React.Component {
 		DocumentActions.deleteDocuments(checkedList.toJS(), page);
 	};
 
-	handleOpenDetail = ({ id }) => async () => {
+	handleOpenDetail = async (id) => {
 		const { ModalActions, DocumentActions } = this.props;
 
 		await this.getDocument(id);
@@ -69,7 +69,7 @@ class DocumentTableContainer extends React.Component {
 	render() {
 		const { writable, documents, checkedList, lastPage, page, loading, searchLoading } = this.props;
 
-		if (loading) return <div>Test</div>;
+		if (loading) return null;
 
 		return (
 			<DocumentTable
@@ -77,7 +77,7 @@ class DocumentTableContainer extends React.Component {
 				writable={writable}
 				page={page}
 				lastPage={lastPage}
-				data={documents}
+				documents={documents.toJS()}
 				checkedList={checkedList.toJS()}
 				onOpenAdd={this.handleOpenAdd}
 				onDelete={this.handleDelete}

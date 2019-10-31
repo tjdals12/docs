@@ -26,11 +26,7 @@ const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeri
 				<Col md={2}>
 					<Input type="select" name="documentGb" id="documentGb" onChange={onChange}>
 						<option value="">-- Gb --</option>
-						{gb.get('cdMinors').map((code, index) => (
-							<option key={index} value={code.get('_id')}>
-								{code.get('cdSName')}
-							</option>
-						))}
+						{gb.map((code, index) => (<option key={index} value={code._id}>{code.cdSName}</option>))}
 					</Input>
 				</Col>
 				<Label md={1} for="documentNumber" className="text-right">
@@ -42,7 +38,7 @@ const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeri
 						name="documentNumber"
 						id="documentNumber"
 						onChange={onChange}
-						value={search.get('documentNumber')}
+						value={search.documentNumber}
 					/>
 				</Col>
 				<Label md={1} for="documentTitle" className="text-right">
@@ -53,7 +49,7 @@ const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeri
 						type="text"
 						name="documentTitle"
 						id="documentTitle"
-						value={search.get('documentTitle')}
+						value={search.documentTitle}
 						onChange={onChange}
 					/>
 				</Col>
@@ -68,7 +64,7 @@ const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeri
 							name="documentRev"
 							id="documentRev"
 							onChange={onChange}
-							value={search.get('documentRev')}
+							value={search.documentRev}
 						/>
 					</InputGroup>
 				</Col>
@@ -83,20 +79,11 @@ const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeri
 						type="select"
 						name="documentStatus"
 						id="documentStatus"
-						defaultValue={search.get('documentStatus')}
+						defaultValue={search.documentStatus}
 						onChange={onChange}
 					>
 						<option value="">-- Status --</option>
-						{status.get('cdMinors').map((code, index) => {
-							let name = code.get('cdSName');
-							let value = code.getIn(['cdRef1', 'status']);
-
-							return (
-								<option key={index} value={value}>
-									{name}
-								</option>
-							);
-						})}
+						{status.map((code, index) => (<option key={index} value={code.cdRef1.status}>{code.cdSName}</option>))}
 					</Input>
 				</Col>
 				<Label md={1} for="holdYn" className="text-right">
@@ -107,7 +94,7 @@ const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeri
 						type="select"
 						name="holdYn"
 						id="holdYn"
-						defaultValue={search.get('holdYn')}
+						defaultValue={search.holdYn}
 						onChange={onChange}
 					>
 						<option value="">-- Y/N --</option>
@@ -121,11 +108,11 @@ const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeri
 				<Col md={4}>
 					<InputGroup id="regDt">
 						<InputGroupAddon addonType="prepend">
-							<Input type="date" name="regDtSta" value={search.get('regDtSta')} onChange={onChange} />
+							<Input type="date" name="regDtSta" value={search.regDtSta} onChange={onChange} />
 						</InputGroupAddon>
 						<Input defaultValue="~" className="bg-light text-center" />
 						<InputGroupAddon addonType="append">
-							<Input type="date" name="regDtEnd" value={search.get('regDtEnd')} onChange={onChange} />
+							<Input type="date" name="regDtEnd" value={search.regDtEnd} onChange={onChange} />
 						</InputGroupAddon>
 					</InputGroup>
 				</Col>
@@ -144,7 +131,7 @@ const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeri
 						type="select"
 						name="deleteYn"
 						id="deleteYn"
-						defaultValue={search.get('deleteYn')}
+						defaultValue={search.deleteYn}
 						onChange={onChange}
 					>
 						<option value="">-- Y/N --</option>
@@ -156,7 +143,7 @@ const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeri
 					중요도
 				</Label>
 				<Col md={2}>
-					<Input type="select" name="level" id="level" value={search.get('level')} onChange={onChange}>
+					<Input type="select" name="level" id="level" value={search.level} onChange={onChange}>
 						<option value="">-- Level --</option>
 						<option value="1">1</option>
 						<option value="2">2</option>
@@ -177,6 +164,9 @@ const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeri
 };
 
 DocumentSearchForm.propTypes = {
+	gb: PropTypes.array.isRequired,
+	status: PropTypes.array.isRequired,
+	search: PropTypes.object.isRequired,
 	onChange: PropTypes.func,
 	onSearch: PropTypes.func,
 	onFullPeriod: PropTypes.func
