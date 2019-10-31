@@ -14,11 +14,11 @@ const IndexesDetailPage = (props) => {
 	const { id, page } = queryString.parse(props.location.search);
 
 	return (
-		<ScrollToTop>
-			<Page
-				title="Index Detail"
-				breadcrumbs={[ { name: 'Indexes', active: false }, { name: 'Detail', active: true } ]}
-			>
+		<Page
+			title="Index Detail"
+			breadcrumbs={[{ name: 'Indexes', active: false }, { name: 'Detail', active: true }]}
+		>
+			<ScrollToTop>
 				<IndexCardContainer id={id} />
 				<IndexesDetailTemplateContainer id={id} page={parseInt(page || 1, 10)} />
 				<DocumentDetailModalContainer />
@@ -26,8 +26,8 @@ const IndexesDetailPage = (props) => {
 				<VendorDetailModalContainer />
 				<DocumentInfoDetailModalContainer />
 				<LatestDocumentsModalContainer />
-			</Page>
-		</ScrollToTop>
+			</ScrollToTop>
+		</Page>
 	);
 };
 

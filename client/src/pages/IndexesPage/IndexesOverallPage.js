@@ -13,18 +13,18 @@ const IndexesOverallPage = (props) => {
 	const { writable } = props;
 
 	return (
-		<ScrollToTop>
-			<Page
-				title="Indexes"
-				breadcrumbs={[{ name: 'Indexes', active: false }, { name: 'Overall', active: true }]}
-			>
+		<Page
+			title="Indexes"
+			breadcrumbs={[{ name: 'Indexes', active: false }, { name: 'Overall', active: true }]}
+		>
+			<ScrollToTop>
 				<IndexesSearchFormContainer />
 				<IndexListContainer writable={writable} page={parseInt(page || 1, 10)} />
 				<DocumentIndexAddModalContainer />
 				<DocumentIndexEditModalContainer />
 				<DocumentInfoAddModalContainer />
-			</Page>
-		</ScrollToTop>
+			</ScrollToTop>
+		</Page>
 	);
 };
 

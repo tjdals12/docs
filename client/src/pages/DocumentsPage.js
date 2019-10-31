@@ -14,16 +14,18 @@ const DocumentsPage = (props) => {
 	const { writable } = props;
 
 	return (
-		<ScrollToTop>
-			<Page title="Documents" breadcrumbs={[{ name: 'Documents', active: true }]}>
+
+		<Page title="Documents" breadcrumbs={[{ name: 'Documents', active: true }]}>
+			<ScrollToTop>
 				<DocumentSearchFormContainer />
 				<DocumentTableContainer writable={writable} page={parseInt(page || 1, 10)} />
 				<DocumentAddModalContainer />
 				<DocumentDetailModalContainer writable={writable} />
 				<DocumentEditModalContainer />
 				<VendorDetailModalContainer />
-			</Page>
-		</ScrollToTop>
+			</ScrollToTop>
+		</Page >
+
 	);
 };
 

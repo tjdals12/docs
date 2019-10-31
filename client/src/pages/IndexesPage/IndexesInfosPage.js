@@ -12,15 +12,15 @@ const IndexesInfosPage = (props) => {
 	const { page } = queryString.parse(props.location.search);
 
 	return (
-		<ScrollToTop>
-			<Page title="Infos" breadcrumbs={[ { name: 'Indexes', active: false }, { name: 'Infos', active: true } ]}>
+		<Page title="Infos" breadcrumbs={[{ name: 'Indexes', active: false }, { name: 'Infos', active: true }]}>
+			<ScrollToTop>
 				<DocumentInfoSearchFormContainer />
 				<DocumentInfoTableContainer page={parseInt(page || 1, 10)} />
 				<VendorDetailModalContainer />
 				<DocumentInfoDetailModalContainer />
 				<DocumentDetailModalContainer />
-			</Page>
-		</ScrollToTop>
+			</ScrollToTop>
+		</Page>
 	);
 };
 

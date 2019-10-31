@@ -17,11 +17,11 @@ const VendorTransmittalsPage = (props) => {
 	const { writable } = props;
 
 	return (
-		<ScrollToTop>
-			<Page
-				title="Vendor Letters"
-				breadcrumbs={[{ name: 'Letters', active: false }, { name: 'Vendor', active: true }]}
-			>
+		<Page
+			title="Vendor Letters"
+			breadcrumbs={[{ name: 'Letters', active: false }, { name: 'Vendor', active: true }]}
+		>
+			<ScrollToTop>
 				<VendorLetterSearchFormContainer />
 				<VendorLetterTableContainer writable={writable} page={parseInt(page || 1, 10)} />
 				<VendorDetailModalContainer />
@@ -31,8 +31,8 @@ const VendorTransmittalsPage = (props) => {
 				<VendorLetterEditModalContainer />
 				<VendorLetterAdditionalReceiveModalContainer />
 				<DocumentDetailModalContainer />
-			</Page>
-		</ScrollToTop>
+			</ScrollToTop>
+		</Page>
 	);
 };
 

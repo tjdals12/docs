@@ -17,11 +17,11 @@ const InternalTransmittalPage = (props) => {
 	const { writable } = props;
 
 	return (
-		<ScrollToTop>
-			<Page
-				title="Internal Letters"
-				breadcrumbs={[{ name: 'Letters', active: false }, { name: 'Internal', active: true }]}
-			>
+		<Page
+			title="Internal Letters"
+			breadcrumbs={[{ name: 'Letters', active: false }, { name: 'Internal', active: true }]}
+		>
+			<ScrollToTop>
 				<LetterSearchFormContainer />
 				<LetterTableContainer writable={writable} page={parseInt(page || 1, 10)} />
 				<LetterAddModalContainer />
@@ -31,8 +31,8 @@ const InternalTransmittalPage = (props) => {
 				<DocumentDetailModalContainer />
 				<VendorLetterDetailModalContainer />
 				<VendorDetailModalContainer />
-			</Page>
-		</ScrollToTop>
+			</ScrollToTop>
+		</Page>
 	);
 };
 
