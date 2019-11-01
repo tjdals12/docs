@@ -5,6 +5,8 @@ import ProjectCollapseCardContainer from 'containers/Card/ProjectCollapseCardCon
 import TemplateCollapseCardContainer from 'containers/Card/TemplateCollapseCardContainer';
 import CmcodeCollapseCardContainer from 'containers/Card/CmcodeCollapseCardContainer';
 import ManagerCollapseCardContainer from 'containers/Card/ManagerCollapseCardContainer';
+import AccountCollapseCardContainer from 'containers/Card/AccountCollapseCardContainer';
+
 
 const SettingsPage = () => {
 	return (
@@ -14,6 +16,7 @@ const SettingsPage = () => {
 				<TemplateCollapseCardContainer />
 				<CmcodeCollapseCardContainer />
 				<ManagerCollapseCardContainer />
+				<AccountCollapseCardContainer />
 			</ScrollToTop>
 		</Page>
 	);
