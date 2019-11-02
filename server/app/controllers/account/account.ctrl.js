@@ -71,6 +71,11 @@ export const list = async (ctx) => {
             .skip((page - 1) * 10)
             .limit(10);
 
+        const count = await User.countDocuments();
+
+        ctx.set('Total', count);
+        ctx.set('Last-Page', Math.ceil(count / 10));
+
         ctx.res.ok({
             data: accounts,
             message: 'Success - accountCtrl > list'

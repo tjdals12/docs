@@ -241,7 +241,7 @@ account.post('/login', accountCtrl.login);
  *                          type:
  *                              type: string
  */
-account.get('/check', accountCtrl.check);
+account.post('/check', accountCtrl.check);
 
 /**
  * @swagger
