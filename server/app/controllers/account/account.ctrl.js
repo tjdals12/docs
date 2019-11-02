@@ -50,6 +50,63 @@ export const create = async (ctx) => {
 
 /**
  * @author      minz-logger
+ * @date        2019. 11. 02
+ * @description 계정 목록 조회
+ */
+export const list = async (ctx) => {
+    let page = parseInt(ctx.query.page || 1, 10);
+
+    if (page < 1) {
+        ctx.res.badRequest({
+            data: page,
+            message: 'Page can\'t be less than 1'
+        });
+
+        return;
+    }
+
+    try {
+        const accounts = await User.find({}, { pwd: 0 })
+            .sort({ 'timestamp.regDt': -1 })
+            .skip((page - 1) * 10)
+            .limit(10);
+
+        ctx.res.ok({
+            data: accounts,
+            message: 'Success - accountCtrl > list'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            message: `Error - accountCtrl > list: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 11. 02
+ * @description 계정 조회
+ */
+export const one = async (ctx) => {
+    let { id } = ctx.params;
+
+    try {
+        let account = await User.findOne({ _id: id }, { pwd: 0 });
+
+        ctx.res.ok({
+            data: account,
+            message: 'Success - accountCtrl > one'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            data: { id: id },
+            message: `Error - accountCtrl > one: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
  * @date        2019. 10. 18
  * @description 로그인
  */

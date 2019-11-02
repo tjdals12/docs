@@ -1,7 +1,61 @@
 import Router from 'koa-router';
+import * as commonCtrl from 'controllers/common.ctrl';
 import * as accountCtrl from './account.ctrl';
 
 const account = new Router();
+
+/**a
+ * @swagger
+ * definitions:
+ *  user:
+ *      type: object
+ *      required:
+ *          - profile
+ *          - userId
+ *          - pwd
+ *      properties:
+ *          profile:
+ *              type: object
+ *              properties:
+ *                  thumbnail:
+ *                      type: string
+ *                      example: 'https://thumbnail.url.com'
+ *                  username:
+ *                      type: string
+ *                      example: '홍길동'
+ *                  description:
+ *                      type: string
+ *                      example: '테스트 계정'
+ *                  userType:
+ *                      type: string
+ *                      enum: [ 'Admin', 'Manager', 'Guest' ]
+ *                      example: 'Guest'
+ *          userId:
+ *              type: string
+ *              example: 'test'
+ *          pwd:
+ *              type: string
+ *          history:
+ *              type: array
+ *              items:
+ *                  type: string
+ *          notifications:
+ *              type: array
+ *              items:
+ *                  type: string
+ *          deleteYn:
+ *              type: object
+ *              properties:
+ *                  yn:
+ *                      type: string    
+ *                      example: 'NO'
+ *                  deleteDt:
+ *                      type: string
+ *                      format: date-time
+ *                      example: '9999-12-31 23:59:59'
+ *          timemstamp:
+ *              $ref: '#/definitions/timestamp'
+ */
 
 /**
  * @swagger
@@ -59,6 +113,57 @@ const account = new Router();
  *                              type: string
  */
 account.post('/', accountCtrl.create);
+
+/**
+ * @swagger
+ * /api/accounts:
+ *  get:
+ *      tags:
+ *          - Account
+ *      summary: 계정 목록 조회
+ *      description: 계정 목록 조회
+ *      produces:
+ *          - application/json
+ *      parameters: 
+ *          - in: query
+ *            name: page
+ *            description: page parameters
+ *            type: string
+ *            example: 1
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ *              schema:
+ *                  type: array
+ *                  items:
+ *                      $ref: '#/definitions/user'
+ */
+account.get('/', accountCtrl.list);
+
+/**
+ * @swagger
+ * /api/accounts/{id}:
+ *  get:
+ *      tags:
+ *          - Account
+ *      summary: 계정 조회
+ *      description: 계정 조회
+ *      produces:
+ *          - application/json
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            description: user id
+ *            required: true
+ *            type: string
+ *            example: 5d3e4a41709a5107893bfe4c
+ *      responses:
+ *          200:
+ *              description: Successful definitions
+ *              schema:
+ *                  $ref: '#/definitions/user'
+ */
+account.get('/:id', commonCtrl.checkObjectId, accountCtrl.one);
 
 /**
  * @swagger
