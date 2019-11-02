@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-import userImg from 'assets/img/users/100.jpg';
+import userImg from 'assets/img/users/default.png';
 
 const Avatar = ({ circle, rounded, size, src, style, tag: Tag, className, ...restProps }) => {
 	const classes = classNames({ 'rounded-circle': circle, rounded }, className);
@@ -13,10 +13,10 @@ const Avatar = ({ circle, rounded, size, src, style, tag: Tag, className, ...res
 Avatar.propTypes = {
 	circle: PropTypes.bool,
 	rounded: PropTypes.bool,
-	size: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
+	size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	src: PropTypes.string,
 	style: PropTypes.object,
-	tag: PropTypes.oneOfType([ PropTypes.func, PropTypes.string ]),
+	tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
 	className: PropTypes.string
 };
 

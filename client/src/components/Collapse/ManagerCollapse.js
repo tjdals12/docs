@@ -162,12 +162,12 @@ const ManagerCollapse = ({
                             />
                         </Grid>
                     </Col>
-                    <Col md={4} style={colStyle} className="pl-4 pr-4 pt-4 pb-1 border rounded bg-light">
+                    <Col md={4} style={colStyle}>
                         <Form
+                            className="pl-4 pr-4 pt-4 pb-1 mb-3 border rounded bg-light"
                             onSubmit={(e) => {
                                 e.preventDefault()
                             }}
-                            className="mb-5"
                         >
                             <FormGroup row>
                                 <Label md={2} for='part' className='text-right'>
@@ -189,7 +189,7 @@ const ManagerCollapse = ({
                                     팀명
                                 </Label>
                                 <Col md={5}>
-                                    <Input type='text' id='teamName' name='teamName' value={isAddTeam ? add.get('teamName') : edit.get('teamName')} onChange={onChange(isAddTeam ? 'add' : 'edit')} invalid={teamErrors.get('teamNameError')}/>
+                                    <Input type='text' id='teamName' name='teamName' value={isAddTeam ? add.get('teamName') : edit.get('teamName')} onChange={onChange(isAddTeam ? 'add' : 'edit')} invalid={teamErrors.get('teamNameError')} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -206,6 +206,7 @@ const ManagerCollapse = ({
                         </Form>
 
                         <Form
+                            className="pl-4 pr-4 pt-4 pb-1 border rounded bg-light"
                             onSubmit={(e) => {
                                 e.preventDefault()
                             }}
@@ -213,23 +214,23 @@ const ManagerCollapse = ({
                             <FormGroup row>
                                 <Label md={3} for='name' className='text-right'>이름</Label>
                                 <Col md={4}>
-                                    <Input type='text' id='name' name='name' value={isAddManager ? addManager.get('name') : editManager.get('name')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('nameError')}/>
+                                    <Input type='text' id='name' name='name' value={isAddManager ? addManager.get('name') : editManager.get('name')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('nameError')} />
                                 </Col>
                                 <Label md={2} for='position' className='text-right'>직책</Label>
                                 <Col md={3}>
-                                    <Input type='text' id='position' name='position' value={isAddManager ? addManager.get('position') : editManager.get('position')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('positionError')}/>
+                                    <Input type='text' id='position' name='position' value={isAddManager ? addManager.get('position') : editManager.get('position')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('positionError')} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label md={3} for='effStaDt' className='text-right'>시작일</Label>
                                 <Col md={9}>
-                                    <Input type='date' id='effStaDt' name='effStaDt' value={isAddManager ? addManager.get('effStaDt') : editManager.get('effStaDt')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('effStaDtError')}/>
+                                    <Input type='date' id='effStaDt' name='effStaDt' value={isAddManager ? addManager.get('effStaDt') : editManager.get('effStaDt')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('effStaDtError')} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label md={3} for='effEndDt' className='text-right'>종료일</Label>
                                 <Col md={9}>
-                                    <Input type='date' id='effEndDt' name='effEndDt' value={isAddManager ? addManager.get('effEndDt') : editManager.get('effEndDt')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('effEndDtError')}/>
+                                    <Input type='date' id='effEndDt' name='effEndDt' value={isAddManager ? addManager.get('effEndDt') : editManager.get('effEndDt')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('effEndDtError')} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>

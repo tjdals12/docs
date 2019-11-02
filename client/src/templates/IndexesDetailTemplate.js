@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col } from 'reactstrap';
 import UserCard from 'components/Card/UserCard';
-import userImg from 'assets/img/users/105.png';
+import userImg from 'assets/img/users/default.png';
 import DocumentIndexOverallCardContainer from 'containers/Card/DocumentIndexOverallCardContainer';
 import StatisticsByStatusBarCharCardContainer from 'containers/Card/StatisticsByStatusBarChartCardContainer';
 import TransmittalCardContainer from 'containers/Card/TransmittalCardContainer';

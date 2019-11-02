@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 
 class AccountsCopllapseCardContainer extends React.Component {
     state = {
-        isOpen: true
+        isOpen: false
     }
 
     handleToggle = () => {

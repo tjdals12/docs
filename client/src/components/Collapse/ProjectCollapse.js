@@ -92,10 +92,10 @@ const ProjectCollapse = ({
 				</Col>
 				<Col
 					md={6}
-					className={`pl-4 pr-4 pt-4 pb-1 border rounded bg-light ${isAdd && 'border-danger'}`}
 					style={colStyle}
 				>
 					<Form
+						className={`p-4 pb-0 border rounded bg-light h-100 ${isAdd && 'border-danger'}`}
 						onSubmit={(e) => {
 							e.preventDefault();
 						}}
