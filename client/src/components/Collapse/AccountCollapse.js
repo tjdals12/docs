@@ -5,10 +5,6 @@ import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
 import Avatar from 'components/Avatar';
 import PropTypes from 'prop-types';
 
-const demo = [
-    { index: 1, userId: 'master', username: 'Master', description: 'Master Account', userType: 'Admin' }
-]
-
 const colStyle = {
     maxHeight: '400px',
     overflow: 'scroll',
@@ -21,18 +17,18 @@ const makeHeaderCell = ({ title, className }) => {
     return <span className={classes}>{title}</span>;
 };
 
-const AccountCollapse = ({ isOpen, onChange, onSave, onEdit, onDelete }) => {
+const AccountCollapse = ({ isOpen, roles, users, count, page, onChange, onSave, onEdit, onDelete }) => {
 
     return (
         <Collapse isOpen={isOpen} className="mt-3 pt-4 border-top">
             <Row style={{ minHeight: '400px' }}>
                 <Col md={4} style={colStyle}>
                     <Grid
-                        data={demo}
+                        data={users.toJS()}
                         pageable
-                        total={25}
+                        total={count}
                         take={10}
-                        skip={0}
+                        skip={(page - 1) * 10}
                         className="h-100 border rounded"
                     >
                         <Column
@@ -48,13 +44,13 @@ const AccountCollapse = ({ isOpen, onChange, onSave, onEdit, onDelete }) => {
                             headerCell={() => makeHeaderCell({ title: 'ID', className: 'text-left' })}
                         />
                         <Column
-                            field="username"
+                            field="profile.username"
                             className="text-left"
                             headerCell={() => makeHeaderCell({ title: '이름', className: 'text-left' })}
                         />
                         <Column
-                            field="userType"
-                            width={80}
+                            field="profile.userType"
+                            width={100}
                             className="text-center"
                             headerCell={() => makeHeaderCell({ title: '구분', className: 'text-center' })}
                         />
@@ -121,11 +117,14 @@ const AccountCollapse = ({ isOpen, onChange, onSave, onEdit, onDelete }) => {
                     <Form className="pl-4 pr-4 pt-4 pb-2 border rounded bg-light h-100">
                         <Label for='roles' className="title-font">권한</Label>
                         <Input type='select' id='roles' name='roles[]' className="p-1 h-85" onChange={onChange} multiple>
-                            <option value='a' className="p-2 mb-1">Dashboard</option>
-                            <option value='b' className="p-2 mb-1">Documents (READ)</option>
-                            <option value='c' className="p-2 mb-1">Documents (WRITE)</option>
-                            <option value='d' className="p-2 mb-1">Vendors (READ)</option>
-                            <option value='e' className="p-2 mb-1">Vendors (WRITE)</option>
+                            {roles.map((role) => {
+                                const { _id, name, roleId } = role.toJS();
+                                const keys = Object.keys(roleId);
+
+                                return keys.map((key, index) => (
+                                    <option key={`${_id}_${index}`} value={roleId[key]} className="p-2 mb-1">{name} ({key})</option>
+                                ))
+                            })}
                         </Input>
                     </Form>
                 </Col>
