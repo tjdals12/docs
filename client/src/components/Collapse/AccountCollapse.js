@@ -17,7 +17,16 @@ const makeHeaderCell = ({ title, className }) => {
     return <span className={classes}>{title}</span>;
 };
 
-const AccountCollapse = ({ isOpen, roles, users, count, page, onChange, onSave, onEdit, onDelete }) => {
+const AccountCollapse = ({ isOpen, roles, users, user, add, errors, count, page, onSelect, onChange, onSave, onEdit, onDelete }) => {
+    const isAdd = user.size === 0;
+
+    const rowRender = (Row, props) => {
+        const isActive = props.dataItem._id === user.get('_id');
+
+        return React.cloneElement(Row, {
+            className: classNames(isActive && 'bg-gradient-theme-left text-white', 'can-click', Row.props.className)
+        })
+    }
 
     return (
         <Collapse isOpen={isOpen} className="mt-3 pt-4 border-top">
@@ -29,6 +38,8 @@ const AccountCollapse = ({ isOpen, roles, users, count, page, onChange, onSave, 
                         total={count}
                         take={10}
                         skip={(page - 1) * 10}
+                        onRowClick={(e) => onSelect(e.dataItem._id)}
+                        rowRender={rowRender}
                         className="h-100 border rounded"
                     >
                         <Column
@@ -66,21 +77,21 @@ const AccountCollapse = ({ isOpen, roles, users, count, page, onChange, onSave, 
                                 <FormGroup row>
                                     <Label md={3} for='username' className='text-right title-font'>이름</Label>
                                     <Col md={9}>
-                                        <Input type='text' id='username' name='username' onChange={onChange} />
+                                        <Input type='text' id='username' name='username' value={isAdd ? add.get('username') : user.getIn(['profile', 'username'])} onChange={onChange(isAdd ? 'add' : 'user')} invalid={errors.get('usernameError')} />
                                     </Col>
                                 </FormGroup>
 
                                 <FormGroup row>
                                     <Label md={3} for='description' className='text-right title-font'>설명</Label>
                                     <Col md={9}>
-                                        <Input type='text' id='description' name='description' onChange={onChange} />
+                                        <Input type='text' id='description' name='description' value={isAdd ? add.get('description') : user.getIn(['profile', 'description'])} onChange={onChange(isAdd ? 'add' : 'user')} invalid={errors.get('descriptionError')}/>
                                     </Col>
                                 </FormGroup>
 
                                 <FormGroup row>
-                                    <Label md={3} for='description' className='text-right  title-font'>구분</Label>
+                                    <Label md={3} for='description' className='text-right title-font'>구분</Label>
                                     <Col md={9}>
-                                        <Input type='select' name='userType' onChange={onChange}>
+                                        <Input type='select' name='userType' value={isAdd ? add.get('userType') : user.getIn(['profile', 'userType'])} onChange={onChange('add')} invalid={errors.get('userTypeError')} >
                                             <option value=''>-- 구분 --</option>
                                             <option value='Admin'>관리자</option>
                                             <option value='Manager'>담당자</option>
@@ -94,20 +105,25 @@ const AccountCollapse = ({ isOpen, roles, users, count, page, onChange, onSave, 
                         <FormGroup row>
                             <Label md={4} for='userId' className='text-right title-font'>ID</Label>
                             <Col md={8}>
-                                <Input type='text' id='userId' name='userId' onChange={onChange} />
+                                <Input type='text' id='userId' name='userId' value={isAdd ? add.get('userId') : user.get('userId')} onChange={onChange('add')} invalid={errors.get('userIdError')} />
                             </Col>
                         </FormGroup>
                         <FormGroup row>
-                            <Label md={4} for='pwd' className='text-right title-font'>PWD</Label>
+                            <Label md={4} for='pwd' className='text-right title-font' >PWD</Label>
                             <Col md={8}>
-                                <Input type='text' id='pwd' name='pwd' disabled />
+                                <Input type='password' id='pwd' name='pwd' disabled={!isAdd} value={isAdd ? add.get('pwd') : ''} onChange={onChange('add')} invalid={errors.get('pwdError')}/>
                             </Col>
                         </FormGroup>
                         <FormGroup row>
                             <Col className="d-flex align-items-center justify-content-end">
-                                {/* <Button color='primary' onClick={onSave}>추가</Button> */}
-                                <Button color='primary' className="mr-2" onClick={onEdit}>수정</Button>
-                                <Button color='danger' onClick={onDelete}>삭제</Button>
+                                {isAdd ? (<Button color='primary' onClick={onSave}>추가</Button>)
+                                    : (
+                                        <React.Fragment>
+                                            <Button color='primary' className="mr-2" onClick={onEdit}>수정</Button>
+                                            <Button color='danger' onClick={onDelete}>삭제</Button>
+                                        </React.Fragment>
+                                    )
+                                }
                             </Col>
                         </FormGroup>
                     </Form>
@@ -116,14 +132,26 @@ const AccountCollapse = ({ isOpen, roles, users, count, page, onChange, onSave, 
                 <Col md={4} style={colStyle}>
                     <Form className="pl-4 pr-4 pt-4 pb-2 border rounded bg-light h-100">
                         <Label for='roles' className="title-font">권한</Label>
-                        <Input type='select' id='roles' name='roles[]' className="p-1 h-85" onChange={onChange} multiple>
+                        <Input type='select' id='roles' name='roles[]' className="p-1 h-85" value={isAdd ? [] : user.get('roles').toJS()} onChange={onChange} multiple>
                             {roles.map((role) => {
-                                const { _id, name, roleId } = role.toJS();
-                                const keys = Object.keys(roleId);
+                                const { _id, sub, name, roleId } = role.toJS();
 
-                                return keys.map((key, index) => (
-                                    <option key={`${_id}_${index}`} value={roleId[key]} className="p-2 mb-1">{name} ({key})</option>
-                                ))
+                                if (sub.length > 0) {
+                                    return sub.map((subRole) => {
+                                        const { _id: subId, name: subName, roleId: subRoleId } = subRole;
+                                        const keys = Object.keys(subRoleId);
+
+                                        return keys.map((key, index) => (
+                                            <option key={`${subId}_${index}`} value={subRoleId[key]} className="p-2 mb-1">{name} - {subName} ({key})</option>
+                                        ))
+                                    })
+                                } else {
+                                    const keys = Object.keys(roleId);
+
+                                    return keys.map((key, index) => (
+                                        <option key={`${_id}_${index}`} value={roleId[key]} className="p-2 mb-1">{name} ({key})</option>
+                                    ))
+                                }
                             })}
                         </Input>
                     </Form>
@@ -135,6 +163,7 @@ const AccountCollapse = ({ isOpen, roles, users, count, page, onChange, onSave, 
 
 AccountCollapse.propTypes = {
     isOpen: PropTypes.bool,
+    onSelect: PropTypes.func,
     onChange: PropTypes.func,
     onSave: PropTypes.func,
     onEdit: PropTypes.func,
@@ -143,10 +172,11 @@ AccountCollapse.propTypes = {
 
 AccountCollapse.defaultProps = {
     isOpen: false,
-    onChange: () => console.warn('onChange is not defined'),
-    onSave: () => console.warn('onChange is not defined'),
-    onEdit: () => console.warn('onChange is not defined'),
-    onDelete: () => console.warn('onChange is not defined')
+    onSelect: () => console.warn('Warning: onSelect is not defined'),
+    onChange: () => console.warn('Warning: onChange is not defined'),
+    onSave: () => console.warn('Warning: onSave is not defined'),
+    onEdit: () => console.warn('Warning: onEdit is not defined'),
+    onDelete: () => console.warn('Warning: onDelete is not defined')
 }
 
 export default AccountCollapse;

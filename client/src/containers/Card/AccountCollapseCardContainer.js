@@ -23,6 +23,12 @@ class AccountsCopllapseCardContainer extends React.Component {
         AccountActions.getUsers();
     }
 
+    getUser = (id) => {
+        const { AccountActions } = this.props;
+
+        AccountActions.getUser({ id });
+    }
+
     handleToggle = () => {
         this.setState(prevState => {
             const { isOpen } = prevState;
@@ -33,26 +39,55 @@ class AccountsCopllapseCardContainer extends React.Component {
         })
     }
 
+    handleAddForm = () => {
+        const { AccountActions } = this.props;
+
+        AccountActions.initialize('user');
+    }
+
+    handleChange = (target) => (e) => {
+        const { AccountActions } = this.props;
+        const { name, value } = e.target;
+
+        AccountActions.onChange({ target, name, value });
+    }
+
+    handleSave = async () => {
+        const { AccountActions, add } = this.props;
+
+        await AccountActions.addUser(add.toJS());
+        AccountActions.initialize('add');
+        AccountActions.initialize('errors');
+        this.getUsers();
+    }
+
     componentDidMount() {
         this.getUsers();
     }
 
     render() {
         const { isOpen } = this.state;
-        const { roles, users, count, page } = this.props;
+        const { roles, users, user, add, errors, count, page } = this.props;
 
         return (
             <CollapseCard
                 title="계정 관리"
                 description="계정 관리"
                 onToggle={this.handleToggle}
+                onAddForm={this.handleAddForm}
                 collapse={
                     <AccountCollapse
                         isOpen={isOpen}
                         roles={roles}
                         users={users}
+                        user={user}
+                        add={add}
+                        errors={errors}
                         count={count}
                         page={page}
+                        onSelect={this.getUser}
+                        onChange={this.handleChange}
+                        onSave={this.handleSave}
                     />
                 }
             />
@@ -64,6 +99,9 @@ export default connect(
     (state) => ({
         roles: state.role.get('roles'),
         users: state.account.get('users'),
+        user: state.account.get('user'),
+        add: state.account.get('add'),
+        errors: state.account.get('errors'),
         count: state.account.get('count'),
         page: state.account.get('page')
     }),

@@ -5,23 +5,43 @@ import * as api from 'lib/api';
 
 const GET_USERS = 'account/GET_USERS';
 const GET_USER = 'account/GET_USER';
+const ADD_USER = 'account/ADD_USER';
 const LOGIN = 'account/LOGIN';
 const CHECK = 'account/CHECK';
 const LOGOUT = 'account/LOGOUT';
 const SET_USER_INFO = 'account/SET_USER_INFO';
 const SET_VALIDATED = 'account/SET_VALIDATED';
+const ON_CHANGE = 'account/ON_CHANGE';
+const INITIALIZE = 'account/INITIALIZE';
 
 export const getUsers = createAction(GET_USERS, api.getUsers);
 export const getUser = createAction(GET_USER, api.getUser);
+export const addUser = createAction(ADD_USER, api.addUser);
 export const login = createAction(LOGIN, api.login);
 export const check = createAction(CHECK, api.check);
 export const logout = createAction(LOGOUT, api.logout);
 export const setUserInfo = createAction(SET_USER_INFO);
 export const setValidated = createAction(SET_VALIDATED);
+export const onChange = createAction(ON_CHANGE);
+export const initialize = createAction(INITIALIZE);
 
 const initialState = Map({
     users: List(),
     user: Map(),
+    add: Map({
+        username: '',
+        description: '',
+        userType: '',
+        userId: '',
+        pwd: ''
+    }),
+    errors: Map({
+        usernameError: false,
+        descriptionError: false,
+        userTypeError: false,
+        userIdError: false,
+        pwdError: false
+    }),
     count: 0,
     page: 1,
     lastPage: null,
@@ -53,6 +73,18 @@ export default handleActions({
             const { data: user } = action.payload.data;
 
             return state.set('user', fromJS(user));
+        }
+    }),
+    ...pender({
+        type: ADD_USER,
+        onFailure: (state, action) => {
+            const add = state.get('add');
+
+            return state.setIn(['errors', 'usernameError'], add.get('username') === '')
+                .setIn(['errors', 'descriptionError'], add.get('description') === '')
+                .setIn(['errors', 'userTypeError'], add.get('userType') === '')
+                .setIn(['errors', 'userIdError'], add.get('userId') === '')
+                .setIn(['errors', 'pwdError'], add.get('pwd') === '' || add.get('pwd').length < 4)
         }
     }),
     ...pender({
@@ -88,5 +120,15 @@ export default handleActions({
         const { payload } = action;
 
         return state.set('validated', payload);
+    },
+    [ON_CHANGE]: (state, action) => {
+        const { target, name, value } = action.payload;
+
+        return target ? state.setIn([target, name], value) : state.set(name, value);
+    },
+    [INITIALIZE]: (state, action) => {
+        const { payload } = action;
+
+        return state.set(payload, initialState.get(payload));
     }
 }, initialState);
