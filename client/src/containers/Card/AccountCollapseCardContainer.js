@@ -60,6 +60,15 @@ class AccountsCopllapseCardContainer extends React.Component {
         AccountActions.initialize('errors');
         this.getUsers();
     }
+    
+    handleEdit = async (id) => {
+        const { AccountActions, edit } = this.props;
+
+        await AccountActions.editUser({ id, param: { ...edit.toJS() } });
+        AccountActions.initialize('errors');
+        this.getUsers();
+        this.getUser(id);
+    }
 
     componentDidMount() {
         this.getUsers();
@@ -67,7 +76,7 @@ class AccountsCopllapseCardContainer extends React.Component {
 
     render() {
         const { isOpen } = this.state;
-        const { roles, users, user, add, errors, count, page } = this.props;
+        const { roles, users, user, add, edit, errors, count, page } = this.props;
 
         return (
             <CollapseCard
@@ -82,12 +91,14 @@ class AccountsCopllapseCardContainer extends React.Component {
                         users={users}
                         user={user}
                         add={add}
+                        edit={edit}
                         errors={errors}
                         count={count}
                         page={page}
                         onSelect={this.getUser}
                         onChange={this.handleChange}
                         onSave={this.handleSave}
+                        onEdit={this.handleEdit}
                     />
                 }
             />
@@ -100,6 +111,7 @@ export default connect(
         roles: state.role.get('roles'),
         users: state.account.get('users'),
         user: state.account.get('user'),
+        edit: state.account.get('edit'),
         add: state.account.get('add'),
         errors: state.account.get('errors'),
         count: state.account.get('count'),

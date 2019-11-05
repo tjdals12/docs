@@ -6,6 +6,7 @@ import * as api from 'lib/api';
 const GET_USERS = 'account/GET_USERS';
 const GET_USER = 'account/GET_USER';
 const ADD_USER = 'account/ADD_USER';
+const EDIT_USER = 'account/EDIT_USER';
 const LOGIN = 'account/LOGIN';
 const CHECK = 'account/CHECK';
 const LOGOUT = 'account/LOGOUT';
@@ -17,6 +18,7 @@ const INITIALIZE = 'account/INITIALIZE';
 export const getUsers = createAction(GET_USERS, api.getUsers);
 export const getUser = createAction(GET_USER, api.getUser);
 export const addUser = createAction(ADD_USER, api.addUser);
+export const editUser = createAction(EDIT_USER, api.editUser);
 export const login = createAction(LOGIN, api.login);
 export const check = createAction(CHECK, api.check);
 export const logout = createAction(LOGOUT, api.logout);
@@ -33,7 +35,15 @@ const initialState = Map({
         description: '',
         userType: '',
         userId: '',
-        pwd: ''
+        pwd: '',
+        roles: List()
+    }),
+    edit: Map({
+        username: '',
+        description: '',
+        userType: '',
+        userId: '',
+        roles: List()
     }),
     errors: Map({
         usernameError: false,
@@ -72,7 +82,12 @@ export default handleActions({
         onSuccess: (state, action) => {
             const { data: user } = action.payload.data;
 
-            return state.set('user', fromJS(user));
+            return state.set('user', fromJS(user))
+                        .setIn(['edit', 'username'], user.profile.username)
+                        .setIn(['edit', 'description'], user.profile.description)
+                        .setIn(['edit', 'userType'], user.profile.userType)
+                        .setIn(['edit', 'userId'], user.userId)
+                        .setIn(['edit', 'roles'], fromJS(user.roles));
         }
     }),
     ...pender({
@@ -85,6 +100,17 @@ export default handleActions({
                 .setIn(['errors', 'userTypeError'], add.get('userType') === '')
                 .setIn(['errors', 'userIdError'], add.get('userId') === '')
                 .setIn(['errors', 'pwdError'], add.get('pwd') === '' || add.get('pwd').length < 4)
+        }
+    }),
+    ...pender({
+        type: EDIT_USER,
+        onFailure: (state, action) => {
+            const edit = state.get('user');
+
+            return state.setIn(['errors', 'usernameError'], edit.get('username') === '')
+                .setIn(['errors', 'descriptionError'], edit.get('description') === '')
+                .setIn(['errors', 'userTypeError'], edit.get('userType') === '')
+                .setIn(['errors', 'userIdError'], edit.get('userId') === '');
         }
     }),
     ...pender({

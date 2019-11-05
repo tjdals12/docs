@@ -17,7 +17,7 @@ const makeHeaderCell = ({ title, className }) => {
     return <span className={classes}>{title}</span>;
 };
 
-const AccountCollapse = ({ isOpen, roles, users, user, add, errors, count, page, onSelect, onChange, onSave, onEdit, onDelete }) => {
+const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count, page, onSelect, onChange, onChangeRoles, onSave, onEdit, onDelete }) => {
     const isAdd = user.size === 0;
 
     const rowRender = (Row, props) => {
@@ -77,21 +77,21 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, errors, count, page,
                                 <FormGroup row>
                                     <Label md={3} for='username' className='text-right title-font'>이름</Label>
                                     <Col md={9}>
-                                        <Input type='text' id='username' name='username' value={isAdd ? add.get('username') : user.getIn(['profile', 'username'])} onChange={onChange(isAdd ? 'add' : 'user')} invalid={errors.get('usernameError')} />
+                                        <Input type='text' id='username' name='username' value={isAdd ? add.get('username') : edit.get('username')} onChange={onChange(isAdd ? 'add' : 'edit')} invalid={errors.get('usernameError')} />
                                     </Col>
                                 </FormGroup>
 
                                 <FormGroup row>
                                     <Label md={3} for='description' className='text-right title-font'>설명</Label>
                                     <Col md={9}>
-                                        <Input type='text' id='description' name='description' value={isAdd ? add.get('description') : user.getIn(['profile', 'description'])} onChange={onChange(isAdd ? 'add' : 'user')} invalid={errors.get('descriptionError')}/>
+                                        <Input type='text' id='description' name='description' value={isAdd ? add.get('description') : edit.get('description')} onChange={onChange(isAdd ? 'add' : 'edit')} invalid={errors.get('descriptionError')}/>
                                     </Col>
                                 </FormGroup>
 
                                 <FormGroup row>
                                     <Label md={3} for='description' className='text-right title-font'>구분</Label>
                                     <Col md={9}>
-                                        <Input type='select' name='userType' value={isAdd ? add.get('userType') : user.getIn(['profile', 'userType'])} onChange={onChange('add')} invalid={errors.get('userTypeError')} >
+                                        <Input type='select' name='userType' value={isAdd ? add.get('userType') : edit.get('userType')} onChange={onChange(isAdd ? 'add' : 'edit')} invalid={errors.get('userTypeError')} >
                                             <option value=''>-- 구분 --</option>
                                             <option value='Admin'>관리자</option>
                                             <option value='Manager'>담당자</option>
@@ -105,13 +105,13 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, errors, count, page,
                         <FormGroup row>
                             <Label md={4} for='userId' className='text-right title-font'>ID</Label>
                             <Col md={8}>
-                                <Input type='text' id='userId' name='userId' value={isAdd ? add.get('userId') : user.get('userId')} onChange={onChange('add')} invalid={errors.get('userIdError')} />
+                                <Input type='text' id='userId' name='userId' value={isAdd ? add.get('userId') : edit.get('userId')} onChange={onChange(isAdd ? 'add' : 'edit')} invalid={errors.get('userIdError')} />
                             </Col>
                         </FormGroup>
                         <FormGroup row>
                             <Label md={4} for='pwd' className='text-right title-font' >PWD</Label>
                             <Col md={8}>
-                                <Input type='password' id='pwd' name='pwd' disabled={!isAdd} value={isAdd ? add.get('pwd') : ''} onChange={onChange('add')} invalid={errors.get('pwdError')}/>
+                                <Input type='password' id='pwd' name='pwd' disabled={!isAdd} value={isAdd ? add.get('pwd') : ''} onChange={onChange(isAdd ? 'add' : 'user')} invalid={errors.get('pwdError')}/>
                             </Col>
                         </FormGroup>
                         <FormGroup row>
@@ -119,7 +119,7 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, errors, count, page,
                                 {isAdd ? (<Button color='primary' onClick={onSave}>추가</Button>)
                                     : (
                                         <React.Fragment>
-                                            <Button color='primary' className="mr-2" onClick={onEdit}>수정</Button>
+                                            <Button color='primary' className="mr-2" onClick={() => onEdit(user.get('_id'))}>수정</Button>
                                             <Button color='danger' onClick={onDelete}>삭제</Button>
                                         </React.Fragment>
                                     )
@@ -132,7 +132,7 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, errors, count, page,
                 <Col md={4} style={colStyle}>
                     <Form className="pl-4 pr-4 pt-4 pb-2 border rounded bg-light h-100">
                         <Label for='roles' className="title-font">권한</Label>
-                        <Input type='select' id='roles' name='roles[]' className="p-1 h-85" value={isAdd ? [] : user.get('roles').toJS()} onChange={onChange} multiple>
+                        <Input type='select' id='roles' name='roles' className="p-1 h-85" value={isAdd ? add.get('roles').toJS() : edit.get('roles').toJS() } multiple>
                             {roles.map((role) => {
                                 const { _id, sub, name, roleId } = role.toJS();
 

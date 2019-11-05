@@ -122,6 +122,7 @@ export const getRoles = () => axios.get(`${real}/api/roles`);
 export const getUsers = () => axios.get(`${real}/api/accounts`);
 export const getUser = ({ id }) => axios.get(`${real}/api/accounts/${id}`);
 export const addUser = (param) => axios.post(`${real}/api/accounts`, { ...param });
+export const editUser = ({ id, param }) => axios.patch(`${real}/api/accounts/${id}/edit`, { ...param });
 export const login = (param) => axios.post(`${real}/api/accounts/login`, { ...param });
 export const check = () => axios.post(`${real}/api/accounts/check`);
 export const logout = () => axios.post(`${real}/api/accounts/logout`);
