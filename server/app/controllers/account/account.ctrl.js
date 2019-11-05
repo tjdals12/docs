@@ -112,6 +112,53 @@ export const one = async (ctx) => {
 
 /**
  * @author      minz-logger
+ * @date        2019. 11. 05
+ * @description 계정 수정
+ */
+export const edit = async (ctx) => {
+    let { id } = ctx.params;
+    let {
+        username,
+        description,
+        userType,
+        userId
+    } = ctx.request.body;
+
+    const schema = Joi.object().keys({
+        username: Joi.string().required(),
+        description: Joi.string().required(),
+        userType: Joi.string().required(),
+        userId: Joi.string().required()
+    });
+
+    const result = Joi.validate(ctx.request.body, schema);
+
+    if (result.error) {
+        ctx.res.badRequest({
+            data: result.error,
+            message: 'Fail - accountCtrl > edit'
+        });
+
+        return;
+    }
+
+    try {
+        const account = await User.editUser(id, { username, description, userType, userId });
+
+        ctx.res.ok({
+            data: account,
+            message: 'Success - accountCtrl > edit'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            data: ctx.request.body,
+            message: `Error - accountCtrl > edit: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
  * @date        2019. 10. 18
  * @description 로그인
  */
