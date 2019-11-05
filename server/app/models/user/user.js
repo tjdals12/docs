@@ -99,6 +99,40 @@ UserSchema.statics.findByUserId = function (userId) {
 
 /**
  * @author      minz-logger
+ * @date        2019. 11. 05
+ * @description 계정 수정
+ */
+UserSchema.statics.editUser = function (id, param) {
+    let {
+        username,
+        description,
+        userType,
+        userId
+    } = param;
+
+    return this.findOneAndUpdate(
+        { _id: id },
+        {
+            $set: {
+                profile: {
+                    username,
+                    description,
+                    userType
+                },
+                userId
+            }
+        },
+        {
+            new: true,
+            projection: {
+                pwd: 0
+            }
+        }
+    );
+};
+
+/**
+ * @author      minz-logger
  * @date        2019. 10. 18
  * @description 비밀번호 검증
  */

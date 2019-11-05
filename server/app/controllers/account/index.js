@@ -103,14 +103,16 @@ const account = new Router();
  *                          type: string
  *                          format: ObjectId
  *                      profile:
- *                          thumbnail:
- *                              type: string
- *                          username:
- *                              type: string
- *                          description:
- *                              type: string
- *                          type:
- *                              type: string
+ *                          type: object
+ *                          properties:
+ *                              thumbnail:
+ *                                  type: string
+ *                              username:
+ *                                  type: string
+ *                              description:
+ *                                  type: string
+ *                              type:
+ *                                  type: string
  */
 account.post('/', accountCtrl.create);
 
@@ -164,6 +166,53 @@ account.get('/', accountCtrl.list);
  *                  $ref: '#/definitions/user'
  */
 account.get('/:id', commonCtrl.checkObjectId, accountCtrl.one);
+
+/**
+ * @swagger
+ * /api/accounts/{id}/edit:
+ *  patch:
+ *      tags:
+ *          - Account
+ *      summary: 계정 수정
+ *      description: 계정 수정
+ *      consumes:
+ *          - application/json
+ *      produces:
+ *          - application/json
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            description: user id
+ *            required: true
+ *            type: string
+ *            example: 5d3e4a41709a5107893bfe4c
+ *          - in: body
+ *            name: body
+ *            description: edit parameters
+ *            required: true
+ *            schema:
+ *              type: object
+ *              properties:
+ *                  username:
+ *                      type: string
+ *                      example: ''
+ *                  description:
+ *                      type: string
+ *                      example: ''
+ *                  userType:
+ *                      type: string
+ *                      example: ''
+ *                      enum: [ 'Admin', 'Manager', 'Guest' ]
+ *                  userId:
+ *                      type: string
+ *                      example: ''
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ *              schema:
+ *                  $ref: '#/definitions/user'
+ */
+account.patch('/:id/edit', commonCtrl.checkObjectId, accountCtrl.edit);
 
 /**
  * @swagger
