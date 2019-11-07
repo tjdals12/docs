@@ -52,6 +52,14 @@ class AccountsCopllapseCardContainer extends React.Component {
         AccountActions.onChange({ target, name, value });
     }
 
+    handleChangeRoles = (target) => (e) => {
+        const { AccountActions } = this.props;
+        const { name, value, checked } = e.target;
+        console.log(target, name, value, checked);
+
+        AccountActions.setCheckedList({ target, name, value, checked });
+    }
+
     handleSave = async () => {
         const { AccountActions, add } = this.props;
 
@@ -60,7 +68,7 @@ class AccountsCopllapseCardContainer extends React.Component {
         AccountActions.initialize('errors');
         this.getUsers();
     }
-    
+
     handleEdit = async (id) => {
         const { AccountActions, edit } = this.props;
 
@@ -97,6 +105,7 @@ class AccountsCopllapseCardContainer extends React.Component {
                         page={page}
                         onSelect={this.getUser}
                         onChange={this.handleChange}
+                        onChangeRoles={this.handleChangeRoles}
                         onSave={this.handleSave}
                         onEdit={this.handleEdit}
                     />

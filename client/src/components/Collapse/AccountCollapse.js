@@ -84,7 +84,7 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
                                 <FormGroup row>
                                     <Label md={3} for='description' className='text-right title-font'>설명</Label>
                                     <Col md={9}>
-                                        <Input type='text' id='description' name='description' value={isAdd ? add.get('description') : edit.get('description')} onChange={onChange(isAdd ? 'add' : 'edit')} invalid={errors.get('descriptionError')}/>
+                                        <Input type='text' id='description' name='description' value={isAdd ? add.get('description') : edit.get('description')} onChange={onChange(isAdd ? 'add' : 'edit')} invalid={errors.get('descriptionError')} />
                                     </Col>
                                 </FormGroup>
 
@@ -111,7 +111,7 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
                         <FormGroup row>
                             <Label md={4} for='pwd' className='text-right title-font' >PWD</Label>
                             <Col md={8}>
-                                <Input type='password' id='pwd' name='pwd' disabled={!isAdd} value={isAdd ? add.get('pwd') : ''} onChange={onChange(isAdd ? 'add' : 'user')} invalid={errors.get('pwdError')}/>
+                                <Input type='password' id='pwd' name='pwd' disabled={!isAdd} value={isAdd ? add.get('pwd') : ''} onChange={onChange(isAdd ? 'add' : 'user')} invalid={errors.get('pwdError')} />
                             </Col>
                         </FormGroup>
                         <FormGroup row>
@@ -130,30 +130,46 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
                 </Col>
 
                 <Col md={4} style={colStyle}>
-                    <Form className="pl-4 pr-4 pt-4 pb-2 border rounded bg-light h-100">
-                        <Label for='roles' className="title-font">권한</Label>
-                        <Input type='select' id='roles' name='roles' className="p-1 h-85" value={isAdd ? add.get('roles').toJS() : edit.get('roles').toJS() } multiple>
-                            {roles.map((role) => {
-                                const { _id, sub, name, roleId } = role.toJS();
+                    <Form className="pl-4 pr-4 pt-4 pb-2 border rounded bg-light h-100 overflow-scroll">
+                        <h3 className="title-font">권한</h3>
+                        {roles.map((role) => {
+                            const { _id, sub, name, roleId } = role.toJS();
 
-                                if (sub.length > 0) {
-                                    return sub.map((subRole) => {
-                                        const { _id: subId, name: subName, roleId: subRoleId } = subRole;
-                                        const keys = Object.keys(subRoleId);
-
-                                        return keys.map((key, index) => (
-                                            <option key={`${subId}_${index}`} value={subRoleId[key]} className="p-2 mb-1">{name} - {subName} ({key})</option>
-                                        ))
-                                    })
-                                } else {
-                                    const keys = Object.keys(roleId);
+                            if (sub.length > 0) {
+                                return sub.map((subRole) => {
+                                    const { _id: subId, name: subName, roleId: subRoleId } = subRole;
+                                    const keys = Object.keys(subRoleId);
 
                                     return keys.map((key, index) => (
-                                        <option key={`${_id}_${index}`} value={roleId[key]} className="p-2 mb-1">{name} ({key})</option>
+                                        <div key={`${subId}_${index}`} className="mb-2">
+                                            <input
+                                                type='checkbox'
+                                                name="roles"
+                                                value={subRoleId[key]}
+                                                checked={isAdd ? add.get('roles').includes(subRoleId[key]) : edit.get('roles').includes(subRoleId[key])}
+                                                onChange={onChangeRoles(isAdd ? 'add' : 'edit')}
+                                            />
+                                            <span className="pl-2">{subName} ({key})</span>
+                                        </div>
                                     ))
-                                }
-                            })}
-                        </Input>
+                                })
+                            } else {
+                                const keys = Object.keys(roleId);
+
+                                return keys.map((key, index) => (
+                                    <div key={`${_id}_${index}`} className="mb-2">
+                                        <input
+                                            type='checkbox'
+                                            name="roles"
+                                            value={roleId[key]}
+                                            checked={isAdd ? add.get('roles').includes(roleId[key]) : edit.get('roles').includes(roleId[key])}
+                                            onChange={onChangeRoles(isAdd ? 'add' : 'edit')}
+                                        />
+                                        <span className="pl-2">{name} ({key})</span>
+                                    </div>
+                                ))
+                            }
+                        })}
                     </Form>
                 </Col>
             </Row>

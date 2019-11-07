@@ -13,6 +13,7 @@ const LOGOUT = 'account/LOGOUT';
 const SET_USER_INFO = 'account/SET_USER_INFO';
 const SET_VALIDATED = 'account/SET_VALIDATED';
 const ON_CHANGE = 'account/ON_CHANGE';
+const SET_CHECKED_LIST = 'account/SET_CHECKED_LIST';
 const INITIALIZE = 'account/INITIALIZE';
 
 export const getUsers = createAction(GET_USERS, api.getUsers);
@@ -25,6 +26,7 @@ export const logout = createAction(LOGOUT, api.logout);
 export const setUserInfo = createAction(SET_USER_INFO);
 export const setValidated = createAction(SET_VALIDATED);
 export const onChange = createAction(ON_CHANGE);
+export const setCheckedList = createAction(SET_CHECKED_LIST);
 export const initialize = createAction(INITIALIZE);
 
 const initialState = Map({
@@ -83,11 +85,11 @@ export default handleActions({
             const { data: user } = action.payload.data;
 
             return state.set('user', fromJS(user))
-                        .setIn(['edit', 'username'], user.profile.username)
-                        .setIn(['edit', 'description'], user.profile.description)
-                        .setIn(['edit', 'userType'], user.profile.userType)
-                        .setIn(['edit', 'userId'], user.userId)
-                        .setIn(['edit', 'roles'], fromJS(user.roles));
+                .setIn(['edit', 'username'], user.profile.username)
+                .setIn(['edit', 'description'], user.profile.description)
+                .setIn(['edit', 'userType'], user.profile.userType)
+                .setIn(['edit', 'userId'], user.userId)
+                .setIn(['edit', 'roles'], fromJS(user.roles));
         }
     }),
     ...pender({
@@ -151,6 +153,18 @@ export default handleActions({
         const { target, name, value } = action.payload;
 
         return target ? state.setIn([target, name], value) : state.set(name, value);
+    },
+    [SET_CHECKED_LIST]: (state, action) => {
+        const { target, name, value, checked } = action.payload;
+        const checkedList = target ? state.getIn([target, name]) : state.get(name);
+
+        if (checked) {
+            return target ? state.updateIn([target, name], (target) => target.push(value)) : state.update(name, (target) => target.push(value))
+        } else {
+            const index = checkedList.findIndex((item) => item === value);
+
+            return target ? state.updateIn([target, name], (target) => target.remove(index)) : state.update(name, (target) => target.remove(index));
+        }
     },
     [INITIALIZE]: (state, action) => {
         const { payload } = action;
