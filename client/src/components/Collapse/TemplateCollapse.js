@@ -107,9 +107,9 @@ const TemplateCollapse = ({
 				<Col
 					md={6}
 					style={colStyle}
-					className={`pl-4 pr-4 pt-4 pb-1 border rounded bg-light ${isAdd && 'border-danger'}`}
 				>
 					<Form
+						className={`pl-4 pr-4 pt-4 pb-1 border rounded bg-light h-100 ${isAdd && 'border-danger'}`}
 						onSubmit={(e) => {
 							e.stopPropagation();
 						}}

@@ -12,7 +12,8 @@ export const create = async (ctx) => {
         description,
         userType,
         userId,
-        pwd
+        pwd,
+        roles
     } = ctx.request.body;
 
     const schema = Joi.object().keys({
@@ -20,7 +21,8 @@ export const create = async (ctx) => {
         description: Joi.string().required(),
         userType: Joi.string().required(),
         userId: Joi.string().min(4).required(),
-        pwd: Joi.string().min(4).max(16).required()
+        pwd: Joi.string().min(4).max(16).required(),
+        roles: Joi.array().min(0)
     });
 
     const result = Joi.validate(ctx.request.body, schema);
@@ -35,7 +37,7 @@ export const create = async (ctx) => {
     }
 
     try {
-        const user = await User.createUser({ username, description, userType, userId, pwd });
+        const user = await User.createUser({ username, description, userType, userId, pwd, roles });
 
         ctx.res.ok({
             data: user,
@@ -44,6 +46,156 @@ export const create = async (ctx) => {
     } catch (e) {
         ctx.res.internalServerError({
             message: `Error - accountCtrl > create: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 11. 02
+ * @description 계정 목록 조회
+ */
+export const list = async (ctx) => {
+    let page = parseInt(ctx.query.page || 1, 10);
+
+    if (page < 1) {
+        ctx.res.badRequest({
+            data: page,
+            message: 'Page can\'t be less than 1'
+        });
+
+        return;
+    }
+
+    try {
+        const accounts = await User.find({}, { pwd: 0 })
+            .sort({ 'timestamp.regDt': -1 })
+            .skip((page - 1) * 10)
+            .limit(10);
+
+        const count = await User.countDocuments();
+
+        ctx.set('Total', count);
+        ctx.set('Last-Page', Math.ceil(count / 10));
+
+        ctx.res.ok({
+            data: accounts,
+            message: 'Success - accountCtrl > list'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            message: `Error - accountCtrl > list: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 11. 02
+ * @description 계정 조회
+ */
+export const one = async (ctx) => {
+    let { id } = ctx.params;
+
+    try {
+        let account = await User.findOne({ _id: id }, { pwd: 0 });
+
+        ctx.res.ok({
+            data: account,
+            message: 'Success - accountCtrl > one'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            data: { id: id },
+            message: `Error - accountCtrl > one: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 11. 05
+ * @description 계정 수정
+ */
+export const edit = async (ctx) => {
+    let { id } = ctx.params;
+    let {
+        username,
+        description,
+        userType,
+        userId,
+        roles
+    } = ctx.request.body;
+
+    const schema = Joi.object().keys({
+        username: Joi.string().required(),
+        description: Joi.string().required(),
+        userType: Joi.string().required(),
+        userId: Joi.string().required(),
+        roles: Joi.array().min(0)
+    });
+
+    const result = Joi.validate(ctx.request.body, schema);
+
+    if (result.error) {
+        ctx.res.badRequest({
+            data: result.error,
+            message: 'Fail - accountCtrl > edit'
+        });
+
+        return;
+    }
+
+    try {
+        const account = await User.editUser(id, { username, description, userType, userId, roles });
+
+        ctx.res.ok({
+            data: account,
+            message: 'Success - accountCtrl > edit'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            data: ctx.request.body,
+            message: `Error - accountCtrl > edit: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 11. 07
+ * @description 계정 삭제
+ */
+export const deleteOne = async (ctx) => {
+    let { id } = ctx.params;
+    let { yn } = ctx.request.body;
+
+    const schema = Joi.object().keys({
+        yn: Joi.string().required()
+    });
+
+    const result = Joi.validate(ctx.request.body, schema);
+
+    if (result.error) {
+        ctx.res.badRequest({
+            data: result.error,
+            message: 'Fail - accountCtrl > deleteOne'
+        });
+
+        return;
+    }
+
+    try {
+        const account = await User.deleteUser({ id, yn });
+
+        ctx.res.ok({
+            data: account,
+            message: 'Success - accountCtrl > deleteOne'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            data: { id, yn },
+            message: `Error - accountCtrl > deleteOne: ${e.message}`
         });
     }
 };
