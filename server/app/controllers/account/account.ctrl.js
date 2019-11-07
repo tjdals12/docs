@@ -163,6 +163,45 @@ export const edit = async (ctx) => {
 
 /**
  * @author      minz-logger
+ * @date        2019. 11. 07
+ * @description 계정 삭제
+ */
+export const deleteOne = async (ctx) => {
+    let { id } = ctx.params;
+    let { yn } = ctx.request.body;
+
+    const schema = Joi.object().keys({
+        yn: Joi.string().required()
+    });
+
+    const result = Joi.validate(ctx.request.body, schema);
+
+    if (result.error) {
+        ctx.res.badRequest({
+            data: result.error,
+            message: 'Fail - accountCtrl > deleteOne'
+        });
+
+        return;
+    }
+
+    try {
+        const account = await User.deleteUser({ id, yn });
+
+        ctx.res.ok({
+            data: account,
+            message: 'Success - accountCtrl > deleteOne'
+        });
+    } catch (e) {
+        ctx.res.internalServerError({
+            data: { id, yn },
+            message: `Error - accountCtrl > deleteOne: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
  * @date        2019. 10. 18
  * @description 로그인
  */

@@ -92,6 +92,7 @@ UserSchema.statics.createUser = async function (param) {
  * @author minz-logger
  * @date 2019. 10. 18
  * @description UserId로 계정 조회
+ * @param       {String} userId
  */
 UserSchema.statics.findByUserId = function (userId) {
     return this.findOne({
@@ -103,6 +104,8 @@ UserSchema.statics.findByUserId = function (userId) {
  * @author      minz-logger
  * @date        2019. 11. 05
  * @description 계정 수정
+ * @param       {String} id
+ * @param       {Object} param
  */
 UserSchema.statics.editUser = function (id, param) {
     let {
@@ -137,8 +140,40 @@ UserSchema.statics.editUser = function (id, param) {
 
 /**
  * @author      minz-logger
+ * @date        2019. 11. 07
+ * @description 계정 삭제
+ * @param       {Object} param
+ */
+UserSchema.statics.deleteUser = function (param) {
+    let {
+        id,
+        yn
+    } = param;
+
+    return this.findOneAndUpdate(
+        { _id: id },
+        {
+            $set: {
+                deleteYn: {
+                    yn,
+                    deleteDt: DEFINE.dateNow()
+                }
+            }
+        },
+        {
+            new: true,
+            projection: {
+                pwd: 0
+            }
+        }
+    );
+};
+
+/**
+ * @author      minz-logger
  * @date        2019. 10. 18
  * @description 비밀번호 검증
+ * @param       {String} password
  */
 UserSchema.methods.validatePassword = function (password) {
     return this.pwd === auth.hash(password);

@@ -226,6 +226,39 @@ account.patch('/:id/edit', commonCtrl.checkObjectId, accountCtrl.edit);
 
 /**
  * @swagger
+ * /api/accounts/{id}/delete:
+ *  patch:
+ *      tags:
+ *          - Account
+ *      summary: 계정 삭제
+ *      description: 계정 삭제
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            description: user id
+ *            required: true
+ *            type: string
+ *            example: 5d3e4a41709a5107893bfe4c
+ *          - in: body
+ *            name: body
+ *            description: delete parameters
+ *            required: true
+ *            schema:
+ *              type: object
+ *              properties:
+ *                  yn:
+ *                      type: string
+ *                      example: 'YES'
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ *              schema:
+ *                  $ref: '#/definitions/user'
+ */
+account.patch('/:id/delete', commonCtrl.checkObjectId, accountCtrl.deleteOne);
+
+/**
+ * @swagger
  * /api/accounts/login:
  *  post:
  *      tags:
