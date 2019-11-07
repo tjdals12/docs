@@ -12,7 +12,8 @@ export const create = async (ctx) => {
         description,
         userType,
         userId,
-        pwd
+        pwd,
+        roles
     } = ctx.request.body;
 
     const schema = Joi.object().keys({
@@ -20,7 +21,8 @@ export const create = async (ctx) => {
         description: Joi.string().required(),
         userType: Joi.string().required(),
         userId: Joi.string().min(4).required(),
-        pwd: Joi.string().min(4).max(16).required()
+        pwd: Joi.string().min(4).max(16).required(),
+        roles: Joi.array().min(0)
     });
 
     const result = Joi.validate(ctx.request.body, schema);
@@ -35,7 +37,7 @@ export const create = async (ctx) => {
     }
 
     try {
-        const user = await User.createUser({ username, description, userType, userId, pwd });
+        const user = await User.createUser({ username, description, userType, userId, pwd, roles });
 
         ctx.res.ok({
             data: user,
@@ -121,14 +123,16 @@ export const edit = async (ctx) => {
         username,
         description,
         userType,
-        userId
+        userId,
+        roles
     } = ctx.request.body;
 
     const schema = Joi.object().keys({
         username: Joi.string().required(),
         description: Joi.string().required(),
         userType: Joi.string().required(),
-        userId: Joi.string().required()
+        userId: Joi.string().required(),
+        roles: Joi.array().min(0)
     });
 
     const result = Joi.validate(ctx.request.body, schema);
@@ -143,7 +147,7 @@ export const edit = async (ctx) => {
     }
 
     try {
-        const account = await User.editUser(id, { username, description, userType, userId });
+        const account = await User.editUser(id, { username, description, userType, userId, roles });
 
         ctx.res.ok({
             data: account,
