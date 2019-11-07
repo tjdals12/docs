@@ -55,7 +55,6 @@ class AccountsCopllapseCardContainer extends React.Component {
     handleChangeRoles = (target) => (e) => {
         const { AccountActions } = this.props;
         const { name, value, checked } = e.target;
-        console.log(target, name, value, checked);
 
         AccountActions.setCheckedList({ target, name, value, checked });
     }
@@ -74,6 +73,14 @@ class AccountsCopllapseCardContainer extends React.Component {
 
         await AccountActions.editUser({ id, param: { ...edit.toJS() } });
         AccountActions.initialize('errors');
+        this.getUsers();
+        this.getUser(id);
+    }
+
+    handleDelete = async (id, yn) => {
+        const { AccountActions } = this.props;
+
+        await AccountActions.deleteUser({ id, param: { yn } });
         this.getUsers();
         this.getUser(id);
     }
@@ -108,6 +115,7 @@ class AccountsCopllapseCardContainer extends React.Component {
                         onChangeRoles={this.handleChangeRoles}
                         onSave={this.handleSave}
                         onEdit={this.handleEdit}
+                        onDelete={this.handleDelete}
                     />
                 }
             />

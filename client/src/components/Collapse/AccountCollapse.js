@@ -22,9 +22,10 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
 
     const rowRender = (Row, props) => {
         const isActive = props.dataItem._id === user.get('_id');
+        const isDelete = props.dataItem.deleteYn.yn === 'YES';
 
         return React.cloneElement(Row, {
-            className: classNames(isActive && 'bg-gradient-theme-left text-white', 'can-click', Row.props.className)
+            className: classNames(isActive && 'bg-gradient-theme-left text-white', isDelete && 'font-italic text-line-through', 'can-click', Row.props.className)
         })
     }
 
@@ -120,7 +121,10 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
                                     : (
                                         <React.Fragment>
                                             <Button color='primary' className="mr-2" onClick={() => onEdit(user.get('_id'))}>수정</Button>
-                                            <Button color='danger' onClick={onDelete}>삭제</Button>
+                                            {user.getIn(['deleteYn', 'yn']) === 'YES'
+                                                ? <Button color='success' onClick={() => onDelete(user.get('_id'), 'NO')}>복구</Button>
+                                                : <Button color='danger' onClick={() => onDelete(user.get('_id'), 'YES')}>삭제</Button>
+                                            }
                                         </React.Fragment>
                                     )
                                 }
