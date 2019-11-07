@@ -17,10 +17,11 @@ class AccountsCopllapseCardContainer extends React.Component {
         RoleActions.getRoles();
     }
 
-    getUsers = () => {
+    getUsers = (page) => {
         const { AccountActions } = this.props;
 
-        AccountActions.getUsers();
+        AccountActions.onChange({ name: 'page', value: page })
+        AccountActions.getUsers(page);
     }
 
     getUser = (id) => {
@@ -86,7 +87,7 @@ class AccountsCopllapseCardContainer extends React.Component {
     }
 
     componentDidMount() {
-        this.getUsers();
+        this.getUsers(1);
     }
 
     render() {
@@ -110,6 +111,7 @@ class AccountsCopllapseCardContainer extends React.Component {
                         errors={errors}
                         count={count}
                         page={page}
+                        onPage={this.getUsers}
                         onSelect={this.getUser}
                         onChange={this.handleChange}
                         onChangeRoles={this.handleChangeRoles}

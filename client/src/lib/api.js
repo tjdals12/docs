@@ -119,7 +119,7 @@ export const deleteTemplate = ({ id }) => axios.delete(`${real}/api/templates/${
 export const getRoles = () => axios.get(`${real}/api/roles`);
 
 /** Account */
-export const getUsers = () => axios.get(`${real}/api/accounts`);
+export const getUsers = (page) => axios.get(`${real}/api/accounts?page=${page}`);
 export const getUser = ({ id }) => axios.get(`${real}/api/accounts/${id}`);
 export const addUser = (param) => axios.post(`${real}/api/accounts`, { ...param });
 export const editUser = ({ id, param }) => axios.patch(`${real}/api/accounts/${id}/edit`, { ...param });

@@ -17,7 +17,7 @@ const makeHeaderCell = ({ title, className }) => {
     return <span className={classes}>{title}</span>;
 };
 
-const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count, page, onSelect, onChange, onChangeRoles, onSave, onEdit, onDelete }) => {
+const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count, page, onPage, onSelect, onChange, onChangeRoles, onSave, onEdit, onDelete }) => {
     const isAdd = user.size === 0;
 
     const rowRender = (Row, props) => {
@@ -40,6 +40,7 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
                         take={10}
                         skip={(page - 1) * 10}
                         onRowClick={(e) => onSelect(e.dataItem._id)}
+                        onPageChange={(e) => onPage(e.page.skip / e.page.take + 1)}
                         rowRender={rowRender}
                         className="h-100 border rounded"
                     >
@@ -153,7 +154,7 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
                                                 checked={isAdd ? add.get('roles').includes(subRoleId[key]) : edit.get('roles').includes(subRoleId[key])}
                                                 onChange={onChangeRoles(isAdd ? 'add' : 'edit')}
                                             />
-                                            <span className="pl-2">{subName} ({key})</span>
+                                            <span className="pl-2">{name} - {subName} ({key})</span>
                                         </div>
                                     ))
                                 })
