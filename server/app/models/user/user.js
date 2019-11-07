@@ -65,7 +65,8 @@ UserSchema.statics.createUser = async function (param) {
         description,
         userType,
         userId,
-        pwd
+        pwd,
+        roles
     } = param;
 
     const user = new this({
@@ -75,7 +76,8 @@ UserSchema.statics.createUser = async function (param) {
             userType
         },
         userId,
-        pwd: auth.hash(pwd)
+        pwd: auth.hash(pwd),
+        roles
     });
 
     await user.save();
@@ -107,7 +109,8 @@ UserSchema.statics.editUser = function (id, param) {
         username,
         description,
         userType,
-        userId
+        userId,
+        roles
     } = param;
 
     return this.findOneAndUpdate(
@@ -119,7 +122,8 @@ UserSchema.statics.editUser = function (id, param) {
                     description,
                     userType
                 },
-                userId
+                userId,
+                roles
             }
         },
         {

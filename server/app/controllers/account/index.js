@@ -93,6 +93,11 @@ const account = new Router();
  *                  pwd:
  *                      type: string
  *                      example: ''
+ *                  roles:
+ *                      type: array
+ *                      example: ['5daeaefaef365b120bab0084', '5daeaefdef365b120bab0085']
+ *                      items:
+ *                          type: string
  *      responses:
  *          200:
  *              description: Successful operation
@@ -206,6 +211,11 @@ account.get('/:id', commonCtrl.checkObjectId, accountCtrl.one);
  *                  userId:
  *                      type: string
  *                      example: ''
+ *                  roles:
+ *                      type: array
+ *                      example: ['5daeaf41ef365b120bab0088', '5daeaf43ef365b120bab0089']
+ *                      items:
+ *                          type: string
  *      responses:
  *          200:
  *              description: Successful operation
