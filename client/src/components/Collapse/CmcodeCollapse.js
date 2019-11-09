@@ -132,8 +132,9 @@ const CmcodeCollapse = ({
 					</Grid>
 				</Col>
 
-				<Col md={3} style={colStyle} className="pl-4 pr-4 pt-4 pb-1 border rounded bg-light">
+				<Col md={3} style={colStyle} >
 					<Form
+						className="pl-4 pr-4 pt-4 pb-1 border rounded bg-light h-100"
 						onSubmit={(e) => {
 							e.preventDefault();
 						}}
