@@ -1,20 +1,16 @@
 import React from 'react';
-import { Col, Row, Button, Table } from 'reactstrap';
+import { Table } from 'reactstrap';
 import classNames from 'classnames';
 import Loader from 'components/Loader';
 import PropTypes from 'prop-types';
 import Pagination from 'components/Pagination';
 
-
 const DocumentTable = ({
 	loading,
-	writable,
 	page,
 	lastPage,
 	documents,
 	checkedList,
-	onOpenAdd,
-	onDelete,
 	onOpenDetail,
 	onChecked,
 	onCheckedAll,
@@ -28,20 +24,6 @@ const DocumentTable = ({
 
 	return (
 		<React.Fragment>
-			{writable && (
-				<Row className="hidden-md hidden-sm hidden-xs">
-					<Col md={4}>
-						<Button color="primary" className="mr-2" onClick={onOpenAdd}>
-							추가
-						</Button>
-
-						<Button color="secondary" onClick={onDelete}>
-							삭제
-						</Button>
-					</Col>
-				</Row>
-			)}
-
 			{loading && <Loader size={20} margin={10} />}
 
 			{!loading && (
@@ -82,7 +64,18 @@ const DocumentTable = ({
 					</thead>
 					<tbody>
 						{documents.map((document) => {
-							let { _id, documentGb, documentNumber, documentTitle, documentRev, documentStatus, holdYn, deleteYn, level, timestamp } = document;
+							let { 
+								_id, 
+								documentGb, 
+								documentNumber, 
+								documentTitle, 
+								documentRev, 
+								documentStatus, 
+								holdYn, 
+								deleteYn, 
+								level, 
+								timestamp 
+							} = document;
 
 							return (
 								<tr key={_id}>
@@ -156,13 +149,10 @@ const DocumentTable = ({
 
 DocumentTable.propTypes = {
 	loading: PropTypes.bool,
-	writable: PropTypes.bool,
 	page: PropTypes.number,
 	lastPage: PropTypes.number,
 	documents: PropTypes.array.isRequired,
 	checkedList: PropTypes.array,
-	onOpenAdd: PropTypes.func,
-	onDelete: PropTypes.func,
 	onOpenDetail: PropTypes.func,
 	onChecked: PropTypes.func,
 	onCheckedAll: PropTypes.func,
@@ -174,12 +164,9 @@ DocumentTable.propTypes = {
 
 DocumentTable.defaultProps = {
 	loading: false,
-	writable: false,
 	page: 1,
 	lastPage: 1,
 	checkedList: [],
-	onOpenAdd: () => console.warn('Warning: onOpenAdd is not defined'),
-	onDelete: () => console.warn('Warning: onDelete is not defined'),
 	onOpenDetail: () => console.warn('Warning: onOpenDetail is not defined'),
 	onChecked: () => console.warn('Warning: onChecked is not defined'),
 	onCheckedAll: () => console.warn('Warning: onCheckedAll is not defined'),
