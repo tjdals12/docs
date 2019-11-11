@@ -1,18 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Col, Form, FormGroup, InputGroup, InputGroupAddon, Input, Label, Button } from 'reactstrap';
+import { Col, Form, FormGroup, InputGroup, InputGroupAddon, Input, Button } from 'reactstrap';
+import LabelInput from './LabelInput';
 import PropTypes from 'prop-types';
-
-const LabelInput = ({ name, label, size = 2, children }) => {
-	return (
-		<React.Fragment>
-			<Label md={1} for={name} className="title-font text-right">{label}</Label>
-			<Col md={size}>
-				{children}
-			</Col>
-		</React.Fragment>
-	)
-};
 
 const DocumentSearchForm = ({ gb, status, search, onChange, onSearch, onFullPeriod, className, ...rest }) => {
 	const classes = classNames(

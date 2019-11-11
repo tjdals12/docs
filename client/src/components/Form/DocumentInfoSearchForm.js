@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Form, FormGroup, Col, Label, Input, Button } from 'reactstrap';
+import { Form, FormGroup, Col, Input, Button } from 'reactstrap';
+import LabelInput from './LabelInput';
 import PropTypes from 'prop-types';
 
 const DocumentInfoSearchForm = ({ vendors, gbs, search, onChange, onSearch, className, ...rest }) => {
@@ -17,10 +18,7 @@ const DocumentInfoSearchForm = ({ vendors, gbs, search, onChange, onSearch, clas
 			{...rest}
 		>
 			<FormGroup row>
-				<Label md={1} for="vendor" className="text-right">
-					업체명
-				</Label>
-				<Col md={2}>
+				<LabelInput name="vendor" label="업체">
 					<Input
 						type="select"
 						id="vendor"
@@ -37,11 +35,9 @@ const DocumentInfoSearchForm = ({ vendors, gbs, search, onChange, onSearch, clas
 							</option>
 						))}
 					</Input>
-				</Col>
-				<Label md={1} for="documentNumber" className="text-right">
-					문서번호
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+
+				<LabelInput name="documentNumber" label="문서번호">
 					<Input
 						type="text"
 						id="documentNumber"
@@ -49,11 +45,9 @@ const DocumentInfoSearchForm = ({ vendors, gbs, search, onChange, onSearch, clas
 						value={search.get('documentNumber')}
 						onChange={onChange}
 					/>
-				</Col>
-				<Label md={1} for="documentTitle" className="text-right">
-					문서명
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+
+				<LabelInput name="documentTitle" label="문서명">
 					<Input
 						type="text"
 						id="documentTitle"
@@ -61,11 +55,9 @@ const DocumentInfoSearchForm = ({ vendors, gbs, search, onChange, onSearch, clas
 						value={search.get('documentTitle')}
 						onChange={onChange}
 					/>
-				</Col>
-				<Label md={1} for="documentGb" className="text-right">
-					문서 구분
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+
+				<LabelInput name="documentGb" label="문서 구분">
 					<Input
 						type="select"
 						id="documentGb"
@@ -80,7 +72,7 @@ const DocumentInfoSearchForm = ({ vendors, gbs, search, onChange, onSearch, clas
 							</option>
 						))}
 					</Input>
-				</Col>
+				</LabelInput>
 			</FormGroup>
 			<FormGroup row className="mb-0">
 				<Col md={{ size: 3, offset: 9 }}>
