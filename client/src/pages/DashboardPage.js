@@ -9,8 +9,8 @@ import { FaBuilding } from 'react-icons/fa';
 
 const DashboardPage = (props) => {
 	return (
-		<ScrollToTop>
-			<Page title="Dashboard" breadcrumbs={[{ name: 'Dashboard', active: true }]}>
+		<Page title="Dashboard" breadcrumbs={[{ name: 'Dashboard', active: true }]}>
+			<ScrollToTop>
 				<Row>
 					<Col lg={3} md={6} sm={6} xs={12}>
 						<NumberWidget
@@ -51,9 +51,8 @@ const DashboardPage = (props) => {
 						/>
 					</Col>
 				</Row>
-			</Page>
-
-		</ScrollToTop>
+			</ScrollToTop>
+		</Page>
 	);
 };
 

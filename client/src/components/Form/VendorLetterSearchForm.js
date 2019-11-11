@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Form, FormGroup, Label, Col, Input, Button } from 'reactstrap';
+import { Form, FormGroup, Col, Input, Button } from 'reactstrap';
+import LabelInput from './LabelInput';
 import PropTypes from 'prop-types';
 
 const VendorLetterSearchForm = ({ status, vendors, search, onChange, onSearch, className, ...rest }) => {
@@ -16,10 +17,7 @@ const VendorLetterSearchForm = ({ status, vendors, search, onChange, onSearch, c
 			}}
 		>
 			<FormGroup row>
-				<Label md={1} for="senderGb" className="text-right">
-					발신 구분
-				</Label>
-				<Col md={2}>
+				<LabelInput name="senderGb" label="발신 구분">
 					<Input
 						type="select"
 						id="senderGb"
@@ -32,11 +30,9 @@ const VendorLetterSearchForm = ({ status, vendors, search, onChange, onSearch, c
 						<option value="02">CONTRACTOR</option>
 						<option value="03">VENDOR</option>
 					</Input>
-				</Col>
-				<Label md={1} for="sender" className="text-right">
-					발신
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+				
+				<LabelInput name="sender" label="발신">
 					<Input
 						type="text"
 						id="sender"
@@ -45,11 +41,9 @@ const VendorLetterSearchForm = ({ status, vendors, search, onChange, onSearch, c
 						value={search.get('sender')}
 						onChange={onChange}
 					/>
-				</Col>
-				<Label md={1} for="receiverGb" className="text-right">
-					수신 구분
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+
+				<LabelInput name="receiverGb" label="수신 구분">
 					<Input
 						type="select"
 						id="receiverGb"
@@ -62,11 +56,9 @@ const VendorLetterSearchForm = ({ status, vendors, search, onChange, onSearch, c
 						<option value="02">CONTRACTOR</option>
 						<option value="03">VENDOR</option>
 					</Input>
-				</Col>
-				<Label md={1} for="receiver" className="text-right">
-					수신
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+				
+				<LabelInput name="receiver" label="수신">
 					<Input
 						type="text"
 						id="receiver"
@@ -75,13 +67,11 @@ const VendorLetterSearchForm = ({ status, vendors, search, onChange, onSearch, c
 						value={search.get('receiver')}
 						onChange={onChange}
 					/>
-				</Col>
+				</LabelInput>
 			</FormGroup>
+
 			<FormGroup row>
-				<Label md={1} for="vendor" className="text-right">
-					업체명
-				</Label>
-				<Col md={2}>
+				<LabelInput name="vendor" label="업체명">
 					<Input type="select" id="vendor" name="vendor" value={search.get('vendor')} onChange={onChange}>
 						<option value="">-- 업체 --</option>
 						{vendors.map((vendor) => (
@@ -91,11 +81,9 @@ const VendorLetterSearchForm = ({ status, vendors, search, onChange, onSearch, c
 							</option>
 						))}
 					</Input>
-				</Col>
-				<Label md={1} for="officialNumber" className="text-right">
-					접수번호
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+
+				<LabelInput name="officialNumber" label="접수번호">
 					<Input
 						type="text"
 						id="officialNumber"
@@ -104,11 +92,9 @@ const VendorLetterSearchForm = ({ status, vendors, search, onChange, onSearch, c
 						value={search.get('officialNumber')}
 						onChange={onChange}
 					/>
-				</Col>
-				<Label md={1} for="receiveDate" className="text-right">
-					접수일
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+				
+				<LabelInput name="receiveDate" label="접수일">
 					<Input
 						type="date"
 						id="receiveDate"
@@ -116,11 +102,9 @@ const VendorLetterSearchForm = ({ status, vendors, search, onChange, onSearch, c
 						defaultValue={search.get('receiveDate')}
 						onChange={onChange}
 					/>
-				</Col>
-				<Label md={1} for="targetDate" className="text-right">
-					회신요청일
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+				
+				<LabelInput name="targetDate" label="회신요청일">
 					<Input
 						type="date"
 						id="targetDate"
@@ -128,13 +112,11 @@ const VendorLetterSearchForm = ({ status, vendors, search, onChange, onSearch, c
 						defaultValue={search.get('targetDate')}
 						onChange={onChange}
 					/>
-				</Col>
+				</LabelInput>
 			</FormGroup>
+
 			<FormGroup row className="mb-0">
-				<Label md={1} for="letterStatus" className="text-right">
-					현재 상태
-				</Label>
-				<Col md={2}>
+				<LabelInput name="letterStatus" label="현재 상태">
 					<Input
 						type="select"
 						id="letterStatus"
@@ -149,11 +131,9 @@ const VendorLetterSearchForm = ({ status, vendors, search, onChange, onSearch, c
 							</option>
 						))}
 					</Input>
-				</Col>
-				<Label md={1} for="cancelYn" className="text-right">
-					삭제 여부
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+
+				<LabelInput name="cancelYn" label="삭제 여부">
 					<Input
 						type="select"
 						id="cancelYn"
@@ -165,7 +145,8 @@ const VendorLetterSearchForm = ({ status, vendors, search, onChange, onSearch, c
 						<option value="YES">YES</option>
 						<option value="NO">NO</option>
 					</Input>
-				</Col>
+				</LabelInput>
+
 				<Col md={{ size: 3, offset: 3 }}>
 					<Button type="submit" color="primary" className="w-100">
 						SEARCH

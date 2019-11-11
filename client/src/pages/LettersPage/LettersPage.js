@@ -2,6 +2,7 @@ import React from 'react';
 import ScrollToTop from 'components/ScrollToTop';
 import Page from 'components/Page';
 import LetterSearchFormContainer from 'containers/Form/LetterSearchFormContainer';
+import LetterToolbarContainer from 'containers/Toolbar/LetterToolbarContainer';
 import LetterTableContainer from 'containers/Table/LetterTableContainer';
 import LetterAddModalContainer from 'containers/Modal/LetterAddModalContainer';
 import LetterDetailModalContainer from 'containers/Modal/LetterDetailModalContainer';
@@ -17,13 +18,15 @@ const InternalTransmittalPage = (props) => {
 	const { writable } = props;
 
 	return (
-		<ScrollToTop>
-			<Page
-				title="Internal Letters"
-				breadcrumbs={[{ name: 'Letters', active: false }, { name: 'Internal', active: true }]}
-			>
+		<Page
+			title="Internal Letters"
+			breadcrumbs={[{ name: 'Letters', active: false }, { name: 'Internal', active: true }]}
+		>
+			<ScrollToTop>
 				<LetterSearchFormContainer />
-				<LetterTableContainer writable={writable} page={parseInt(page || 1, 10)} />
+				<LetterToolbarContainer writable={writable}/>
+				<LetterTableContainer page={parseInt(page || 1, 10)} />
+
 				<LetterAddModalContainer />
 				<LetterDetailModalContainer writable={writable} />
 				<LetterEditModalContainer />
@@ -31,8 +34,8 @@ const InternalTransmittalPage = (props) => {
 				<DocumentDetailModalContainer />
 				<VendorLetterDetailModalContainer />
 				<VendorDetailModalContainer />
-			</Page>
-		</ScrollToTop>
+			</ScrollToTop>
+		</Page>
 	);
 };
 

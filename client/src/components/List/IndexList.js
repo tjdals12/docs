@@ -41,19 +41,6 @@ const IndexList = ({
 				}
 			/>
 
-			{
-				writable &&
-				<Row className="hidden-md hidden-sm hidden-xs">
-					<Col md={4}>
-						<Button color="primary" className="mr-2" onClick={onOpenAdd}>
-							생성
-						</Button>
-						<Button color="secondary" onClick={onOpenInfoAdd}>
-							문서 추가
-						</Button>
-					</Col>
-				</Row>
-			}
 			<Row className="mb-2">
 				<Col md={12}>
 					{data.map((item, index) => {

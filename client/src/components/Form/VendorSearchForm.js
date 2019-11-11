@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Form, FormGroup, Label, Col, Input, InputGroup, InputGroupAddon, Button } from 'reactstrap';
+import { Form, FormGroup, Col, Input, InputGroup, InputGroupAddon, Button } from 'reactstrap';
+import LabelInput from './LabelInput';
 import PropTypes from 'prop-types';
 
 const VendorSearchForm = ({ projectList, managerList, parts, search, onChange, onSearch, onFullPeriod, className, ...rest }) => {
@@ -20,21 +21,16 @@ const VendorSearchForm = ({ projectList, managerList, parts, search, onChange, o
 			{...rest}
 		>
 			<FormGroup row>
-				<Label md={1} className='text-right'>
-					프로젝트
-				</Label>
-				<Col md={2}>
+				<LabelInput name="project" label="프로젝트">
 					<Input type='select' name='project' value={search.get('project')} onChange={onChange}>
 						<option value=''>-- 프로젝트 --</option>
 						{projectList.map((project) => (
 							<option key={project.get('_id')} value={project.get('_id')}>[{project.get('projectCode')}] {project.get('projectName')}</option>
 						))}
 					</Input>
-				</Col>
-				<Label md={1} className='text-right'>
-					담당자
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+
+				<LabelInput name="manager" label="담당자">
 					<Input type='select' name='manager' value={search.get('manager')} onChange={onChange}>
 						<option value=''>-- 담당자 --</option>
 						{managerList.map(team => {
@@ -45,34 +41,27 @@ const VendorSearchForm = ({ projectList, managerList, parts, search, onChange, o
 							)))
 						})}
 					</Input>
-				</Col>
-				<Label md={1} className="text-right">
-					Gb
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+
+				<LabelInput name="vendorGb" label="Gb">
 					<Input type="select" name="vendorGb" value={search.get('vendorGb')} onChange={onChange}>
 						<option value="">-- Gb --</option>
 						<option value="01">계약 업체</option>
 						<option value="02">관리 업체</option>
 					</Input>
-				</Col>
-				<Label md={1} className="text-right">
-					국가
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+
+				<LabelInput name="countryCd" label="국가">
 					<Input type="select" name="countryCd" value={search.get('countryCd')} onChange={onChange}>
 						<option value="">-- 국가 --</option>
 						<option value="01">국내</option>
 						<option value="02">해외</option>
 					</Input>
-				</Col>
+				</LabelInput> 
 			</FormGroup>
 
 			<FormGroup row>
-				<Label md={1} className="text-right">
-					공종명
-				</Label>
-				<Col md={2}>
+				<LabelInput name="part" label="공종명">
 					<Input type="select" name="part" value={search.get('part')} onChange={onChange}>
 						<option value="">-- 공종 --</option>
 						{parts.get('cdMinors').map((code) => (
@@ -81,11 +70,9 @@ const VendorSearchForm = ({ projectList, managerList, parts, search, onChange, o
 							</option>
 						))}
 					</Input>
-				</Col>
-				<Label md={1} className="text-right">
-					공종번호
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+
+				<LabelInput name="partNumber" label="공종번호">
 					<Input
 						type="text"
 						name="partNumber"
@@ -93,11 +80,9 @@ const VendorSearchForm = ({ projectList, managerList, parts, search, onChange, o
 						placeholder="ex) R-001"
 						onChange={onChange}
 					/>
-				</Col>
-				<Label md={1} className="text-right">
-					업체명
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+
+				<LabelInput name="vendorName" label="업체명">
 					<Input
 						type="text"
 						name="vendorName"
@@ -105,11 +90,9 @@ const VendorSearchForm = ({ projectList, managerList, parts, search, onChange, o
 						value={search.get('vendorName')}
 						onChange={onChange}
 					/>
-				</Col>
-				<Label md={1} className="text-right">
-					관리번호
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+
+				<LabelInput name="officialName" label="관리번호">
 					<Input
 						type="text"
 						name="officialName"
@@ -117,15 +100,12 @@ const VendorSearchForm = ({ projectList, managerList, parts, search, onChange, o
 						value={search.get('officialName')}
 						onChange={onChange}
 					/>
-				</Col>
+				</LabelInput>
 			</FormGroup>
 
 			<FormGroup row className="mb-0">
-				<Label md={1} className="text-right">
-					계약기간
-				</Label>
-				<Col md={4}>
-					<InputGroup id="regDt">
+				<LabelInput name="regDt" label="계약기간" size={4}>
+				<InputGroup id="regDt">
 						<InputGroupAddon addonType="prepend">
 							<Input type="date" name="effStaDt" value={search.get('effStaDt')} onChange={onChange} />
 						</InputGroupAddon>
@@ -134,7 +114,8 @@ const VendorSearchForm = ({ projectList, managerList, parts, search, onChange, o
 							<Input type="date" name="effEndDt" value={search.get('effEndDt')} onChange={onChange} />
 						</InputGroupAddon>
 					</InputGroup>
-				</Col>
+				</LabelInput>
+
 				<Col md={1}>
 					<Button color="dark" className="w-100" onClick={onFullPeriod}>
 						전체기간

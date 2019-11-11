@@ -1,6 +1,6 @@
 import React from 'react';
-import DocumentTable from 'components/Table/DocumentTable';
 import { withRouter } from 'react-router-dom';
+import DocumentTable from 'components/Table/DocumentTable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as documentActions from 'store/modules/document';
@@ -18,33 +18,16 @@ class DocumentTableContainer extends React.Component {
 		history.push(`/documents?page=${page}`);
 	};
 
-	getDocument = (id) => {
+	getDocument = async (id) => {
 		const { DocumentActions } = this.props;
 
-		DocumentActions.getDocument({ id });
+		await DocumentActions.getDocument({ id });
 	};
 
-	componentDidMount() {
-		this.getDocuments(1);
-	}
-
-	handleOpenAdd = async () => {
+	handleOpenDetail = (id) => {
 		const { ModalActions, DocumentActions } = this.props;
 
-		DocumentActions.initialize('errors');
-		ModalActions.open('documentAdd');
-	};
-
-	handleDelete = () => {
-		const { DocumentActions, checkedList, page } = this.props;
-
-		DocumentActions.deleteDocuments(checkedList.toJS(), page);
-	};
-
-	handleOpenDetail = ({ id }) => async () => {
-		const { ModalActions, DocumentActions } = this.props;
-
-		await this.getDocument(id);
+		this.getDocument(id);
 
 		DocumentActions.initialize('reasonError');
 		ModalActions.open('documentDetail');
@@ -66,21 +49,22 @@ class DocumentTableContainer extends React.Component {
 		});
 	};
 
-	render() {
-		const { writable, documents, checkedList, lastPage, page, loading, searchLoading } = this.props;
+	componentDidMount() {
+		this.getDocuments(1);
+	}
 
-		if (loading) return <div>Test</div>;
+	render() {
+		const { documents, checkedList, lastPage, page, loading, searchLoading } = this.props;
+
+		if (loading) return null;
 
 		return (
 			<DocumentTable
 				loading={searchLoading}
-				writable={writable}
 				page={page}
 				lastPage={lastPage}
-				data={documents}
+				documents={documents.toJS()}
 				checkedList={checkedList.toJS()}
-				onOpenAdd={this.handleOpenAdd}
-				onDelete={this.handleDelete}
 				onOpenDetail={this.handleOpenDetail}
 				onChecked={this.handleChecked}
 				onCheckedAll={this.handleCheckedAll}

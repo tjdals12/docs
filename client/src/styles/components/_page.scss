@@ -1,7 +1,7 @@
 .cr-page {
 	display: flex;
 	flex-direction: column;
-	min-height: 100vh;
+	flex: 1;
 
 	&__header {
 		@include media-breakpoint-down(sm) {

@@ -1,24 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Row, Col, Button, Table } from 'reactstrap';
+import { Table } from 'reactstrap';
 import Pagination from 'components/Pagination';
 import PropTypes from 'prop-types';
 
-const LetterTable = ({ writable, page, lastPage, data, onOpen, onOpenDetail, onPage, className, ...rest }) => {
+const LetterTable = ({ page, lastPage, data, onOpen, onOpenDetail, onPage, className, ...rest }) => {
 	const classes = classNames('mb-4 bg-white', classNames);
 
 	return (
 		<React.Fragment>
-			{
-				writable &&
-				<Row className="hidden-md hidden-sm hidden-xs">
-					<Col md={4}>
-						<Button color="primary" className="mr-2" onClick={onOpen('letterAdd')}>
-							추가
-					</Button>
-					</Col>
-				</Row>
-			}
 			<Table className={classes} {...rest} bordered striped hover>
 				<colgroup>
 					<col width="3%" />
@@ -68,7 +58,7 @@ const LetterTable = ({ writable, page, lastPage, data, onOpen, onOpenDetail, onP
 								</td>
 								<td className="text-center">{transmittal.get('officialNumber')}</td>
 								<td className="text-left">
-									<span className="have-link" onClick={onOpenDetail(id)}>
+									<span className="have-link" onClick={() => onOpenDetail(id)}>
 										{transmittal.get('letterTitle')}
 									</span>
 								</td>
@@ -110,20 +100,16 @@ const LetterTable = ({ writable, page, lastPage, data, onOpen, onOpenDetail, onP
 };
 
 LetterTable.propTypes = {
-	writable: PropTypes.bool,
 	page: PropTypes.number,
 	lastPage: PropTypes.number,
-	onOpen: PropTypes.func,
 	onOpenDetail: PropTypes.func,
 	onPage: PropTypes.func,
 	className: PropTypes.string
 }
 
 LetterTable.defaultProps = {
-	writable: false,
 	page: 1,
 	lastPage: 1,
-	onOpen: () => console.warn('Warning: onOpen is not defined'),
 	onOpenDetail: () => console.warn('Warning: onOpenDetail is not defined'),
 	onPage: () => console.warn('Warning: onPage is not defined')
 }

@@ -32,14 +32,8 @@ class VendorLetterTableContainer extends React.Component {
 		VendorActions.setTarget(id);
 	};
 
-	handleOpen = (name) => () => {
+	handleOpen = (name) => {
 		const { ModalActions, VendorLetterActions } = this.props;
-
-		if (name === 'vendorLetterReceive') {
-			VendorLetterActions.initialize('receive');
-		} else if (name === 'vendorLetterAdditionalReceive') {
-			VendorLetterActions.initialize('additionalReceive');
-		}
 
 		VendorLetterActions.initialize('errors');
 		ModalActions.open(name);
@@ -58,13 +52,12 @@ class VendorLetterTableContainer extends React.Component {
 	}
 
 	render() {
-		const { writable, vendorletters, page, lastPage, loading } = this.props;
+		const { vendorletters, page, lastPage, loading } = this.props;
 
 		if (loading || loading === undefined) return null;
 
 		return (
 			<VendorLetterTable
-				writable={writable}
 				page={page}
 				lastPage={lastPage}
 				data={vendorletters}

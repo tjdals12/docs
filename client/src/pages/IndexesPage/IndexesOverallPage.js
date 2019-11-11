@@ -2,6 +2,7 @@ import React from 'react';
 import ScrollToTop from 'components/ScrollToTop';
 import Page from 'components/Page';
 import IndexesSearchFormContainer from 'containers/Form/IndexesSearchFormContainer';
+import IndexesOverallToolbarContainer from 'containers/Toolbar/IndexesOverallToolbarContainer';
 import IndexListContainer from 'containers/List/IndexListContainer';
 import DocumentIndexAddModalContainer from 'containers/Modal/DocumentIndexAddModalContainer';
 import DocumentIndexEditModalContainer from 'containers/Modal/DocumentIndexEditModalContainer';
@@ -13,18 +14,19 @@ const IndexesOverallPage = (props) => {
 	const { writable } = props;
 
 	return (
-		<ScrollToTop>
-			<Page
-				title="Indexes"
-				breadcrumbs={[{ name: 'Indexes', active: false }, { name: 'Overall', active: true }]}
-			>
+		<Page
+			title="Indexes"
+			breadcrumbs={[{ name: 'Indexes', active: false }, { name: 'Overall', active: true }]}
+		>
+			<ScrollToTop>
 				<IndexesSearchFormContainer />
-				<IndexListContainer writable={writable} page={parseInt(page || 1, 10)} />
+				<IndexesOverallToolbarContainer writable={writable}/>
+				<IndexListContainer page={parseInt(page || 1, 10)} />
 				<DocumentIndexAddModalContainer />
 				<DocumentIndexEditModalContainer />
 				<DocumentInfoAddModalContainer />
-			</Page>
-		</ScrollToTop>
+			</ScrollToTop>
+		</Page>
 	);
 };
 

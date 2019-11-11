@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Col, Row, Button, Table } from 'reactstrap';
+import { Table } from 'reactstrap';
 import Pagination from 'components/Pagination';
 
 const DocumentInfoTable = ({
@@ -18,13 +18,6 @@ const DocumentInfoTable = ({
 
 	return (
 		<React.Fragment>
-			<Row className="hidden-md hidden-sm hidden-xs">
-				<Col md={4}>
-					<Button color="primary" className="mr-2">
-						EXPORT
-					</Button>
-				</Col>
-			</Row>
 			<Table className={classes} {...rest}>
 				<colgroup>
 					<col width="3%" />

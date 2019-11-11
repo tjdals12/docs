@@ -2,6 +2,7 @@ import React from 'react';
 import ScrollToTop from 'components/ScrollToTop';
 import Page from 'components/Page';
 import VendorSearchFormContainer from 'containers/Form/VendorSearchFormContainer';
+import VendorToolbarContainer from 'containers/Toolbar/VendorToolbarContainer';
 import VendorListContainer from 'containers/List/VendorListContainer';
 import VendorAddModalContainer from 'containers/Modal/VendorAddModalContainer';
 import VendorDetailModalContainer from 'containers/Modal/VendorDetailModalContainer';
@@ -14,16 +15,19 @@ const VendorsPage = (props) => {
 	const { writable } = props;
 
 	return (
-		<ScrollToTop>
-			<Page title="Vendors" breadcrumbs={[{ name: 'Vendors', active: true }]}>
+		<Page title="Vendors" breadcrumbs={[{ name: 'Vendors', active: true }]}>
+			<ScrollToTop>
 				<VendorSearchFormContainer />
-				<VendorListContainer writable={writable} page={parseInt(page || 1, 10)} />
+				<VendorToolbarContainer writable={writable}/>
+				<VendorListContainer page={parseInt(page || 1, 10)} />
+				
 				<VendorAddModalContainer />
 				<VendorDetailModalContainer writable={writable} />
 				<VendorEditModalContainer />
 				<VendorPersonAddModalContainer />
-			</Page>
-		</ScrollToTop>
+			</ScrollToTop>
+		</Page>
+
 	);
 };
 

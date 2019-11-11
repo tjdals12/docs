@@ -45,9 +45,9 @@ class DocumentSearchFormContainer extends React.Component {
 
 		return (
 			<DocumentSearchForm
-				gb={gb}
-				status={status}
-				search={search}
+				gb={gb.toJS()}
+				status={status.toJS()}
+				search={search.toJS()}
 				onChange={this.handleChange}
 				onSearch={this.handleSearch}
 				onFullPeriod={this.handleFullPeriod}
@@ -58,8 +58,8 @@ class DocumentSearchFormContainer extends React.Component {
 
 export default connect(
 	(state) => ({
-		gb: state.cmcode.get('0002'),
-		status: state.cmcode.get('0003'),
+		gb: state.cmcode.getIn(['0002', 'cdMinors']),
+		status: state.cmcode.getIn(['0003', 'cdMinors']),
 		search: state.document.get('search')
 	}),
 	(dispatch) => ({

@@ -52,13 +52,15 @@ const Pagination = ({ currentPage, lastPage, onPage, className, listClassName, .
 Pagination.propTypes = {
 	currentPage: PropTypes.number,
 	lastPage: PropTypes.number,
+	onPage: PropTypes.func,
 	className: PropTypes.string,
 	listClassName: PropTypes.string
 };
 
 Pagination.defaultProps = {
 	currentPage: 1,
-	lastPage: 1
+	lastPage: 1,
+	onPage: () => console.warn('Warning: onPage is not defined')
 };
 
 export default Pagination;

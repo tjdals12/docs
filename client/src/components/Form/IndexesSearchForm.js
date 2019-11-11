@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Form, FormGroup, Col, Label, Input, Button } from 'reactstrap';
+import { Form, FormGroup, Col, Input, Button } from 'reactstrap';
+import LabelInput from './LabelInput';
 import PropTypes from 'prop-types';
 
 const IndexesSearchForm = ({ parts, search, onChange, onSearch, className, ...rest }) => {
@@ -17,10 +18,7 @@ const IndexesSearchForm = ({ parts, search, onChange, onSearch, className, ...re
 			}}
 		>
 			<FormGroup row>
-				<Label md={1} className="text-right">
-					공종명
-				</Label>
-				<Col md={2}>
+				<LabelInput name="part" label="공종명">
 					<Input type="select" name="part" value={search.get('part')} onChange={onChange}>
 						<option value="">-- 공종 --</option>
 						{parts.get('cdMinors').map((code) => (
@@ -29,11 +27,9 @@ const IndexesSearchForm = ({ parts, search, onChange, onSearch, className, ...re
 							</option>
 						))}
 					</Input>
-				</Col>
-				<Label md={1} className="text-right">
-					공종번호
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+				
+				<LabelInput name="partNumber" label="공종번호">
 					<Input
 						type="text"
 						name="partNumber"
@@ -41,11 +37,9 @@ const IndexesSearchForm = ({ parts, search, onChange, onSearch, className, ...re
 						value={search.get('partNumber')}
 						onChange={onChange}
 					/>
-				</Col>
-				<Label md={1} className="text-right">
-					업체명
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+
+				<LabelInput name="vendorName" label="업체명">
 					<Input
 						type="text"
 						name="vendorName"
@@ -53,11 +47,9 @@ const IndexesSearchForm = ({ parts, search, onChange, onSearch, className, ...re
 						value={search.get('vendorName')}
 						onChange={onChange}
 					/>
-				</Col>
-				<Label md={1} className="text-right">
-					관리번호
-				</Label>
-				<Col md={2}>
+				</LabelInput>
+
+				<LabelInput name="officialName" label="관리번호">
 					<Input
 						type="text"
 						name="officialName"
@@ -65,7 +57,7 @@ const IndexesSearchForm = ({ parts, search, onChange, onSearch, className, ...re
 						value={search.get('officialName')}
 						onChange={onChange}
 					/>
-				</Col>
+				</LabelInput>
 			</FormGroup>
 			<FormGroup row className="mb-0">
 				<Col md={{ size: 3, offset: 9 }}>
