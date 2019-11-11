@@ -1,28 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Row, Col, Button, Table } from 'reactstrap';
+import { Table } from 'reactstrap';
 import Pagination from 'components/Pagination';
 import PropTypes from 'prop-types';
 
-const VendorLetterTable = ({ writable, page, lastPage, data, onPage, onTarget, onOpen, onOpenDetail, className, ...rest }) => {
+const VendorLetterTable = ({ page, lastPage, data, onPage, onTarget, onOpen, onOpenDetail, className, ...rest }) => {
 	const classes = classNames('mb-4 bg-white', className);
 
 	return (
 		<React.Fragment>
-			{
-				writable &&
-				<Row className="hidden-md hidden-sm -hidden-xs">
-					<Col md={4}>
-						<Button color="primary" className="mr-2" onClick={onOpen('vendorLetterReceive')}>
-							접수
-					</Button>
-						<Button color="secondary" className="mr-2" onClick={onOpen('vendorLetterAdditionalReceive')}>
-							추가 접수
-					</Button>
-					</Col>
-				</Row>
-			}
-
 			<Table className={classes} {...rest} bordered striped hover>
 				<colgroup>
 					<col width="3%" />
@@ -66,7 +52,7 @@ const VendorLetterTable = ({ writable, page, lastPage, data, onPage, onTarget, o
 										className="have-link"
 										onClick={() => {
 											onTarget(transmittal.getIn(['vendor', '_id']));
-											onOpen('vendorDetail')();
+											onOpen('vendorDetail');
 										}}
 									>
 										{transmittal.getIn(['vendor', 'vendorName'])} <br />

@@ -18,22 +18,6 @@ class VendorListContainer extends React.Component {
 		history.push(`/vendors?page=${page}`);
 	};
 
-	handleOpenAdd = () => {
-		const { ModalActions, VendorActions } = this.props;
-
-		VendorActions.initialize('errors');
-		ModalActions.open('vendorAdd');
-	};
-
-	handleOpenPersonAdd = () => {
-		const { ModalActions, VendorActions } = this.props;
-
-		VendorActions.setTarget('');
-		VendorActions.initialize('targetError');
-		VendorActions.initialize('personsError');
-		ModalActions.open('vendorPersonAdd');
-	};
-
 	handleOpenDetail = (id) => async () => {
 		const { ModalActions, VendorActions } = this.props;
 
@@ -47,19 +31,16 @@ class VendorListContainer extends React.Component {
 	}
 
 	render() {
-		const { writable, vendors, lastPage, page, loading } = this.props;
+		const { vendors, lastPage, page, loading } = this.props;
 
 		if (loading) return null;
 
 		return (
 			<VendorList
-				writable={writable}
 				page={page}
 				lastPage={lastPage}
 				data={vendors}
 				onPage={this.getVendors}
-				onOpenAdd={this.handleOpenAdd}
-				onOpenPersonAdd={this.handleOpenPersonAdd}
 				onOpenDetail={this.handleOpenDetail}
 			/>
 		);

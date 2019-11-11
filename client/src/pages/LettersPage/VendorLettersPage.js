@@ -2,6 +2,7 @@ import React from 'react';
 import ScrollToTop from 'components/ScrollToTop';
 import Page from 'components/Page';
 import VendorLetterSearchFormContainer from 'containers/Form/VendorLetterSearchFormContainer';
+import VendorLetterToolbarContainer from 'containers/Toolbar/VendorLetterToolbarContainer';
 import VendorLetterTableContainer from 'containers/Table/VendorLetterTableContainer';
 import VendorDetailModalContainer from 'containers/Modal/VendorDetailModalContainer';
 import VendorEditModalContainer from 'containers/Modal/VendorEditModalContainer';
@@ -23,7 +24,8 @@ const VendorTransmittalsPage = (props) => {
 		>
 			<ScrollToTop>
 				<VendorLetterSearchFormContainer />
-				<VendorLetterTableContainer writable={writable} page={parseInt(page || 1, 10)} />
+				<VendorLetterToolbarContainer writable={writable}/>
+				<VendorLetterTableContainer page={parseInt(page || 1, 10)} />
 				<VendorDetailModalContainer />
 				<VendorEditModalContainer />
 				<VendorLetterReceiveModalContainer />

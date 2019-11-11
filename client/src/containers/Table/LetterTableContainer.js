@@ -25,17 +25,7 @@ class LetterTableContainer extends React.Component {
 		LetterActions.getLetter({ id });
 	};
 
-	handleOpen = (name) => () => {
-		const { LetterActions, ModalActions } = this.props;
-
-		if (name === 'letterAdd') {
-			LetterActions.initialize('add');
-		}
-
-		ModalActions.open(name);
-	};
-
-	handleOpenDetail = (id) => async () => {
+	handleOpenDetail = async (id) => {
 		const { ModalActions, LetterActions } = this.props;
 
 		LetterActions.initialize('reasonError');
@@ -48,17 +38,15 @@ class LetterTableContainer extends React.Component {
 	}
 
 	render() {
-		const { writable, transmittals, page, lastPage, loading } = this.props;
+		const { transmittals, page, lastPage, loading } = this.props;
 
 		if (loading || loading === 'undefined') return null;
 
 		return (
 			<LetterTable
-				writable={writable}
 				page={page}
 				lastPage={lastPage}
 				data={transmittals}
-				onOpen={this.handleOpen}
 				onOpenDetail={this.handleOpenDetail}
 				onPage={this.getLetters}
 			/>
