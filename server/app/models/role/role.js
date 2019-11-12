@@ -15,12 +15,10 @@ const RoleSchema = new Schema({
     component: String,
     roleId: {
         READ: {
-            type: Schema.Types.ObjectId,
-            default: new Types.ObjectId
+            type: Schema.Types.ObjectId
         },
         WRITE: {
-            type: Schema.Types.ObjectId,
-            default: new Types.ObjectId
+            type: Schema.Types.ObjectId
         }
     },
     dispGb: {
@@ -61,11 +59,12 @@ RoleSchema.statics.createRole = function (params) {
         name,
         icon,
         layout,
-        component,
-        roleType
+        component
     } = params;
 
-    const role = new this({ to, name, icon, layout, component, roleType });
+    const roleId = to === 'ROOT' ? { READ: new Types.ObjectId } : { READ: new Types.ObjectId, WRITE: new Types.ObjectId };
+
+    const role = new this({ to, name, icon, layout, component, roleId });
 
     return role.save();
 };
@@ -77,11 +76,12 @@ RoleSchema.statics.addRole = function (params) {
         name,
         icon,
         layout,
-        component,
-        roleType
+        component
     } = params;
 
-    const role = new this({ to, name, icon, layout, component, roleType });
+    const roleId = to === 'ROOT' ? { READ: new Types.ObjectId } : { READ: new Types.ObjectId, WRITE: new Types.ObjectId };
+
+    const role = new this({ to, name, icon, layout, component, roleId });
 
     return this.findOneAndUpdate(
         { _id: id },
