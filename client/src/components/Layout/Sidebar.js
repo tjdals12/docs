@@ -71,7 +71,7 @@ class Sidebar extends React.Component {
 									</NavItem>,
 									<Collapse key={`collapse-${index}`} isOpen={this.state[`isOpen${name}`]}>
 										{
-											sub.filter(({ dispGb }) => dispGb === '01').map(({ to, name, icon: subIcon }, subIndex) => {
+											sub.filter(({ dispGb, roleId: subRoleId }) => (dispGb === '01' && myRoles.includes(subRoleId['READ']))).map(({ to, name, icon: subIcon }, subIndex) => {
 												const SubIcon = MaterialDesign[subIcon];
 
 												return (
