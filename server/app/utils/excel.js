@@ -9,6 +9,11 @@ import stream from 'stream';
  * @param       {Function} callback
  */
 export const exportExcel = async (data, callback) => {
+    if(!data || data.length <= 0) {
+        callback(null, 'No data');
+        return;
+    }
+
     const newWorkBook = XLSX.utils.book_new();
     await XLSX.utils.book_append_sheet(
         newWorkBook,

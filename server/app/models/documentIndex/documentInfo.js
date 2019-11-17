@@ -89,7 +89,7 @@ DocumentInfoSchema.statics.searchDocumentInfosForExport = async function (param)
         {
             $match: {
                 $and: [
-                    { vendor: vendor === '' ? { $ne: DEFINE.COMMON.NONE_ID } : vendor },
+                    { vendor: vendor === '' ? { $ne: DEFINE.COMMON.NONE_ID } : Types.ObjectId(vendor) },
                     { documentNumber: { $regex: documentNumber + '.*', $options: 'i' } },
                     { documentTitle: { $regex: documentTitle + '.*', $options: 'i' } },
                     { documentGb: documentGb === '' ? { $ne: DEFINE.COMMON.NONE_ID } : documentGb }

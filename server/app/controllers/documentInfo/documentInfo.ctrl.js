@@ -1,6 +1,5 @@
 import DocumentInfo from 'models/documentIndex/documentInfo';
 import { Types } from 'mongoose';
-import Joi from 'joi';
 import { exportExcel } from 'utils/excel';
 
 /**
@@ -167,24 +166,6 @@ export const latest = async (ctx) => {
  * @description 엑셀로 저장
  */
 export const writeExcel = async (ctx) => {
-    const schema = Joi.object().keys({
-        vendor: Joi.string().allow('').required(),
-        documentNumber: Joi.string().allow('').required(),
-        documentTitle: Joi.string().allow('').required(),
-        documentGb: Joi.string().allow('').required()
-    });
-
-    const result = Joi.validate(ctx.request.body, schema);
-
-    if(result.error) {
-        ctx.res.badRequest({
-            data: result.error,
-            message: 'Fail - documentIndex > writeExcel'
-        });
-
-        return;
-    }
-
     try{
         const data = await DocumentInfo.searchDocumentInfosForExport(ctx.request.body);
 
