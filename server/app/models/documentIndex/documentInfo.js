@@ -71,6 +71,101 @@ DocumentInfoSchema.statics.searchDocumentInfos = async function (param, page) {
 };
 
 /**
+ * @author      minz-logger
+ * @date        2019. 11. 17
+ * @description 문서정보 검색 for export
+ * @param       {Object} param
+ */
+DocumentInfoSchema.statics.searchDocumentInfosForExport = async function (param) {
+    // TODO: 쿼리 최적화
+    let {
+        vendor,
+        documentNumber,
+        documentTitle,
+        documentGb
+    } = param;
+
+    return this.aggregate([
+        {
+            $match: {
+                $and: [
+                    { vendor: vendor === '' ? { $ne: DEFINE.COMMON.NONE_ID } : vendor },
+                    { documentNumber: { $regex: documentNumber + '.*', $options: 'i' } },
+                    { documentTitle: { $regex: documentTitle + '.*', $options: 'i' } },
+                    { documentGb: documentGb === '' ? { $ne: DEFINE.COMMON.NONE_ID } : documentGb }
+                ]
+            }
+        },
+        {
+            $lookup: {
+                from: 'vendors',
+                localField: 'vendor',
+                foreignField: '_id',
+                as: 'vendor'
+            }
+        },
+        {
+            $unwind: '$vendor'
+        },
+        {
+            $lookup: {
+                from: 'cdminors',
+                localField: 'documentGb',
+                foreignField: '_id',
+                as: 'documentGb'
+            }
+        },
+        {
+            $lookup: {
+                from: 'cdminors',
+                localField: 'vendor.part',
+                foreignField: '_id',
+                as: 'vendor.part'
+            }
+        },
+        {
+            $unwind: '$vendor.part'
+        },
+        {
+            $unwind: '$documentGb'
+        },
+        {
+            $lookup: {
+                from: 'documents',
+                localField: 'trackingDocument',
+                foreignField: '_id',
+                as: 'trackingDocument'
+            }
+        },
+        {
+            $unwind: {
+                path: '$trackingDocument',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+                'Vendor': { $concat: [ '$vendor.vendorName', ' (', '$vendor.partNumber', ')' ] },
+                'No': '$documentNumber',
+                'Description': '$documentTitle',
+                'Plan': '$plan',
+                '구분': '$documentGb.cdSName',
+                'Rev': '$trackingDocument.documentRev',
+                '삭제여부': '$removeYn.yn',
+                'Status': { $arrayElemAt: [{ $slice: [ '$trackingDocument.documentStatus.statusName', -1 ] }, 0]},
+                '취소여부': '$trackingDocument.deleteYn.yn',
+                '보류여부': { $arrayElemAt: [{ $slice: [ '$trackingDocument.holdYn.yn', -1 ] }, 0]},
+                '등록자': '$timestamp.regId',
+                '등록일': '$timestamp.regDt',
+                '수정자': '$timestamp.updId',
+                '수정일': '$timestamp.updDt',
+            }
+        }
+    ]);
+};
+
+/**
  * @author minz-logger
  * @date 2019. 08. 26
  * @description 문서정보 검색 카운트

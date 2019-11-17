@@ -1,5 +1,7 @@
 import DocumentInfo from 'models/documentIndex/documentInfo';
 import { Types } from 'mongoose';
+import Joi from 'joi';
+import { exportExcel } from 'utils/excel';
 
 /**
  * @author      minz-logger
@@ -155,6 +157,52 @@ export const latest = async (ctx) => {
         ctx.res.internalServerError({
             data: vendor,
             message: `Error - documentInfoCtrl > latest: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 11. 17
+ * @description 엑셀로 저장
+ */
+export const writeExcel = async (ctx) => {
+    const schema = Joi.object().keys({
+        vendor: Joi.string().allow('').required(),
+        documentNumber: Joi.string().allow('').required(),
+        documentTitle: Joi.string().allow('').required(),
+        documentGb: Joi.string().allow('').required()
+    });
+
+    const result = Joi.validate(ctx.request.body, schema);
+
+    if(result.error) {
+        ctx.res.badRequest({
+            data: result.error,
+            message: 'Fail - documentIndex > writeExcel'
+        });
+
+        return;
+    }
+
+    try{
+        const data = await DocumentInfo.searchDocumentInfosForExport(ctx.request.body);
+
+        ctx.set('Content-disposition', 'attachment; filename=text.xlsx');
+        ctx.set('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+        return new Promise((resolve, reject) => {
+            exportExcel(data, (data, err) => {
+                if(err) reject(err);
+
+                ctx.body = data;
+                resolve();
+            });
+        });
+    }catch(e) {
+        ctx.res.internalServerError({
+            data: ctx.request.body,
+            message: `Error - documentIndex > writeExcel: ${e.message}`
         });
     }
 };
