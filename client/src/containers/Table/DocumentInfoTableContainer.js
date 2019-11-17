@@ -46,12 +46,28 @@ class DocumentInfoTableContainer extends React.Component {
 		ModalActions.open('documentInfoDetail');
 	};
 
+	handleChecked = (e) => {
+		const { InfoActions } = this.props;
+		const { checked, value } = e.target;
+
+		InfoActions.setCheckedList({ checked: checked, value: value });
+	}
+
+	handleCheckedAll = (e) => {
+		const { InfoActions, infos } = this.props;
+		const { checked } = e.target;
+
+		infos.forEach((info) => {
+			InfoActions.setCheckedList({ checked: checked, value: info.get('_id') })
+		})
+	}
+
 	componentDidMount() {
 		this.getInfos(1);
 	}
 
 	render() {
-		const { infos, page, lastPage, loading } = this.props;
+		const { infos, page, lastPage, checkedList, loading } = this.props;
 
 		if (loading || loading === undefined) return null;
 
@@ -60,10 +76,13 @@ class DocumentInfoTableContainer extends React.Component {
 				page={page}
 				lastPage={lastPage}
 				data={infos}
+				checkedList={checkedList.toJS()}
 				onPage={this.getInfos}
 				onTargetVendor={this.handleTargetVendor}
 				onOpen={this.handleOpen}
 				onOpenDetail={this.handleOpenDetail}
+				onChecked={this.handleChecked}
+				onCheckedAll={this.handleCheckedAll}
 				bordered
 				striped
 				hover
@@ -78,6 +97,7 @@ export default connect(
 		lastPage: state.info.get('lastPage'),
 		isSearch: state.info.getIn([ 'search', 'isSearch' ]),
 		search: state.info.get('search'),
+		checkedList: state.info.get('checkedList'),
 		loading: state.pender.pending['info/GET_INFOS']
 	}),
 	(dispatch) => ({
