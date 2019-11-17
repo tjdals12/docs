@@ -54,7 +54,18 @@ export const deleteIndex = ({ id }) => axios.patch(`${real}/api/documentindexes/
 export const getInfos = ({ page }) => axios.get(`${real}/api/documentinfos?page=${page}`);
 export const searchInfos = (page, param) => axios.post(`${real}/api/documentinfos/search?page=${page}`, { ...param });
 export const getInfo = ({ id }) => axios.get(`${real}/api/documentinfos/${id}`);
-export const getLatestDocuments = ({ vendor, page }) => axios.get(`${real}/api/documentinfos/${vendor}/latest?page=${page}`);
+export const getLatestDocuments = ({ vendor, page }) =>
+	axios.get(`${real}/api/documentinfos/${vendor}/latest?page=${page}`);
+export const exportExcel = (param) => axios.post(`${real}/api/documentinfos/writeexcel`, { ...param }, { responseType: 'blob' }).then((response) => {
+	let { filename } = ContentDisposition.parse(response.headers['content-disposition']).parameters;
+
+	const url = window.URL.createObjectURL(new Blob([response.data]));
+	const link = document.createElement('a');
+	link.href = url;
+	link.setAttribute('download', filename);
+	document.body.appendChild(link);
+	link.click();
+});
 
 /** Vendor Letter */
 export const getVendorLetters = ({ page }) => axios.get(`${real}/api/vendorletters?page=${page}`);

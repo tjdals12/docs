@@ -7,10 +7,13 @@ const DocumentInfoTable = ({
 	page,
 	lastPage,
 	data,
+	checkedList,
 	onPage,
 	onTargetVendor,
 	onOpen,
 	onOpenDetail,
+	onChecked,
+	onCheckedAll,
 	className,
 	...rest
 }) => {
@@ -32,7 +35,7 @@ const DocumentInfoTable = ({
 				<thead>
 					<tr>
 						<th className="text-center">
-							<input type="checkbox" />
+							<input type="checkbox" onChange={onCheckedAll}/>
 						</th>
 						<th className="text-center">업체</th>
 						<th className="text-center">구분</th>
@@ -50,7 +53,7 @@ const DocumentInfoTable = ({
 						return (
 							<tr key={index}>
 								<td className="text-center">
-									<input type="checkbox" value={id} />
+									<input type="checkbox" value={id} checked={checkedList.includes(id)} onChange={onChecked}/>
 								</td>
 								<td className="text-center">
 									<span

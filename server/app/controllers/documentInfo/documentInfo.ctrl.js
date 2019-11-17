@@ -1,5 +1,6 @@
 import DocumentInfo from 'models/documentIndex/documentInfo';
 import { Types } from 'mongoose';
+import { exportExcel } from 'utils/excel';
 
 /**
  * @author      minz-logger
@@ -155,6 +156,34 @@ export const latest = async (ctx) => {
         ctx.res.internalServerError({
             data: vendor,
             message: `Error - documentInfoCtrl > latest: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 11. 17
+ * @description 엑셀로 저장
+ */
+export const writeExcel = async (ctx) => {
+    try{
+        const data = await DocumentInfo.searchDocumentInfosForExport(ctx.request.body);
+
+        ctx.set('Content-disposition', 'attachment; filename=text.xlsx');
+        ctx.set('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+        return new Promise((resolve, reject) => {
+            exportExcel(data, (data, err) => {
+                if(err) reject(err);
+
+                ctx.body = data;
+                resolve();
+            });
+        });
+    }catch(e) {
+        ctx.res.internalServerError({
+            data: ctx.request.body,
+            message: `Error - documentIndex > writeExcel: ${e.message}`
         });
     }
 };

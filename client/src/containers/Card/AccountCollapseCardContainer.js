@@ -61,28 +61,28 @@ class AccountsCopllapseCardContainer extends React.Component {
     }
 
     handleSave = async () => {
-        const { AccountActions, add } = this.props;
+        const { AccountActions, add, page } = this.props;
 
         await AccountActions.addUser(add.toJS());
         AccountActions.initialize('add');
         AccountActions.initialize('errors');
-        this.getUsers();
+        this.getUsers(page);
     }
 
     handleEdit = async (id) => {
-        const { AccountActions, edit } = this.props;
+        const { AccountActions, edit, page } = this.props;
 
         await AccountActions.editUser({ id, param: { ...edit.toJS() } });
         AccountActions.initialize('errors');
-        this.getUsers();
+        this.getUsers(page);
         this.getUser(id);
     }
 
     handleDelete = async (id, yn) => {
-        const { AccountActions } = this.props;
+        const { AccountActions, page } = this.props;
 
         await AccountActions.deleteUser({ id, param: { yn } });
-        this.getUsers();
+        this.getUsers(page);
         this.getUser(id);
     }
 

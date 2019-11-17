@@ -1,10 +1,14 @@
 import React from 'react';
 import Toolbar from 'components/Toolbar';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as infoActions from 'store/modules/info';
 
 class IndexesInfosToolbarContainer extends React.Component {
     handleExport = () => {
-        console.warn('Warning: handleExport is not ready yet');
+        const { InfoActions, search } = this.props;
+
+        InfoActions.exportExcel(search.toJS());
     }
 
     render() {
@@ -20,4 +24,11 @@ class IndexesInfosToolbarContainer extends React.Component {
     }
 }
 
-export default connect(null, null)(IndexesInfosToolbarContainer);
+export default connect(
+    (state) => ({
+        search: state.info.get('search'),
+    }),
+    (dispatch) => ({
+        InfoActions: bindActionCreators(infoActions, dispatch)
+    })
+)(IndexesInfosToolbarContainer);

@@ -140,8 +140,23 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
                         {roles.map((role) => {
                             const { _id, sub, name, roleId } = role.toJS();
 
+                            const keys = Object.keys(roleId);
+
+                            let result = keys.map((key, index) => (
+                                <div key={`${_id}_${index}`} className="mb-2">
+                                    <input
+                                        type='checkbox'
+                                        name="roles"
+                                        value={roleId[key]}
+                                        checked={isAdd ? add.get('roles').includes(roleId[key]) : edit.get('roles').includes(roleId[key])}
+                                        onChange={onChangeRoles(isAdd ? 'add' : 'edit')}
+                                    />
+                                    <span className="pl-2">{name} ({key})</span>
+                                </div>
+                            ));
+
                             if (sub.length > 0) {
-                                return sub.map((subRole) => {
+                                result.push(...sub.map((subRole) => {
                                     const { _id: subId, name: subName, roleId: subRoleId } = subRole;
                                     const keys = Object.keys(subRoleId);
 
@@ -157,23 +172,10 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
                                             <span className="pl-2">{name} - {subName} ({key})</span>
                                         </div>
                                     ))
-                                })
-                            } else {
-                                const keys = Object.keys(roleId);
-
-                                return keys.map((key, index) => (
-                                    <div key={`${_id}_${index}`} className="mb-2">
-                                        <input
-                                            type='checkbox'
-                                            name="roles"
-                                            value={roleId[key]}
-                                            checked={isAdd ? add.get('roles').includes(roleId[key]) : edit.get('roles').includes(roleId[key])}
-                                            onChange={onChangeRoles(isAdd ? 'add' : 'edit')}
-                                        />
-                                        <span className="pl-2">{name} ({key})</span>
-                                    </div>
-                                ))
+                                }))
                             }
+
+                            return result;
                         })}
                     </Form>
                 </Col>

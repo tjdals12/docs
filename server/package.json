@@ -16,6 +16,7 @@
 		"@types/koa-router": "^7.0.42",
 		"@types/mocha": "^5.2.7",
 		"@types/moment-timezone": "^0.5.12",
+		"@types/mongoose": "^5.5.32",
 		"@types/multer-s3": "^2.7.7",
 		"chai": "^4.2.0",
 		"cli-color": "^2.0.0",

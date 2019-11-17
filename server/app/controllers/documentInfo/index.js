@@ -183,4 +183,42 @@ documentInfo.get('/:id', commonCtrl.checkObjectId, documentInfoCtrl.one);
  */
 documentInfo.get('/:vendor/latest', documentInfoCtrl.latest);
 
+/**
+ * @swagger
+ * /api/documentinfos/writeexcel:
+ *  post:
+ *      tags:
+ *          - Document Info
+ *      summary: 엑셀로 저장
+ *      description: 엑셀로 저장
+ *      consumes:
+ *          - application/json
+ *      produces:
+ *          - application/json
+ *      parameters:
+ *          - in: body
+ *            name: body
+ *            description: search parameters
+ *            required: true
+ *            schema:
+ *              type: object
+ *              properties:
+ *                  vendor:
+ *                      type: string
+ *                      example: ''
+ *                  documentNumber:
+ *                      type: string
+ *                      example: ''
+ *                  documentTitle:
+ *                      type: string
+ *                      example: ''
+ *                  documentGb:
+ *                      type: string
+ *                      example: ''
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ */
+documentInfo.post('/writeexcel', documentInfoCtrl.writeExcel);
+
 export default documentInfo;

@@ -7,15 +7,19 @@ const GET_INFOS = 'info/GET_INFOS';
 const SEARCH_INFOS = 'info/SEARCH_INFOS';
 const GET_INFO = 'info/GET_INFO';
 const GET_LATEST_DOCUMENTS = 'info/GET_LATEST_DOCUMENTS';
+const EXPORT_EXCEL = 'info/EXPORT_EXCEL';
 const ON_CHANGE = 'info/ON_CHANGE';
 const ON_CHANGE_SEARCH = 'info/ON_CHANGE_SEARCH';
+const SET_CHECKED_LIST = 'info/ON_CHECKED_LIST';
 
 export const getInfos = createAction(GET_INFOS, api.getInfos);
 export const searchInfos = createAction(SEARCH_INFOS, api.searchInfos);
 export const getInfo = createAction(GET_INFO, api.getInfo);
 export const getLatestDocuments = createAction(GET_LATEST_DOCUMENTS, api.getLatestDocuments);
+export const exportExcel = createAction(EXPORT_EXCEL, api.exportExcel);
 export const onChange = createAction(ON_CHANGE);
 export const onChangeSearch = createAction(ON_CHANGE_SEARCH);
+export const setCheckedList = createAction(SET_CHECKED_LIST);
 
 const initialState = Map({
 	infos: List(),
@@ -28,6 +32,7 @@ const initialState = Map({
 		isSearch: false
 	}),
 	latest: List(),
+	checkedList: List(),
 	page: 1,
 	lastPage: null
 });
@@ -81,6 +86,18 @@ export default handleActions(
 			const { name, value } = action.payload;
 
 			return state.setIn([ 'search', name ], value);
+		},
+		[SET_CHECKED_LIST]: (state, action) => {
+			const { checked, value } = action.payload;
+			const checkedList = state.get('checkedList');
+
+			if(checked) {
+				return state.set('checkedList', checkedList.push(value));
+			}else {
+				const index = checkedList.findIndex((item) => item === value);
+
+				return state.set('checkedList', checkedList.remove(index));
+			}
 		}
 	},
 	initialState
