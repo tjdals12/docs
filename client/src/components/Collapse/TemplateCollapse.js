@@ -5,12 +5,6 @@ import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
 import QuestionModal from 'components/Modal/QuestionModal';
 import PropTypes from 'prop-types';
 
-const colStyle = {
-	maxHeight: '600px',
-	overflow: 'scroll',
-	margin: 0
-};
-
 const makeHeaderCell = ({ title, className }) => {
 	const classes = classNames('k-link title-font', className);
 
@@ -67,7 +61,7 @@ const TemplateCollapse = ({
 			/>
 
 			<Row style={{ minHeight: '520px' }}>
-				<Col md={6} style={colStyle}>
+				<Col xl={6} lg={12}>
 					<Grid
 						pageable
 						data={data.toJS()}
@@ -104,12 +98,9 @@ const TemplateCollapse = ({
 					</Grid>
 				</Col>
 
-				<Col
-					md={6}
-					style={colStyle}
-				>
+				<Col xl={6} lg={12}>
 					<Form
-						className={`pl-4 pr-4 pt-4 pb-1 border rounded bg-light h-100 ${isAdd && 'border-danger'}`}
+						className={`p-4 border rounded bg-light h-100 ${isAdd && 'border-danger'}`}
 						onSubmit={(e) => {
 							e.stopPropagation();
 						}}

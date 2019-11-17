@@ -4,12 +4,6 @@ import { Collapse, Row, Col, Button, Form, FormGroup, Label, Input } from 'react
 import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
 import PropTypes from 'prop-types';
 
-const colStyle = {
-	maxHeight: '400px',
-	overflow: 'scroll',
-	margin: 0
-};
-
 const makeHeaderCell = ({ title, className }) => {
 	const classes = classNames('k-link title-font', className);
 
@@ -58,7 +52,7 @@ const CmcodeCollapse = ({
 	return (
 		<Collapse isOpen={isOpen} className="mt-3 pt-4 border-top">
 			<Row style={{ minHeight: '400px' }}>
-				<Col md={5} style={colStyle}>
+				<Col xl={5} lg={12}>
 					<Grid
 						pageable
 						data={cdMajors.toJS()}
@@ -98,7 +92,7 @@ const CmcodeCollapse = ({
 					</Grid>
 				</Col>
 
-				<Col md={4} style={colStyle}>
+				<Col xl={4} lg={7}>
 					<Grid
 						pageable
 						data={cdMajor.size === 0 ? [] : cdMajor.get('cdMinors').toJS()}
@@ -132,15 +126,15 @@ const CmcodeCollapse = ({
 					</Grid>
 				</Col>
 
-				<Col md={3} style={colStyle} >
+				<Col xl={3} lg={5} >
 					<Form
-						className="pl-4 pr-4 pt-4 pb-1 border rounded bg-light h-100"
+						className="p-4 border rounded bg-light h-100"
 						onSubmit={(e) => {
 							e.preventDefault();
 						}}
 					>
 						<FormGroup row>
-							<Label md={4} for="cdMinor">
+							<Label md={4} for="cdMinor" className="text-right title-font">
 								코드
 							</Label>
 							<Col md={8}>
@@ -155,7 +149,7 @@ const CmcodeCollapse = ({
 							</Col>
 						</FormGroup>
 						<FormGroup row>
-							<Label md={4} for="cdSName">
+							<Label md={4} for="cdSName" className="text-right title-font">
 								코드명
 							</Label>
 							<Col md={8}>

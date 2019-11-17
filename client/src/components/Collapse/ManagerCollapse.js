@@ -5,12 +5,6 @@ import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
 import QuestionModal from 'components/Modal/QuestionModal';
 import PropTypes from 'prop-types';
 
-const colStyle = {
-    maxHeight: '400px',
-    overflow: 'scroll',
-    margin: 0
-};
-
 const makeHeaderCell = ({ title, className }) => {
     const classes = classNames('k-link title-font', className);
 
@@ -87,7 +81,7 @@ const ManagerCollapse = ({
             <Collapse isOpen={isOpen} className="mt-3 pt-4 border-top">
                 <Row style={{ minHeight: '400px' }}>
 
-                    <Col md={4} style={colStyle}>
+                    <Col xl={4} lg={12}>
                         <Grid
                             pageable
                             data={teams.toJS()}
@@ -124,12 +118,13 @@ const ManagerCollapse = ({
                             />
                         </Grid>
                     </Col>
-                    <Col md={4} style={colStyle}>
+                    <Col xl={4} lg={6}>
                         <Grid
                             data={team.toJS().managers}
                             onRowClick={(e) => onSelectManager(e.dataItem._id)}
                             rowRender={managerRowRender}
                             className="h-100 border rounded"
+                            resizable
                         >
                             <Column
                                 field="index"
@@ -162,7 +157,7 @@ const ManagerCollapse = ({
                             />
                         </Grid>
                     </Col>
-                    <Col md={4} style={colStyle}>
+                    <Col xl={4} lg={6}>
                         <Form
                             className="pl-4 pr-4 pt-4 pb-1 mb-3 border rounded bg-light"
                             onSubmit={(e) => {
@@ -170,10 +165,10 @@ const ManagerCollapse = ({
                             }}
                         >
                             <FormGroup row>
-                                <Label md={2} for='part' className='text-right'>
-                                    공종
+                                <Label md={3} for='part' className='text-right title-font'>
+                                    공종 / 팀명
                             </Label>
-                                <Col md={3}>
+                                <Col md={4}>
                                     <Input type='select' id='part' name='part' value={isAddTeam ? add.get('part') : edit.get('part')} onChange={onChange(isAddTeam ? 'add' : 'edit')} invalid={teamErrors.get('partError')}>
                                         <option value="">-- 공종 --</option>
                                         {
@@ -185,9 +180,6 @@ const ManagerCollapse = ({
                                         }
                                     </Input>
                                 </Col>
-                                <Label md={2} for='teamName' className='text-right'>
-                                    팀명
-                                </Label>
                                 <Col md={5}>
                                     <Input type='text' id='teamName' name='teamName' value={isAddTeam ? add.get('teamName') : edit.get('teamName')} onChange={onChange(isAddTeam ? 'add' : 'edit')} invalid={teamErrors.get('teamNameError')} />
                                 </Col>
@@ -212,23 +204,23 @@ const ManagerCollapse = ({
                             }}
                         >
                             <FormGroup row>
-                                <Label md={3} for='name' className='text-right'>이름</Label>
+                                <Label md={3} for='name' className='text-right title-font'>이름</Label>
                                 <Col md={4}>
                                     <Input type='text' id='name' name='name' value={isAddManager ? addManager.get('name') : editManager.get('name')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('nameError')} />
                                 </Col>
-                                <Label md={2} for='position' className='text-right'>직책</Label>
+                                <Label md={2} for='position' className='text-right title-font'>직책</Label>
                                 <Col md={3}>
                                     <Input type='text' id='position' name='position' value={isAddManager ? addManager.get('position') : editManager.get('position')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('positionError')} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Label md={3} for='effStaDt' className='text-right'>시작일</Label>
+                                <Label md={3} for='effStaDt' className='text-right title-font'>시작일</Label>
                                 <Col md={9}>
                                     <Input type='date' id='effStaDt' name='effStaDt' value={isAddManager ? addManager.get('effStaDt') : editManager.get('effStaDt')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('effStaDtError')} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Label md={3} for='effEndDt' className='text-right'>종료일</Label>
+                                <Label md={3} for='effEndDt' className='text-right title-font'>종료일</Label>
                                 <Col md={9}>
                                     <Input type='date' id='effEndDt' name='effEndDt' value={isAddManager ? addManager.get('effEndDt') : editManager.get('effEndDt')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('effEndDtError')} />
                                 </Col>
