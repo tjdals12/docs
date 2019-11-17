@@ -12,6 +12,7 @@ const s3 = new AWS.S3();
  * @description 양식에 데이터 입혀서 반환
  * @param       {String} template
  * @param       {Object} param
+ * @param       {Function} callback
  */
 export const makeFile = async (template, param, callback) => {
     s3.getObject({ Bucket: 'docs-server', Key: template.split('/').pop() }, (err, data) => {
