@@ -1,6 +1,7 @@
 import DocumentInfo from 'models/documentIndex/documentInfo';
 import { Types } from 'mongoose';
 import { exportExcel } from 'utils/excel';
+import moment from 'moment-timezone';
 
 /**
  * @author      minz-logger
@@ -169,7 +170,7 @@ export const writeExcel = async (ctx) => {
     try{
         const data = await DocumentInfo.searchDocumentInfosForExport(ctx.request.body);
 
-        ctx.set('Content-disposition', 'attachment; filename=text.xlsx');
+        ctx.set('Content-disposition', `attachment; filename=VP_List_${moment.tz(Date.now(), 'Asia/Seoul').format('YYYY-MM-DD')}.xlsx`);
         ctx.set('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
         return new Promise((resolve, reject) => {

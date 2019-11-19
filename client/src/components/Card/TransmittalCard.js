@@ -40,7 +40,7 @@ const TransmittalCard = ({ data, onOpenDetail, height, className, ...rest }) => 
 						</tr>
 					</thead>
 					<tbody>
-						{data.size > 0 ? (
+						{data.length > 0 ? (
 							data.map((transmittal) => {
 								const {
 									_id,
@@ -49,7 +49,7 @@ const TransmittalCard = ({ data, onOpenDetail, height, className, ...rest }) => 
 									receiveDate,
 									targetDate,
 									letterStatus
-								} = transmittal.toJS();
+								} = transmittal;
 
 								return (
 									<tr key={_id}>
@@ -83,7 +83,7 @@ const TransmittalCard = ({ data, onOpenDetail, height, className, ...rest }) => 
 };
 
 TransmittalCard.propTypes = {
-	data: PropTypes.object,
+	data: PropTypes.array,
 	onOpenDetail: PropTypes.func,
 	height: PropTypes.string,
 	className: PropTypes.string

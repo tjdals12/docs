@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 import {
 	Modal,
 	ModalHeader,
@@ -40,7 +39,7 @@ const VendorLetterReceiveModal = ({
 		<Modal
 			isOpen={isOpen}
 			toggle={onClose}
-			className={classNames(className, 'position-relative overlay')}
+			className={className}
 			contentClassName="border rounded"
 			{...rest}
 			size="lg"

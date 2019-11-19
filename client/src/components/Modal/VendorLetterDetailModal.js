@@ -16,6 +16,7 @@ import QuestionModal from 'components/Modal/QuestionModal';
 import Typography from 'components/Typography';
 import DatePicker from 'react-datepicker';
 import PropTypes from 'prop-types';
+import { Table as VirtualTable, Column as VirtualColumn } from 'react-virtualized';
 
 const VendorLetterDetailModal = ({
 	codes,
@@ -37,6 +38,9 @@ const VendorLetterDetailModal = ({
 	className,
 	...rest
 }) => {
+	const documents = data.get('documents').toJS();
+	const width = 1100;
+
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -189,52 +193,56 @@ const VendorLetterDetailModal = ({
 						</tr>
 						<tr className="border-bottom" height="30">
 							<td colSpan={4}>
-								<Table bordered className="mb-0">
-									<thead>
-										<tr className="border-bottom" style={{ background: '#e7f5ff' }}>
-											<th className="text-left">문서번호</th>
-											<th className="text-left">문서명</th>
-											<th className="text-center">Rev.</th>
-											<th className="text-center">접수일</th>
-											<th className="text-right">상태</th>
-										</tr>
-									</thead>
-									<tbody>
-										{data.get('documents').size === 0 ? (
-											<tr>
-												<td colSpan={5} className="text-center font-italic">
-													접수된 문서가 없습니다.
-												</td>
-											</tr>
-										) : (
-												data.get('documents').map((document, index) => (
-													<tr key={index} className="border-bottom">
-														<td className="text-left">{document.get('documentNumber')}</td>
-														<td className="text-left">
-															<span
-																className="have-link"
-																onClick={onOpenDetail(document.get('_id'))}
-															>
-																{document.get('documentTitle')}
-															</span>
-														</td>
-														<td className="text-center">{document.get('documentRev')}</td>
-														<td className="text-center">
-															{document.getIn(['timestamp', 'regDt']).substr(0, 10)}
-														</td>
-														<td className="text-right">
-															{document.getIn(['documentStatus', -1, 'statusName'])}{' '}
-															<span className="text-danger">
-																({document
-																	.getIn(['documentStatus', -1, 'timestamp', 'regDt'])
-																	.substr(0, 10)})
-														</span>
-														</td>
-													</tr>
-												))
-											)}
-									</tbody>
-								</Table>
+								<VirtualTable
+									className="pb-2 ml-2"
+									headerClassName="d-flex align-items-center justify-content-center bg-light title-font"
+									rowClassName="table-row d-flex border-bottom outline-none"
+									gridClassName="outline-none"
+									headerHeight={70}
+									width={width}
+									height={500}
+									rowHeight={50}
+									rowCount={documents.length}
+									rowGetter={({ index }) => documents[index]}
+								>
+									<VirtualColumn
+										label="문서번호"
+										dataKey="documentNumber"
+										className="pl-2 align-self-center"
+										width={width * 0.2}
+									/>
+									<VirtualColumn
+										label="문서명"
+										dataKey="documentTitle"
+										cellRenderer={({ dataKey,rowData }) => <span onClick={onOpenDetail(rowData._id)}>{rowData[dataKey]}</span>}
+										className="align-self-center have-link"
+										width={width * 0.4}
+									/>
+									<VirtualColumn
+										label="Rev."
+										dataKey="documentRev"
+										className="text-center align-self-center"
+										width={width * 0.05}
+									/>
+									<VirtualColumn
+										label="접수일"
+										cellDataGetter={({ dataKey, rowData }) => rowData.timestamp[dataKey].substr(0, 10)}
+										dataKey="regDt"
+										className="text-center align-self-center"
+										width={width * 0.1}
+									/>
+									<VirtualColumn
+										label="상태"
+										cellRenderer={({ dataKey, rowData, columnIndex }) => {
+											const documentStatus = rowData[dataKey][rowData[dataKey].length - 1];
+
+											return <span>{documentStatus.statusName} <strong className="text-danger">({documentStatus.timestamp.regDt.substr(0, 10)})</strong></span>
+										}}
+										dataKey="documentStatus"
+										className="text-center align-self-center"
+										width={width * 0.25}
+									/>
+								</VirtualTable>
 							</td>
 						</tr>
 						<tr>

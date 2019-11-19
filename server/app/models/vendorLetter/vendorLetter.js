@@ -136,9 +136,17 @@ VendorLetterSchema.statics.statisticsByTransmittal = function (id) {
         },
         {
             $sort: {
+                'receiveDate': -1
+            }
+        },
+        {
+            $limit: 3
+        },
+        {
+            $sort: {
                 'receiveDate': 1
             }
-        }
+        },
     ]);
 };
 
