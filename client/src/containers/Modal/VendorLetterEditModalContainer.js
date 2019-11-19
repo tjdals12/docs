@@ -70,12 +70,13 @@ class VendorLetterEditModalContainer extends React.Component {
 	}
 
 	render() {
-		const { vendorList, isOpen, edit, errors, loading } = this.props;
+		const { vendorList, isOpen, edit, errors, loading, editLoading } = this.props;
 
 		if (loading || loading === undefined) return null;
 
 		return (
 			<VendorLetterEditModal
+				loading={editLoading}
 				vendorList={vendorList}
 				isOpen={isOpen}
 				data={edit}
@@ -95,7 +96,8 @@ export default connect(
 		isOpen: state.modal.get('vendorLetterEditModal'),
 		edit: state.vendorLetter.get('edit'),
 		errors: state.vendorLetter.get('errors'),
-		loading: state.pender.pending['vendorletter/GET_VENDORLETTER']
+		loading: state.pender.pending['vendorletter/GET_VENDORLETTER'],
+		editLoading: state.pender.pending['vendorletter/EDIT_VENDORLETTER']
 	}),
 	(dispatch) => ({
 		VendorActions: bindActionCreators(vendorActions, dispatch),

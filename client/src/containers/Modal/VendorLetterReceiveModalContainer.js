@@ -66,12 +66,13 @@ class VendorLetterReceiveModalContainer extends React.Component {
 	}
 
 	render() {
-		const { vendorList, receive, errors, isOpen } = this.props;
+		const { vendorList, receive, errors, isOpen, loading } = this.props;
 
 		if (!vendorList) return null;
 
 		return (
 			<VendorLetterReceiveModal
+				loading={loading}
 				vendorList={vendorList}
 				isOpen={isOpen}
 				data={receive}
@@ -91,7 +92,8 @@ export default connect(
 		vendorList: state.vendor.get('vendorList'),
 		receive: state.vendorLetter.get('receive'),
 		errors: state.vendorLetter.get('errors'),
-		isOpen: state.modal.get('vendorLetterReceiveModal')
+		isOpen: state.modal.get('vendorLetterReceiveModal'),
+		loading: state.pender.pending['vendorletter/RECEIVE_VENDORLETTER']
 	}),
 	(dispatch) => ({
 		VendorActions: bindActionCreators(vendorActions, dispatch),

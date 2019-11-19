@@ -21,6 +21,9 @@ const SET_DELETE_DOCUMENT = 'vendorletter/SET_DELETE_DOCUMENT';
 const DELETE_RECEIVE_DOCUMENT = 'vendorletter/DELETE_RECEIVE_DOCUMENT';
 const INITIALIZE = 'vendorletter/INITIALIZE';
 
+const ON_CHANGE_VENDORLETTER = 'vendorletter/ON_CHANGE_VENDORLETTER';
+export const onChangeVendorLetter = createAction(ON_CHANGE_VENDORLETTER);
+
 export const getVendorLetters = createAction(GET_VENDORLETTERS, api.getVendorLetters);
 export const getVendorLettersByVendor = createAction(GET_VENDORLETTERS_BY_VENDOR, api.getVendorLettersByVendor);
 export const statisticsByTransmittal = createAction(STATISTICS_BY_TRANSMITTAL, api.statisticsByTransmittal);
@@ -58,7 +61,8 @@ const initialState = Map({
 	}),
 	additionalReceive: Map({
 		id: '',
-		receiveDocuments: List()
+		receiveDocuments: List(),
+		receiveDate: '',
 	}),
 	edit: Map({
 		vendor: '',
@@ -219,7 +223,8 @@ export default handleActions(
 
 				return state
 					.setIn(['errors', 'officialNumberError'], additionalReceive.get('id') === '')
-					.setIn(['errors', 'receiveDocumentsErrorList'], Array.isArray(data) ? data : List());
+					.setIn(['errors', 'receiveDocumentsErrorList'], Array.isArray(data) ? data : List())
+					.setIn(['errors', 'receiveDateError'], additionalReceive.get('receiveDate') === '');
 			}
 		}),
 		...pender({
@@ -281,6 +286,13 @@ export default handleActions(
 			const { payload } = action;
 
 			return state.set(payload, initialState.get(payload));
+		},
+		[ON_CHANGE_VENDORLETTER]: (state, action) => {
+			const id = action.payload;
+			const vendorLetter = state.getIn(['vendorLettersByVendor', state.get('vendorLettersByVendor').findIndex(vendorLetter => vendorLetter.get('_id') === id)]);
+
+			return state.setIn(['additionalReceive', 'id'], id)
+						.setIn(['additionalReceive', 'receiveDate'], vendorLetter.get('receiveDate').substr(0, 10));
 		}
 	},
 	initialState

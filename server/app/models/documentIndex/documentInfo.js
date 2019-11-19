@@ -200,7 +200,6 @@ DocumentInfoSchema.statics.saveDocumentInfos = async function (id, param) {
     let ids = [];
 
     for (let i = 0; i < param.length; i++) {
-
         const { documentNumber, documentTitle, documentGb, plan } = param[i];
         const documentInfo = new this({ vendor: id, documentNumber, documentTitle, documentGb, plan: new Date(plan) });
         await documentInfo.save();

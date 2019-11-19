@@ -52,12 +52,13 @@ class VendorLetterTableContainer extends React.Component {
 	}
 
 	render() {
-		const { vendorletters, page, lastPage, loading } = this.props;
+		const { vendorletters, page, lastPage, loading, searchLoading } = this.props;
 
-		if (loading || loading === undefined) return null;
+		if(loading || loading === undefined) return null;
 
 		return (
 			<VendorLetterTable
+				loading={searchLoading}
 				page={page}
 				lastPage={lastPage}
 				data={vendorletters}
@@ -76,7 +77,8 @@ export default connect(
 		lastPage: state.vendorLetter.get('lastPage'),
 		isSearch: state.vendorLetter.getIn(['search', 'isSearch']),
 		search: state.vendorLetter.get('search'),
-		loading: state.pender.pending['vendorletter/GET_VENDORLETTERS']
+		loading: state.pender.pending['vendorletter/GET_VENDORLETTERS'],
+		searchLoading: state.pender.pending['vendorletter/SEARCH_VENDORLETTERS']
 	}),
 	(dispatch) => ({
 		ModalActions: bindActionCreators(modalActions, dispatch),

@@ -67,7 +67,7 @@ const VendorLetterDetailModal = ({
 				업체 공문 상세 <span className="text-primary">({data.get('officialNumber')})</span>
 			</ModalHeader>
 			<ModalBody className="p-0">
-				<Table borderless className="rounded m-0">
+				<Table borderless className="rounded m-0 overflow-hidden">
 					<colgroup>
 						<col width="20%" />
 						<col width="30%" />
@@ -187,7 +187,7 @@ const VendorLetterDetailModal = ({
 								})}
 							</td>
 						</tr>
-						<tr className="border-bottom">
+						<tr className="border-bottom" height="30">
 							<td colSpan={4}>
 								<Table bordered className="mb-0">
 									<thead>

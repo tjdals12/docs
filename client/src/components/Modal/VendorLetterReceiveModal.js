@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import {
 	Modal,
 	ModalHeader,
@@ -17,8 +18,10 @@ import {
 import { MdClose } from 'react-icons/md';
 import Typography from 'components/Typography';
 import PropTypes from 'prop-types';
+import Loader from 'components/Loader';
 
 const VendorLetterReceiveModal = ({
+	loading,
 	vendorList,
 	isOpen,
 	data,
@@ -37,7 +40,7 @@ const VendorLetterReceiveModal = ({
 		<Modal
 			isOpen={isOpen}
 			toggle={onClose}
-			className={className}
+			className={classNames(className, 'position-relative overlay')}
 			contentClassName="border rounded"
 			{...rest}
 			size="lg"
@@ -235,12 +238,18 @@ const VendorLetterReceiveModal = ({
 				</Form>
 			</ModalBody>
 			<ModalFooter className="bg-light">
-				<Button color="primary" onClick={onReceive}>
-					접수
-				</Button>
-				<Button color="secondary" onClick={onClose}>
-					취소
-				</Button>
+				{
+					loading 
+						? <Loader size={15}/>
+						: ([
+							<Button key="receive" color="primary" onClick={onReceive}>
+								접수
+							</Button>,
+							<Button key="cancel" color="secondary" onClick={onClose}>
+								취소
+							</Button>
+						])
+				}
 			</ModalFooter>
 		</Modal>
 	);
