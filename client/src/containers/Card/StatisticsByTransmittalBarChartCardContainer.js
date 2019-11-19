@@ -3,6 +3,7 @@ import BarChartCard from 'components/Card/BarChartCard';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as vendorLetterActions from 'store/modules/vendorLetter';
+import Loader from 'components/Loader';
 
 class StatisticsByTransmittalBarChartCardContainer extends React.Component {
 	getStatisticsByTransmittal = () => {
@@ -18,7 +19,7 @@ class StatisticsByTransmittalBarChartCardContainer extends React.Component {
 	render() {
 		const { statisticsByTransmittal } = this.props;
 
-		if (!statisticsByTransmittal) return null;
+		if (!statisticsByTransmittal) return <Loader size={20} margin={10} className="h-100" />
 
 		return <BarChartCard data={statisticsByTransmittal.toJS()} title="Transmittal Receive / Reply" />;
 	}

@@ -21,7 +21,7 @@ const IndexesOverallPage = (props) => {
 			<ScrollToTop>
 				<IndexesSearchFormContainer />
 				<IndexesOverallToolbarContainer writable={writable}/>
-				<IndexListContainer page={parseInt(page || 1, 10)} />
+				<IndexListContainer writable={writable} page={parseInt(page || 1, 10)} />
 				<DocumentIndexAddModalContainer />
 				<DocumentIndexEditModalContainer />
 				<DocumentInfoAddModalContainer />

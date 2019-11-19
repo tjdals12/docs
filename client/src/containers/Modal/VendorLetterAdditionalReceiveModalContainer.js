@@ -36,6 +36,13 @@ class VendorLetterAdditionalReceiveModalContainer extends React.Component {
 		}
 	};
 
+	handleChangeVendorLetter = (e) => {
+		const { VendorLetterActions } = this.props;
+		const { value } = e.target;
+
+		VendorLetterActions.onChangeVendorLetter(value);
+	}
+
 	handleReadDirectory = (e) => {
 		const { VendorLetterActions } = this.props;
 		const { files } = e.target;
@@ -70,19 +77,20 @@ class VendorLetterAdditionalReceiveModalContainer extends React.Component {
 
 	handleAdditionalReceive = async () => {
 		const { ModalActions, VendorLetterActions, data } = this.props;
-		const { id, receiveDocuments } = data.toJS();
+		const { id, receiveDocuments, receiveDate } = data.toJS();
 
-		await VendorLetterActions.additionalReceiveVendorLetter({ id, param: receiveDocuments });
+		await VendorLetterActions.additionalReceiveVendorLetter({ id, param: { receiveDocuments, receiveDate } });
 		ModalActions.close('vendorLetterAdditionalReceive');
 	};
 
 	render() {
-		const { vendorList, transmittalsByVendor, data, errors, isOpen } = this.props;
+		const { vendorList, transmittalsByVendor, data, errors, isOpen, loading } = this.props;
 
 		if (!vendorList) return null;
 
 		return (
 			<VendorLetterAdditionalReceiveModal
+				loading={loading}
 				vendorList={vendorList}
 				transmittalsByVendor={transmittalsByVendor}
 				data={data}
@@ -90,6 +98,7 @@ class VendorLetterAdditionalReceiveModalContainer extends React.Component {
 				isOpen={isOpen}
 				onClose={this.handleClose}
 				onChange={this.handleChange}
+				onChangeVendorLetter={this.handleChangeVendorLetter}
 				onReadDirectory={this.handleReadDirectory}
 				onDeleteReceiveDocument={this.handleDeleteReceiveDocument}
 				onAdditionalReceive={this.handleAdditionalReceive}
@@ -104,7 +113,8 @@ export default connect(
 		transmittalsByVendor: state.vendorLetter.get('vendorLettersByVendor'),
 		data: state.vendorLetter.get('additionalReceive'),
 		errors: state.vendorLetter.get('errors'),
-		isOpen: state.modal.get('vendorLetterAdditionalReceiveModal')
+		isOpen: state.modal.get('vendorLetterAdditionalReceiveModal'),
+		loading: state.pender.pending['vendorletter/ADDITIONAL_RECEIVE_VENDORLETTER'],
 	}),
 	(dispatch) => ({
 		VendorLetterActions: bindActionCreators(vendorLetterActions, dispatch),

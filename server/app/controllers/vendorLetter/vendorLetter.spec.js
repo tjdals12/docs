@@ -479,7 +479,8 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                             documentTitle: 'Sub-Vendor List',
                             documentRev: 'A'
                         }
-                    ]
+                    ],
+                    receiveDate: '2019-11-23'
                 })
                 .expect(200)
                 .end((err, ctx) => {
@@ -492,6 +493,8 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     expect(ctx.body.data.documents[1].documentNumber).to.equal('VP-NCC-R-001-002');
                     expect(ctx.body.data.documents[1].documentTitle).to.equal('Sub-Vendor List');
                     expect(ctx.body.data.documents[1].documentRev).to.equal('A');
+                    expect(ctx.body.data.documents[1].timestamp.regDt.substr(0, 10)).to.equal('2019-11-23');
+                    expect(ctx.body.data.documents[1].timestamp.updDt.substr(0, 10)).to.equal('2019-11-23');
                     done();
                 });
         });

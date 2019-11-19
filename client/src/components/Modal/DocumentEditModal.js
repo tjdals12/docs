@@ -161,7 +161,7 @@ const DocumentEditModal = ({
 						<Slider
 							min={1}
 							max={5}
-							value={level}
+							value={level.number}
 							labels={horizontalLabels}
 							onChange={(value) => {
 								onChange({ target: { name: 'level', value: value } });

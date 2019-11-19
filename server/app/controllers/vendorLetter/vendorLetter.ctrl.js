@@ -13,11 +13,10 @@ export const list = async (ctx) => {
     try {
         const vendorLetters = await VendorLetter
             .find()
-            .populate({ path: 'vendor', populate: { path: 'part' } })
-            .populate({ path: 'documents', populate: { path: 'documentGb' } })
+            .sort({ 'timestamp.regDt': -1 })
             .skip((page - 1) * 10)
             .limit(10)
-            .sort({ 'timestamp.regDt': -1 });
+            .populate({ path: 'vendor', populate: { path: 'part' } });
 
         const count = await VendorLetter.countDocuments();
 
@@ -36,8 +35,8 @@ export const list = async (ctx) => {
 };
 
 /**
- * @author minz-logger
- * @date 2019. 09. 04
+ * @author      minz-logger
+ * @date        2019. 09. 04
  * @desscription 업체 공식 문서 목록 조회 by vendor
  */
 export const listByVendor = async (ctx) => {
@@ -339,7 +338,8 @@ export const edit = async (ctx) => {
 export const addPartial = async (ctx) => {
     let { id } = ctx.params;
     let {
-        receiveDocuments
+        receiveDocuments,
+        receiveDate,
     } = ctx.request.body;
 
     const schema = Joi.object().keys({
@@ -348,7 +348,8 @@ export const addPartial = async (ctx) => {
             documentNumber: Joi.string().required(),
             documentTitle: Joi.string().required(),
             documentRev: Joi.string().required()
-        })).min(1).required()
+        })).min(1).required(),
+        receiveDate: Joi.string().required()
     });
 
     const result = Joi.validate(ctx.request.body, schema);
@@ -362,7 +363,7 @@ export const addPartial = async (ctx) => {
     }
 
     try {
-        const vendorLetter = await VendorLetter.addDocumentInVendorLetter({ id, receiveDocuments });
+        const vendorLetter = await VendorLetter.addDocumentInVendorLetter({ id, receiveDocuments, receiveDate });
 
         ctx.res.ok({
             data: vendorLetter,

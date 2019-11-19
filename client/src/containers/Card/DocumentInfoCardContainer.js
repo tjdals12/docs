@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as indexesActions from 'store/modules/indexes';
 import * as modalActions from 'store/modules/modal';
+import Loader from 'components/Loader';
 
 class DocumentInfoCardContainer extends React.Component {
 	getTrackingDocument = async (page) => {
@@ -27,7 +28,7 @@ class DocumentInfoCardContainer extends React.Component {
 	render() {
 		const { list, currentPage, lastPage } = this.props;
 
-		if (!list) return null;
+		if (!list) return <Loader size={20} margin={10} className="h-100"/>;
 
 		return (
 			<DocumentInfoCard

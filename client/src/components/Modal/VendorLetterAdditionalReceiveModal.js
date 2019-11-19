@@ -15,8 +15,10 @@ import {
 import PropTypes from 'prop-types';
 import { MdClose } from 'react-icons/md';
 import Typography from 'components/Typography';
+import Loader from 'components/Loader';
 
 const VendorLetterAdditionalReceiveModal = ({
+	loading,
 	vendorList,
 	transmittalsByVendor,
 	data,
@@ -24,6 +26,7 @@ const VendorLetterAdditionalReceiveModal = ({
 	isOpen,
 	onClose,
 	onChange,
+	onChangeVendorLetter,
 	onReadDirectory,
 	onDeleteReceiveDocument,
 	onAdditionalReceive,
@@ -70,7 +73,7 @@ const VendorLetterAdditionalReceiveModal = ({
 								id="officialNumber"
 								name="id"
 								placeholder="ex) ABC-DEF-T-R-001-002"
-								onChange={onChange}
+								onChange={onChangeVendorLetter}
 								invalid={errors.get('officialNumberError')}
 							>
 								<option value="">--- 접수번호 ---</option>
@@ -80,6 +83,15 @@ const VendorLetterAdditionalReceiveModal = ({
 									</option>
 								))}
 							</Input>
+						</Col>
+					</FormGroup>
+					
+					<FormGroup row>
+						<Col md={12}>
+							<Label for="receiveDate">
+								접수일
+							</Label>
+							<Input type='date' id='receiveDate' name='receiveDate' onChange={onChange} value={data.get('receiveDate')} invalid={errors.get('receiveDateError')}/>
 						</Col>
 					</FormGroup>
 
@@ -159,12 +171,18 @@ const VendorLetterAdditionalReceiveModal = ({
 				</Form>
 			</ModalBody>
 			<ModalFooter>
-				<Button color="primary" onClick={onAdditionalReceive}>
-					추가
-				</Button>
-				<Button color="secondary" onClick={onClose}>
-					취소
-				</Button>
+				{
+					loading
+						? <Loader size={15} />
+						: ([
+							<Button key="add" color="primary" onClick={onAdditionalReceive}>
+								추가
+							</Button>,
+							<Button key="cancel" color="secondary" onClick={onClose}>
+								취소
+							</Button>
+						])
+				}
 			</ModalFooter>
 		</Modal>
 	);

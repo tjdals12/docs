@@ -22,9 +22,9 @@ class IndexesDetailTemplateContainer extends React.Component {
 	render() {
 		const { id, vendor, page, manager, loading } = this.props;
 
-		if (loading || loading === undefined) return null;
+		if (loading === undefined) return null;
 
-		return <IndexesDetailTemplate id={id} vendor={vendor} manager={manager} currentPage={page} />;
+		return <IndexesDetailTemplate loading={loading} id={id} vendor={vendor} manager={manager} currentPage={page} />;
 	}
 }
 
@@ -32,7 +32,7 @@ export default connect(
 	(state) => ({
 		vendor: state.indexes.getIn(['index', 'vendor', '_id']),
 		manager: state.indexes.getIn(['index', 'vendor', 'manager']),
-		loading: state.pender.pending['indexes/GET_INDEX']
+		loading: state.pender.pending['indexes/GET_INDEX'],
 	}),
 	(dispatch) => ({
 		VendorLetterActions: bindActionCreators(vendorLetterActions, dispatch),

@@ -75,8 +75,10 @@ export const searchVendorLetters = (page, param) => axios.post(`${real}/api/vend
 export const getVendorLetter = ({ id }) => axios.get(`${real}/api/vendorletters/${id}`);
 export const receiveVendorLetter = (param) => axios.post(`${real}/api/vendorletters`, { ...param });
 export const editVendorLetter = ({ id, param }) => axios.patch(`${real}/api/vendorletters/${id}/edit`, { ...param });
-export const additionalReceiveVendorLetter = ({ id, param }) => axios.patch(`${real}/api/vendorletters/${id}/add`, { receiveDocuments: param });
-export const deleteVendorLetter = ({ id, yn, reason }) => axios.patch(`${real}/api/vendorletters/${id}/delete`, { yn, reason });
+export const additionalReceiveVendorLetter = ({ id, param }) =>
+	axios.patch(`${real}/api/vendorletters/${id}/add`, { ...param });
+export const deleteVendorLetter = ({ id, yn, reason }) =>
+	axios.patch(`${real}/api/vendorletters/${id}/delete`, { yn, reason });
 export const inOutVendorLetter = (id, param) => axios.patch(`${real}/api/vendorletters/${id}/inout`, { ...param });
 export const deleteInOutVendorLetter = ({ id, target }) => axios.patch(`${real}/api/vendorletters/${id}/inout/delete`, { targetId: target });
 

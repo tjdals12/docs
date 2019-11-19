@@ -21,6 +21,7 @@ const IndexesDetailPage = (props) => {
 			<ScrollToTop>
 				<IndexCardContainer id={id} />
 				<IndexesDetailTemplateContainer id={id} page={parseInt(page || 1, 10)} />
+				
 				<DocumentDetailModalContainer />
 				<DocumentEditModalContainer />
 				<VendorDetailModalContainer />

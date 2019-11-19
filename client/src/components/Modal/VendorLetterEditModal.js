@@ -16,8 +16,10 @@ import {
 } from 'reactstrap';
 import { MdClose } from 'react-icons/md';
 import PropTypes from 'prop-types';
+import Loader from 'components/Loader';
 
 const VendorLetterEditModal = ({
+	loading,
 	vendorList,
 	isOpen,
 	data,
@@ -246,12 +248,18 @@ const VendorLetterEditModal = ({
 				</Form>
 			</ModalBody>
 			<ModalFooter>
-				<Button color="primary" onClick={onEdit}>
-					수정
-				</Button>
-				<Button color="secondary" onClick={onClose}>
-					취소
-				</Button>
+				{
+					loading 
+						? <Loader size={15} />
+						: ([
+							<Button key="edit" color="primary" onClick={onEdit}>
+								수정
+							</Button>,
+							<Button key="cancel" color="secondary" onClick={onClose}>
+								취소
+							</Button>
+						])
+				}
 			</ModalFooter>
 		</Modal>
 	);

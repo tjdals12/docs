@@ -301,7 +301,8 @@ DocumentSchema.statics.saveDocuments = async function (param) {
             documentTitle,
             documentRev,
             officialNumber,
-            memo
+            memo,
+            timestamp
         } = param.pop();
 
         let documentGb;
@@ -329,8 +330,8 @@ DocumentSchema.statics.saveDocuments = async function (param) {
             continue;
         }
 
-        const documentInOut = new InOut({ officialNumber });
-        targets.push(new this({ vendor, part, documentNumber, documentTitle, documentGb, documentRev, documentInOut, memo }));
+        const documentInOut = new InOut({ officialNumber, timestamp });
+        targets.push(new this({ vendor, part, documentNumber, documentTitle, documentGb, documentRev, documentInOut, memo, timestamp }));
     }
 
     if (fails.length > 0) throw fails;

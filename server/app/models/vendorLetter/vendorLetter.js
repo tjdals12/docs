@@ -136,9 +136,17 @@ VendorLetterSchema.statics.statisticsByTransmittal = function (id) {
         },
         {
             $sort: {
+                'receiveDate': -1
+            }
+        },
+        {
+            $limit: 3
+        },
+        {
+            $sort: {
                 'receiveDate': 1
             }
-        }
+        },
     ]);
 };
 
@@ -327,13 +335,16 @@ VendorLetterSchema.statics.receiveVendorLetter = async function (param) {
 
     vendor = await Vendor.findOne({ _id: vendor });
 
+    const receiveTimestamp = new Timestamp({ regId: DEFINE.COMMON.SYSTEM, regDt: receiveDate, updId: DEFINE.COMMON.SYSTEM, updDt: receiveDate });
+
     receiveDocuments = receiveDocuments.map(document => {
         return {
             vendor: vendor._id,
             part: vendor.part,
             ...document,
             officialNumber,
-            memo: `${officialNumber}로 접수`
+            memo: `${officialNumber}로 접수`,
+            timestamp: receiveTimestamp
         };
     });
 
@@ -420,10 +431,13 @@ VendorLetterSchema.statics.editVendorLetter = async function (param) {
 VendorLetterSchema.statics.addDocumentInVendorLetter = async function (param) {
     let {
         id,
-        receiveDocuments
+        receiveDocuments,
+        receiveDate
     } = param;
 
     const vendorLetter = await this.findOne({ _id: id }, { vendor: 1, officialNumber: 1 }).populate({ path: 'vendor' });
+
+    const receiveTimestamp = new Timestamp({ regId: DEFINE.COMMON.SYSTEM, regDt: receiveDate, updId: DEFINE.COMMON.SYSTEM, updDt: receiveDate });
 
     receiveDocuments = receiveDocuments.map(document => {
         return {
@@ -431,7 +445,8 @@ VendorLetterSchema.statics.addDocumentInVendorLetter = async function (param) {
             part: vendorLetter.vendor.part,
             ...document,
             officialNumber: vendorLetter.officialNumber,
-            memo: `${vendorLetter.officialNumber}로 접수`
+            memo: `${vendorLetter.officialNumber}로 접수`,
+            timestamp: receiveTimestamp
         };
     });
 
