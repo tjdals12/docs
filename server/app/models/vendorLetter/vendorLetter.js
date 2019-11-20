@@ -551,9 +551,26 @@ VendorLetterSchema.statics.inOutVendorLetter = async function (id, inOutGb, offi
             }
         },
         {
-            new: true
+            new: true,
+            projection: {
+                _id: 1,
+                documents: { $slice: 20 },
+                vendor:1,
+                senderGb: 1,
+                sender: 1,
+                receiverGb: 1,
+                receiver: 1,
+                officialNumber: 1,
+                receiveDate: 1,
+                targetDate: 1,
+                letterStatus: 1,
+                cancelYn: 1,
+                timestamp: 1,
+            }
         }
-    ).populate({ path: 'vendor', populate: { path: 'part' } }).populate({ path: 'documents', populate: { path: 'part documentGb' } });
+    )
+        .populate({ path: 'vendor', select: '_id vendorName partNumber part', populate: { path: 'part' } })
+        .populate({ path: 'documents', select: '_id documentNumber documentTitle documentStatus timestamp'});
 };
 
 /**
@@ -601,9 +618,26 @@ VendorLetterSchema.statics.deleteInOut = async function (id, targetId) {
             }
         },
         {
-            new: true
+            new: true,
+            projection: {
+                _id: 1,
+                documents: { $slice: 20 },
+                vendor:1,
+                senderGb: 1,
+                sender: 1,
+                receiverGb: 1,
+                receiver: 1,
+                officialNumber: 1,
+                receiveDate: 1,
+                targetDate: 1,
+                letterStatus: 1,
+                cancelYn: 1,
+                timestamp: 1,
+            }
         }
-    ).populate({ path: 'vendor', populate: { path: 'part' } }).populate({ path: 'documents', populate: { path: 'part documentGb' } });
+    )
+        .populate({ path: 'vendor', select: '_id vendorName partName part', populate: { path: 'part' } })
+        .populate({ path: 'documents', select: '_id documentNumber documentTitle documentStatus timestamp' });
 };
 
 export default model('VendorLetter', VendorLetterSchema);

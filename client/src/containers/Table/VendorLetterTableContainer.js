@@ -33,16 +33,14 @@ class VendorLetterTableContainer extends React.Component {
 	};
 
 	handleOpen = (name) => {
-		const { ModalActions, VendorLetterActions } = this.props;
+		const { ModalActions } = this.props;
 
-		VendorLetterActions.initialize('errors');
 		ModalActions.open(name);
 	};
 
 	handleOpenDetail = (id) => async () => {
-		const { ModalActions, VendorLetterActions } = this.props;
+		const { ModalActions } = this.props;
 
-		VendorLetterActions.initialize('reasonError');
 		await this.getVendorLetter(id);
 		ModalActions.open('vendorLetterDetail');
 	};

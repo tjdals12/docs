@@ -9,6 +9,10 @@ import * as documentActions from 'store/modules/document';
 import * as modalActions from 'store/modules/modal';
 
 class VendorLetterDetailModalContainer extends React.Component {
+	state = {
+		page: 1
+	}
+
 	getCmcodes = (major) => {
 		const { CmcodeActions } = this.props;
 
@@ -21,16 +25,27 @@ class VendorLetterDetailModalContainer extends React.Component {
 		DocumentActions.getDocument({ id });
 	};
 
-	handleMoreDocument = async (id, start, stop) => {
+	handleMoreDocument = async (id, stopIndex) => {
 		const { VendorLetterActions } = this.props;
-		console.log(start-stop);
+		const nextPage = Math.ceil(stopIndex / 20);
+		const page = this.state.page;
 
-		await VendorLetterActions.getVendorLetterOnlyDocuments({ id, limit: start / 20 });
+		if(page < nextPage) {
+			this.setState({
+				page: nextPage
+			});
+
+			await VendorLetterActions.getVendorLetterOnlyDocuments({ id, page: nextPage });
+		}
 	}
 
 	handleClose = (name) => () => {
-		const { ModalActions } = this.props;
+		const { ModalActions, VendorLetterActions } = this.props;
 
+		this.setState({
+			page: 1
+		})
+		VendorLetterActions.initialize('reasonError');
 		ModalActions.close(name);
 	};
 
@@ -63,17 +78,17 @@ class VendorLetterDetailModalContainer extends React.Component {
 		ModalActions.open(name);
 	};
 
-	handleOpenDetail = (id) => async () => {
+	handleOpenDetail = async (id) => {
 		const { ModalActions } = this.props;
 
 		await this.getDocument(id);
 		ModalActions.open('documentDetail');
 	};
 
-	handleDelete = ({ id, yn }) => () => {
+	handleDelete = async ({ id, yn }) => {
 		const { VendorLetterActions, reason } = this.props;
 
-		VendorLetterActions.deleteVendorLetter({ id, yn, reason });
+		await VendorLetterActions.deleteVendorLetter({ id, yn, reason });
 	};
 
 	handleDate = (date) => {
@@ -82,16 +97,22 @@ class VendorLetterDetailModalContainer extends React.Component {
 		VendorLetterActions.onChange({ name: 'date', value: date });
 	};
 
-	handleStatus = ({ id }) => () => {
+	handleStatus = async ({ id }) => {
 		const { VendorLetterActions, selectedStatus, date } = this.props;
 
-		VendorLetterActions.inOutVendorLetter(id, Object.assign(JSON.parse(selectedStatus), { date: date }));
+		await VendorLetterActions.inOutVendorLetter(id, Object.assign(JSON.parse(selectedStatus), { date: date }));
+		this.setState({
+			page: 1
+		});
 	};
 
 	handleDeleteStatus = async () => {
 		const { ModalActions, VendorLetterActions, transmittal, target } = this.props;
 
 		await VendorLetterActions.deleteInOutVendorLetter({ id: transmittal.get('_id'), target });
+		this.setState({
+			page: 1
+		});
 		ModalActions.close('question');
 	};
 
