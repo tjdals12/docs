@@ -95,12 +95,13 @@ class VendorLetterDetailModalContainer extends React.Component {
 	}
 
 	render() {
-		const { codes, date, isOpen, isOpenQuestion, transmittal, reasonError, loading } = this.props;
+		const { codes, date, isOpen, isOpenQuestion, transmittal, reasonError, loading, inOutLoading } = this.props;
 
 		if (!codes || loading || loading === undefined) return null;
 
 		return (
 			<VendorLetterDetailModal
+				loading={inOutLoading}
 				codes={codes}
 				date={date}
 				reasonError={reasonError}
@@ -133,7 +134,8 @@ export default connect(
 		reason: state.vendorLetter.get('reason'),
 		reasonError: state.vendorLetter.get('reasonError'),
 		target: state.vendorLetter.get('target'),
-		loading: state.pender.pending['vendorletter/GET_VENDORLETTER']
+		loading: state.pender.pending['vendorletter/GET_VENDORLETTER'],
+		inOutLoading: state.pender.pending['vendorletter/INOUT_VENDORLETTER']
 	}),
 	(dispatch) => ({
 		CmcodeActions: bindActionCreators(cmcodeActions, dispatch),

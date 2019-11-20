@@ -258,11 +258,9 @@ export const one = async (ctx) => {
     let { id } = ctx.params;
 
     try {
-        console.time('getIndex');
         const documentIndex = await DocumentIndex.findById(id)
             .populate({ path: 'vendor', populate: { path: 'project manager part' } })
-            .populate({ path: 'list', populate: { path: 'documentGb trackingDocument' }, options: { sort: { documentNumber: 1 } } });
-        console.timeEnd('getIndex');
+            .populate({ path: 'list', options: { sort: { documentNumber: 1 }}});
 
         ctx.res.ok({
             data: documentIndex,

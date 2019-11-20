@@ -13,12 +13,10 @@ const IndexList = ({
 	isOpenQuestion,
 	onOpenQuestion,
 	onClose,
-	onOpenAdd,
 	onTarget,
 	onDetailPage,
 	onDeleteIndex,
 	onOpenEdit,
-	onOpenInfoAdd,
 	onPage
 }) => {
 	return (

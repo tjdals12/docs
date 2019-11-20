@@ -82,15 +82,16 @@ class DocumentInfoAddModalContainer extends React.Component {
 	}
 
 	render() {
-		const { vendorList, gbs, infos, error, infosError, isOpen } = this.props;
+		const { vendorList, gbs, infos, error, infosError, isOpen, loading } = this.props;
 
 		if (!vendorList || !gbs) return null;
 
 		return (
 			<DocumentInfoAddModal
+				loading={loading}
 				vendorList={vendorList}
 				gbs={gbs}
-				infos={infos}
+				infos={infos.toJS()}
 				error={error}
 				infosError={infosError}
 				isOpen={isOpen}
@@ -114,7 +115,8 @@ export default connect(
 		infos: state.indexes.get('infos'),
 		error: state.indexes.get('error'),
 		infosError: state.indexes.get('infosError'),
-		isOpen: state.modal.get('documentInfoAddModal')
+		isOpen: state.modal.get('documentInfoAddModal'),
+		loading: state.pender.pending['indexes/ADD_PARTIAL']
 	}),
 	(dispatch) => ({
 		CmcodeActions: bindActionCreators(cmcodeActions, dispatch),

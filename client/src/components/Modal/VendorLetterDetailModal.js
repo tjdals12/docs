@@ -17,8 +17,10 @@ import Typography from 'components/Typography';
 import DatePicker from 'react-datepicker';
 import PropTypes from 'prop-types';
 import { Table as VirtualTable, Column as VirtualColumn } from 'react-virtualized';
+import Loader from 'components/Loader';
 
 const VendorLetterDetailModal = ({
+	loading,
 	codes,
 	date,
 	reasonError,
@@ -264,28 +266,32 @@ const VendorLetterDetailModal = ({
 			</ModalBody>
 			<ModalFooter className="bg-light">
 				<Col className="pr-5 hidden-md hidden-sm hidden-xs">
-					<InputGroup>
-						<Input type="select" name="status" className="text-center" onChange={onChange}>
-							<option value="">--- 변경할 상태 선택 --</option>
-							{codes.get('cdMinors').map((code) => (
-								<option key={code.get('_id')} value={JSON.stringify(code.get('cdRef1'))}>
-									{code.get('cdSName')}
-								</option>
-							))}
-						</Input>
-						<InputGroupAddon addonType="prepend">
-							<DatePicker
-								dateFormat="yyyy-MM-dd"
-								className="text-center"
-								name="date"
-								selected={date}
-								onChange={onDate}
-							/>
-						</InputGroupAddon>
-						<InputGroupAddon addonType="append">
-							<Button onClick={onStatus({ id: data.get('_id') })}>변경</Button>
-						</InputGroupAddon>
-					</InputGroup>
+					{loading && <Loader size={20} margin={10} />}
+
+					{loading ||
+						<InputGroup>
+							<Input type="select" name="status" className="text-center" onChange={onChange}>
+								<option value="">--- 변경할 상태 선택 --</option>
+								{codes.get('cdMinors').map((code) => (
+									<option key={code.get('_id')} value={JSON.stringify(code.get('cdRef1'))}>
+										{code.get('cdSName')}
+									</option>
+								))}
+							</Input>
+							<InputGroupAddon addonType="prepend">
+								<DatePicker
+									dateFormat="yyyy-MM-dd"
+									className="text-center"
+									name="date"
+									selected={date}
+									onChange={onDate}
+								/>
+							</InputGroupAddon>
+							<InputGroupAddon addonType="append">
+								<Button onClick={onStatus({ id: data.get('_id') })}>변경</Button>
+							</InputGroupAddon>
+						</InputGroup>
+					}
 				</Col>
 				<Input
 					type="text"

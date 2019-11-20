@@ -164,7 +164,7 @@ export const one = async (ctx) => {
         const vendorLetter = await VendorLetter
             .findOne({ _id: id })
             .populate({ path: 'vendor', populate: 'part' })
-            .populate({ path: 'documents', populate: { path: 'part documentGb' } });
+            .populate({ path: 'documents', options: { sort: { documentNumber: 1 }}, populate: { path: 'part documentGb' } });
 
         ctx.res.ok({
             data: vendorLetter,

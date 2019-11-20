@@ -15,71 +15,12 @@ import {
 import { MdClose, MdKeyboardCapslock } from 'react-icons/md';
 import { FaCaretRight } from 'react-icons/fa';
 import PropTypes from 'prop-types';
-
-const DocumentIndexItem = React.memo(({ gbs, index, _id, documentNumber, documentTitle, documentGb, plan, isError, onChangeInfo, onChangeList }) => {
-	return (
-		<tr key={index} className={isError ? 'bg-secondary' : ''}>
-			<td className="text-right">{index + 1}</td>
-			<td>
-				<Input
-					type="text"
-					name="documentNumber"
-					value={documentNumber}
-					onChange={onChangeInfo(_id || index)}
-					bsSize="sm"
-				/>
-			</td>
-			<td>
-				<Input
-					type="text"
-					name="documentTitle"
-					value={documentTitle}
-					onChange={onChangeInfo(_id || index)}
-					bsSize="sm"
-				/>
-			</td>
-			<td>
-				<Input
-					type="select"
-					name="documentGb"
-					value={documentGb || index}
-					onChange={onChangeInfo(_id || index)}
-				>
-					<option value="">-- 구분 --</option>
-					{gbs.get('cdMinors').map((gb) => (
-						<option key={gb.get('_id')} value={gb.get('_id')}>
-							{gb.get('cdSName')}
-						</option>
-					))}
-				</Input>
-			</td>
-			<td className="text-center">
-				<Input
-					type="date"
-					name="plan"
-					value={plan.substr(0, 10)}
-					onChange={onChangeInfo(_id || index)}
-					bsSize="sm"
-				/>
-			</td>
-			<td className="text-center">
-				<MdClose
-					size={20}
-					className="text-danger can-click"
-					onClick={
-						_id === '' ? (
-							onChangeList(index, 'DELETE')
-						) : (
-								onChangeList(_id, 'REMOVE')
-							)
-					}
-				/>
-			</td>
-		</tr>
-	)
-})
+import { Table as VirtualTable, Column as VirtualColumn } from 'react-virtualized';
+import Loader from 'components/Loader';
+import { FaExclamation } from 'react-icons/fa';
 
 const DocumentIndexAddModal = ({
+	loading,
 	vendorList,
 	gbs,
 	data,
@@ -95,6 +36,8 @@ const DocumentIndexAddModal = ({
 	className,
 	...rest
 }) => {
+	const width = 1100;
+
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -112,12 +55,12 @@ const DocumentIndexAddModal = ({
 					<FormGroup row>
 						<Col md={12}>
 							<Label for="vendor">업체</Label>
-							<Input type="select" id="vendor" name="vendor" value={data.get('vendor')} disabled>
+							<Input type="select" id="vendor" name="vendor" value={data.vendor} disabled>
 								<option value="">--- 업체를 선택해주세요. ---</option>
 								{vendorList.map((vendor) => (
-									<option key={vendor.get('_id')} value={vendor.get('_id')}>
-										{vendor.get('vendorName')} ({vendor.getIn(['part', 'cdSName'])},{' '}
-										{vendor.get('partNumber')})
+									<option key={vendor._id} value={vendor._id}>
+										{vendor.vendorName} ({vendor.part.cdSName},{' '}
+										{vendor.partNumber}
 									</option>
 								))}
 							</Input>
@@ -127,7 +70,7 @@ const DocumentIndexAddModal = ({
 						<Label for="list" md={2}>
 							<FaCaretRight className="text-success pb-1" size={20} />문서목록
 						</Label>
-						{data.get('list').size === 0 && (
+						{data.list.length === 0 && (
 							<Col md={4}>
 								<Button className="custom-file-uploader">
 									<Input
@@ -142,61 +85,115 @@ const DocumentIndexAddModal = ({
 							</Col>
 						)}
 					</FormGroup>
-					<Table bordered striped className="mb-5">
-						<colgroup>
-							<col with="5%" />
-							<col width="25%" />
-							<col width="35%" />
-							<col width="15%" />
-							<col width="15%" />
-							<col width="5%" />
-						</colgroup>
-						<thead>
-							<tr style={{ background: '#e7f5ff' }}>
-								<th>#</th>
-								<th>문서번호</th>
-								<th>문서명</th>
-								<th>구분</th>
-								<th className="text-center">Plan</th>
-								<th />
-							</tr>
-						</thead>
-						<tbody>
-							{data.get('list').size === 0 ? (
-								<tr>
-									<td colSpan={6} className="text-center text-muted font-italic">
-										양식에 맞게 작성된 엑셀 파일을 선택해주세요.
-									</td>
-								</tr>
-							) : (
-									data.get('list').map((document, index) => {
-										const {
-											_id = '',
-											documentNumber,
-											documentTitle,
-											documentGb,
-											plan
-										} = document.toJS();
-										const isError = infosError.indexOf(_id) > -1;
+					<VirtualTable
+						className="pb-2"
+						headerClassName="d-flex align-items-center justify-content-center bg-light title-font h-100"
+						rowClassName="table-row d-flex align-items-center justify-content-center border-bottom outline-none"
+						gridClassName="outline-none"
+						headerHeight={70}
+						width={width}
+						height={400}
+						rowHeight={50}
+						rowCount={data.list.length}
+						rowGetter={({ index }) => data.list[index]}
+					>
+						<VirtualColumn
+							label="#"
+							dataKey="index"
+							className="text-right p-2"
+							cellRenderer={({ rowData, rowIndex }) => {
+								const isError = infosError.indexOf(rowData['_id']) > -1;
 
-										return (
-											<DocumentIndexItem
-												key={index}
-												gbs={gbs}
-												index={index}
-												_id={_id}
-												documentNumber={documentNumber}
-												documentTitle={documentTitle}
-												documentGb={documentGb}
-												plan={plan}
-												isError={isError}
-												onChangeInfo={onChangeInfo}
-												onChangeList={onChangeList} />
-										);
-									})
-								)}
-						</tbody>
-					</Table>
+								return <span className={`${isError ? 'text-danger title-font' : 'font-weight-bold'} font-italic`}>{rowIndex + 1}.</span>
+							}}
+							width={width * 0.05}
+						/>
+						<VirtualColumn
+							label="문서번호"
+							dataKey="documentNumber"
+							className="p-2"
+							cellRenderer={({ dataKey, rowData, rowIndex }) => (
+								<Input 
+									type='text'
+									name={dataKey}
+									value={rowData[dataKey]}
+									onChange={onChangeInfo(rowData['_id'] || rowIndex)}
+								/>
+							)}
+							width={width * 0.20}
+						/>
+						<VirtualColumn
+							label="문서명"
+							dataKey="documentTitle"
+							className="p-2"
+							cellRenderer={({ dataKey, rowData, rowIndex }) => (
+								<Input
+									type='text'
+									name={dataKey}
+									value={rowData[dataKey]}
+									onChange={onChangeInfo(rowData['_id'] || rowIndex)}
+								/>
+							)}
+							width={width * 0.4}
+						/>
+						<VirtualColumn
+							label="구분"
+							dataKey="documentGb"
+							className="p-2"
+							cellRenderer={({ dataKey, rowData, rowIndex }) => {
+								return (
+									<Input
+										type="select"
+										name="documentGb"
+										value={rowData[dataKey] || rowIndex}
+										onChange={onChangeInfo(rowData['_id'] || rowIndex)}
+									>
+										<option value="">-- 구분 --</option>
+										{gbs.cdMinors.map((gb) => (
+											<option key={gb._id} value={gb._id}>
+												{gb.cdSName}
+											</option>
+										))}
+									</Input>	
+								)
+							}}
+							width={width * 0.10}
+						/>
+						<VirtualColumn
+							label="Plan"
+							dataKey="plan"
+							className="p-2"
+							cellRenderer={({ dataKey, rowData, rowIndex }) => (
+								<Input
+									type="date"
+									name="plan"
+									value={rowData[dataKey].substr(0, 10)}
+									onChange={onChangeInfo(rowData['_id'] || rowIndex)}
+									bsSize="sm"
+								/>
+							)}
+							width={width * 0.20}
+						/>
+						<VirtualColumn
+							label=""
+							dataKey="_id"
+							className="text-center"
+							cellRenderer={({ dataKey, rowData, rowIndex }) => (
+								<MdClose
+									size={20}
+									className="text-danger can-click"
+									onClick={
+										rowData[dataKey] === '' ? (
+											onChangeList(rowIndex, 'DELETE')
+										) : (
+											onChangeList(rowData[dataKey], 'REMOVE')
+										)
+									}
+								/>
+							)}
+							width={width * 0.05}
+						/>
+					</VirtualTable>
 
 					<FormGroup row>
 						<Label for="deleteList" md={2}>
@@ -221,15 +218,15 @@ const DocumentIndexAddModal = ({
 							</tr>
 						</thead>
 						<tbody>
-							{data.get('deleteList').size === 0 ? (
+							{data.deleteList.length === 0 ? (
 								<tr>
 									<td colSpan={5} className="text-center text-muted font-italic">
 										삭제된 문서가 없습니다.
 									</td>
 								</tr>
 							) : (
-									data.get('deleteList').map((document, index) => {
-										const { _id = '', documentNumber, documentTitle, plan } = document.toJS();
+									data.deleteList.map((document, index) => {
+										const { _id = '', documentNumber, documentTitle, plan } = document;
 
 										return (
 											<tr key={index}>
@@ -253,12 +250,18 @@ const DocumentIndexAddModal = ({
 				</Form>
 			</ModalBody>
 			<ModalFooter className="bg-light">
-				<Button color="primary" onClick={onEdit}>
-					수정
-				</Button>
-				<Button color="secondary" onClick={onClose}>
-					취소
-				</Button>
+				{loading || infosError.length === 0 || <span className="m-auto text-danger"><FaExclamation size={20} className="pb-1" /> 누락된 값이 없는지 확인 바랍니다.</span>}
+				{loading
+					? <Loader size={20} margin={10} />
+					: ([
+							<Button key="edit" color="primary" onClick={onEdit}>
+								수정
+							</Button>,
+							<Button key="cancel" color="secondary" onClick={onClose}>
+								취소
+							</Button>
+						])
+				}
 			</ModalFooter>
 		</Modal>
 	);

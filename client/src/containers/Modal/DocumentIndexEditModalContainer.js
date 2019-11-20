@@ -82,16 +82,17 @@ class DocumentIndexEditModalContainer extends React.Component {
 	}
 
 	render() {
-		const { vendorList, gbs, edit, infosError, isOpen, loading } = this.props;
+		const { vendorList, gbs, edit, infosError, isOpen, loading, editLoading } = this.props;
 
 		if (!vendorList || !gbs || loading) return null;
 
 		return (
 			<DocumentIndexEditModal
-				vendorList={vendorList}
-				gbs={gbs}
-				data={edit}
-				infosError={infosError}
+				loading={editLoading}
+				vendorList={vendorList.toJS()}
+				gbs={gbs.toJS()}
+				data={edit.toJS()}
+				infosError={infosError.toJS()}
 				isOpen={isOpen}
 				onChange={this.handleChange}
 				onChangeInfo={this.handleChangeInfo}
@@ -113,7 +114,8 @@ export default connect(
 		error: state.indexes.get('error'),
 		infosError: state.indexes.get('infosError'),
 		target: state.indexes.get('target'),
-		loading: state.pender.pending['indexes/GET_INDEX']
+		loading: state.pender.pending['indexes/GET_INDEX'],
+		editLoading: state.pender.pending['indexes/EDIT_INDEX']
 	}),
 	(dispatch) => ({
 		CmcodeActions: bindActionCreators(cmcodeActions, dispatch),

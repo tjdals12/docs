@@ -136,7 +136,7 @@ export default handleActions(
 						_id: document._id,
 						documentNumber: document.documentNumber,
 						documentTitle: document.documentTitle,
-						documentGb: document.documentGb._id,
+						documentGb: document.documentGb,
 						plan: document.plan
 					};
 				});
@@ -218,7 +218,7 @@ export default handleActions(
 		...pender({
 			type: EDIT_INDEX,
 			onSuccess: (state, action) => {
-				return state.set('edit', initialState.get('edit'));
+				return state.set('edit', initialState.get('edit')).set('infosError', initialState.get('infosError'));
 			},
 			onFailure: (state, action) => {
 				const edit = state.get('edit');

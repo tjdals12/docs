@@ -39,6 +39,7 @@ class IndexListContainer extends React.Component {
 
 		IndexesActions.setTarget(id);
 		await IndexesActions.getIndex({ id });
+		IndexesActions.initialize('infosError');
 		ModalActions.open('documentIndexEdit');
 	};
 
