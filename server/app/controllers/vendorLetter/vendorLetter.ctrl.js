@@ -10,6 +10,15 @@ import { Types } from 'mongoose';
 export const list = async (ctx) => {
     let page = parseInt(ctx.query.page || 1, 10);
 
+    if(page < 1) {
+        ctx.res.badRequest({
+            data: page,
+            message: 'Page can\'t be less than 1'
+        });
+
+        return;
+    }
+
     try {
         const vendorLetters = await VendorLetter
             .find()
@@ -161,10 +170,38 @@ export const one = async (ctx) => {
     let { id } = ctx.params;
 
     try {
+        const documentsCount = await VendorLetter.findOne(
+            { _id: id },
+            { _id: 0, documents: 1 }
+        ).then(data => {
+            return data.documents.length;
+        });
+
         const vendorLetter = await VendorLetter
-            .findOne({ _id: id })
-            .populate({ path: 'vendor', populate: 'part' })
-            .populate({ path: 'documents', populate: { path: 'part documentGb' } });
+            .findOne(
+                { _id: id },
+                {
+                    _id: 1,
+                    documents: { $slice: 20 },
+                    vendor:1,
+                    senderGb: 1,
+                    sender: 1,
+                    receiverGb: 1,
+                    receiver: 1,
+                    officialNumber: 1,
+                    receiveDate: 1,
+                    targetDate: 1,
+                    letterStatus: 1,
+                    timestamp: 1,
+                }
+            )
+            .populate({ path: 'vendor', select: '_id vendorName partNumber part', populate: 'part' })
+            .populate({ 
+                path: 'documents',
+                select: '_id, documentNumber documentTitle documentStatus timestamp'
+            });
+
+        ctx.set('documentsCount', documentsCount);
 
         ctx.res.ok({
             data: vendorLetter,
@@ -174,6 +211,49 @@ export const one = async (ctx) => {
         ctx.res.internalServerError({
             data: id,
             message: 'Error - vendorLetterCtrl > one'
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 11. 20
+ * @description 업체 공식 문서 개별 조회 only documents
+ */
+export const oneOnlyDocuments = async (ctx) => {
+    let { id } = ctx.params;
+    let page = parseInt(ctx.query.page || 1, 10);
+
+    if(page < 1) {
+        ctx.res.badRequest({
+            data: page,
+            message: 'Page can\'t be less than 1'
+        });
+
+        return;
+    }
+
+    try{
+        const skip = (page - 1) * 10;
+
+        const documents = await VendorLetter
+            .findOne(
+                { _id: id },
+                {
+                    _id: 0,
+                    documents: { $slice: [skip, 20] },
+                }
+            )
+            .populate({ path: 'documents', select: '_id documentNumber documentTitle documentStatus timestamp' });
+
+        ctx.res.ok({
+            data: documents,
+            message: 'Success - vendorLetterCtrl'
+        });
+    }catch(e){
+        ctx.res.internalServerError({
+            data: { id, page },
+            message: `Error - vendorLetterCtrl > ${e.message}`
         });
     }
 };

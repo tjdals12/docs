@@ -8,7 +8,6 @@ import {
 	FormGroup,
 	Label,
 	Input,
-	Table,
 	Col,
 	Button,
 	ButtonGroup
@@ -16,8 +15,11 @@ import {
 import { MdClose } from 'react-icons/md';
 import { TiPlus, TiMinus } from 'react-icons/ti';
 import PropTypes from 'prop-types';
+import { Table as VirtualTable, Column as VirtualColumn } from 'react-virtualized';
+import Loader from 'components/Loader';
 
 const DocumentInfoAddModal = ({
+	loading,
 	vendorList,
 	gbs,
 	infos,
@@ -34,6 +36,8 @@ const DocumentInfoAddModal = ({
 	className,
 	...rest
 }) => {
+	const width = 1100;
+
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -79,76 +83,107 @@ const DocumentInfoAddModal = ({
 							</Button>
 						</Col>
 					</FormGroup>
-					<Table bordered striped>
-						<colgroup>
-							<col width="25%" />
-							<col width="35%" />
-							<col width="15%" />
-							<col width="15%" />
-							<col with="5%" />
-						</colgroup>
-						<thead>
-							<tr style={{ background: '#e7f5ff' }}>
-								<th>문서번호</th>
-								<th>문서명</th>
-								<th>구분</th>
-								<th>Plan</th>
-								<th />
-							</tr>
-						</thead>
-						<tbody>
-							{infos.map((info) => {
-								const { index, documentNumber, documentTitle, documentGb, plan } = info.toJS();
-								const isError = infosError.indexOf(index) > -1;
+					
+					<VirtualTable
+						className="pb-2"
+						headerClassName="d-flex align-items-center justify-content-center bg-light title-font h-100"
+						rowClassName="table-row d-flex align-items-center justify-content-center border-bottom outline-none"
+						gridClassName="outline-none"
+						headerHeight={70}
+						width={width}
+						height={400}
+						rowHeight={50}
+						rowGetter={({ index }) => infos[index]}
+						rowCount={infos.length}
+					>
+						<VirtualColumn
+							label="#"
+							dataKey="index"
+							className="p-2"
+							cellRenderer={({ dataKey, rowData, rowIndex }) => {
+								const isError = infosError.indexOf(rowData[dataKey]) > -1;
 
-								return (
-									<tr key={index + 1} className={isError ? 'bg-secondary' : ''}>
-										<td className="text-right">
-											<Input
-												type="text"
-												name="documentNumber"
-												value={documentNumber}
-												onChange={onChange(index)}
-											/>
-										</td>
-										<td>
-											<Input
-												type="text"
-												name="documentTitle"
-												value={documentTitle}
-												onChange={onChange(index)}
-											/>
-										</td>
-										<td>
-											<Input
-												type="select"
-												name="documentGb"
-												value={documentGb}
-												onChange={onChange(index)}
-											>
-												<option value="">-- 구분 --</option>
-												{gbs.get('cdMinors').map((gb) => (
-													<option key={gb.get('_id')} value={gb.get('_id')}>
-														{gb.get('cdSName')}
-													</option>
-												))}
-											</Input>
-										</td>
+								return <span className={`${isError ? 'text-danger title-font' : 'font-weight-bold'} font-italic`}>{rowIndex + 1}.</span>
+							}}
+						/>
+						<VirtualColumn
+							label="문서번호"
+							dataKey="documentNumber"
+							className="p-2"
+							cellRenderer={({ dataKey, rowData }) => (
+								<Input
+									type="text"
+									name="documentNumber"
+									value={rowData[dataKey]}
+									onChange={onChange(rowData['index'])}
+								/>
+							)}
+							width={width * 0.25}
+						/>
+						<VirtualColumn
+							label="문서제목"
+							dataKey="documentTitle"
+							className="p-2"
+							cellRenderer={({ dataKey, rowData }) => (
+									<Input
+										type="text"
+										name="documentTitle"
+										value={rowData[dataKey]}
+										onChange={onChange(rowData['index'])}
+									/>
+								)
+							}
+							width={width * 0.35}
+						/>
+						<VirtualColumn
+							label="구분"
+							dataKey="documentGb"
+							className="p-2"
+							cellRenderer={({ dataKey, rowData }) => (
+								<Input
+									type="select"
+									name="documentGb"
+									value={rowData[dataKey]}
+									onChange={onChange(rowData['index'])}
+								>
+									<option value="">-- 구분 --</option>
+									{gbs.get('cdMinors').map((gb) => (
+										<option key={gb.get('_id')} value={gb.get('_id')}>
+											{gb.get('cdSName')}
+										</option>
+									))}
+								</Input>
+							)}
+							width={width * 0.10}
+						/>
+						<VirtualColumn
+							label="Plan"
+							dataKey="plan"
+							className="p-2"
+							cellRenderer={({ dataKey, rowData }) => (
+								<Input
+									type="date"
+									name="plan"
+									value={rowData[dataKey]}
+									onChange={onChange(rowData['index'])}
+								/>
+							)}
+							width={width * 0.2}
+						/>
+						<VirtualColumn
+							label=""
+							dataKey="index"
+							className="p-2 text-center"
+							cellRenderer={({ dataKey, rowData }) => (
+								<MdClose
+									className="can-click text-danger"
+									onClick={onDeleteInfoForm(rowData[dataKey])}
+								/>
+							)}
+							width={width * 0.05}
+						/>
+					</VirtualTable>
 
-										<td>
-											<Input type="date" name="plan" value={plan} onChange={onChange(index)} />
-										</td>
-										<td className="text-center">
-											<MdClose
-												className={`can-click ${isError ? 'text-warning' : 'text-danger'}`}
-												onClick={onDeleteInfoForm(index)}
-											/>
-										</td>
-									</tr>
-								);
-							})}
-						</tbody>
-					</Table>
 					<ButtonGroup className="d-block text-center">
 						<Button color="primary" onClick={onAddInfoForm}>
 							<TiPlus />
@@ -160,12 +195,17 @@ const DocumentInfoAddModal = ({
 				</Form>
 			</ModalBody>
 			<ModalFooter className="bg-light">
-				<Button color="primary" onClick={onAddInfo}>
-					추가
-				</Button>
-				<Button color="secondary" onClick={onClose}>
-					취소
-				</Button>
+				{loading
+					? <Loader size={20} margin={10} />
+					: ([
+						<Button key="add" color="primary" onClick={onAddInfo}>
+							추가
+						</Button>,
+						<Button key="cancel" color="secondary" onClick={onClose}>
+							취소
+						</Button>
+					])
+				}
 			</ModalFooter>
 		</Modal>
 	);

@@ -19,7 +19,9 @@ class IndexesOverallToolbarContainer extends React.Component {
         const{ ModalActions, IndexesActions } = this.props;
 
         IndexesActions.setTarget('');
+        IndexesActions.initialize('infos');
         IndexesActions.initialize('error');
+        IndexesActions.initialize('infosError');
         ModalActions.open('documentInfoAdd');
     }
 

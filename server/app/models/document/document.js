@@ -317,6 +317,7 @@ DocumentSchema.statics.saveDocuments = async function (param) {
 
             const isSaved = await this.findOne({
                 $and: [
+                    { vendor: { $eq: vendor } },
                     { documentNumber: { $eq: documentNumber } },
                     { documentRev: { $eq: documentRev } }
                 ]

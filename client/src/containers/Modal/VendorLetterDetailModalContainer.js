@@ -21,6 +21,13 @@ class VendorLetterDetailModalContainer extends React.Component {
 		DocumentActions.getDocument({ id });
 	};
 
+	handleMoreDocument = async (id, start, stop) => {
+		const { VendorLetterActions } = this.props;
+		console.log(start-stop);
+
+		await VendorLetterActions.getVendorLetterOnlyDocuments({ id, limit: start / 20 });
+	}
+
 	handleClose = (name) => () => {
 		const { ModalActions } = this.props;
 
@@ -95,18 +102,21 @@ class VendorLetterDetailModalContainer extends React.Component {
 	}
 
 	render() {
-		const { codes, date, isOpen, isOpenQuestion, transmittal, reasonError, loading } = this.props;
+		const { codes, date, isOpen, isOpenQuestion, transmittal, documentsCount, reasonError, loading, inOutLoading } = this.props;
 
 		if (!codes || loading || loading === undefined) return null;
 
 		return (
 			<VendorLetterDetailModal
+				loading={inOutLoading}
 				codes={codes}
 				date={date}
 				reasonError={reasonError}
 				isOpen={isOpen}
 				isOpenQuestion={isOpenQuestion}
 				data={transmittal}
+				documentsCount={documentsCount}
+				onMoreDocuments={this.handleMoreDocument}
 				onClose={this.handleClose}
 				onChange={this.handleChange}
 				onTarget={this.handleTarget}
@@ -130,10 +140,12 @@ export default connect(
 		isOpen: state.modal.get('vendorLetterDetailModal'),
 		isOpenQuestion: state.modal.get('questionModal'),
 		transmittal: state.vendorLetter.get('vendorLetter'),
+		documentsCount: state.vendorLetter.get('documentsCount'),
 		reason: state.vendorLetter.get('reason'),
 		reasonError: state.vendorLetter.get('reasonError'),
 		target: state.vendorLetter.get('target'),
-		loading: state.pender.pending['vendorletter/GET_VENDORLETTER']
+		loading: state.pender.pending['vendorletter/GET_VENDORLETTER'],
+		inOutLoading: state.pender.pending['vendorletter/INOUT_VENDORLETTER']
 	}),
 	(dispatch) => ({
 		CmcodeActions: bindActionCreators(cmcodeActions, dispatch),

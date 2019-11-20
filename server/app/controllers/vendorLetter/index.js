@@ -169,6 +169,40 @@ vendorLetter.get('/:id', commonCtrl.checkObjectId, vendorLetterCtrl.one);
 
 /**
  * @swagger
+ * /api/vendorletters/{id}/documents:
+ *  get:
+ *      tags:
+ *         - Vendor Letter
+ *      summary: 업체 공식 문서 개별 조회 only documents
+ *      descriptipon: 업체 공식 문서 개별 조회 only documents
+ *      produces:
+ *          - application/json
+ *      parameters:
+ *          - in: query
+ *            name: page
+ *            description: page number
+ *            required: string
+ *            type: string
+ *            example: 1
+ *          - in: path
+ *            name: id
+ *            description: vendorletter id
+ *            required: true
+ *            type: string
+ *            example: '5dd4d1ffc62cc80b6d326f2e'
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ *              schema:
+ *                  type: array
+ *                  items:
+ *                      type: object
+ *                      $ref: '#/definitions/document'
+ */
+vendorLetter.get('/:id/documents', commonCtrl.checkObjectId, vendorLetterCtrl.oneOnlyDocuments);
+
+/**
+ * @swagger
  * /api/vendorletters/{vendor}/letters:
  *  get:
  *      tags:
