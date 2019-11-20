@@ -11,6 +11,7 @@ class VendorLetterToolbarContainer extends React.Component {
         const { ModalActions, VendorLetterActions } = this.props;
 
         VendorLetterActions.initialize('receive');
+        VendorLetterActions.initialize('errors');
         ModalActions.open('vendorLetterReceive');
     }
 

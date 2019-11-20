@@ -27,6 +27,8 @@ const VendorLetterDetailModal = ({
 	isOpen,
 	isOpenQuestion,
 	data,
+	documentsCount,
+	onMoreDocuments,
 	onClose,
 	onChange,
 	onTarget,
@@ -235,7 +237,7 @@ const VendorLetterDetailModal = ({
 									/>
 									<VirtualColumn
 										label="상태"
-										cellRenderer={({ dataKey, rowData, columnIndex }) => {
+										cellRenderer={({ dataKey, rowData }) => {
 											const documentStatus = rowData[dataKey][rowData[dataKey].length - 1];
 
 											return <span>{documentStatus.statusName} <strong className="text-danger">({documentStatus.timestamp.regDt.substr(0, 10)})</strong></span>

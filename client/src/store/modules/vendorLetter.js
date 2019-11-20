@@ -9,6 +9,7 @@ const GET_VENDORLETTERS_BY_VENDOR = 'vendorletter/GET_VENDORLETTERS_BY_VENDOR';
 const STATISTICS_BY_TRANSMITTAL = 'vendorletter/STATISTICS_BY_TRANSMITTAL';
 const SEARCH_VENDORLETTERS = 'vendorletter/SEARCH_VENDORLETTERS';
 const GET_VENDORLETTER = 'vendorletter/GET_VENDORLETTER';
+const GET_VENDORLETTER_ONLY_DOCUMENTS = 'vendorletter/GET_VENDORLETTER_ONLY_DOCUMENTS';
 const RECEIVE_VENDORLETTER = 'vendorletter/RECEIVE_VENDORLETTER';
 const EDIT_VENDORLETTER = 'vendorletter/EDIT_VENDORLETTER';
 const ADDITIONAL_RECEIVE_VENDORLETTER = 'vendorletter/ADDITIONAL_RECEIVE_VENDORLETTER';
@@ -29,6 +30,7 @@ export const getVendorLettersByVendor = createAction(GET_VENDORLETTERS_BY_VENDOR
 export const statisticsByTransmittal = createAction(STATISTICS_BY_TRANSMITTAL, api.statisticsByTransmittal);
 export const searchVendorLetters = createAction(SEARCH_VENDORLETTERS, api.searchVendorLetters);
 export const getVendorLetter = createAction(GET_VENDORLETTER, api.getVendorLetter);
+export const getVendorLetterOnlyDocuments = createAction(GET_VENDORLETTER_ONLY_DOCUMENTS, api.getVendorLetterOnlyDocuments);
 export const receiveVendorLetter = createAction(RECEIVE_VENDORLETTER, api.receiveVendorLetter);
 export const editVendorLetter = createAction(EDIT_VENDORLETTER, api.editVendorLetter);
 export const additionalReceiveVendorLetter = createAction(
@@ -105,6 +107,7 @@ const initialState = Map({
 	status: '',
 	date: new Date(),
 	target: '',
+	documentsCount: 0,
 	lastPage: null
 });
 
@@ -151,12 +154,23 @@ export default handleActions(
 			type: GET_VENDORLETTER,
 			onSuccess: (state, action) => {
 				const { data: vendorLetter } = action.payload.data;
+				const documentsCount = action.payload.headers['documentscount'];
 
 				return state
 					.set('vendorLetter', fromJS(vendorLetter))
 					.set('edit', fromJS(vendorLetter))
 					.setIn(['edit', 'vendor'], vendorLetter.vendor._id)
-					.setIn(['edit', 'deleteDocuments'], List());
+					.setIn(['edit', 'deleteDocuments'], List())
+					.set('documentsCount', parseInt(documentsCount || 1, 10));
+			}
+		}),
+		...pender({
+			type: GET_VENDORLETTER_ONLY_DOCUMENTS,
+			onSuccess: (state, action) => {
+				const { data } = action.payload.data;
+				const documents = state.getIn(['vendorLetter', 'documents']).toJS();
+
+				return state.setIn(['vendorLetter', 'documents'], fromJS(documents.concat(data.documents)));
 			}
 		}),
 		...pender({

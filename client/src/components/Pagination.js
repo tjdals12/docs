@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 
 const createPage = (currentPage, lastPage, onPage) => {
 	let pageNumbers = [];
-	const minPageNumber = (currentPage - 2) <= 1 ? 1 : (currentPage - (currentPage === lastPage ? 4 : currentPage === lastPage - 1 ? 3 : 2));
-	const maxPageNumber = (currentPage + 2) >= lastPage ? lastPage : (currentPage + (currentPage === 1 ? 4 : currentPage === 2 ? 3 : 2));
+	const minPageNumber = (currentPage - 3) <= 1 ? 1 : (currentPage - (currentPage === lastPage ? 4 : currentPage === lastPage - 1 ? 3 : 2));
+	const maxPageNumber = (currentPage + 3) >= lastPage ? lastPage : (currentPage + (currentPage === 1 ? 4 : currentPage === 2 ? 3 : 2));
 
 	for (let i = currentPage - 1; i >= minPageNumber; i--) {
 		pageNumbers.unshift(

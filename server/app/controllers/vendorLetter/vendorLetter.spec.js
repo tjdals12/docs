@@ -454,6 +454,21 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
         });
     });
 
+    describe('GET /vendorletters/:id/documents', () => {
+        it('get vendorletter only documents', (done) => {
+            request(server)
+                .get(`/api/vendorletters/${id}/documents?page=1`)
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    expect(ctx.body.data).haveOwnProperty('documents');
+                    expect(ctx.body.data.documents).instanceOf(Array);
+                    done();
+                });
+        });
+    });
+
     describe('GET /vendorletters/:vendor/letters', () => {
         it('get vendorletters by vendor', (done) => {
             request(server)

@@ -78,6 +78,7 @@ export const statisticsByTransmittal = ({ vendor }) =>
 export const searchVendorLetters = (page, param) =>
 	axios.post(`${real}/api/vendorletters/search?page=${page}`, { ...param });
 export const getVendorLetter = ({ id }) => axios.get(`${real}/api/vendorletters/${id}`);
+export const getVendorLetterOnlyDocuments = ({ id, limit }) => axios.get(`${real}/api/vendorletters/${id}/documents?page=2`);
 export const receiveVendorLetter = (param) => axios.post(`${real}/api/vendorletters`, { ...param });
 export const editVendorLetter = ({ id, param }) => axios.patch(`${real}/api/vendorletters/${id}/edit`, { ...param });
 export const additionalReceiveVendorLetter = ({ id, param }) =>
