@@ -124,7 +124,7 @@ class Header extends React.Component {
 									text={userInfo.getIn(['profile', 'userType'])}
 								>
 									<ListGroup flush>
-										<ListGroupItem tag="button" action className="border-light">
+										{/* <ListGroupItem tag="button" action className="border-light">
 											<MdAssignmentInd /> Profile
 										</ListGroupItem>
 										<ListGroupItem tag="button" action className="border-light">
@@ -138,7 +138,7 @@ class Header extends React.Component {
 										</ListGroupItem>
 										<ListGroupItem tag="button" action className="border-light">
 											<MdSettingsApplications /> Settings
-										</ListGroupItem>
+										</ListGroupItem> */}
 										<ListGroupItem tag="button" action className="border-light" onClick={onLogout}>
 											<MdExitToApp /> Signout
 										</ListGroupItem>

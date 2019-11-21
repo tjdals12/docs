@@ -11,4 +11,5 @@ export { default as template } from './template';
 export { default as role } from './role';
 export { default as account } from './account';
 export { default as team } from './team';
+export { default as dashboard } from './dashboard';
 export { penderReducer as pender } from 'redux-pender';

@@ -13,16 +13,14 @@ export const getDatas = async (ctx) => {
     const { id } = ctx.params;
 
     try{
-        console.time('Project');
+        /** Project */
         const project = await Project.findOne({ _id: id }, { projectName: 1, effStaDt: 1, effEndDt: 1 });
-        console.timeEnd('Project');
 
-        console.time('Vendor');
+        /** Contracted Vendors */
         const contractedVendors = await Vendor.find({ project: id }, { _id: 1 })
             .then(vendors => vendors.map(vendor => vendor._id));
-        console.timeEnd('Vendor');
 
-        console.time('Documents');
+        /** Managed Documents */
         const managedDocuments = await DocumentIndex.find({ vendor: { $in: contractedVendors } }, { _id: 0, list: 1 })
             .then(indexes => indexes.map(index => index.list)[0]);
         const currentReceivedDocuments = await DocumentInfo.countDocuments(
@@ -33,9 +31,8 @@ export const getDatas = async (ctx) => {
                 ]
             }
         );
-        console.timeEnd('Documents');
 
-        console.time('Vendor Letters');
+        /** Received Vendor Letters */
         const currentReeceivedVendorLetters = await VendorLetter.countDocuments({ vendor: { $in: contractedVendors } });
         const repliedVendorLetters = await VendorLetter.countDocuments(
             {
@@ -49,7 +46,6 @@ export const getDatas = async (ctx) => {
                 ]
             }
         );
-        console.timeEnd('Vendor Letters');
 
         ctx.res.ok({
             data: {
@@ -60,7 +56,7 @@ export const getDatas = async (ctx) => {
                     current: currentReceivedDocuments,
                     percentage: Math.ceil(((currentReceivedDocuments /managedDocuments.length) * 100))
                 },
-                receivedDocuments: {
+                receivedVendorLetters: {
                     received: currentReeceivedVendorLetters,
                     replied: repliedVendorLetters,
                     percentage: Math.ceil(((repliedVendorLetters / currentReceivedDocuments) * 100))
