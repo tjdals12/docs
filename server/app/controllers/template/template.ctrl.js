@@ -216,7 +216,7 @@ export const download = async (ctx) => {
                     documents: 1
                 }
             )
-                .populate({ path: 'documents' })
+                .populate({ path: 'documents', select: 'documentTitle documentNumber documentRev documentStatus' })
                 .then(function (vendorLetters) {
                     return vendorLetters.map((vendorLetter) => {
                         const documents = vendorLetter.documents.map((document, index) => {

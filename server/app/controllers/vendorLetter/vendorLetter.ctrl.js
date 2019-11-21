@@ -144,7 +144,6 @@ export const search = async (ctx) => {
                 receiverGb: vendorLetter.receiveGb === '01' ? 'CLIENT' : (vendorLetter.receiverGb === '02' ? 'CONTRACTOR' : 'VENDOR')
             };
         });
-
         const countQuery = await VendorLetter.searchVendorLetterCount(query);
 
         ctx.set('Last-Page', Math.ceil((countQuery[0] ? countQuery[0].count : 1) / 10));

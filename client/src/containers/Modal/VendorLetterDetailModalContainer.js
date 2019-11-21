@@ -89,6 +89,9 @@ class VendorLetterDetailModalContainer extends React.Component {
 		const { VendorLetterActions, reason } = this.props;
 
 		await VendorLetterActions.deleteVendorLetter({ id, yn, reason });
+		this.setState({
+			page: 1
+		})
 	};
 
 	handleDate = (date) => {

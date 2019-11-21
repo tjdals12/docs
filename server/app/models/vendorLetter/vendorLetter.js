@@ -214,6 +214,9 @@ VendorLetterSchema.statics.searchVendorLetter = function (param, page) {
             }
         },
         {
+            $sort: { receiveDate: -1 }
+        },
+        {
             $lookup: {
                 from: 'vendors',
                 localField: 'vendor',
@@ -241,9 +244,6 @@ VendorLetterSchema.statics.searchVendorLetter = function (param, page) {
         {
             $limit: 10
         },
-        {
-            $sort: { receiveDate: -1 }
-        }
     ]);
 };
 
@@ -293,8 +293,8 @@ VendorLetterSchema.statics.searchVendorLetterCount = function (param) {
                     { receiverGb: { $regex: receiverGb + '.*', $options: 'i' } },
                     { receiver: { $regex: receiver + '.*', $options: 'i' } },
                     { officialNumber: { $regex: officialNumber + '.*', $options: 'i' } },
-                    { receiveDate: { gte: new Date(receiveDate) } },
-                    { targetDate: { lte: new Date(targetDate) } },
+                    { receiveDate: { $gte: new Date(receiveDate) } },
+                    { targetDate: { $lte: new Date(targetDate) } },
                     {
                         letterStatus: {
                             $elemMatch: {
@@ -506,7 +506,26 @@ VendorLetterSchema.statics.deleteVendorLetter = async function (param) {
         }
     );
 
-    return this.findOne({ _id: id }).populate({ path: 'vendor', populate: { path: 'part' } }).populate({ path: 'documents', populate: { path: 'part documentGb' } });
+    return this.findOne(
+        { _id: id },
+        {
+            _id: 1,
+            documents: { $slice: 20 },
+            vendor:1,
+            senderGb: 1,
+            sender: 1,
+            receiverGb: 1,
+            receiver: 1,
+            officialNumber: 1,
+            receiveDate: 1,
+            targetDate: 1,
+            letterStatus: 1,
+            cancelYn: 1,
+            timestamp: 1,
+        }
+    )
+        .populate({ path: 'vendor', select: '_id vendorName partNumber part', populate: { path: 'part' } })
+        .populate({ path: 'documents', select: '_id documentNumber documentTitle documentStatus timestamp' });
 };
 
 /**
