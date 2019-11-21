@@ -12,7 +12,7 @@ class VendorLetterTableContainer extends React.Component {
 		const { VendorLetterActions, isSearch, search, history } = this.props;
 
 		if (isSearch) {
-			await VendorLetterActions.searchVendorLetters(1, search.toJS());
+			await VendorLetterActions.searchVendorLetters(page, search.toJS());
 		} else {
 			await VendorLetterActions.getVendorLetters({ page });
 		}
@@ -33,16 +33,14 @@ class VendorLetterTableContainer extends React.Component {
 	};
 
 	handleOpen = (name) => {
-		const { ModalActions, VendorLetterActions } = this.props;
+		const { ModalActions } = this.props;
 
-		VendorLetterActions.initialize('errors');
 		ModalActions.open(name);
 	};
 
 	handleOpenDetail = (id) => async () => {
-		const { ModalActions, VendorLetterActions } = this.props;
+		const { ModalActions } = this.props;
 
-		VendorLetterActions.initialize('reasonError');
 		await this.getVendorLetter(id);
 		ModalActions.open('vendorLetterDetail');
 	};

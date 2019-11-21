@@ -29,7 +29,7 @@ const ReferenceSearchModal = ({
 			className={className}
 			contentClassName="border rounded"
 			{...rest}
-			size="lg"
+			size="xl"
 		>
 			<ModalBody className="mh-100">
 				<SearchForm

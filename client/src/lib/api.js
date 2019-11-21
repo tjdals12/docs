@@ -4,6 +4,9 @@ import ContentDisposition from 'content-disposition';
 // const real = 'http://192.168.7.9';
 const real = '';
 
+/** Dashobard */
+export const getDashboardDatas = ({ id }) => axios.get(`${real}/api/dashboards/${id}`);
+
 /** Document */
 export const getDocuments = ({ page }) => axios.get(`${real}/api/documents?page=${page}`);
 export const searchDocuments = (page, param) => axios.post(`${real}/api/documents/search?page=${page}`, { ...param });
@@ -73,7 +76,7 @@ export const getVendorLettersByVendor = ({ vendor }) => axios.get(`${real}/api/v
 export const statisticsByTransmittal = ({ vendor }) => axios.get(`${real}/api/vendorletters/${vendor}/statisticsbytransmittal`);
 export const searchVendorLetters = (page, param) => axios.post(`${real}/api/vendorletters/search?page=${page}`, { ...param });
 export const getVendorLetter = ({ id }) => axios.get(`${real}/api/vendorletters/${id}`);
-export const getVendorLetterOnlyDocuments = ({ id, limit }) => axios.get(`${real}/api/vendorletters/${id}/documents?page=2`);
+export const getVendorLetterOnlyDocuments = ({ id, page }) => axios.get(`${real}/api/vendorletters/${id}/documents?page=${page}`);
 export const receiveVendorLetter = (param) => axios.post(`${real}/api/vendorletters`, { ...param });
 export const editVendorLetter = ({ id, param }) => axios.patch(`${real}/api/vendorletters/${id}/edit`, { ...param });
 export const additionalReceiveVendorLetter = ({ id, param }) =>

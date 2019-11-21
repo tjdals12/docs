@@ -144,7 +144,6 @@ export const search = async (ctx) => {
                 receiverGb: vendorLetter.receiveGb === '01' ? 'CLIENT' : (vendorLetter.receiverGb === '02' ? 'CONTRACTOR' : 'VENDOR')
             };
         });
-
         const countQuery = await VendorLetter.searchVendorLetterCount(query);
 
         ctx.set('Last-Page', Math.ceil((countQuery[0] ? countQuery[0].count : 1) / 10));
@@ -192,6 +191,7 @@ export const one = async (ctx) => {
                     receiveDate: 1,
                     targetDate: 1,
                     letterStatus: 1,
+                    cancelYn: 1,
                     timestamp: 1,
                 }
             )
@@ -234,7 +234,7 @@ export const oneOnlyDocuments = async (ctx) => {
     }
 
     try{
-        const skip = (page - 1) * 10;
+        const skip = (page - 1) * 20;
 
         const documents = await VendorLetter
             .findOne(
@@ -527,7 +527,9 @@ export const inOut = async (ctx) => {
     }
 
     try {
+        console.time('inOut');
         const vendorLetter = await VendorLetter.inOutVendorLetter(id, inOutGb, officialNumber, status, resultCode, replyCode, date);
+        console.timeEnd('inOut');
 
         ctx.res.ok({
             data: vendorLetter,
@@ -566,7 +568,9 @@ export const deleteInOut = async (ctx) => {
     }
 
     try {
+        console.time('inOut Delete');
         const vendorLetter = await VendorLetter.deleteInOut(id, targetId);
+        console.timeEnd('inOut Delete');
 
         ctx.res.ok({
             data: vendorLetter,

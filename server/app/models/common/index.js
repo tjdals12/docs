@@ -212,6 +212,10 @@ const DEFINE = {
         }
     },
 
+    getDatePeriod: function(startDt, endDt, format) {
+        return moment(endDt, 'YYYY-MM-DD').diff(moment(startDt, 'YYYY-MM-DD'), format);
+    },
+
     isDelay: function (target, lastStatus) {
         if (lastStatus.match(new RegExp(/^9/g))) {
             return {

@@ -12,6 +12,7 @@ import role from 'controllers/role';
 import template from 'controllers/template';
 import account from 'controllers/account';
 import team from 'controllers/team';
+import dashboard from 'controllers/dashboard';
 
 const api = new Router();
 
@@ -56,5 +57,6 @@ api.use('/roles', role.routes());
 api.use('/templates', template.routes());
 api.use('/accounts', account.routes());
 api.use('/teams', team.routes());
+api.use('/dashboards', dashboard.routes());
 
 export default api;

@@ -181,8 +181,8 @@ export const add = async (ctx) => {
 };
 
 /**
- * @author minz-logger
- * @date 2019. 09. 19
+ * @author      minz-logger
+ * @date        2019. 09. 19
  * @description 참조할 문서 검색
  */
 export const referenceSearch = async (ctx) => {
@@ -325,7 +325,7 @@ export const edit = async (ctx) => {
 /**
  * @author      minz-logger
  * @date        2019. 10. 08
- * @description 공문 회신
+ * @description 공식문서 회신
  */
 export const reply = async (ctx) => {
     let { id } = ctx.params;

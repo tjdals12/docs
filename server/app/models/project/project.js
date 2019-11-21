@@ -2,6 +2,8 @@ import { Schema, model } from 'mongoose';
 import { Timestamp } from 'models/common/schema';
 import DEFINE from 'models/common';
 
+import moment from 'moment-timezone';
+
 /**
  * @author      minz-logger
  * @date        2019. 09. 23
@@ -38,6 +40,17 @@ const ProjectSchema = new Schema({
 });
 
 ProjectSchema.set('toJSON', { getters: true });
+
+ProjectSchema.virtual('projectPeriod').get(function() {
+    const period = DEFINE.getDatePeriod(this.effStaDt, this.effEndDt, 'days');
+    const untilNow = DEFINE.getDatePeriod(this.effStaDt, new Date(), 'days');
+
+    return {
+        period,
+        untilNow,
+        percentage: Math.ceil((untilNow / period) * 100)
+    };
+});
 
 /**
  * @author      minz-logger
