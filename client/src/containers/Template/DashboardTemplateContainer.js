@@ -5,21 +5,38 @@ import { bindActionCreators } from 'redux';
 import * as dashboardActions from 'store/modules/dashboard';
 
 class DashboardTemplateContainer extends React.Component {
-    getDashboardDatas = async (id) => {
+    getWidgetDatas = async (id) => {
         const { DashboardActions } = this.props;
 
-        await DashboardActions.getDashboardDatas({ id });
+        await DashboardActions.getWidgetDatas({ id });
+    }
+
+    getVendorDatas = async (id) => {
+        const { DashboardActions } = this.props;
+
+        await DashboardActions.getVendorDatas({ id });
     }
 
     componentDidMount() {
         // TODO: Main Project의 ID를 가져오도록
-        this.getDashboardDatas('5d89c8be523cbf13cd173729');
+        const id = '5d89c8be523cbf13cd173729';
+        this.getWidgetDatas(id);
+        this.getVendorDatas(id);
     }
 
     render() {
-        const { project, contractedVendors, managedDocuments, receivedVendorLetters, loading } = this.props;
+        const { 
+            project,
+            contractedVendors,
+            managedDocuments,
+            receivedVendorLetters,
+            vendorsCountGroupByPart,
+            vendorsCountGroupByStartDt,
+            widgetLoading,
+            vendorLoading
+        } = this.props;
 
-        if(loading || loading === undefined) return null;
+        if((widgetLoading || vendorLoading) || (widgetLoading === undefined || vendorLoading === undefined)) return null;
 
         return (
             <DashboardTemplate
@@ -27,6 +44,8 @@ class DashboardTemplateContainer extends React.Component {
                 managedDocuments={managedDocuments.toJS()}
                 receivedVendorLetters={receivedVendorLetters.toJS()}
                 contractedVendors={contractedVendors}
+                vendorsCountGroupByStartDt={vendorsCountGroupByStartDt.toJS()}
+                vendorsCountGroupByPart={vendorsCountGroupByPart.toJS()}
             />
         )
     }
@@ -38,7 +57,10 @@ export default connect(
         contractedVendors: state.dashboard.get('contractedVendors'),
         managedDocuments: state.dashboard.get('managedDocuments'),
         receivedVendorLetters: state.dashboard.get('receivedVendorLetters'),
-        loading: state.pender.pending['dashboard/GET_DASHBOARD_DATAS']
+        vendorsCountGroupByStartDt: state.dashboard.get('vendorsCountGroupByStartDt'),
+        vendorsCountGroupByPart: state.dashboard.get('vendorsCountGroupByPart'),
+        widgetLoading: state.pender.pending['dashboard/GET_WIDGET_DATAS'],
+        vendorLoading: state.pender.pending['dashboard/GET_VENDOR_DATAS']
     }),
     (dispatch) => ({
         DashboardActions: bindActionCreators(dashboardActions, dispatch)

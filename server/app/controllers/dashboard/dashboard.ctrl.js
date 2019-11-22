@@ -7,9 +7,9 @@ import VendorLetter from 'models/vendorLetter/vendorLetter';
 /**
  * @author      minz-logger
  * @date        2019. 11. 21
- * @description 대시보드 데이터 조회
+ * @description 대시보드 위젯 데이터 조회
  */
-export const getDatas = async (ctx) => {
+export const getWidgetDatas = async (ctx) => {
     const { id } = ctx.params;
 
     try{
@@ -68,6 +68,34 @@ export const getDatas = async (ctx) => {
         ctx.res.internalServerError({
             data: { id },
             message: `Error - dashboardCtrl > getDatas: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 11. 22
+ * @description 대시보드 업체 데이터 조회
+ */
+export const getVendorDatas = async (ctx) => {
+    const { id } = ctx.params;
+
+    try{
+        const vendorsCountGroupByPart = await Vendor.vendorsCountGroupByPart(id);
+
+        const vendorsCountGroupByStartDt = await Vendor.vendorsCountGroupByStartDt(id);
+
+        ctx.res.ok({
+            data: {
+                vendorsCountGroupByPart,
+                vendorsCountGroupByStartDt,
+            },
+            message: 'Success - vendorCtrl > getVendorDatas'
+        });
+    }catch(e) {
+        ctx.res.internalServerError({
+            data: { id },
+            message: `Error - dashboardCtrl > getVendorDatas: ${e.message}`
         });
     }
 };

@@ -3,8 +3,17 @@ import { Row, Col } from 'reactstrap';
 import NumberWidget from 'components/Widget/NumberWidget';
 import IconWidget from 'components/Widget/IconWidget';
 import { FaBuilding } from 'react-icons/fa';
+import PieChartCard from 'components/Card/PieChartCard';
+import CustomAreaChart from 'components/Chart/CustomAreaChart';
 
-const DashboardTemplate = ({ project, managedDocuments, receivedVendorLetters, contractedVendors }) => {
+const DashboardTemplate = ({ 
+    project, 
+    managedDocuments, 
+    receivedVendorLetters, 
+    contractedVendors,
+    vendorsCountGroupByStartDt,
+    vendorsCountGroupByPart,
+}) => {
     return (
         <React.Fragment>
             <Row>
@@ -45,6 +54,16 @@ const DashboardTemplate = ({ project, managedDocuments, receivedVendorLetters, c
                         title="계약 업체"
                         subtitle={`${contractedVendors} 개`}
                     />
+                </Col>
+            </Row>
+
+            <Row>
+                <Col md={7}>
+                    <CustomAreaChart data={vendorsCountGroupByStartDt} />
+                </Col>
+
+                <Col md={5}>
+                    <PieChartCard data={vendorsCountGroupByPart} />
                 </Col>
             </Row>
         </React.Fragment>
