@@ -87,6 +87,128 @@ VendorSchema.virtual('period').get(function () {
 
 /**
  * @author      minz-logger
+ * @date        2019. 11. 22
+ * @description 공정별 업체 수
+ */
+VendorSchema.statics.vendorsCountGroupByPart = function (project) { 
+    return this.aggregate([
+        {
+            $match: {
+                project: Types.ObjectId(project)
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+                part: 1,
+            }
+        },
+        {
+            $group: {
+                _id: '$part',
+                total: { $sum: 1 }
+            }
+        },
+        {
+            $lookup: {
+                from: 'cdminors',
+                localField: '_id',
+                foreignField: '_id',
+                as: '_id'
+            }
+        },
+        {
+            $unwind: '$_id'
+        },
+        {
+            $project: {
+                _id: 0,
+                name: '$_id.cdSName',
+                value: '$total'
+            }
+        },
+    ]);
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 11. 22
+ * @description 계약시작일 + 공정별 업체수
+ */
+VendorSchema.statics.vendorsCountGroupByStartDt = function (project) {
+    return this.aggregate([
+        {
+            $match: {
+                project: Types.ObjectId(project)
+            }
+        },
+        {
+            $project: {
+                part: 1,
+                effStaDt: { $substr: [ '$effStaDt', 0, 7 ] },
+            }
+        },
+        {
+            $group: {
+                _id: {
+                    effStaDt: '$effStaDt',
+                    part: '$part'
+                },
+                part: { $push: '$part' }
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+                effStaDt: '$_id.effStaDt',
+                parts: {
+                    _id: '$_id.part',
+                    count: { $size: '$part' }
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: 'cdminors',
+                localField: 'parts._id',
+                foreignField: '_id',
+                as: 'parts._id'
+            }
+        },
+        {
+            $unwind: '$parts._id'
+        },
+        {
+            $project: {
+                effStaDt: 1,
+                parts: {
+                    part: '$parts._id.cdSName',
+                    count: '$parts.count'
+                }
+            }
+        },
+        {
+            $group: {
+                _id: '$effStaDt',
+                parts: { $push: '$parts' }
+            }
+        },
+        {
+            $sort: {
+                _id: 1
+            }
+        }
+    ]).then((response) => {
+        return response.map(({ _id, parts }) => {
+            const data = parts.reduce((acc, cur) => Object.assign(acc, { [cur.part]: cur.count }), {});
+
+            return { name: _id, ...data };
+        });
+    });
+};
+
+/**
+ * @author      minz-logger
  * @date        2019. 08. 05
  * @description 업체 검색
  * @param       {Object} param

@@ -3,6 +3,7 @@ import Vendor from 'models/vendor/vendor';
 import DocumentIndex from 'models/documentIndex/documentIndex';
 import DocumentInfo from 'models/documentIndex/documentInfo';
 import VendorLetter from 'models/vendorLetter/vendorLetter';
+import { Types } from 'mongoose';
 
 /**
  * @author      minz-logger
@@ -68,6 +69,29 @@ export const getDatas = async (ctx) => {
         ctx.res.internalServerError({
             data: { id },
             message: `Error - dashboardCtrl > getDatas: ${e.message}`
+        });
+    }
+};
+
+export const getVendorDatas = async (ctx) => {
+    const { id } = ctx.params;
+
+    try{
+        const vendorsCountGroupByPart = await Vendor.vendorsCountGroupByPart(id);
+
+        const vendorsCountGroupByStartDt = await Vendor.vendorsCountGroupByStartDt(id);
+
+        ctx.res.ok({
+            data: {
+                vendorsCountGroupByPart,
+                vendorsCountGroupByStartDt,
+            },
+            message: 'Success - vendorCtrl > getVendorDatas'
+        });
+    }catch(e) {
+        ctx.res.internalServerError({
+            data: { id },
+            message: `Error - dashboardCtrl > getVendorDatas: ${e.message}`
         });
     }
 };
