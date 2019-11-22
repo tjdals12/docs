@@ -4,13 +4,15 @@ import {
 	MdClearAll,
 	MdNotificationsNone,
 	MdNotificationsActive,
-	MdAssignmentInd,
-	MdAssessment,
-	MdMessage,
-	MdHelp,
-	MdSettingsApplications,
 	MdExitToApp
 } from 'react-icons/md';
+// import {
+// 	MdAssignmentInd,
+// 	MdAssessment,
+// 	MdMessage,
+// 	MdHelp,
+// 	MdSettingsApplications,
+// } from 'react-icons/md';
 import bn from 'utils/bemnames';
 
 import SearchForm from 'components/SearchForm';

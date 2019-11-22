@@ -6,7 +6,7 @@ const dashboard = new Router();
 
 /**
  * @swagger
- * /api/dashboards/{id}:
+ * /api/dashboards/{id}/widgets:
  *  get:
  *      tags:
  *          - Dashboard
@@ -25,7 +25,7 @@ const dashboard = new Router();
  *          200:
  *              description: Successful operation
  */
-dashboard.get('/:id', commonCtrl.checkObjectId, dashboardCtrl.getDatas);
+dashboard.get('/:id/widgets', commonCtrl.checkObjectId, dashboardCtrl.getWidgetDatas);
 
 /**
  * @swagger

@@ -3,14 +3,13 @@ import Vendor from 'models/vendor/vendor';
 import DocumentIndex from 'models/documentIndex/documentIndex';
 import DocumentInfo from 'models/documentIndex/documentInfo';
 import VendorLetter from 'models/vendorLetter/vendorLetter';
-import { Types } from 'mongoose';
 
 /**
  * @author      minz-logger
  * @date        2019. 11. 21
- * @description 대시보드 데이터 조회
+ * @description 대시보드 위젯 데이터 조회
  */
-export const getDatas = async (ctx) => {
+export const getWidgetDatas = async (ctx) => {
     const { id } = ctx.params;
 
     try{
@@ -73,6 +72,11 @@ export const getDatas = async (ctx) => {
     }
 };
 
+/**
+ * @author      minz-logger
+ * @date        2019. 11. 22
+ * @description 대시보드 업체 데이터 조회
+ */
 export const getVendorDatas = async (ctx) => {
     const { id } = ctx.params;
 
