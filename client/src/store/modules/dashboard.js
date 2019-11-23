@@ -3,13 +3,19 @@ import { createAction, handleActions } from 'redux-actions';
 import * as api from 'lib/api';
 import { pender } from 'redux-pender';
 
+const SET_TARGET = 'dashboard/SET_TARGET';
 const GET_WIDGET_DATAS = 'dashboard/GET_WIDGET_DATAS';
 const GET_VENDOR_DATAS = 'dashboard/GET_VENDOR_DATAS';
 
+export const setTarget = createAction(SET_TARGET);
 export const getWidgetDatas = createAction(GET_WIDGET_DATAS, api.getWidgetDatas);
 export const getVendorDatas = createAction(GET_VENDOR_DATAS, api.getVendorDatas);
 
 const initialState = Map({
+    target: Map({
+        key: '',
+        value: '[PROJECT]'
+    }),
     project: Map(),
     managedDocuments: Map(),
     receivedVendorLetters: Map(),
@@ -19,6 +25,11 @@ const initialState = Map({
 });
 
 export default handleActions({
+    [SET_TARGET]: (state, action) => {
+        const { payload } = action;
+
+        return state.set('target', fromJS(payload));
+    },
     ...pender({
         type: GET_WIDGET_DATAS,
         onSuccess: (state, action) => {

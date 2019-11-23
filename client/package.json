@@ -1,66 +1,68 @@
 {
-	"name": "docs-frontend",
-	"version": "0.1.0",
-	"private": true,
-	"dependencies": {
-		"@progress/kendo-data-query": "^1.5.2",
-		"@progress/kendo-drawing": "^1.5.12",
-		"@progress/kendo-react-dateinputs": "^3.4.1",
-		"@progress/kendo-react-dropdowns": "^3.4.1",
-		"@progress/kendo-react-grid": "^3.4.1",
-		"@progress/kendo-react-inputs": "^3.4.1",
-		"@progress/kendo-react-intl": "^3.4.1",
-		"@progress/kendo-theme-default": "^4.3.2",
-		"axios": "^0.19.0",
-		"bootstrap": "^4.3.1",
-		"content-disposition": "^0.5.3",
-		"immutable": "^4.0.0-rc.12",
-		"moment": "^2.24.0",
-		"node-sass": "^4.12.0",
-		"query-string": "^6.8.1",
-		"react": "^16.8.6",
-		"react-component-queries": "^2.3.0",
-		"react-datepicker": "^2.8.0",
-		"react-dom": "^16.8.6",
-		"react-icons": "^3.7.0",
-		"react-infinite-calendar": "^2.3.1",
-		"react-rangeslider": "^2.2.0",
-		"react-redux": "^7.1.0",
-		"react-router-dom": "^5.0.1",
-		"react-scripts": "3.0.1",
-		"react-sizeme": "^2.6.7",
-		"react-spinners": "^0.6.1",
-		"react-virtualized": "^9.21.2",
-		"reactstrap": "^8.0.1",
-		"recharts": "^1.7.1",
-		"redux": "^4.0.4",
-		"redux-actions": "^2.6.5",
-		"redux-pender": "^2.0.12"
-	},
-	"scripts": {
-		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"test": "react-scripts test",
-		"eject": "react-scripts eject"
-	},
-	"eslintConfig": {
-		"extends": "react-app"
-	},
-	"browserslist": {
-		"production": [
-			">0.2%",
-			"not dead",
-			"not op_mini all"
-		],
-		"development": [
-			"last 1 chrome version",
-			"last 1 firefox version",
-			"last 1 safari version"
-		]
-	},
-	"proxy": "http://localhost:4000",
-	"devDependencies": {
-		"@types/immutable": "^3.8.7",
-		"@types/reactstrap": "^8.0.4"
-	}
+  "name": "docs-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@progress/kendo-data-query": "^1.5.2",
+    "@progress/kendo-drawing": "^1.5.12",
+    "@progress/kendo-react-dateinputs": "^3.4.1",
+    "@progress/kendo-react-dropdowns": "^3.4.1",
+    "@progress/kendo-react-grid": "^3.4.1",
+    "@progress/kendo-react-inputs": "^3.4.1",
+    "@progress/kendo-react-intl": "^3.4.1",
+    "@progress/kendo-theme-default": "^4.3.2",
+    "axios": "^0.19.0",
+    "bootstrap": "^4.3.1",
+    "content-disposition": "^0.5.3",
+    "immutable": "^4.0.0-rc.12",
+    "moment": "^2.24.0",
+    "node-sass": "^4.12.0",
+    "query-string": "^6.8.1",
+    "react": "^16.8.6",
+    "react-component-queries": "^2.3.0",
+    "react-datepicker": "^2.8.0",
+    "react-dom": "^16.8.6",
+    "react-icons": "^3.7.0",
+    "react-infinite-calendar": "^2.3.1",
+    "react-rangeslider": "^2.2.0",
+    "react-redux": "^7.1.0",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.0.1",
+    "react-sizeme": "^2.6.7",
+    "react-spinners": "^0.6.1",
+    "react-virtualized": "^9.21.2",
+    "reactstrap": "^8.0.1",
+    "recharts": "^1.7.1",
+    "redux": "^4.0.4",
+    "redux-actions": "^2.6.5",
+    "redux-pender": "^2.0.12",
+    "source-map-explorer": "^2.1.1"
+  },
+  "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "proxy": "http://localhost:4000",
+  "devDependencies": {
+    "@types/immutable": "^3.8.7",
+    "@types/reactstrap": "^8.0.4"
+  }
 }

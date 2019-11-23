@@ -5,6 +5,7 @@ import IconWidget from 'components/Widget/IconWidget';
 import { FaBuilding } from 'react-icons/fa';
 import PieChartCard from 'components/Card/PieChartCard';
 import CustomAreaChart from 'components/Chart/CustomAreaChart';
+import ProjectDropdownContainer from 'containers/Dropdown/ProjectDropdownContainer';
 
 const DashboardTemplate = ({ 
     project, 
@@ -16,7 +17,8 @@ const DashboardTemplate = ({
 }) => {
     return (
         <React.Fragment>
-            <Row>
+            <Row className="position-relative">
+                <ProjectDropdownContainer isOpen={true} outline={true} color="muted" className="position-absolute" style={{ top: '-3.5rem', right: '1rem' }}/>
                 <Col lg={3} md={6} sm={6} xs={12}>
                     <NumberWidget
                         title="프로젝트 기간"
@@ -58,11 +60,11 @@ const DashboardTemplate = ({
             </Row>
 
             <Row>
-                <Col md={7}>
+                <Col lg={7} md={12}>
                     <CustomAreaChart data={vendorsCountGroupByStartDt} />
                 </Col>
 
-                <Col md={5}>
+                <Col lg={5} md={12}>
                     <PieChartCard data={vendorsCountGroupByPart} />
                 </Col>
             </Row>
