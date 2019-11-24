@@ -6,6 +6,26 @@ const dashboard = new Router();
 
 /**
  * @swagger
+ * /api/dashboards/projects:
+ *  get:
+ *      tags:
+ *          - Dashboard
+ *      summary: 프로젝트 목록 조회
+ *      description: 프로젝트 목록 조회
+ *      produces:
+ *          - application/json
+ *      responses:
+ *          200:
+ *              description: Successful operation
+ *              schema:
+ *                  type: array
+ *                  items:
+ *                      $ref: '#/definitions/project'
+ */
+dashboard.get('/projects', dashboardCtrl.getProjects);
+
+/**
+ * @swagger
  * /api/dashboards/{id}/widgets:
  *  get:
  *      tags:

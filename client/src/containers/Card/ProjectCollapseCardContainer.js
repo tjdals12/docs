@@ -100,10 +100,17 @@ class ProjectCollapseCardContainer extends React.Component {
 		this.getProjects(page);
 	};
 
-	handleDelete = (id, yn) => {
+	handleDelete = async (id, yn) => {
 		const { ProjectActions, page } = this.props;
 
-		ProjectActions.deleteProject({ id, yn });
+		await ProjectActions.deleteProject({ id, yn });
+		this.getProjects(page);
+	}
+
+	handleMainProject = async (id) => {
+		const { ProjectActions, page } = this.props;
+
+		await ProjectActions.changeMainProject({ id });
 		this.getProjects(page);
 	}
 
@@ -140,6 +147,7 @@ class ProjectCollapseCardContainer extends React.Component {
 						onSave={this.handleSave}
 						onEdit={this.handleEdit}
 						onDelete={this.handleDelete}
+						onMainProject={this.handleMainProject}
 					/>
 				}
 			/>

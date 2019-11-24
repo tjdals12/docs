@@ -214,15 +214,15 @@ const ManagerCollapse = ({
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Label md={3} for='effStaDt' className='text-right title-font'>시작일</Label>
+                                <Label md={3} className='text-right title-font'>시작일</Label>
                                 <Col md={9}>
-                                    <Input type='date' id='effStaDt' name='effStaDt' value={isAddManager ? addManager.get('effStaDt') : editManager.get('effStaDt')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('effStaDtError')} />
+                                    <Input type='date' name='effStaDt' value={isAddManager ? addManager.get('effStaDt') : editManager.get('effStaDt')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('effStaDtError')} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Label md={3} for='effEndDt' className='text-right title-font'>종료일</Label>
+                                <Label md={3} className='text-right title-font'>종료일</Label>
                                 <Col md={9}>
-                                    <Input type='date' id='effEndDt' name='effEndDt' value={isAddManager ? addManager.get('effEndDt') : editManager.get('effEndDt')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('effEndDtError')} />
+                                    <Input type='date' name='effEndDt' value={isAddManager ? addManager.get('effEndDt') : editManager.get('effEndDt')} onChange={onChange(isAddManager ? 'addManager' : 'editManager')} invalid={managerErrors.get('effEndDtError')} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>

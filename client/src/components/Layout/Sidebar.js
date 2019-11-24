@@ -6,7 +6,7 @@ import {
 	MdKeyboardArrowDown
 } from 'react-icons/md';
 import bn from 'utils/bemnames';
-import sidebarBgImg from 'assets/img/sidebar/sidebar-9.jpg';
+import sidebarBgImg from 'assets/img/sidebar/sidebar-7.jpg';
 import Typography from 'components/Typography';
 
 const bem = bn.create('sidebar');

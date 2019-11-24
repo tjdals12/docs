@@ -8,25 +8,14 @@ import {
     YAxis,
     Tooltip
 } from 'recharts';
-
-const colors = [
-    '#8884d8',
-    '#82ca9d',
-    '#e64980',
-    '#4dabf7',
-    '#1098ad',
-    '#40c057',
-    '#ffe066',
-    '#d9480f',
-    '#5f3dc4',
-];
+import { colors } from 'utils/define';
 
 const CustomAreaChart = ({ data }) => {
     const getArea = (data) => {
         const keys = Object.keys(data.reduce((acc, cur) => Object.assign(acc, cur), {}));
         
-        return keys.slice(1, keys.length).map((key, index) => (
-            <Area type="monotone" dataKey={key} stackId="1" stroke={colors[index]} fill={colors[index]}/>
+        return keys.slice(1, keys.length).sort().map((key, index) => (
+            <Area key={key} type="monotone" dataKey={key} stackId="1" stroke={colors[index]} fill={colors[index]}/>
         ));
     }
 

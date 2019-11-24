@@ -2,18 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { Card, CardHeader, CardBody } from 'reactstrap';
 import { ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-
-const colors = [
-    '#8884d8',
-    '#82ca9d',
-    '#e64980',
-    '#4dabf7',
-    '#1098ad',
-    '#40c057',
-    '#ffe066',
-    '#d9480f',
-    '#5f3dc4',
-];
+import { colors } from 'utils/define';
 
 const PieChartCard = ({ data, className }) => {
     const classes = classNames(className, 'w-100', 'h-100');

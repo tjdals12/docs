@@ -126,7 +126,7 @@ const CmcodeCollapse = ({
 					</Grid>
 				</Col>
 
-				<Col xl={3} lg={5} >
+				<Col xl={3} lg={5}>
 					<Form
 						className="p-4 border rounded bg-light h-100"
 						onSubmit={(e) => {

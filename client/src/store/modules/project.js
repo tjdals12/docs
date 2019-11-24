@@ -9,6 +9,7 @@ const GET_PROJECT = 'project/GET_PROJECT';
 const ADD_PROJECT = 'project/ADD_PROJECT';
 const EDIT_PROJECT = 'project/EDIT_PROJECT';
 const DELETE_PROJECT = 'project/DELETE_PROJECT';
+const CHANGE_MAIN_PROJECT = 'project/CHANGE_MAIN_PROJECT';
 const SELECT_PROJECT = 'project/SELECT_PROJECT';
 const ON_CHANGE = 'project/ON_CHANGE';
 const ON_CHANGE_DEEP = 'project/ON_CHANGE_DEEP';
@@ -20,6 +21,7 @@ export const getProject = createAction(GET_PROJECT, api.getProject);
 export const addProject = createAction(ADD_PROJECT, api.addProject);
 export const editProject = createAction(EDIT_PROJECT, api.editProject);
 export const deleteProject = createAction(DELETE_PROJECT, api.deleteProject);
+export const changeMainProject = createAction(CHANGE_MAIN_PROJECT, api.changeMainProject);
 export const selectProject = createAction(SELECT_PROJECT);
 export const onChange = createAction(ON_CHANGE);
 export const onChangeDeep = createAction(ON_CHANGE_DEEP);
@@ -136,6 +138,14 @@ export default handleActions(
 		}),
 		...pender({
 			type: DELETE_PROJECT,
+			onSuccess: (state, action) => {
+				const { data: project } = action.payload.data;
+
+				return state.set('project', fromJS(project));
+			}
+		}),
+		...pender({
+			type: CHANGE_MAIN_PROJECT,
 			onSuccess: (state, action) => {
 				const { data: project } = action.payload.data;
 

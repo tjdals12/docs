@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { Collapse, Row, Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
 import PropTypes from 'prop-types';
+import { TiPinOutline } from 'react-icons/ti';
 
 const makeHeaderCell = ({ title, className }) => {
 	const classes = classNames('k-link title-font', className);
@@ -25,6 +26,7 @@ const ProjectCollapse = ({
 	onSave,
 	onEdit,
 	onDelete,
+	onMainProject
 }) => {
 	const isAdd = detail.size === 0;
 
@@ -68,6 +70,9 @@ const ProjectCollapse = ({
 							field="projectName"
 							title="프로젝트명"
 							headerCell={() => makeHeaderCell({ title: '프로젝트명' })}
+							cell={({ dataItem, field }) => (
+								<td>{dataItem[field]} {dataItem['isMain'] && '📌'}</td>
+							)}
 						/>
 						<Column
 							field="client"
@@ -141,12 +146,11 @@ const ProjectCollapse = ({
 						</FormGroup>
 						<FormGroup row>
 							<Col md={6}>
-								<Label for="effStaDt" className="title-font">
+								<Label className="title-font">
 									시작일
 								</Label>
 								<Input
 									type="date"
-									id="effStaDt"
 									name="effStaDt"
 									value={
 										detail.get('effStaDt') ? (
@@ -160,12 +164,11 @@ const ProjectCollapse = ({
 								/>
 							</Col>
 							<Col md={6}>
-								<Label for="effEndDt" className="title-font">
+								<Label className="title-font">
 									종료일
 								</Label>
 								<Input
 									type="date"
-									id="effEndDt"
 									name="effEndDt"
 									value={
 										detail.get('effEndDt') ? (
@@ -247,13 +250,18 @@ const ProjectCollapse = ({
 							</Col>
 						</FormGroup>
 						<FormGroup row className="mt-5 mb-0">
-							<Col md={{ offset: 8, size: 4 }} className="d-flex justify-content-end">
+							<Col md={12} className="d-flex justify-content-end">
 								{isAdd ? (
 									<Button size="lg" color="primary" onClick={onSave}>
 										저장
 									</Button>
 								) : (
 										<React.Fragment>
+											{detail.get('isMain') || (
+												<Button color="danger" className="mr-auto" onClick={() => onMainProject(detail.get('_id'))}>
+													<TiPinOutline size={25}/>
+												</Button>
+											)}
 											<Button size="lg" color="primary" className="mr-2" onClick={onEdit}>
 												수정
 											</Button>

@@ -6,6 +6,35 @@ import VendorLetter from 'models/vendorLetter/vendorLetter';
 
 /**
  * @author      minz-logger
+ * @date        2019. 11. 24
+ * @description 프로젝트 목록 조회
+ */
+export const getProjects = async (ctx) => {
+    try{
+        const projects = await Project
+            .find({ deleteYn: 'NO' })
+            .then((projects) => projects.map(({ _id, projectName }) => ({ key: _id, value: projectName})));
+
+        const mainProject = await Project
+            .findOne({ isMain: true })
+            .then(({ _id, projectName }) => ({ key: _id, value: projectName }));
+
+        ctx.res.ok({
+            data: {
+                projects,
+                mainProject
+            },
+            message: 'Success - dashboardCtrl > getProjects'
+        });
+    }catch(e){
+        ctx.res.internalServerError({
+            message: `Error - dashboardCtrl > getProjects: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
  * @date        2019. 11. 21
  * @description 대시보드 위젯 데이터 조회
  */
@@ -22,7 +51,11 @@ export const getWidgetDatas = async (ctx) => {
 
         /** Managed Documents */
         const managedDocuments = await DocumentIndex.find({ vendor: { $in: contractedVendors } }, { _id: 0, list: 1 })
-            .then(indexes => indexes.map(index => index.list)[0]);
+            .then(indexes => {
+                const list = indexes.map(index => index.list);
+
+                return list[0] ? list[0] : [];
+            });
         const currentReceivedDocuments = await DocumentInfo.countDocuments(
             {
                 $and: [
@@ -31,9 +64,10 @@ export const getWidgetDatas = async (ctx) => {
                 ]
             }
         );
+        const documentsPercentage = Math.ceil((currentReceivedDocuments / managedDocuments.length) * 100 || 0);
 
         /** Received Vendor Letters */
-        const currentReeceivedVendorLetters = await VendorLetter.countDocuments({ vendor: { $in: contractedVendors } });
+        const currentReceivedVendorLetters = await VendorLetter.countDocuments({ vendor: { $in: contractedVendors } });
         const repliedVendorLetters = await VendorLetter.countDocuments(
             {
                 $and: [
@@ -46,6 +80,7 @@ export const getWidgetDatas = async (ctx) => {
                 ]
             }
         );
+        const vendorLettersPercentage = Math.ceil((repliedVendorLetters / currentReceivedVendorLetters) * 100 || 0);
 
         ctx.res.ok({
             data: {
@@ -54,12 +89,12 @@ export const getWidgetDatas = async (ctx) => {
                 managedDocuments: {
                     total: managedDocuments.length,
                     current: currentReceivedDocuments,
-                    percentage: Math.ceil(((currentReceivedDocuments /managedDocuments.length) * 100))
+                    percentage: documentsPercentage
                 },
                 receivedVendorLetters: {
-                    received: currentReeceivedVendorLetters,
+                    received: currentReceivedVendorLetters,
                     replied: repliedVendorLetters,
-                    percentage: Math.ceil(((repliedVendorLetters / currentReceivedDocuments) * 100))
+                    percentage: vendorLettersPercentage
                 }
             },
             message: 'Success - dashboardCtrl > getDatas'
