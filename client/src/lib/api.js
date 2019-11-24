@@ -111,6 +111,7 @@ export const getProject = ({ id }) => axios.get(`${real}/api/projects/${id}`);
 export const addProject = (param) => axios.post(`${real}/api/projects`, { ...param });
 export const editProject = ({ id, param }) => axios.patch(`${real}/api/projects/${id}/edit`, { ...param });
 export const deleteProject = ({ id, yn }) => axios.patch(`${real}/api/projects/${id}/delete`, { yn });
+export const changeMainProject = ({ id }) => axios.patch(`${real}/api/projects/${id}/changemain`);
 
 /** Template */
 export const getTemplates = ({ page }) => axios.get(`${real}/api/templates?page=${page}`);

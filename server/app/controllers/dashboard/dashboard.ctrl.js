@@ -51,7 +51,11 @@ export const getWidgetDatas = async (ctx) => {
 
         /** Managed Documents */
         const managedDocuments = await DocumentIndex.find({ vendor: { $in: contractedVendors } }, { _id: 0, list: 1 })
-            .then(indexes => indexes.map(index => index.list)[0]);
+            .then(indexes => {
+                const list = indexes.map(index => index.list);
+
+                return list[0] ? list[0] : [];
+            });
         const currentReceivedDocuments = await DocumentInfo.countDocuments(
             {
                 $and: [
@@ -60,9 +64,10 @@ export const getWidgetDatas = async (ctx) => {
                 ]
             }
         );
+        const documentsPercentage = Math.ceil((currentReceivedDocuments / managedDocuments.length) * 100 || 0);
 
         /** Received Vendor Letters */
-        const currentReeceivedVendorLetters = await VendorLetter.countDocuments({ vendor: { $in: contractedVendors } });
+        const currentReceivedVendorLetters = await VendorLetter.countDocuments({ vendor: { $in: contractedVendors } });
         const repliedVendorLetters = await VendorLetter.countDocuments(
             {
                 $and: [
@@ -75,6 +80,7 @@ export const getWidgetDatas = async (ctx) => {
                 ]
             }
         );
+        const vendorLettersPercentage = Math.ceil((repliedVendorLetters / currentReceivedVendorLetters) * 100 || 0);
 
         ctx.res.ok({
             data: {
@@ -83,12 +89,12 @@ export const getWidgetDatas = async (ctx) => {
                 managedDocuments: {
                     total: managedDocuments.length,
                     current: currentReceivedDocuments,
-                    percentage: Math.ceil(((currentReceivedDocuments /managedDocuments.length) * 100))
+                    percentage: documentsPercentage
                 },
                 receivedVendorLetters: {
-                    received: currentReeceivedVendorLetters,
+                    received: currentReceivedVendorLetters,
                     replied: repliedVendorLetters,
-                    percentage: Math.ceil(((repliedVendorLetters / currentReceivedDocuments) * 100))
+                    percentage: vendorLettersPercentage
                 }
             },
             message: 'Success - dashboardCtrl > getDatas'

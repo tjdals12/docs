@@ -14,7 +14,7 @@ const CustomAreaChart = ({ data }) => {
     const getArea = (data) => {
         const keys = Object.keys(data.reduce((acc, cur) => Object.assign(acc, cur), {}));
         
-        return keys.slice(1, keys.length).map((key, index) => (
+        return keys.slice(1, keys.length).sort().map((key, index) => (
             <Area key={key} type="monotone" dataKey={key} stackId="1" stroke={colors[index]} fill={colors[index]}/>
         ));
     }

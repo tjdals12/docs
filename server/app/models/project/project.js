@@ -46,11 +46,12 @@ ProjectSchema.set('toJSON', { getters: true });
 ProjectSchema.virtual('projectPeriod').get(function() {
     const period = DEFINE.getDatePeriod(this.effStaDt, this.effEndDt, 'days');
     const untilNow = DEFINE.getDatePeriod(this.effStaDt, new Date(), 'days');
+    const percentage = Math.ceil((untilNow / period) * 100);
 
     return {
         period,
         untilNow,
-        percentage: Math.ceil((untilNow / period) * 100)
+        percentage: percentage > 100 ? 100 : percentage
     };
 });
 
@@ -146,6 +147,40 @@ ProjectSchema.statics.deleteProject = function (param) {
         {
             $set: {
                 deleteYn: yn
+            }
+        },
+        {
+            new: true
+        }
+    );
+};
+
+/**
+ * @author      minz-logger
+ * @date        2019. 11. 24
+ * @description 메인 프로젝트 변경
+ * @param       {String} id 
+ */
+ProjectSchema.statics.changeMainProject = async function (id) {
+    const project = await this.findOne({ _id: id  });
+
+    if(!project)
+        throw new Error('존재하지 않는 프로젝트입니다.');
+
+    await this.updateMany(
+        {},
+        {
+            $set: {
+                isMain: false
+            }
+        }
+    );
+
+    return this.findOneAndUpdate(
+        { _id: id },
+        {
+            $set: {
+                isMain: true
             }
         },
         {

@@ -5,12 +5,6 @@ import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
 import Avatar from 'components/Avatar';
 import PropTypes from 'prop-types';
 
-const colStyle = {
-    maxHeight: '400px',
-    overflow: 'scroll',
-    margin: 0
-};
-
 const makeHeaderCell = ({ title, className }) => {
     const classes = classNames('k-link title-font', className);
 
@@ -32,7 +26,7 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
     return (
         <Collapse isOpen={isOpen} className="mt-3 pt-4 border-top">
             <Row style={{ minHeight: '400px' }}>
-                <Col md={4} style={colStyle}>
+                <Col xl={4} lg={12}>
                     <Grid
                         data={users.toJS()}
                         pageable
@@ -69,7 +63,7 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
                         />
                     </Grid>
                 </Col>
-                <Col md={4} style={colStyle}>
+                <Col xl={4} lg={12}>
                     <Form className="pl-4 pr-4 pt-4 pb-2 border rounded bg-light h-100">
                         <FormGroup row>
                             <Col md={4} className="mt-2 d-flex align-items-start justify-content-center">
@@ -134,7 +128,7 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
                     </Form>
                 </Col>
 
-                <Col md={4} style={colStyle}>
+                <Col xl={4} lg={12} style={{ maxHeight: '450px', overflow: 'scroll' }}>
                     <Form className="pl-4 pr-4 pt-4 pb-2 border rounded bg-light h-100 overflow-scroll">
                         <h3 className="title-font">권한</h3>
                         {roles.map((role) => {

@@ -127,6 +127,11 @@ VendorSchema.statics.vendorsCountGroupByPart = function (project) {
                 value: '$total'
             }
         },
+        {
+            $sort: {
+                name: 1
+            }
+        }
     ]);
 };
 
@@ -195,7 +200,8 @@ VendorSchema.statics.vendorsCountGroupByStartDt = function (project) {
         },
         {
             $sort: {
-                _id: 1
+                _id: 1,
+
             }
         }
     ]).then((response) => {

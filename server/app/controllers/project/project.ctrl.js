@@ -265,3 +265,26 @@ export const deleteOne = async (ctx) => {
         });
     }
 };
+
+/**
+ * @author      minz-logger
+ * @date        2019. 11. 24
+ * @descriptipon 메인 프로젝트 변경
+ */
+export const changeMainProject = async (ctx) => {
+    let { id } = ctx.params;
+
+    try{
+        const project = await Project.changeMainProject(id);
+
+        ctx.res.ok({
+            data: project,
+            message: 'Success - projectCtrl > changeMainProject'
+        });
+    }catch(e) {
+        ctx.res.internalServerError({
+            data: { id },
+            message: `Error - projectCtrl > changeMainProject: ${e.message}`
+        });
+    }
+};
