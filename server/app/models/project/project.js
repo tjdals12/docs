@@ -2,8 +2,6 @@ import { Schema, model } from 'mongoose';
 import { Timestamp } from 'models/common/schema';
 import DEFINE from 'models/common';
 
-import moment from 'moment-timezone';
-
 /**
  * @author      minz-logger
  * @date        2019. 09. 23
@@ -32,6 +30,10 @@ const ProjectSchema = new Schema({
     deleteYn: {
         type: String,
         default: DEFINE.COMMON.DEFAULT_NO
+    },
+    isMain: {
+        type: Boolean,
+        default: false
     },
     timestamp: {
         type: Timestamp.schema,

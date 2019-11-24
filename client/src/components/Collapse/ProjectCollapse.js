@@ -68,6 +68,9 @@ const ProjectCollapse = ({
 							field="projectName"
 							title="프로젝트명"
 							headerCell={() => makeHeaderCell({ title: '프로젝트명' })}
+							cell={({ dataItem, field }) => (
+								<td>{dataItem[field]} {dataItem['isMain'] && '📌'}</td>
+							)}
 						/>
 						<Column
 							field="client"

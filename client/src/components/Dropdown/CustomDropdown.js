@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 
-const CustomDropdown = ({ outline, color, selectedMenu, menus, getter, onSelect, className, style }) => {
+const CustomDropdown = ({ outline, color, selectedMenu, menus, onSelect, className, style }) => {
     const [ open, setOpen ] = useState(false);
 
     const onOpen = () => {
@@ -12,7 +12,7 @@ const CustomDropdown = ({ outline, color, selectedMenu, menus, getter, onSelect,
     }
 
     const getMenus = () => {
-        return menus.map(getter).map(menu => <DropdownItem key={menu.key} onClick={() => onSelect(menu)}>{menu.value}</DropdownItem>);
+        return menus.map(menu => <DropdownItem key={menu.key} onClick={() => onSelect(menu)}>{menu.value}</DropdownItem>);
     }
 
     return (

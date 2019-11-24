@@ -5,6 +5,7 @@ import ContentDisposition from 'content-disposition';
 const real = '';
 
 /** Dashobard */
+export const getDashboardProjects = () => axios.get(`${real}/api/dashboards/projects`);
 export const getWidgetDatas = ({ id }) => axios.get(`${real}/api/dashboards/${id}/widgets`);
 export const getVendorDatas = ({ id }) => axios.get(`${real}/api/dashboards/${id}/vendors`);
 

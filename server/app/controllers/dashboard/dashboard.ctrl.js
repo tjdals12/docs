@@ -6,6 +6,35 @@ import VendorLetter from 'models/vendorLetter/vendorLetter';
 
 /**
  * @author      minz-logger
+ * @date        2019. 11. 24
+ * @description 프로젝트 목록 조회
+ */
+export const getProjects = async (ctx) => {
+    try{
+        const projects = await Project
+            .find({ deleteYn: 'NO' })
+            .then((projects) => projects.map(({ _id, projectName }) => ({ key: _id, value: projectName})));
+
+        const mainProject = await Project
+            .findOne({ isMain: true })
+            .then(({ _id, projectName }) => ({ key: _id, value: projectName }));
+
+        ctx.res.ok({
+            data: {
+                projects,
+                mainProject
+            },
+            message: 'Success - dashboardCtrl > getProjects'
+        });
+    }catch(e){
+        ctx.res.internalServerError({
+            message: `Error - dashboardCtrl > getProjects: ${e.message}`
+        });
+    }
+};
+
+/**
+ * @author      minz-logger
  * @date        2019. 11. 21
  * @description 대시보드 위젯 데이터 조회
  */
