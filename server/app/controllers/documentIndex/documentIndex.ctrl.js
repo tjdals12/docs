@@ -23,11 +23,10 @@ export const list = async (ctx) => {
 
     try {
         const documentIndexes = await DocumentIndex.find()
-            .populate({ path: 'vendor', populate: { path: 'part' } })
-            .populate({ path: 'list', populate: { path: 'documentGb' } })
+            .sort({ 'timestamp.regDt': -1 })
             .skip((page - 1) * 10)
             .limit(10)
-            .sort({ 'timestamp.regDt': -1 });
+            .populate({ path: 'vendor', populate: { path: 'part' } });
 
         const count = await DocumentIndex.countDocuments();
 

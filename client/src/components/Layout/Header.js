@@ -85,7 +85,7 @@ class Header extends React.Component {
 				</Nav>
 				<Nav navbar className={bem.e('nav-right')}>
 					<NavItem className="d-inline-flex">
-						<NavLink id="Popover1">
+						<NavLink id="Popover1" className="position-relative">
 							{this.state.isNotificationsConfirmed ? (
 								<MdNotificationsNone size={25} className="can-click text-secondary" />
 							) : (

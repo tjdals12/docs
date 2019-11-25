@@ -1,4 +1,3 @@
-
 const storage = {
     set: (key, object) => {
         if (!localStorage) return;
