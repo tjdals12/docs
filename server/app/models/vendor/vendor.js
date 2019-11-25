@@ -397,7 +397,8 @@ VendorSchema.statics.saveVendor = async function (param) {
         itemName,
         effStaDt,
         effEndDt,
-        persons
+        persons,
+        user
     } = param;
 
     let ids = [];
@@ -405,22 +406,44 @@ VendorSchema.statics.saveVendor = async function (param) {
     if (persons.length > 0)
         ids = await Person.savePersons(persons);
 
-    const vendor = new this({ project, manager, vendorGb, countryCd, part, partNumber, vendorName, officialName, itemName, effStaDt, effEndDt, vendorPerson: ids });
+    const timestamp = new Timestamp({
+        regId: user.profile.username,
+        regDt: DEFINE.dateNow(),
+        updId: user.profile.username,
+        updDt: DEFINE.dateNow(),
+    });
+    const vendor = new this({ 
+        project, 
+        manager, 
+        vendorGb, 
+        countryCd, 
+        part, 
+        partNumber, 
+        vendorName, 
+        officialName, 
+        itemName, 
+        effStaDt, 
+        effEndDt, 
+        vendorPerson: ids,
+        timestamp
+    });
 
     await vendor.save();
 
-    return this.findOne({ _id: vendor._id }).populate({ path: 'part' }).populate({ path: 'vendorPerson' });
+    return this.findOne({ _id: vendor._id })
+        .populate({ path: 'part' })
+        .populate({ path: 'vendorPerson' });
 };
 
 /**
  * @author      minz-logger
  * @date        2019. 08. 04
  * @description 업체 수정
- * @param       {String} id
  * @param       {Object} param
  */
-VendorSchema.statics.editVendor = async function (id, param) {
+VendorSchema.statics.editVendor = async function (param) {
     let {
+        id,
         project,
         manager,
         vendorGb,
@@ -432,7 +455,8 @@ VendorSchema.statics.editVendor = async function (id, param) {
         itemName,
         effStaDt,
         effEndDt,
-        vendorPerson
+        vendorPerson,
+        user
     } = param;
 
     const { vendorPerson: oldVendorPerson } = await this.findOne({ _id: id });
@@ -455,26 +479,32 @@ VendorSchema.statics.editVendor = async function (id, param) {
                 effStaDt: new Date(effStaDt),
                 effEndDt: new Date(effEndDt),
                 vendorPerson: persons,
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {
             new: true
         }
-    ).populate({ path: 'part' }).populate({ path: 'vendorPerson' });
+    )
+        .populate({ path: 'part' })
+        .populate({ path: 'vendorPerson' });
 };
 
 /**
  * @author      minz-logger
  * @date        2019. 08. 04
  * @description 업체 삭제
- * @param       {String} id
+ * @param       {Object} param
  */
 VendorSchema.statics.deleteVendor = async function (param) {
     let {
         id,
         yn,
-        reason
+        reason,
+        user
     } = param;
 
     return this.findOneAndUpdate(
@@ -486,57 +516,88 @@ VendorSchema.statics.deleteVendor = async function (param) {
                     deleteDt: DEFINE.dateNow(),
                     reason
                 },
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {
             new: true
         }
-    ).populate({ path: 'part' }).populate({ path: 'vendorPerson' });
+    )
+        .populate({ path: 'part' })
+        .populate({ path: 'vendorPerson' });
 };
 
 /**
  * @author      minz-logger
  * @date        2019. 08. 04
  * @description 담당자 추가
- * @param       {String} id
  * @param       {Object} param
  */
-VendorSchema.statics.addPerson = async function (id, param) {
-    const personId = await Person.savePersons(param);
+VendorSchema.statics.addPerson = async function (param) {
+    let {
+        id,
+        persons,
+        user
+    } = param;
+
+    const personId = await Person.savePersons(persons);
 
     return this.findOneAndUpdate(
         { _id: id },
         {
             $push: {
                 vendorPerson: personId
+            },
+            $set: {
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {
             new: true
         }
-    ).populate({ path: 'part' }).populate({ path: 'vendorPerson' });
+    )
+        .populate({ path: 'part' })
+        .populate({ path: 'vendorPerson' });
 };
 
 /**
  * @author      minz-logger
  * @date        2019. 08. 04
  * @description 담당자 삭제
- * @param       {String} id
- * @param       {String} personId
+ * @param       {Object} param
  */
-VendorSchema.statics.deletePerson = async function (id, personId) {
+VendorSchema.statics.deletePerson = async function (param) {
+    let {
+        id,
+        personId,
+        user
+    } = param;
+
     return this.findOneAndUpdate(
         { _id: id },
         {
             $pull: {
                 vendorPerson: personId
+            },
+            $set: {
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {
             new: true
         }
-    ).populate({ path: 'part' }).populate({ path: 'vendorPerson' });
+    )
+        .populate({ path: 'part' })
+        .populate({ path: 'vendorPerson' });
 };
 
 export default model('Vendor', VendorSchema);

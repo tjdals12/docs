@@ -44,6 +44,49 @@ describe(clc.bgGreen(clc.black('[ Document ]')), () => {
         let teamId;
         let managerId;
 
+        it('add user', (done) => {
+            request(server)
+                .post('/api/accounts')
+                .send({
+                    username: 'Tester',
+                    description: 'API Tester',
+                    userType: 'admin',
+                    userId: 'test',
+                    pwd: '1234',
+                    roles: [
+                        '5daeaefaef365b120bab0084',
+                        '5daeaefdef365b120bab0085'
+                    ]
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    expect(ctx.body.data.profile.username).to.equal('Tester');
+                    expect(ctx.body.data.profile.description).to.equal('API Tester');
+                    done();
+                });
+        });
+
+        it('login', (done) => {
+            request(server)
+                .post('/api/accounts/login')
+                .send({
+                    userId: 'test',
+                    pwd: '1234'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    accessToken = ctx.res.headers['set-cookie'][0];
+
+                    expect(ctx.body.data).to.have.property('_id');
+                    expect(ctx.body.data).to.have.property('profile');
+                    done();
+                });
+        });
+
         it('add Part', (done) => {
             request(server)
                 .post('/api/cmcodes')
@@ -266,6 +309,7 @@ describe(clc.bgGreen(clc.black('[ Document ]')), () => {
                         }
                     ]
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -277,49 +321,6 @@ describe(clc.bgGreen(clc.black('[ Document ]')), () => {
                     expect(ctx.body.data.partNumber).to.equal('G-001');
                     expect(ctx.body.data.vendorName).to.equal('성민테크');
                     expect(ctx.body.data.vendorPerson).have.length(3);
-                    done();
-                });
-        });
-
-        it('add user', (done) => {
-            request(server)
-                .post('/api/accounts')
-                .send({
-                    username: 'Tester',
-                    description: 'API Tester',
-                    userType: 'Guest',
-                    userId: 'test',
-                    pwd: '1234',
-                    roles: [
-                        '5daeaefaef365b120bab0084',
-                        '5daeaefdef365b120bab0085'
-                    ]
-                })
-                .expect(200)
-                .end((err, ctx) => {
-                    if(err) throw err;
-
-                    expect(ctx.body.data.profile.username).to.equal('Tester');
-                    expect(ctx.body.data.profile.description).to.equal('API Tester');
-                    done();
-                });
-        });
-
-        it('login', (done) => {
-            request(server)
-                .post('/api/accounts/login')
-                .send({
-                    userId: 'test',
-                    pwd: '1234'
-                })
-                .expect(200)
-                .end((err, ctx) => {
-                    if(err) throw err;
-
-                    accessToken = ctx.res.headers['set-cookie'][0];
-
-                    expect(ctx.body.data).to.have.property('_id');
-                    expect(ctx.body.data).to.have.property('profile');
                     done();
                 });
         });

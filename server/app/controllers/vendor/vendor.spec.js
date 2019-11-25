@@ -11,6 +11,7 @@ describe(clc.bgGreen(clc.black('[ Vendor ]')), () => {
     let part2;
     let projectId;
     let managerId;
+    let accessToken;
     let personId;
     let vendorPerson;
 
@@ -40,6 +41,49 @@ describe(clc.bgGreen(clc.black('[ Vendor ]')), () => {
         var major;
         let projectGb;
         let teamId;
+
+        it('add user', (done) => {
+            request(server)
+                .post('/api/accounts')
+                .send({
+                    username: 'Tester',
+                    description: 'API Tester',
+                    userType: 'admin',
+                    userId: 'test',
+                    pwd: '1234',
+                    roles: [
+                        '5daeaefaef365b120bab0084',
+                        '5daeaefdef365b120bab0085'
+                    ]
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    expect(ctx.body.data.profile.username).to.equal('Tester');
+                    expect(ctx.body.data.profile.description).to.equal('API Tester');
+                    done();
+                });
+        });
+
+        it('login', (done) => {
+            request(server)
+                .post('/api/accounts/login')
+                .send({
+                    userId: 'test',
+                    pwd: '1234'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    accessToken = ctx.res.headers['set-cookie'][0];
+
+                    expect(ctx.body.data).to.have.property('_id');
+                    expect(ctx.body.data).to.have.property('profile');
+                    done();
+                });
+        });
 
         it('add Part', (done) => {
             request(server)
@@ -248,6 +292,7 @@ describe(clc.bgGreen(clc.black('[ Vendor ]')), () => {
                         }
                     ]
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -355,6 +400,7 @@ describe(clc.bgGreen(clc.black('[ Vendor ]')), () => {
                         task: '개발'
                     }]
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -372,6 +418,7 @@ describe(clc.bgGreen(clc.black('[ Vendor ]')), () => {
         it('delete person', (done) => {
             request(server)
                 .patch(`/api/vendors/${id}/${personId}/delete`)
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -421,6 +468,7 @@ describe(clc.bgGreen(clc.black('[ Vendor ]')), () => {
                     effEndDt: '2020-02-21',
                     vendorPerson: vendorPerson
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -446,6 +494,7 @@ describe(clc.bgGreen(clc.black('[ Vendor ]')), () => {
                     yn: 'YES',
                     reason: 'mocha 테스트 삭제'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
