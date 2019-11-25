@@ -374,10 +374,8 @@ VendorLetterSchema.statics.receiveVendorLetter = async function (param) {
                 trackingTransmittal: vendorLetter._id
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         }
     );
@@ -420,10 +418,8 @@ VendorLetterSchema.statics.editVendorLetter = async function (param) {
                     trackingDocument: deleteDocuments[i]
                 },
                 $set: {
-                    timestamp: {
-                        updId: user.profile.username,
-                        updDt: DEFINE.dateNow()
-                    }
+                    'timestamp.updId': user.profile.username,
+                    'timestamp.updDt': DEFINE.dateNow()
                 }
             }
         );
@@ -441,10 +437,8 @@ VendorLetterSchema.statics.editVendorLetter = async function (param) {
                 officialNumber,
                 receiveDate,
                 targetDate,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             },
             $pullAll: {
                 documents: deleteDocuments
@@ -500,10 +494,8 @@ VendorLetterSchema.statics.addDocumentInVendorLetter = async function (param) {
                 documents: documents
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -537,10 +529,8 @@ VendorLetterSchema.statics.deleteVendorLetter = async function (param) {
                     deleteDt: DEFINE.dateNow(),
                     reason
                 },
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -556,10 +546,8 @@ VendorLetterSchema.statics.deleteVendorLetter = async function (param) {
                 deleteDt: DEFINE.dateNow(),
                 reason
             },
-            timestamp: {
-                updId: user.profile.username,
-                updDt: DEFINE.dateNow()
-            }
+            'timestamp.updId': user.profile.username,
+            'timestamp.updDt': DEFINE.dateNow()
         }
     );
 
@@ -633,10 +621,8 @@ VendorLetterSchema.statics.inOutVendorLetter = async function (param) {
                 documentStatus: newStatus
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         }
     );
@@ -648,10 +634,8 @@ VendorLetterSchema.statics.inOutVendorLetter = async function (param) {
                 letterStatus: newStatus
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -711,10 +695,8 @@ VendorLetterSchema.statics.deleteInOut = async function (param) {
                 }
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         }
     );
@@ -728,10 +710,8 @@ VendorLetterSchema.statics.deleteInOut = async function (param) {
                 }
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

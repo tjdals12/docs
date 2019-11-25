@@ -477,10 +477,8 @@ VendorSchema.statics.editVendor = async function (param) {
                 effStaDt: new Date(effStaDt),
                 effEndDt: new Date(effEndDt),
                 vendorPerson: persons,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -514,10 +512,8 @@ VendorSchema.statics.deleteVendor = async function (param) {
                     deleteDt: DEFINE.dateNow(),
                     reason
                 },
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -550,10 +546,8 @@ VendorSchema.statics.addPerson = async function (param) {
                 vendorPerson: personId
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -584,10 +578,8 @@ VendorSchema.statics.deletePerson = async function (param) {
                 vendorPerson: personId
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

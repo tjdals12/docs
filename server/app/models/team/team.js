@@ -73,10 +73,8 @@ TeamSchema.statics.editTeam = function (params) {
             $set: {
                 part,
                 teamName,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -182,10 +180,8 @@ TeamSchema.statics.addManager = async function (params) {
                 managers: _id
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

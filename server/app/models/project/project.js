@@ -137,10 +137,8 @@ ProjectSchema.statics.editProject = function (param) {
                 contractor,
                 contractorCode,
                 memo,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -167,10 +165,8 @@ ProjectSchema.statics.deleteProject = function (param) {
         {
             $set: {
                 deleteYn: yn,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -201,10 +197,8 @@ ProjectSchema.statics.changeMainProject = async function (param) {
         {
             $set: {
                 isMain: false,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         }
     );
@@ -214,10 +208,8 @@ ProjectSchema.statics.changeMainProject = async function (param) {
         {
             $set: {
                 isMain: true,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

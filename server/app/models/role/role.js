@@ -120,10 +120,8 @@ RoleSchema.statics.addRole = function (param) {
         {
             $push: { sub: role },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

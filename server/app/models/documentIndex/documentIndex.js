@@ -204,10 +204,8 @@ DocumentIndexSchema.statics.addPartial = async function (param) {
                 list: documentInfos
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -243,10 +241,8 @@ DocumentIndexSchema.statics.editDocumentIndex = async function (param) {
         {
             $set: {
                 vendor: vendor,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             },
             $push: {
                 list: documentInfos
@@ -300,10 +296,8 @@ DocumentIndexSchema.statics.deleteDocumentInfo = async function (param) {
         { _id: id },
         {
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

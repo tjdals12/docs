@@ -91,10 +91,8 @@ CmcodeSchema.statics.saveCmcodeMinor = async function (param) {
                 cdMinors: newId
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -123,10 +121,8 @@ CmcodeSchema.statics.editCmcode = function (param) {
             $set: {
                 cdMajor,
                 cdFName,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -173,10 +169,8 @@ CmcodeSchema.statics.deleteCmcode = function (param) {
         {
             $set: {
                 effEndDt: DEFINE.dateNow(),
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

@@ -266,10 +266,8 @@ DocumentInfoSchema.statics.updateDocumentInfos = async function (param) {
                             deleteDt: new Date(DEFINE.COMMON.MAX_END_DT),
                             reason: DEFINE.COMMON.DEFAULT_REASON
                         },
-                        timestamp: {
-                            updId: user.profile.username,
-                            updDt: DEFINE.dateNow()
-                        }
+                        'timestamp.updId': user.profile.username,
+                        'timestamp.updDt': DEFINE.dateNow()
                     }
                 },
                 {
@@ -281,10 +279,8 @@ DocumentInfoSchema.statics.updateDocumentInfos = async function (param) {
                 { _id: { $in: documentInfo.trackingDocument } },
                 {
                     documentGb: documentGb,
-                    timestamp: {
-                        updId: user.profile.username,
-                        updDt: DEFINE.dateNow()
-                    }
+                    'timestamp.updId': user.profile.username,
+                    'timestamp.updDt': DEFINE.dateNow()
                 }
             );
         }
@@ -317,10 +313,8 @@ DocumentInfoSchema.statics.deleteDocumentInfos = async function (param) {
                         deleteDt: DEFINE.dateNow(),
                         reason
                     },
-                    timestamp: {
-                        updId: user.profile.username,
-                        updDt: DEFINE.dateNow()
-                    }
+                    'timestamp.updId': user.profile.username,
+                    'timestamp.updDt': DEFINE.dateNow()
                 }
             }
         );
@@ -349,10 +343,8 @@ DocumentInfoSchema.statics.deleteDocumentInfo = function (param) {
                     deleteDt: DEFINE.dateNow(),
                     reason: reason
                 },
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

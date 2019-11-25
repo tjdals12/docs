@@ -74,10 +74,8 @@ CdMinorSchema.statics.editCdMinor = function (param) {
             $set: {
                 cdMinor: cdMinor,
                 cdSName: cdSName,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -103,10 +101,8 @@ CdMinorSchema.statics.deleteCdMinor = function (param) {
         {
             $set: {
                 effEndDt: DEFINE.dateNow(),
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -132,10 +128,8 @@ CdMinorSchema.statics.recoveryCdMinor = function (param) {
         {
             $set: {
                 effEndDt: new Date(DEFINE.COMMON.MAX_END_DT),
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

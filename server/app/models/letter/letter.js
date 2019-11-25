@@ -425,10 +425,8 @@ LetterSchema.statics.editLetter = async function (param) {
                 replyRequired,
                 targetDate,
                 memo,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         }
     );
@@ -456,10 +454,8 @@ LetterSchema.statics.replyLetter = async function (param) {
             $set: {
                 replyYn: yn,
                 replyDate: yn === 'YES' ? replyDate : DEFINE.COMMON.MAX_END_DT,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         }
     );
@@ -489,10 +485,8 @@ LetterSchema.statics.cancelLetter = function (param) {
                     reason,
                     cancelDt: DEFINE.dateNow()
                 },
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

@@ -420,10 +420,8 @@ DocumentSchema.statics.editDocument = function (param) {
                 level,
                 officialNumber,
                 memo,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -455,10 +453,8 @@ DocumentSchema.statics.deleteDocument = function (param) {
                     deleteDt: DEFINE.dateNow(),
                     reason: reason
                 },
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -489,10 +485,8 @@ DocumentSchema.statics.deleteDocuments = function (param) {
                 deleteDt: DEFINE.dateNow(),
                 reason: '일괄 삭제'
             },
-            timestamp: {
-                updId: user.profile.username,
-                updDt: DEFINE.dateNow()
-            }
+            'timestamp.updId': user.profile.username,
+            'timestamp.updDt': DEFINE.dateNow()
         }
     );
 };
@@ -542,10 +536,8 @@ DocumentSchema.statics.inOutDocument = function (param) {
                 documentStatus: newStatus
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -601,10 +593,8 @@ DocumentSchema.statics.inOutDocuments = function (param) {
                 documentStatus: newStatus
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         }
     );
@@ -635,10 +625,8 @@ DocumentSchema.statics.deleteInOutDocument = function (param) {
                 }
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -684,10 +672,8 @@ DocumentSchema.statics.holdDocument = async function (param) {
         {
             $set: {
                 'holdYn.$.effEndDt': DEFINE.dateNow(),
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         }
     );
@@ -699,10 +685,8 @@ DocumentSchema.statics.holdDocument = async function (param) {
                 holdYn: newHoldYn
             },
             $set: {
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

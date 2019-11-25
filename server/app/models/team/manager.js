@@ -86,10 +86,8 @@ ManagerSchema.statics.editManager = function (param) {
                 position,
                 effStaDt,
                 effEndDt: effEndDt === '' ? '9999-12-31' : effEndDt,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         }
     );
@@ -112,10 +110,8 @@ ManagerSchema.statics.deleteManager = function (param) {
         {
             $set: {
                 deleteYn: DEFINE.COMMON.DEFAULT_YES,
-                timestamp: {
-                    updId: user.profile.username,
-                    updDt: DEFINE.dateNow()
-                }
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

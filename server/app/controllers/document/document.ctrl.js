@@ -333,7 +333,7 @@ export const deleteOne = async (ctx) => {
             reason,
             user
         });
-
+        
         ctx.res.ok({
             data: document,
             message: 'Success - documentCtrl > deleteOne'
