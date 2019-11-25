@@ -72,11 +72,26 @@ ProjectSchema.statics.saveProject = async function (param) {
         clientCode,
         contractor,
         contractorCode,
-        memo
+        memo,
+        user
     } = param;
 
+    const timestamp = new Timestamp({
+        regId: user.profile.username,
+        updId: user.profile.username
+    });
     const project = new this({
-        projectGb, projectName, projectCode, effStaDt, effEndDt, client, clientCode, contractor, contractorCode, memo
+        projectGb,
+        projectName, 
+        projectCode, 
+        effStaDt, 
+        effEndDt, 
+        client, 
+        clientCode, 
+        contractor, 
+        contractorCode, 
+        memo,
+        timestamp
     });
 
     await project.save();
@@ -90,11 +105,11 @@ ProjectSchema.statics.saveProject = async function (param) {
  * @author      minz-logger
  * @date        2019. 09. 24
  * @description 프로젝트 수정
- * @param       {String} id
  * @param       {Object} param
  */
-ProjectSchema.statics.editProject = function (id, param) {
+ProjectSchema.statics.editProject = function (param) {
     let {
+        id,
         projectGb,
         projectName,
         projectCode,
@@ -104,7 +119,8 @@ ProjectSchema.statics.editProject = function (id, param) {
         clientCode,
         contractor,
         contractorCode,
-        memo
+        memo,
+        user
     } = param;
 
     return this.findOneAndUpdate(
@@ -121,7 +137,8 @@ ProjectSchema.statics.editProject = function (id, param) {
                 contractor,
                 contractorCode,
                 memo,
-                'timestamp.uptDt': DEFINE.dateNow()
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -139,14 +156,17 @@ ProjectSchema.statics.editProject = function (id, param) {
 ProjectSchema.statics.deleteProject = function (param) {
     let {
         id,
-        yn
+        yn,
+        user
     } = param;
 
     return this.findOneAndUpdate(
         { _id: id },
         {
             $set: {
-                deleteYn: yn
+                deleteYn: yn,
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -161,7 +181,12 @@ ProjectSchema.statics.deleteProject = function (param) {
  * @description 메인 프로젝트 변경
  * @param       {String} id 
  */
-ProjectSchema.statics.changeMainProject = async function (id) {
+ProjectSchema.statics.changeMainProject = async function (param) {
+    let {
+        id,
+        user
+    } = param;
+
     const project = await this.findOne({ _id: id  });
 
     if(!project)
@@ -171,7 +196,9 @@ ProjectSchema.statics.changeMainProject = async function (id) {
         {},
         {
             $set: {
-                isMain: false
+                isMain: false,
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         }
     );
@@ -180,7 +207,9 @@ ProjectSchema.statics.changeMainProject = async function (id) {
         { _id: id },
         {
             $set: {
-                isMain: true
+                isMain: true,
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

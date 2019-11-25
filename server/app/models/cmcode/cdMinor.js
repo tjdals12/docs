@@ -28,18 +28,29 @@ const CdMinorSchema = new Schema({
 });
 
 /**
- * @author minz-logger
- * @date 2019. 07. 30
+ * @author      minz-logger
+ * @date        2019. 07. 30
  * @description 하위 공통코드 저장
+ * @param       {Object} param
  */
 CdMinorSchema.statics.saveCdMinor = async function (param) {
     let {
         cdMinor,
         cdSName,
-        cdRef1
+        cdRef1,
+        user
     } = param;
 
-    const newCdMinor = this({ cdMinor, cdSName, cdRef1 });
+    const timestamp = new Timestamp({
+        regId: user.profile.username,
+        updId: user.profile.username
+    });
+    const newCdMinor = this({ 
+        cdMinor, 
+        cdSName, 
+        cdRef1,
+        timestamp 
+    });
     return newCdMinor.save();
 };
 
@@ -47,12 +58,14 @@ CdMinorSchema.statics.saveCdMinor = async function (param) {
  * @author      minz-logger
  * @date        2019. 07. 30
  * @description 하위 공통코드 수정
+ * @param       {Object} param
  */
 CdMinorSchema.statics.editCdMinor = function (param) {
     let {
         id,
         cdMinor,
-        cdSName
+        cdSName,
+        user
     } = param;
 
     return this.findOneAndUpdate(
@@ -60,7 +73,9 @@ CdMinorSchema.statics.editCdMinor = function (param) {
         {
             $set: {
                 cdMinor: cdMinor,
-                cdSName: cdSName
+                cdSName: cdSName,
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -73,15 +88,21 @@ CdMinorSchema.statics.editCdMinor = function (param) {
  * @author      minz-logger
  * @date        2019. 07. 30
  * @description 하위 공통코드 삭제
+ * @param       {Object} param
  */
 CdMinorSchema.statics.deleteCdMinor = function (param) {
-    let { id } = param;
+    let { 
+        id,
+        user
+    } = param;
 
     return this.findOneAndUpdate(
         { _id: id },
         {
             $set: {
-                effEndDt: DEFINE.dateNow()
+                effEndDt: DEFINE.dateNow(),
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -94,15 +115,21 @@ CdMinorSchema.statics.deleteCdMinor = function (param) {
  * @author      minz-logger
  * @date        2019. 10. 09
  * @description 하위 공통코드 복구
+* @param       {Object} param
  */
 CdMinorSchema.statics.recoveryCdMinor = function (param) {
-    let { id } = param;
+    let { 
+        id,
+        user
+    } = param;
 
     return this.findOneAndUpdate(
         { _id: id },
         {
             $set: {
-                effEndDt: new Date(DEFINE.COMMON.MAX_END_DT)
+                effEndDt: new Date(DEFINE.COMMON.MAX_END_DT),
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

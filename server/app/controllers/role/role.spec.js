@@ -6,6 +6,7 @@ import { expect } from 'chai';
 
 describe(clc.bgGreen(clc.black('[ Role ]')), () => {
     let server;
+    let accessToken;
     let id;
 
     before((done) => {
@@ -30,6 +31,51 @@ describe(clc.bgGreen(clc.black('[ Role ]')), () => {
             });
     });
 
+    describe('Prepare', () => {
+        it('add user', (done) => {
+            request(server)
+                .post('/api/accounts')
+                .send({
+                    username: 'Tester',
+                    description: 'API Tester',
+                    userType: 'admin',
+                    userId: 'test',
+                    pwd: '1234',
+                    roles: [
+                        '5daeaefaef365b120bab0084',
+                        '5daeaefdef365b120bab0085'
+                    ]
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    expect(ctx.body.data.profile.username).to.equal('Tester');
+                    expect(ctx.body.data.profile.description).to.equal('API Tester');
+                    done();
+                });
+        });
+
+        it('login', (done) => {
+            request(server)
+                .post('/api/accounts/login')
+                .send({
+                    userId: 'test',
+                    pwd: '1234'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    accessToken = ctx.res.headers['set-cookie'][0];
+
+                    expect(ctx.body.data).to.have.property('_id');
+                    expect(ctx.body.data).to.have.property('profile');
+                    done();
+                });
+        });
+    });
+
     describe('POST /api/roles', () => {
         it('create role', (done) => {
             request(server)
@@ -41,6 +87,7 @@ describe(clc.bgGreen(clc.black('[ Role ]')), () => {
                     layout: 'MainLayout',
                     component: 'HomePage'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -82,6 +129,7 @@ describe(clc.bgGreen(clc.black('[ Role ]')), () => {
                     layout: 'MainLayout',
                     component: 'IndexesPage'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -109,6 +157,7 @@ describe(clc.bgGreen(clc.black('[ Role ]')), () => {
                     layout: 'MainLayout',
                     component: 'IndexesOverallPage'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;

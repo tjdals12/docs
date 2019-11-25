@@ -7,6 +7,7 @@ import { expect } from 'chai';
 describe(clc.bgGreen(clc.black('[ Project ]')), () => {
     let server;
     let projectGb;
+    let accessToken;
     let id;
 
     before((done) => {
@@ -34,6 +35,49 @@ describe(clc.bgGreen(clc.black('[ Project ]')), () => {
     describe('Cmcode preparation', () => {
         let major;
 
+        it('add user', (done) => {
+            request(server)
+                .post('/api/accounts')
+                .send({
+                    username: 'Tester',
+                    description: 'API Tester',
+                    userType: 'admin',
+                    userId: 'test',
+                    pwd: '1234',
+                    roles: [
+                        '5daeaefaef365b120bab0084',
+                        '5daeaefdef365b120bab0085'
+                    ]
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    expect(ctx.body.data.profile.username).to.equal('Tester');
+                    expect(ctx.body.data.profile.description).to.equal('API Tester');
+                    done();
+                });
+        });
+
+        it('login', (done) => {
+            request(server)
+                .post('/api/accounts/login')
+                .send({
+                    userId: 'test',
+                    pwd: '1234'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    accessToken = ctx.res.headers['set-cookie'][0];
+
+                    expect(ctx.body.data).to.have.property('_id');
+                    expect(ctx.body.data).to.have.property('profile');
+                    done();
+                });
+        });
+
         it('add Part', (done) => {
             request(server)
                 .post('/api/cmcodes')
@@ -41,6 +85,7 @@ describe(clc.bgGreen(clc.black('[ Project ]')), () => {
                     cdMajor: '0000',
                     cdFName: '프로젝트 구분'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -60,6 +105,7 @@ describe(clc.bgGreen(clc.black('[ Project ]')), () => {
                     cdMinor: '0001',
                     cdSName: '신규'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -88,6 +134,7 @@ describe(clc.bgGreen(clc.black('[ Project ]')), () => {
                     contractorCode: 'HENC',
                     memo: '프로젝트 설명'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -146,6 +193,7 @@ describe(clc.bgGreen(clc.black('[ Project ]')), () => {
                     contractorCode: 'HENC',
                     memo: '고순도 솔벤트 12,600 ton/year 생산 설비 신설'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -165,6 +213,7 @@ describe(clc.bgGreen(clc.black('[ Project ]')), () => {
                 .send({
                     yn: 'YES'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -182,6 +231,7 @@ describe(clc.bgGreen(clc.black('[ Project ]')), () => {
                 .send({
                     yn: 'NO'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;

@@ -28,6 +28,16 @@ export const list = async (ctx) => {
  * @description 권한 생성
  */
 export const create = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let {
         to,
         name,
@@ -57,7 +67,15 @@ export const create = async (ctx) => {
     }
 
     try {
-        const role = await Role.createRole({ to, name, icon, layout, component, roleType });
+        const role = await Role.createRole({ 
+            to, 
+            name, 
+            icon, 
+            layout, 
+            component, 
+            roleType,
+            user
+        });
 
         ctx.res.ok({
             data: role,
@@ -77,6 +95,16 @@ export const create = async (ctx) => {
  * @description 권한 추가
  */
 export const add = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let {
         to,
@@ -107,7 +135,16 @@ export const add = async (ctx) => {
     }
 
     try {
-        const role = await Role.addRole({ id, to, name, icon, layout, component, roleType });
+        const role = await Role.addRole({ 
+            id, 
+            to, 
+            name, 
+            icon, 
+            layout, 
+            component, 
+            roleType,
+            user
+        });
 
         ctx.res.ok({
             data: role,

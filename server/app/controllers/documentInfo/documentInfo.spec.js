@@ -8,6 +8,7 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
     let server;
     let id;
     let vendorId;
+    let accessToken;
 
     before((done) => {
         db.connect().then(type => {
@@ -40,6 +41,49 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
         let teamId;
         let managerId;
 
+        it('add user', (done) => {
+            request(server)
+                .post('/api/accounts')
+                .send({
+                    username: 'Tester',
+                    description: 'API Tester',
+                    userType: 'admin',
+                    userId: 'test',
+                    pwd: '1234',
+                    roles: [
+                        '5daeaefaef365b120bab0084',
+                        '5daeaefdef365b120bab0085'
+                    ]
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    expect(ctx.body.data.profile.username).to.equal('Tester');
+                    expect(ctx.body.data.profile.description).to.equal('API Tester');
+                    done();
+                });
+        });
+
+        it('login', (done) => {
+            request(server)
+                .post('/api/accounts/login')
+                .send({
+                    userId: 'test',
+                    pwd: '1234'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    accessToken = ctx.res.headers['set-cookie'][0];
+
+                    expect(ctx.body.data).to.have.property('_id');
+                    expect(ctx.body.data).to.have.property('profile');
+                    done();
+                });
+        });
+
         it('add Part', (done) => {
             request(server)
                 .post('/api/cmcodes')
@@ -47,6 +91,7 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
                     cdMajor: '0001',
                     cdFName: '공종'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -66,6 +111,7 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
                     cdMinor: '0001',
                     cdSName: '기계'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -84,6 +130,7 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
                     cdMajor: '0002',
                     cdFName: '구분'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -102,6 +149,7 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
                     cdMinor: '0001',
                     cdSName: '공통'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -120,6 +168,7 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
                     cdMajor: '0000',
                     cdFName: '프로젝트 구분'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -139,6 +188,7 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
                     cdMinor: '0001',
                     cdSName: '신규'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -165,6 +215,7 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
                     contractorCode: 'HENC',
                     memo: '프로젝트 설명'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -185,6 +236,7 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
                     part: part,
                     teamName: '기계설계팀'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -208,6 +260,7 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
                     effStaDt: '2019-10-26',
                     effEndDt: '9999-12-31'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -263,6 +316,7 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
                         }
                     ]
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -305,6 +359,7 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
                         }
                     ]
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;

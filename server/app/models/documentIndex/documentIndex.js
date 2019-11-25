@@ -23,6 +23,8 @@ const DocumentIndexSchema = new Schema({
     }
 });
 
+DocumentIndexSchema.set('toJSON', { getters: true });
+
 /**
  * @author      minz-logger
  * @date        2019. 08. 17
@@ -151,15 +153,31 @@ DocumentIndexSchema.statics.searchDocumentIndexesCount = function (param) {
 DocumentIndexSchema.statics.saveDocumentIndex = async function (param) {
     let {
         vendor,
-        list
+        list,
+        user
     } = param;
 
-    let documentInfos = await DocumentInfo.saveDocumentInfos(vendor, list);
+    let documentInfos = await DocumentInfo.saveDocumentInfos({ 
+        id: vendor, 
+        list, 
+        user
+    });
 
-    const documentIndex = new this({ vendor, list: documentInfos });
+    const timestamp = new Timestamp({
+        regId: user.profile.username,
+        updId: user.profile.username,
+    });
+
+    const documentIndex = new this({ 
+        vendor, 
+        list: documentInfos,
+        timestamp 
+    });
     await documentIndex.save();
 
-    return this.findOne({ _id: documentIndex._id }).populate({ path: 'list', populate: { path: 'documentGb' } }).populate({ path: 'vendor' });
+    return this.findOne({ _id: documentIndex._id })
+        .populate({ path: 'list', populate: { path: 'documentGb' } })
+        .populate({ path: 'vendor' });
 };
 
 /**
@@ -171,24 +189,31 @@ DocumentIndexSchema.statics.saveDocumentIndex = async function (param) {
 DocumentIndexSchema.statics.addPartial = async function (param) {
     let {
         id,
-        list
+        list,
+        user
     } = param;
 
     let { vendor } = await this.findOne({ _id: id });
 
-    let documentInfos = await DocumentInfo.saveDocumentInfos(vendor, list);
+    let documentInfos = await DocumentInfo.saveDocumentInfos({ id: vendor, list, user });
 
     return this.findOneAndUpdate(
         { _id: id },
         {
             $push: {
                 list: documentInfos
+            },
+            $set: {
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
             new: true
         }
-    ).populate({ path: 'vendor', populate: { path: 'part' } }).populate({ path: 'list', populate: { path: 'documentGb' } });
+    )
+        .populate({ path: 'vendor', populate: { path: 'part' } })
+        .populate({ path: 'list', populate: { path: 'documentGb' } });
 };
 
 /**
@@ -204,17 +229,19 @@ DocumentIndexSchema.statics.editDocumentIndex = async function (param) {
         id,
         vendor,
         list,
-        deleteList
+        deleteList,
+        user
     } = param;
 
-    let documentInfos = await DocumentInfo.updateDocumentInfos(vendor, list);
-    await DocumentInfo.deleteDocumentInfos(deleteList);
+    let documentInfos = await DocumentInfo.updateDocumentInfos({ id: vendor, list, user});
+    await DocumentInfo.deleteDocumentInfos({ list: deleteList, user });
 
     return this.findOneAndUpdate(
         { _id: id },
         {
             $set: {
                 vendor: vendor,
+                'timestamp.updId': user.profile.username,
                 'timestamp.updDt': DEFINE.dateNow()
             },
             $push: {
@@ -224,7 +251,9 @@ DocumentIndexSchema.statics.editDocumentIndex = async function (param) {
         {
             new: true
         }
-    ).populate({ path: 'vendor' }).populate({ path: 'list', populate: { path: 'documentGb trackingDocument' } });
+    )
+        .populate({ path: 'vendor' })
+        .populate({ path: 'list', populate: { path: 'documentGb trackingDocument' } });
 };
 
 /**
@@ -251,14 +280,32 @@ DocumentIndexSchema.statics.deleteDocumentIndex = async function (id) {
  * @author      minz-logger
  * @date        2019. 08. 13
  * @description 문서정보 삭제
- * @param       {String} id
- * @param       {String} targetId
- * @param       {String} reason
+ * @param       {Object} param
  */
-DocumentIndexSchema.statics.deleteDocumentInfo = async function (id, targetId, reason) {
-    await DocumentInfo.deleteDocumentInfo(targetId, reason);
+DocumentIndexSchema.statics.deleteDocumentInfo = async function (param) {
+    let {
+        id, 
+        targetId, 
+        reason,
+        user
+    } = param;
 
-    return this.findOne({ _id: id }).populate({ path: 'vendor' }).populate({ path: 'list', populate: { path: 'documentGb trackingDocument' } });
+    await DocumentInfo.deleteDocumentInfo({ id: targetId, reason, user });
+
+    return this.findOneAndUpdate(
+        { _id: id },
+        {
+            $set: {
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
+            }
+        },
+        {
+            new: true
+        }
+    )
+        .populate({ path: 'vendor' })
+        .populate({ path: 'list', populate: { path: 'documentGb trackingDocument' } });
 };
 
 /**

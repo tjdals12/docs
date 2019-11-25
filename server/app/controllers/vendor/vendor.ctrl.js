@@ -156,6 +156,16 @@ export const getVendor = async (ctx) => {
  * @description 업체 추가
  */
 export const create = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let {
         project,
         manager,
@@ -210,7 +220,8 @@ export const create = async (ctx) => {
             itemName,
             effStaDt,
             effEndDt,
-            persons
+            persons,
+            user
         });
 
         ctx.res.ok({
@@ -231,6 +242,16 @@ export const create = async (ctx) => {
  * @description 업체 수정
  */
 export const editVendor = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let {
         project,
@@ -281,7 +302,8 @@ export const editVendor = async (ctx) => {
     }
 
     try {
-        const vendor = await Vendor.editVendor(id, {
+        const vendor = await Vendor.editVendor({
+            id, 
             project,
             manager,
             vendorGb,
@@ -293,7 +315,8 @@ export const editVendor = async (ctx) => {
             itemName,
             effStaDt,
             effEndDt,
-            vendorPerson
+            vendorPerson,
+            user
         });
 
         ctx.res.ok({
@@ -314,6 +337,16 @@ export const editVendor = async (ctx) => {
  * @description 업체 삭제
  */
 export const deleteVendor = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let { yn, reason } = ctx.request.body;
 
@@ -334,7 +367,12 @@ export const deleteVendor = async (ctx) => {
     }
 
     try {
-        const vendor = await Vendor.deleteVendor({ id, yn, reason });
+        const vendor = await Vendor.deleteVendor({ 
+            id, 
+            yn, 
+            reason, 
+            user
+        });
 
         ctx.res.ok({
             data: vendor,
@@ -354,6 +392,16 @@ export const deleteVendor = async (ctx) => {
  * @description 담당자 추가
  */
 export const addPerson = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let {
         persons
@@ -382,7 +430,11 @@ export const addPerson = async (ctx) => {
     }
 
     try {
-        const vendor = await Vendor.addPerson(id, persons);
+        const vendor = await Vendor.addPerson({
+            id,
+            persons,
+            user
+        });
 
         ctx.res.ok({
             data: vendor,
@@ -402,6 +454,16 @@ export const addPerson = async (ctx) => {
  * @description 담당자 삭제
  */
 export const deletePerson = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id, personId } = ctx.params;
 
     if (!Types.ObjectId.isValid(personId)) {
@@ -413,7 +475,11 @@ export const deletePerson = async (ctx) => {
     }
 
     try {
-        const vendor = await Vendor.deletePerson(id, personId);
+        const vendor = await Vendor.deletePerson({
+            id, 
+            personId,
+            user
+        });
 
         ctx.res.ok({
             data: vendor,

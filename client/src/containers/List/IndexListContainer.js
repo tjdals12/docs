@@ -80,12 +80,11 @@ class IndexListContainer extends React.Component {
 	}
 
 	render() {
-		const { writable, isOpenQuestion, page, lastPage, indexes, loading } = this.props;
-
-		if (loading) return null;
+		const { writable, isOpenQuestion, page, lastPage, indexes, loading, searchLoading } = this.props;
 
 		return (
 			<IndexList
+				loading={loading || searchLoading}
 				writable={writable}
 				page={page}
 				lastPage={lastPage}
@@ -113,7 +112,8 @@ export default connect(
 		target: state.indexes.get('target'),
 		isSearch: state.indexes.getIn(['search', 'isSearch']),
 		search: state.indexes.get('search'),
-		loading: state.pender.pending['indexes/GET_INDEXES']
+		loading: state.pender.pending['indexes/GET_INDEXES'],
+		searchLoading: state.pender.pending['indexes/SEARCH_INDEXES']
 	}),
 	(dispatch) => ({
 		ModalActions: bindActionCreators(modalActions, dispatch),

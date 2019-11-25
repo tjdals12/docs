@@ -4,8 +4,10 @@ import IndexCard from 'components/Card/IndexCard';
 import QuestionModal from 'components/Modal/QuestionModal';
 import Pagination from 'components/Pagination';
 import PropTypes from 'prop-types';
+import Loader from 'components/Loader';
 
 const IndexList = ({
+	loading,
 	writable,
 	page,
 	lastPage,
@@ -21,51 +23,59 @@ const IndexList = ({
 }) => {
 	return (
 		<React.Fragment>
-			<QuestionModal
-				isOpen={isOpenQuestion}
-				onClose={onClose}
-				size="md"
-				header="문서목록 삭제"
-				body={
-					<div>
-						<p className="m-0">선택 값을 삭제하시겠습니까?</p>
-						<p className="m-0 text-danger">(* 삭제된 데이터 복구되지 않습니다.)</p>
-					</div>
-				}
-				footer={
-					<Button color="primary" onClick={onDeleteIndex}>
-						삭제
-					</Button>
-				}
-			/>
+			{loading && <Loader size={20} margin={10} />}
 
-			<Row className="mb-2">
-				<Col md={12}>
-					{data.map((item, index) => {
-						return (
-							<IndexCard
-								writable={writable}
-								key={index}
-								data={item}
-								type="list"
-								onDetail={onDetailPage}
-								onOpenQuestion={onOpenQuestion}
-								onTarget={onTarget}
-								onOpenEdit={onOpenEdit}
-							/>
-						);
-					})}
-				</Col>
-			</Row>
+			{!loading && (
+				<QuestionModal
+					isOpen={isOpenQuestion}
+					onClose={onClose}
+					size="md"
+					header="문서목록 삭제"
+					body={
+						<div>
+							<p className="m-0">선택 값을 삭제하시겠습니까?</p>
+							<p className="m-0 text-danger">(* 삭제된 데이터 복구되지 않습니다.)</p>
+						</div>
+					}
+					footer={
+						<Button color="primary" onClick={onDeleteIndex}>
+							삭제
+						</Button>
+					}
+				/>
+			)}
 
-			<Pagination
-				currentPage={page}
-				lastPage={lastPage}
-				onPage={onPage}
-				size="md"
-				aria-label="Page navigation"
-				listClassName="flex-row justify-content-end ml-auto"
-			/>
+			{!loading && (
+				<Row className="mb-2">
+					<Col md={12}>
+						{data.map((item, index) => {
+							return (
+								<IndexCard
+									writable={writable}
+									key={index}
+									data={item}
+									type="list"
+									onDetail={onDetailPage}
+									onOpenQuestion={onOpenQuestion}
+									onTarget={onTarget}
+									onOpenEdit={onOpenEdit}
+								/>
+							);
+						})}
+					</Col>
+				</Row>
+			)}
+
+			{!loading && (
+				<Pagination
+					currentPage={page}
+					lastPage={lastPage}
+					onPage={onPage}
+					size="md"
+					aria-label="Page navigation"
+					listClassName="flex-row justify-content-end ml-auto"
+				/>
+			)}
 		</React.Fragment>
 	);
 };

@@ -36,17 +36,28 @@ ManagerSchema.set('toJSON', { getters: true });
  * @author      minz-logger
  * @date        2019. 10. 26
  * @description 담당자 추가
- * @param       {Object} params
+ * @param       {Object} param
  */
-ManagerSchema.statics.saveManager = function (params) {
+ManagerSchema.statics.saveManager = function (param) {
     let {
         name,
         position,
         effStaDt,
-        effEndDt
-    } = params;
+        effEndDt,
+        user
+    } = param;
 
-    const manager = new this({ name, position, effStaDt, effEndDt });
+    const timestamp = new Timestamp({
+        regId: user.profile.username,
+        updId: user.profile.username
+    });
+    const manager = new this({ 
+        name, 
+        position, 
+        effStaDt, 
+        effEndDt,
+        timestamp
+    });
 
     return manager.save();
 };
@@ -55,16 +66,17 @@ ManagerSchema.statics.saveManager = function (params) {
  * @author      minz-logger
  * @date        2019. 10. 27
  * @description 담당자 수정
- * @param       {Object} params
+ * @param       {Object} param
  */
-ManagerSchema.statics.editManager = function (params) {
+ManagerSchema.statics.editManager = function (param) {
     let {
         managerId,
         name,
         position,
         effStaDt,
-        effEndDt
-    } = params;
+        effEndDt,
+        user
+    } = param;
 
     return this.findOneAndUpdate(
         { _id: managerId },
@@ -73,7 +85,9 @@ ManagerSchema.statics.editManager = function (params) {
                 name,
                 position,
                 effStaDt,
-                effEndDt: effEndDt === '' ? '9999-12-31' : effEndDt
+                effEndDt: effEndDt === '' ? '9999-12-31' : effEndDt,
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         }
     );
@@ -83,13 +97,21 @@ ManagerSchema.statics.editManager = function (params) {
  * @author      minz-logger
  * @date        2019. 10. 28
  * @description 담당자 삭제
+ * @param       {Object} param
  */
-ManagerSchema.statics.deleteManager = function (id) {
+ManagerSchema.statics.deleteManager = function (param) {
+    let {
+        id,
+        user
+    } = param;
+
     return this.findOneAndUpdate(
         { _id: id },
         {
             $set: {
-                deleteYn: DEFINE.COMMON.DEFAULT_YES
+                deleteYn: DEFINE.COMMON.DEFAULT_YES,
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

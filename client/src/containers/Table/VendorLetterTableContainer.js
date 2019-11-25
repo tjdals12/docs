@@ -52,11 +52,9 @@ class VendorLetterTableContainer extends React.Component {
 	render() {
 		const { vendorletters, page, lastPage, loading, searchLoading } = this.props;
 
-		if(loading || loading === undefined) return null;
-
 		return (
 			<VendorLetterTable
-				loading={searchLoading}
+				loading={loading || searchLoading}
 				page={page}
 				lastPage={lastPage}
 				data={vendorletters}

@@ -38,12 +38,11 @@ class LetterTableContainer extends React.Component {
 	}
 
 	render() {
-		const { transmittals, page, lastPage, loading } = this.props;
-
-		if (loading || loading === 'undefined') return null;
+		const { transmittals, page, lastPage, loading, searchLoading } = this.props;
 
 		return (
 			<LetterTable
+				loading={loading || searchLoading}
 				page={page}
 				lastPage={lastPage}
 				data={transmittals}
@@ -60,7 +59,8 @@ export default connect(
 		lastPage: state.letter.get('lastPage'),
 		isSearch: state.letter.getIn(['search', 'isSearch']),
 		search: state.letter.get('search'),
-		loading: state.pender.pending['letter/GET_LETTERS']
+		loading: state.pender.pending['letter/GET_LETTERS'],
+		searchLoading: state.pender.pending['letter/SEARCH_LETTERS']
 	}),
 	(dispatch) => ({
 		LetterActions: bindActionCreators(letterActions, dispatch),

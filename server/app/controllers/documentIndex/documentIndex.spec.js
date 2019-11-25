@@ -9,6 +9,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
     let vendorId;
     let documentGb;
     let editVendorId;
+    let accessToken;
     let id;
     let documentInfoId1;
     let documentInfoId2;
@@ -43,6 +44,49 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
         let teamId;
         let managerId;
 
+        it('add user', (done) => {
+            request(server)
+                .post('/api/accounts')
+                .send({
+                    username: 'Tester',
+                    description: 'API Tester',
+                    userType: 'admin',
+                    userId: 'test',
+                    pwd: '1234',
+                    roles: [
+                        '5daeaefaef365b120bab0084',
+                        '5daeaefdef365b120bab0085'
+                    ]
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    expect(ctx.body.data.profile.username).to.equal('Tester');
+                    expect(ctx.body.data.profile.description).to.equal('API Tester');
+                    done();
+                });
+        });
+
+        it('login', (done) => {
+            request(server)
+                .post('/api/accounts/login')
+                .send({
+                    userId: 'test',
+                    pwd: '1234'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    accessToken = ctx.res.headers['set-cookie'][0];
+
+                    expect(ctx.body.data).to.have.property('_id');
+                    expect(ctx.body.data).to.have.property('profile');
+                    done();
+                });
+        });
+
         it('add Part', (done) => {
             request(server)
                 .post('/api/cmcodes')
@@ -50,6 +94,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     cdMajor: '0001',
                     cdFName: '공종'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -69,6 +114,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     cdMinor: '0001',
                     cdSName: '기계'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -87,6 +133,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     cdMajor: '0002',
                     cdFName: '구분'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -105,6 +152,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     cdMinor: '0001',
                     cdSName: '공통'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -123,6 +171,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     cdMajor: '0000',
                     cdFName: '프로젝트 구분'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -142,6 +191,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     cdMinor: '0001',
                     cdSName: '신규'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -169,6 +219,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     memo: '프로젝트 설명'
                 })
                 .expect(200)
+                .set('Cookie', accessToken)
                 .end((err, ctx) => {
                     if (err) throw err;
 
@@ -188,6 +239,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     part: part,
                     teamName: '기계설계팀'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -211,6 +263,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     effStaDt: '2019-10-26',
                     effEndDt: '9999-12-31'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -266,6 +319,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                         }
                     ]
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -322,6 +376,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                         }
                     ]
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -382,6 +437,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                         }
                     ]
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -413,14 +469,13 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     expect(ctx.body.data[0].vendor.partNumber).to.equal('R-002');
                     expect(ctx.body.data[0].vendor.vendorName).to.equal('주연테크');
                     expect(ctx.body.data[0].list).have.length(3);
-                    expect(ctx.body.data[0].list[0].documentNumber).to.equal('VP-NCC-R-001-001');
                     done();
                 });
         });
     });
 
     describe('GET /documentindexes/forselect', () => {
-        it('add documentIndexes for select', (done) => {
+        it('get documentIndexes for select', (done) => {
             request(server)
                 .get('/api/documentindexes/forselect')
                 .expect(200)
@@ -476,6 +531,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                         }
                     ]
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -527,6 +583,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     targetId: documentInfoId1,
                     reason: 'API 테스트 - 삭제'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -572,6 +629,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                         }
                     ]
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -594,6 +652,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
             request(server)
                 .patch(`/api/documentindexes/${id}/delete`)
                 .expect(200)
+                .set('Cookie', accessToken)
                 .end((err, ctx) => {
                     if (err) throw err;
 

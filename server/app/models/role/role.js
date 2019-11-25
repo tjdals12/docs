@@ -51,42 +51,78 @@ RoleSchema.set('toJSON', { getters: true });
  * @author      minz-logger
  * @date        2019. 10. 21
  * @description 권한 생성
- * @param       {Object} params
+ * @param       {Object} param
  */
-RoleSchema.statics.createRole = function (params) {
+RoleSchema.statics.createRole = function (param) {
     let {
         to,
         name,
         icon,
         layout,
-        component
-    } = params;
+        component,
+        user
+    } = param;
 
     const roleId = to === 'ROOT' ? { READ: new Types.ObjectId } : { READ: new Types.ObjectId, WRITE: new Types.ObjectId };
 
-    const role = new this({ to, name, icon, layout, component, roleId });
+    const timestamp = new Timestamp({
+        regId: user.profile.username,
+        updId: user.profile.username,
+    });
+    const role = new this({ 
+        to, 
+        name, 
+        icon, 
+        layout, 
+        component, 
+        roleId,
+        timestamp
+    });
 
     return role.save();
 };
 
-RoleSchema.statics.addRole = function (params) {
+/**
+ * @author      minz-logger
+ * @date        2019. 11. 25
+ * @description 권한 추가
+ * @param       {Object} param
+ */
+RoleSchema.statics.addRole = function (param) {
     let {
         id,
         to,
         name,
         icon,
         layout,
-        component
-    } = params;
+        component,
+        user
+    } = param;
 
     const roleId = to === 'ROOT' ? { READ: new Types.ObjectId } : { READ: new Types.ObjectId, WRITE: new Types.ObjectId };
 
-    const role = new this({ to, name, icon, layout, component, roleId });
+    const timestamp = new Timestamp({
+        regId: user.profile.username,
+        updId: user.profile.username
+    });
+    const role = new this({ 
+        to, 
+        name, 
+        icon, 
+        layout, 
+        component, 
+        roleId,
+        timestamp
+    });
 
     return this.findOneAndUpdate(
         { _id: id },
         {
-            $push: { sub: role }
+            $push: { sub: role },
+            $set: {
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
+            }
         },
         {
             new: true

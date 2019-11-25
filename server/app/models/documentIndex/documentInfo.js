@@ -39,6 +39,8 @@ const DocumentInfoSchema = new Schema({
     }
 });
 
+DocumentInfoSchema.set('toJSON', { getters: true });
+
 /**
  * @author      minz-logger
  * @date        2019. 08. 26
@@ -194,14 +196,32 @@ DocumentInfoSchema.statics.searchDocumentInfosCount = async function (param) {
  * @author      minz-logger
  * @date        2019. 08. 12
  * @description 문서 정보 추가
- * @param       {Array}
+ * @param       {Object} param
  */
-DocumentInfoSchema.statics.saveDocumentInfos = async function (id, param) {
+DocumentInfoSchema.statics.saveDocumentInfos = async function (param) {
+    let {
+        id,
+        list,
+        user
+    } = param;
+
     let ids = [];
 
-    for (let i = 0; i < param.length; i++) {
-        const { documentNumber, documentTitle, documentGb, plan } = param[i];
-        const documentInfo = new this({ vendor: id, documentNumber, documentTitle, documentGb, plan: new Date(plan) });
+    const timestamp = new Timestamp({
+        regId: user.profile.username,
+        updId: user.profile.username,
+    });
+
+    for (let i = 0; i < list.length; i++) {
+        const { documentNumber, documentTitle, documentGb, plan } = list[i];
+        const documentInfo = new this({ 
+            vendor: id, 
+            documentNumber, 
+            documentTitle, 
+            documentGb, 
+            plan: new Date(plan), 
+            timestamp
+        });
         await documentInfo.save();
         ids.push(documentInfo._id);
     }
@@ -215,11 +235,17 @@ DocumentInfoSchema.statics.saveDocumentInfos = async function (id, param) {
  * @description 문서 정보 수정
  * @param       {Object} param
  */
-DocumentInfoSchema.statics.updateDocumentInfos = async function (id, param) {
+DocumentInfoSchema.statics.updateDocumentInfos = async function (param) {
+    let {
+        id,
+        list,
+        user
+    } = param;
+
     let ids = [];
 
-    for (let i = 0; i < param.length; i++) {
-        const { _id, documentNumber, documentTitle, documentGb, plan } = param[i];
+    for (let i = 0; i < list.length; i++) {
+        const { _id, documentNumber, documentTitle, documentGb, plan } = list[i];
 
         if (!_id) {
             const documentInfo = new this({ vendor: id, documentNumber, documentTitle, documentGb, plan });
@@ -240,6 +266,7 @@ DocumentInfoSchema.statics.updateDocumentInfos = async function (id, param) {
                             deleteDt: new Date(DEFINE.COMMON.MAX_END_DT),
                             reason: DEFINE.COMMON.DEFAULT_REASON
                         },
+                        'timestamp.updId': user.profile.username,
                         'timestamp.updDt': DEFINE.dateNow()
                     }
                 },
@@ -251,7 +278,9 @@ DocumentInfoSchema.statics.updateDocumentInfos = async function (id, param) {
             await document.updateMany(
                 { _id: { $in: documentInfo.trackingDocument } },
                 {
-                    documentGb: documentGb
+                    documentGb: documentGb,
+                    'timestamp.updId': user.profile.username,
+                    'timestamp.updDt': DEFINE.dateNow()
                 }
             );
         }
@@ -267,8 +296,13 @@ DocumentInfoSchema.statics.updateDocumentInfos = async function (id, param) {
  * @param       {Object} param
  */
 DocumentInfoSchema.statics.deleteDocumentInfos = async function (param) {
-    for (let i = 0; i < param.length; i++) {
-        const { _id, reason = '인덱스 수정' } = param[i];
+    let {
+        list,
+        user 
+    } = param;
+
+    for (let i = 0; i < list.length; i++) {
+        const { _id, reason = '인덱스 수정' } = list[i];
 
         await this.findOneAndUpdate(
             { _id: _id },
@@ -278,7 +312,9 @@ DocumentInfoSchema.statics.deleteDocumentInfos = async function (param) {
                         yn: DEFINE.COMMON.DEFAULT_YES,
                         deleteDt: DEFINE.dateNow(),
                         reason
-                    }
+                    },
+                    'timestamp.updId': user.profile.username,
+                    'timestamp.updDt': DEFINE.dateNow()
                 }
             }
         );
@@ -289,10 +325,15 @@ DocumentInfoSchema.statics.deleteDocumentInfos = async function (param) {
  * @author      minz-logger
  * @date        2019. 08. 13
  * @description 문서 정보 삭제
- * @param       {String} id
- * @param       {String} reason
+ * @param       {Object} param
  */
-DocumentInfoSchema.statics.deleteDocumentInfo = function (id, reason) {
+DocumentInfoSchema.statics.deleteDocumentInfo = function (param) {
+    let {
+        id,
+        reason,
+        user
+    } = param;
+
     return this.findOneAndUpdate(
         { _id: id },
         {
@@ -302,6 +343,8 @@ DocumentInfoSchema.statics.deleteDocumentInfo = function (id, reason) {
                     deleteDt: DEFINE.dateNow(),
                     reason: reason
                 },
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {

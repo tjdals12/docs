@@ -31,12 +31,11 @@ class VendorListContainer extends React.Component {
 	}
 
 	render() {
-		const { vendors, lastPage, page, loading } = this.props;
-
-		if (loading) return null;
+		const { vendors, lastPage, page, loading, searchLoading } = this.props;
 
 		return (
 			<VendorList
+				loading={loading || searchLoading}
 				page={page}
 				lastPage={lastPage}
 				data={vendors}
@@ -53,7 +52,8 @@ export default connect(
 		isSearch: state.vendor.getIn(['search', 'isSearch']),
 		search: state.vendor.get('search'),
 		lastPage: state.vendor.get('lastPage'),
-		loading: state.pender.pending['vendor/GET_VENDORS']
+		loading: state.pender.pending['vendor/GET_VENDORS'],
+		searchLoading: state.pender.pending['vendor/SEARCH_VENDORS']
 	}),
 	(dispatch) => ({
 		ModalActions: bindActionCreators(modalActions, dispatch),

@@ -1,4 +1,4 @@
-import { Schema, model, Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import CdMinor from './cdMinor';
 import Timestamp from 'models/common/schema/Timestamp';
 import DEFINE from 'models/common';
@@ -43,10 +43,19 @@ const CmcodeSchema = new Schema({
 CmcodeSchema.statics.saveCmcodeMajor = function (param) {
     let {
         cdMajor,
-        cdFName
+        cdFName,
+        user
     } = param;
 
-    const cmcode = this({ cdMajor, cdFName });
+    const timestamp = new Timestamp({
+        regId: user.profile.username,
+        updId: user.profile.username
+    });
+    const cmcode = this({
+        cdMajor, 
+        cdFName, 
+        timestamp
+    });
 
     cmcode.save();
 
@@ -64,16 +73,26 @@ CmcodeSchema.statics.saveCmcodeMinor = async function (param) {
         id,
         cdMinor,
         cdSName,
-        cdRef1
+        cdRef1,
+        user
     } = param;
 
-    const { _id: newId } = await CdMinor.saveCdMinor({ cdMinor, cdSName, cdRef1 });
+    const { _id: newId } = await CdMinor.saveCdMinor({ 
+        cdMinor, 
+        cdSName, 
+        cdRef1,
+        user
+    });
 
     return this.findByIdAndUpdate(
         id,
         {
             $push: {
                 cdMinors: newId
+            },
+            $set: {
+                'timestamp.updId': user.profile.username,
+                'timestamp.updDt': DEFINE.dateNow()
             }
         },
         {
@@ -92,7 +111,8 @@ CmcodeSchema.statics.editCmcode = function (param) {
     let {
         id,
         cdMajor,
-        cdFName
+        cdFName,
+        user
     } = param;
 
     return this.findOneAndUpdate(
@@ -101,6 +121,7 @@ CmcodeSchema.statics.editCmcode = function (param) {
             $set: {
                 cdMajor,
                 cdFName,
+                'timestamp.updId': user.profile.username,
                 'timestamp.updDt': DEFINE.dateNow()
             }
         },
@@ -121,26 +142,34 @@ CmcodeSchema.statics.editMinor = async function (param) {
         id,
         minorId,
         cdMinor,
-        cdSName
+        cdSName,
+        user
     } = param;
 
-    await CdMinor.editCdMinor({ id: minorId, cdMinor, cdSName });
+    await CdMinor.editCdMinor({ id: minorId, cdMinor, cdSName, user });
 
-    return this.findOne({ _id: id }).populate({ path: 'cdMinors', match: { _id: minorId } });
+    return this.findOne({ _id: id })
+        .populate({ path: 'cdMinors', match: { _id: minorId } });
 };
 
 /**
  * @author      minz-logger
  * @date        2019. 07. 29
  * @description 상위 공통코드 삭제
- * @param       {String} id
+ * @param       {Object} param
  */
-CmcodeSchema.statics.deleteCmcode = function (id) {
+CmcodeSchema.statics.deleteCmcode = function (param) {
+    let {
+        id,
+        user
+    } = param;
+
     return this.findOneAndUpdate(
         { _id: id },
         {
             $set: {
                 effEndDt: DEFINE.dateNow(),
+                'timestamp.updId': user.profile.username,
                 'timestamp.updDt': DEFINE.dateNow()
             }
         },
@@ -159,12 +188,14 @@ CmcodeSchema.statics.deleteCmcode = function (id) {
 CmcodeSchema.statics.deleteCdMinor = async function (param) {
     let {
         id,
-        minorId
+        minorId,
+        user
     } = param;
 
-    await CdMinor.deleteCdMinor({ id: minorId });
+    await CdMinor.deleteCdMinor({ id: minorId, user });
 
-    return this.findOne({ _id: id }).populate({ path: 'cdMinors' });
+    return this.findOne({ _id: id })
+        .populate({ path: 'cdMinors' });
 };
 
 /**
@@ -176,12 +207,14 @@ CmcodeSchema.statics.deleteCdMinor = async function (param) {
 CmcodeSchema.statics.recoveryCdMinor = async function (param) {
     let {
         id,
-        minorId
+        minorId,
+        user
     } = param;
 
-    await CdMinor.recoveryCdMinor({ id: minorId });
+    await CdMinor.recoveryCdMinor({ id: minorId, user });
 
-    return this.findOne({ _id: id }).populate({ path: 'cdMinors' });
+    return this.findOne({ _id: id })
+        .populate({ path: 'cdMinors' });
 };
 
 export default model('Cmcode', CmcodeSchema);

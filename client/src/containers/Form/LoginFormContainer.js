@@ -7,7 +7,6 @@ import * as accountActions from 'store/modules/account';
 import storage from 'lib/storage';
 
 class LoginFormContainer extends React.Component {
-
     state = {
         userId: '',
         pwd: ''
