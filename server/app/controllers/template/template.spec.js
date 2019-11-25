@@ -8,6 +8,7 @@ describe(clc.bgGreen(clc.black('[ Template ]')), () => {
     let server;
     let templateGb1;
     let templateGb2;
+    let accessToken;
     let id;
 
     before((done) => {
@@ -35,6 +36,49 @@ describe(clc.bgGreen(clc.black('[ Template ]')), () => {
     describe('cmcode preparation', () => {
         let major;
 
+        it('add user', (done) => {
+            request(server)
+                .post('/api/accounts')
+                .send({
+                    username: 'Tester',
+                    description: 'API Tester',
+                    userType: 'admin',
+                    userId: 'test',
+                    pwd: '1234',
+                    roles: [
+                        '5daeaefaef365b120bab0084',
+                        '5daeaefdef365b120bab0085'
+                    ]
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    expect(ctx.body.data.profile.username).to.equal('Tester');
+                    expect(ctx.body.data.profile.description).to.equal('API Tester');
+                    done();
+                });
+        });
+
+        it('login', (done) => {
+            request(server)
+                .post('/api/accounts/login')
+                .send({
+                    userId: 'test',
+                    pwd: '1234'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    accessToken = ctx.res.headers['set-cookie'][0];
+
+                    expect(ctx.body.data).to.have.property('_id');
+                    expect(ctx.body.data).to.have.property('profile');
+                    done();
+                });
+        });
+
         it('add Part', (done) => {
             request(server)
                 .post('/api/cmcodes')
@@ -42,6 +86,7 @@ describe(clc.bgGreen(clc.black('[ Template ]')), () => {
                     cdMajor: '0004',
                     cdFName: '양식 구분'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -61,6 +106,7 @@ describe(clc.bgGreen(clc.black('[ Template ]')), () => {
                     cdMinor: '0001',
                     cdSName: '공문'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -79,6 +125,7 @@ describe(clc.bgGreen(clc.black('[ Template ]')), () => {
                     cdMinor: '0002',
                     cdSName: '보고서'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;

@@ -69,6 +69,16 @@ export const listForSelect = async (ctx) => {
  * @description 프로젝트 추가
  */
 export const add = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let {
         projectGb,
         projectName,
@@ -117,7 +127,8 @@ export const add = async (ctx) => {
             clientCode,
             contractor,
             contractorCode,
-            memo
+            memo,
+            user
         });
 
         ctx.res.ok({
@@ -163,6 +174,16 @@ export const one = async (ctx) => {
  * @description 프로젝트 수정
  */
 export const edit = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+    
     let { id } = ctx.params;
 
     let {
@@ -202,7 +223,8 @@ export const edit = async (ctx) => {
     }
 
     try {
-        const project = await Project.editProject(id, {
+        const project = await Project.editProject({
+            id,
             projectGb,
             projectName,
             projectCode,
@@ -212,7 +234,8 @@ export const edit = async (ctx) => {
             clientCode,
             contractor,
             contractorCode,
-            memo
+            memo,
+            user
         });
 
         ctx.res.ok({
@@ -233,6 +256,16 @@ export const edit = async (ctx) => {
  * @description 프로젝트 삭제
  */
 export const deleteOne = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let { yn } = ctx.request.body;
 
@@ -252,7 +285,11 @@ export const deleteOne = async (ctx) => {
     }
 
     try {
-        const project = await Project.deleteProject({ id, yn });
+        const project = await Project.deleteProject({ 
+            id, 
+            yn, 
+            user
+        });
 
         ctx.res.ok({
             data: project,
@@ -272,10 +309,20 @@ export const deleteOne = async (ctx) => {
  * @descriptipon 메인 프로젝트 변경
  */
 export const changeMainProject = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
 
     try{
-        const project = await Project.changeMainProject(id);
+        const project = await Project.changeMainProject({ id, user });
 
         ctx.res.ok({
             data: project,

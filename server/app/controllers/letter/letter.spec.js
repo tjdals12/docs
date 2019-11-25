@@ -86,6 +86,7 @@ describe(clc.bgGreen(clc.black('[ Letter ]')), () => {
                     cdMajor: '0000',
                     cdFName: '프로젝트 구분'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -105,6 +106,7 @@ describe(clc.bgGreen(clc.black('[ Letter ]')), () => {
                     cdMinor: '0001',
                     cdSName: '신규'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -131,6 +133,7 @@ describe(clc.bgGreen(clc.black('[ Letter ]')), () => {
                     contractorCode: 'HENC',
                     memo: '프로젝트 설명'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;

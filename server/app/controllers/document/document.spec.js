@@ -94,6 +94,7 @@ describe(clc.bgGreen(clc.black('[ Document ]')), () => {
                     cdMajor: '0001',
                     cdFName: '공종'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -112,6 +113,7 @@ describe(clc.bgGreen(clc.black('[ Document ]')), () => {
                     cdMinor: '0001',
                     cdSName: '기계'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -130,6 +132,7 @@ describe(clc.bgGreen(clc.black('[ Document ]')), () => {
                     cdMajor: '0002',
                     cdFName: '구분'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -148,6 +151,7 @@ describe(clc.bgGreen(clc.black('[ Document ]')), () => {
                     cdMinor: '0001',
                     cdSName: '공통'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -166,6 +170,7 @@ describe(clc.bgGreen(clc.black('[ Document ]')), () => {
                     cdMajor: '0000',
                     cdFName: '프로젝트 구분'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -185,6 +190,7 @@ describe(clc.bgGreen(clc.black('[ Document ]')), () => {
                     cdMinor: '0001',
                     cdSName: '신규'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -211,6 +217,7 @@ describe(clc.bgGreen(clc.black('[ Document ]')), () => {
                     contractorCode: 'HENC',
                     memo: '프로젝트 설명'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;

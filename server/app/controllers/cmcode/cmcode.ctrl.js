@@ -215,6 +215,16 @@ export const oneMinor = async (ctx) => {
  * @description 상위 공통코드 생성
  */
 export const add = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let {
         cdMajor,
         cdFName
@@ -237,7 +247,11 @@ export const add = async (ctx) => {
     }
 
     try {
-        const cmcode = await Cmcode.saveCmcodeMajor({ cdMajor, cdFName });
+        const cmcode = await Cmcode.saveCmcodeMajor({ 
+            cdMajor, 
+            cdFName,
+            user
+        });
 
         ctx.res.ok({
             data: cmcode,
@@ -257,6 +271,16 @@ export const add = async (ctx) => {
  * @description 하위 공통코드 추가
  */
 export const addMinor = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let { cdMinor, cdSName, cdRef1 } = ctx.request.body;
 
@@ -278,7 +302,13 @@ export const addMinor = async (ctx) => {
     }
 
     try {
-        const cmcode = await Cmcode.saveCmcodeMinor({ id, cdMinor, cdSName, cdRef1 });
+        const cmcode = await Cmcode.saveCmcodeMinor({ 
+            id, 
+            cdMinor, 
+            cdSName, 
+            cdRef1,
+            user
+        });
 
         ctx.res.ok({
             data: cmcode,
@@ -298,6 +328,16 @@ export const addMinor = async (ctx) => {
  * @description 상위 공통코드 수정
  */
 export const editCmcode = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let {
         cdMajor,
@@ -321,7 +361,12 @@ export const editCmcode = async (ctx) => {
     }
 
     try {
-        const cmcode = await Cmcode.editCmcode({ id, cdMajor, cdFName });
+        const cmcode = await Cmcode.editCmcode({ 
+            id, 
+            cdMajor, 
+            cdFName,
+            user
+        });
 
         ctx.res.ok({
             data: cmcode,
@@ -341,6 +386,16 @@ export const editCmcode = async (ctx) => {
  * @description 하위 공통코드 수정
  */
 export const editMinor = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id, minorId } = ctx.params;
     let {
         cdMinor,
@@ -375,7 +430,13 @@ export const editMinor = async (ctx) => {
     }
 
     try {
-        const cmcode = await Cmcode.editMinor({ id, minorId, cdMinor, cdSName });
+        const cmcode = await Cmcode.editMinor({ 
+            id, 
+            minorId, 
+            cdMinor, 
+            cdSName,
+            user
+        });
 
         ctx.res.ok({
             data: cmcode,
@@ -395,10 +456,20 @@ export const editMinor = async (ctx) => {
  * @description 상위 공통코드 삭제
  */
 export const deleteCmcode = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
 
     try {
-        const cmcode = await Cmcode.deleteCmcode(id);
+        const cmcode = await Cmcode.deleteCmcode({ id, user });
 
         ctx.res.ok({
             data: cmcode,
@@ -418,6 +489,16 @@ export const deleteCmcode = async (ctx) => {
  * @description 하위 공통코드 삭제
  */
 export const deleteCdMinor = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id, minorId } = ctx.params;
 
     if (!Types.ObjectId.isValid(minorId)) {
@@ -430,7 +511,11 @@ export const deleteCdMinor = async (ctx) => {
     }
 
     try {
-        const cmcode = await Cmcode.deleteCdMinor({ id, minorId });
+        const cmcode = await Cmcode.deleteCdMinor({ 
+            id, 
+            minorId, 
+            user
+        });
 
         ctx.res.ok({
             data: cmcode,
@@ -450,6 +535,16 @@ export const deleteCdMinor = async (ctx) => {
  * @description 하위 공통코드 복구
  */
 export const recoveryCdMinor = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id, minorId } = ctx.params;
 
     if (!Types.ObjectId.isValid(minorId)) {
@@ -462,7 +557,11 @@ export const recoveryCdMinor = async (ctx) => {
     }
 
     try {
-        const cmcode = await Cmcode.recoveryCdMinor({ id, minorId });
+        const cmcode = await Cmcode.recoveryCdMinor({ 
+            id, 
+            minorId, 
+            user
+        });
 
         ctx.res.ok({
             data: cmcode,

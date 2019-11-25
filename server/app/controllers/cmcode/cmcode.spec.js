@@ -6,6 +6,7 @@ import { expect } from 'chai';
 
 describe(clc.bgGreen(clc.black('[ CMCODE ]')), () => {
     let server;
+    let accessToken;
     let id;
     let major;
     let minorId;
@@ -32,6 +33,51 @@ describe(clc.bgGreen(clc.black('[ CMCODE ]')), () => {
             });
     });
 
+    describe('Prepare', () => {
+        it('add user', (done) => {
+            request(server)
+                .post('/api/accounts')
+                .send({
+                    username: 'Tester',
+                    description: 'API Tester',
+                    userType: 'admin',
+                    userId: 'test',
+                    pwd: '1234',
+                    roles: [
+                        '5daeaefaef365b120bab0084',
+                        '5daeaefdef365b120bab0085'
+                    ]
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    expect(ctx.body.data.profile.username).to.equal('Tester');
+                    expect(ctx.body.data.profile.description).to.equal('API Tester');
+                    done();
+                });
+        });
+
+        it('login', (done) => {
+            request(server)
+                .post('/api/accounts/login')
+                .send({
+                    userId: 'test',
+                    pwd: '1234'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    accessToken = ctx.res.headers['set-cookie'][0];
+
+                    expect(ctx.body.data).to.have.property('_id');
+                    expect(ctx.body.data).to.have.property('profile');
+                    done();
+                });
+        });
+    });
+
     describe('POST /cmcodes', () => {
         it('add cmcode', (done) => {
             request(server)
@@ -40,6 +86,7 @@ describe(clc.bgGreen(clc.black('[ CMCODE ]')), () => {
                     cdMajor: '0001',
                     cdFName: '공종'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -61,6 +108,7 @@ describe(clc.bgGreen(clc.black('[ CMCODE ]')), () => {
                     cdMinor: '0001',
                     cdSName: '기계'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -151,6 +199,7 @@ describe(clc.bgGreen(clc.black('[ CMCODE ]')), () => {
                     cdMajor: '0002',
                     cdFName: '구분'
                 })
+                .set('Cookie', accessToken)
                 .end((err, ctx) => {
                     if (err) throw err;
 
@@ -170,6 +219,7 @@ describe(clc.bgGreen(clc.black('[ CMCODE ]')), () => {
                     cdMinor: '0002',
                     cdSName: '장치'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -184,6 +234,7 @@ describe(clc.bgGreen(clc.black('[ CMCODE ]')), () => {
         it('delete cdMinor', (done) => {
             request(server)
                 .patch(`/api/cmcodes/${id}/${minorId}/delete`)
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -195,7 +246,7 @@ describe(clc.bgGreen(clc.black('[ CMCODE ]')), () => {
         });
     });
 
-    describe('PATCH /cmcodes/:major/minors/exclude', () => {
+    describe('GET /cmcodes/:major/minors/exclude', () => {
         it('get cmcode by cdMajor', (done) => {
             request(server)
                 .get(`/api/cmcodes/${major}/minors/exclude`)
@@ -213,6 +264,7 @@ describe(clc.bgGreen(clc.black('[ CMCODE ]')), () => {
         it('recovery cdMinor', (done) => {
             request(server)
                 .patch(`/api/cmcodes/${id}/${minorId}/recovery`)
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -224,10 +276,11 @@ describe(clc.bgGreen(clc.black('[ CMCODE ]')), () => {
         });
     });
 
-    describe('PATCH /cmcodes/:major/minors/exclude', () => {
+    describe('GET /cmcodes/:major/minors/exclude', () => {
         it('get cmcode by cdMajor', (done) => {
             request(server)
                 .get(`/api/cmcodes/${major}/minors/exclude`)
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -242,6 +295,7 @@ describe(clc.bgGreen(clc.black('[ CMCODE ]')), () => {
         it('delete cmcode', (done) => {
             request(server)
                 .patch(`/api/cmcodes/${id}/delete`)
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
