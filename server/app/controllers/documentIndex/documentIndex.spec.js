@@ -469,7 +469,6 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     expect(ctx.body.data[0].vendor.partNumber).to.equal('R-002');
                     expect(ctx.body.data[0].vendor.vendorName).to.equal('주연테크');
                     expect(ctx.body.data[0].list).have.length(3);
-                    expect(ctx.body.data[0].list[0].documentNumber).to.equal('VP-NCC-R-001-001');
                     done();
                 });
         });
