@@ -117,6 +117,16 @@ export const search = async (ctx) => {
  * @description 문서 개별 추가
  */
 export const add = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let {
         vendor,
         part,
@@ -159,7 +169,8 @@ export const add = async (ctx) => {
             documentGb,
             documentRev,
             officialNumber,
-            memo
+            memo,
+            user
         });
 
         ctx.res.ok({
@@ -207,6 +218,16 @@ export const one = async (ctx) => {
  * @description 문서 수정
  */
 export const edit = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let {
         vendor,
@@ -244,7 +265,19 @@ export const edit = async (ctx) => {
     }
 
     try {
-        const document = await Document.editDocument({ id, vendor, part, documentNumber, documentTitle, documentGb, documentRev, level, officialNumber, memo });
+        const document = await Document.editDocument({ 
+            id, 
+            vendor,
+            part,
+            documentNumber,
+            documentTitle,
+            documentGb,
+            documentRev,
+            level,
+            officialNumber,
+            memo,
+            user
+        });
 
         ctx.res.ok({
             data: document,
@@ -264,6 +297,16 @@ export const edit = async (ctx) => {
  * @description 문서 삭제
  */
 export const deleteOne = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+    
     let { id } = ctx.params;
     let { yn, reason } = ctx.request.body;
 
@@ -284,7 +327,12 @@ export const deleteOne = async (ctx) => {
     }
 
     try {
-        const document = await Document.deleteDocument(id, yn, reason);
+        const document = await Document.deleteDocument({
+            id,
+            yn,
+            reason,
+            user
+        });
 
         ctx.res.ok({
             data: document,
@@ -304,6 +352,16 @@ export const deleteOne = async (ctx) => {
  * @description 문서 일괄 삭제
  */
 export const deleteMany = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let page = parseInt(ctx.query.page || 1, 10);
     let { ids } = ctx.request.body;
 
@@ -332,7 +390,7 @@ export const deleteMany = async (ctx) => {
     }
 
     try {
-        await Document.deleteDocuments(ids);
+        await Document.deleteDocuments({ ids, user });
 
         const documents = await Document
             .find()
@@ -364,6 +422,16 @@ export const deleteMany = async (ctx) => {
  * @description 문서 In / Out
  */
 export const inOut = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     const { id } = ctx.params;
     const { inOutGb, officialNumber, status, resultCode, replyCode, date } = ctx.request.body;
 
@@ -388,7 +456,16 @@ export const inOut = async (ctx) => {
     }
 
     try {
-        const document = await Document.inOutDocument(id, inOutGb, officialNumber, status, resultCode, replyCode, date);
+        const document = await Document.inOutDocument({
+            id, 
+            inOutGb, 
+            officialNumber, 
+            status, 
+            resultCode, 
+            replyCode, 
+            date, 
+            user
+        });
 
         ctx.res.ok({
             data: document,
@@ -408,6 +485,16 @@ export const inOut = async (ctx) => {
  * @description 문서 In / Out 삭제
  */
 export const deleteInOut = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+    
     const { id } = ctx.params;
     const { targetId } = ctx.request.body;
 
@@ -427,7 +514,11 @@ export const deleteInOut = async (ctx) => {
     }
 
     try {
-        const document = await Document.deleteInOutDocument(id, targetId);
+        const document = await Document.deleteInOutDocument({
+            id,
+            targetId,
+            user
+        });
 
         ctx.res.ok({
             data: document,
@@ -447,6 +538,16 @@ export const deleteInOut = async (ctx) => {
  * @description 문서 보류
  */
 export const hold = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+    
     let { id } = ctx.params;
     let { yn, reason } = ctx.request.body;
 
@@ -467,7 +568,12 @@ export const hold = async (ctx) => {
     }
 
     try {
-        const document = await Document.holdDocument(id, yn, reason);
+        const document = await Document.holdDocument({
+            id,
+            yn,
+            reason,
+            user
+        });
 
         ctx.res.ok({
             data: document,

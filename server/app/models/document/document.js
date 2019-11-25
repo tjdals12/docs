@@ -266,11 +266,13 @@ DocumentSchema.statics.saveDocument = async function (param) {
         documentGb,
         documentRev,
         officialNumber,
-        memo
+        memo,
+        user
     } = param;
 
     const documentInOut = new InOut({ officialNumber });
-    const document = new this({ vendor, part, documentNumber, documentTitle, documentGb, documentRev, documentInOut, memo });
+    const timestamp = new Timestamp({ regId: user.profile.username, updId: user.profile.username });
+    const document = new this({ vendor, part, documentNumber, documentTitle, documentGb, documentRev, documentInOut, memo, timestamp });
 
     await document.save();
 
@@ -377,7 +379,8 @@ DocumentSchema.statics.editDocument = function (param) {
         documentRev,
         level,
         officialNumber,
-        memo
+        memo,
+        user
     } = param;
 
     return this.findOneAndUpdate(
@@ -393,7 +396,10 @@ DocumentSchema.statics.editDocument = function (param) {
                 level,
                 officialNumber,
                 memo,
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {
@@ -406,10 +412,16 @@ DocumentSchema.statics.editDocument = function (param) {
  * @author      minz-logger
  * @date        2019. 07. 21
  * @description 문서 삭제
- * @param       {String} id
- * @param       {String} reason
+ * @param       {Object} param
  */
-DocumentSchema.statics.deleteDocument = function (id, yn, reason) {
+DocumentSchema.statics.deleteDocument = function (param) {
+    let {
+        id,
+        yn,
+        reason,
+        user
+    } = param;
+
     return this.findOneAndUpdate(
         { _id: id },
         {
@@ -419,21 +431,32 @@ DocumentSchema.statics.deleteDocument = function (id, yn, reason) {
                     deleteDt: DEFINE.dateNow(),
                     reason: reason
                 },
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {
             new: true
-        }).populate({ path: 'vendor', populate: { path: 'part vendorPerson' } }).populate({ path: 'part' }).populate({ path: 'documentGb' });
+        })
+        .populate({ path: 'vendor', populate: { path: 'part vendorPerson' } })
+        .populate({ path: 'part' })
+        .populate({ path: 'documentGb' });
 };
 
 /**
  * @author      minz-logger
  * @date        2019. 08. 01
  * @description 문서 일괄 삭제
- * @param       {Array} ids
+ * @param       {Object} param
  */
-DocumentSchema.statics.deleteDocuments = function (ids) {
+DocumentSchema.statics.deleteDocuments = function (param) {
+    let {
+        ids,
+        user
+    } = param;
+
     return this.updateMany(
         { _id: { $in: ids } },
         {
@@ -441,6 +464,10 @@ DocumentSchema.statics.deleteDocuments = function (ids) {
                 yn: 'YES',
                 deleteDt: DEFINE.dateNow(),
                 reason: '일괄 삭제'
+            },
+            timestamp: {
+                updId: user.profile.username,
+                updDt: DEFINE.dateNow()
             }
         }
     );
@@ -450,17 +477,38 @@ DocumentSchema.statics.deleteDocuments = function (ids) {
  * @author      minz-logger
  * @date        2019. 07. 22
  * @description 문서 In / Out
- * @param       {String} id
- * @param       {String} inOutGb
- * @param       {String} officialNumber
- * @param       {String} status
- * @param       {String} resultCode
- * @param       {String} replyCode
+ * @param       {Object} param
  */
-DocumentSchema.statics.inOutDocument = function (id, inOutGb, officialNumber, status, resultCode, replyCode, date) {
-    const timestamp = new Timestamp({ regDt: date });
-    const newInOut = new InOut({ inOutGb, officialNumber, timestamp });
-    const newStatus = new Status({ _id: newInOut._id, status, statusName: status, resultCode, replyCode, timestamp });
+DocumentSchema.statics.inOutDocument = function (param) {
+    let {
+        id, 
+        inOutGb, 
+        officialNumber, 
+        status, 
+        resultCode, 
+        replyCode, 
+        date, 
+        user
+    } = param;
+
+    const timestamp = new Timestamp({ 
+        regId: user.profile.username,
+        regDt: date,
+        updId: user.profile.username,
+        updDt: date
+    });
+    const newInOut = new InOut({ 
+        inOutGb,
+        officialNumber,
+        timestamp 
+    });
+    const newStatus = new Status({ 
+        _id: newInOut._id,
+        status,
+        statusName: status,
+        resultCode, replyCode,
+        timestamp
+    });
 
     return this.findOneAndUpdate(
         { _id: id },
@@ -470,13 +518,19 @@ DocumentSchema.statics.inOutDocument = function (id, inOutGb, officialNumber, st
                 documentStatus: newStatus
             },
             $set: {
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {
             new: true
         }
-    ).populate({ path: 'vendor', populate: { path: 'part vendorPerson' } }).populate({ path: 'part' }).populate({ path: 'documentGb' });
+    )
+        .populate({ path: 'vendor', populate: { path: 'part vendorPerson' } })
+        .populate({ path: 'part' })
+        .populate({ path: 'documentGb' });
 };
 
 /**
@@ -512,10 +566,15 @@ DocumentSchema.statics.inOutDocuments = function (ids, inOutGb, officialNumber, 
  * @author      minz-logger
  * @date        2019. 07. 31
  * @description 문서 In / Out 삭제
- * @param       {String} id
- * @param       {String} targetId
+ * @param       {Object} param
  */
-DocumentSchema.statics.deleteInOutDocument = function (id, targetId) {
+DocumentSchema.statics.deleteInOutDocument = function (param) {
+    let {
+        id, 
+        targetId,
+        user
+    } = param;
+
     return this.findOneAndUpdate(
         { _id: id },
         {
@@ -528,13 +587,19 @@ DocumentSchema.statics.deleteInOutDocument = function (id, targetId) {
                 }
             },
             $set: {
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {
             new: true
         }
-    ).populate({ path: 'vendor', populate: { path: 'part vendorPerson' } }).populate({ path: 'part' }).populate({ path: 'documentGb' });
+    )
+        .populate({ path: 'vendor', populate: { path: 'part vendorPerson' } })
+        .populate({ path: 'part' })
+        .populate({ path: 'documentGb' });
 };
 
 /**
@@ -545,7 +610,14 @@ DocumentSchema.statics.deleteInOutDocument = function (id, targetId) {
  * @param       {String} yn
  * @param       {String} reason
  */
-DocumentSchema.statics.holdDocument = async function (id, yn, reason) {
+DocumentSchema.statics.holdDocument = async function (param) {
+    let {
+        id,
+        yn,
+        reason,
+        user
+    } = param;
+
     const newHoldYn = new HoldYn({ yn, reason });
 
     await this.findOneAndUpdate(
@@ -564,7 +636,10 @@ DocumentSchema.statics.holdDocument = async function (id, yn, reason) {
         {
             $set: {
                 'holdYn.$.effEndDt': DEFINE.dateNow(),
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         }
     );
@@ -576,13 +651,19 @@ DocumentSchema.statics.holdDocument = async function (id, yn, reason) {
                 holdYn: newHoldYn
             },
             $set: {
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {
             new: true
         }
-    ).populate({ path: 'vendor', populate: { path: 'part vendorPerson' } }).populate({ path: 'part' }).populate({ path: 'documentGb' });
+    )
+        .populate({ path: 'vendor', populate: { path: 'part vendorPerson' } })
+        .populate({ path: 'part' })
+        .populate({ path: 'documentGb' });
 };
 
 export default model('Document', DocumentSchema);
