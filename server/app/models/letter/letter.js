@@ -172,11 +172,27 @@ LetterSchema.statics.searchLetterCount = async function (param) {
  * @description 공식문서 추가
  */
 LetterSchema.statics.saveLetter = async function (param) {
+    let {
+        project,
+        letterGb,
+        reference,
+        letterTitle,
+        senderGb,
+        sender,
+        receiverGb,
+        receiver,
+        sendDate,
+        replyRequired,
+        targetDate,
+        memo,
+        user
+    } = param;
+
     const nextNum = await this
         .find({
             $and: [
-                { project: param.project },
-                { letterGb: param.letterGb }
+                { project: project },
+                { letterGb: letterGb }
             ]
 
         }, { _id: 0, officialNumber: 1 })
@@ -190,18 +206,31 @@ LetterSchema.statics.saveLetter = async function (param) {
             return temp.length < 3 ? new Array(3 - temp.length + 1).join('0') + temp : temp;
         });
 
-    const project = await Project.findOne({ _id: param.project });
+    const targetProject = await Project.findOne({ _id: project });
 
-    const sender = param.senderGb === '01' ? project.clientCode : project.contractorCode;
-    const receiver = param.receiverGb === '01' ? project.clientCode : project.contractorCode;
+    const senderCode = senderGb === '01' ? targetProject.clientCode : targetProject.contractorCode;
+    const receiverCode = receiverGb === '01' ? targetProject.clientCode : targetProject.contractorCode;
 
-    if (param.letterGb === '01') {
-        param.officialNumber = `${sender}-${receiver}-E-${nextNum}`;
-    } else {
-        param.officialNumber = `${sender}-${receiver}-T-${nextNum}`;
-    }
-
-    const letter = new this({ ...param });
+    const timestamp = new Timestamp({
+        regId: user.profile.username,
+        updId: user.profile.username
+    });
+    const letter = new this({ 
+        project,
+        letterGb,
+        reference,
+        letterTitle,
+        senderGb,
+        sender,
+        receiverGb,
+        receiver,
+        sendDate,
+        replyRequired,
+        targetDate,
+        officialNumber: letterGb === '01' ? `${senderCode}-${receiver}-E-${nextNum}` : `${receiverCode}-${receiver}-T-${nextNum}`,
+        memo,
+        timestamp
+    });
 
     await letter.save();
 
@@ -377,7 +406,8 @@ LetterSchema.statics.editLetter = async function (param) {
         sendDate,
         replyRequired,
         targetDate,
-        memo
+        memo,
+        user
     } = param;
 
     await this.findOneAndUpdate(
@@ -395,7 +425,10 @@ LetterSchema.statics.editLetter = async function (param) {
                 replyRequired,
                 targetDate,
                 memo,
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         }
     );
@@ -413,7 +446,8 @@ LetterSchema.statics.replyLetter = async function (param) {
     let {
         id,
         yn,
-        replyDate
+        replyDate,
+        user
     } = param;
 
     await this.findOneAndUpdate(
@@ -422,7 +456,10 @@ LetterSchema.statics.replyLetter = async function (param) {
             $set: {
                 replyYn: yn,
                 replyDate: yn === 'YES' ? replyDate : DEFINE.COMMON.MAX_END_DT,
-                'timestamp.uptDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         }
     );
@@ -439,7 +476,8 @@ LetterSchema.statics.cancelLetter = function (param) {
     let {
         id,
         yn,
-        reason
+        reason,
+        user
     } = param;
 
     return this.findOneAndUpdate(
@@ -451,7 +489,10 @@ LetterSchema.statics.cancelLetter = function (param) {
                     reason,
                     cancelDt: DEFINE.dateNow()
                 },
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {

@@ -7,6 +7,7 @@ import { expect } from 'chai';
 describe(clc.bgGreen(clc.black('[ Letter ]')), () => {
     let server;
     let projectId;
+    let accessToken;
     let id;
 
     before((done) => {
@@ -34,6 +35,49 @@ describe(clc.bgGreen(clc.black('[ Letter ]')), () => {
     describe('project preparation', () => {
         let projectGb;
         let major;
+
+        it('add user', (done) => {
+            request(server)
+                .post('/api/accounts')
+                .send({
+                    username: 'Tester',
+                    description: 'API Tester',
+                    userType: 'admin',
+                    userId: 'test',
+                    pwd: '1234',
+                    roles: [
+                        '5daeaefaef365b120bab0084',
+                        '5daeaefdef365b120bab0085'
+                    ]
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    expect(ctx.body.data.profile.username).to.equal('Tester');
+                    expect(ctx.body.data.profile.description).to.equal('API Tester');
+                    done();
+                });
+        });
+
+        it('login', (done) => {
+            request(server)
+                .post('/api/accounts/login')
+                .send({
+                    userId: 'test',
+                    pwd: '1234'
+                })
+                .expect(200)
+                .end((err, ctx) => {
+                    if(err) throw err;
+
+                    accessToken = ctx.res.headers['set-cookie'][0];
+
+                    expect(ctx.body.data).to.have.property('_id');
+                    expect(ctx.body.data).to.have.property('profile');
+                    done();
+                });
+        });
 
         it('add Part', (done) => {
             request(server)
@@ -115,6 +159,7 @@ describe(clc.bgGreen(clc.black('[ Letter ]')), () => {
                     receiver: '김형준 대리',
                     replyRequired: 'NO',
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -194,6 +239,7 @@ describe(clc.bgGreen(clc.black('[ Letter ]')), () => {
                     sendDate: '2019-09-22',
                     replyRequired: 'NO',
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -215,6 +261,7 @@ describe(clc.bgGreen(clc.black('[ Letter ]')), () => {
                     yn: 'YES',
                     replyDate: '2019-10-08'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -235,6 +282,7 @@ describe(clc.bgGreen(clc.black('[ Letter ]')), () => {
                     yn: 'YES',
                     reason: '잘못 작성됨.'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;

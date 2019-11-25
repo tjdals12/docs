@@ -111,6 +111,16 @@ export const search = async (ctx) => {
  * @description 공식문서 추가
  */
 export const add = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let {
         project,
         letterGb,
@@ -165,7 +175,8 @@ export const add = async (ctx) => {
             sendDate,
             replyRequired,
             targetDate,
-            memo
+            memo,
+            user
         });
 
         ctx.res.ok({
@@ -254,6 +265,16 @@ export const one = async (ctx) => {
  * @description 공식문서 수정
  */
 export const edit = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let {
         letterGb,
@@ -307,7 +328,8 @@ export const edit = async (ctx) => {
             sendDate,
             replyRequired,
             targetDate,
-            memo
+            memo,
+            user
         });
 
         ctx.res.ok({
@@ -328,6 +350,16 @@ export const edit = async (ctx) => {
  * @description 공식문서 회신
  */
 export const reply = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let { yn, replyDate } = ctx.request.body;
 
@@ -348,7 +380,12 @@ export const reply = async (ctx) => {
     }
 
     try {
-        const letter = await Letter.replyLetter({ id, yn, replyDate });
+        const letter = await Letter.replyLetter({ 
+            id, 
+            yn, 
+            replyDate, 
+            user
+        });
 
         ctx.res.ok({
             data: letter,
@@ -368,6 +405,16 @@ export const reply = async (ctx) => {
  * @description 공식문서 취소
  */
 export const cancel = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let { yn, reason } = ctx.request.body;
 
@@ -388,7 +435,12 @@ export const cancel = async (ctx) => {
     }
 
     try {
-        const letter = await Letter.cancelLetter({ id, yn, reason });
+        const letter = await Letter.cancelLetter({ 
+            id, 
+            yn, 
+            reason,
+            user
+        });
 
         ctx.res.ok({
             data: letter,
