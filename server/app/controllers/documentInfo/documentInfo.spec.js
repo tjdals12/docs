@@ -350,6 +350,7 @@ describe(clc.bgGreen(clc.black('[ Document Info ]')), () => {
                         }
                     ]
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;

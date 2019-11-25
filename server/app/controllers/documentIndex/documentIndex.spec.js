@@ -428,6 +428,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                         }
                     ]
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -466,7 +467,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
     });
 
     describe('GET /documentindexes/forselect', () => {
-        it('add documentIndexes for select', (done) => {
+        it('get documentIndexes for select', (done) => {
             request(server)
                 .get('/api/documentindexes/forselect')
                 .expect(200)
@@ -522,6 +523,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                         }
                     ]
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -573,6 +575,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     targetId: documentInfoId1,
                     reason: 'API 테스트 - 삭제'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -618,6 +621,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                         }
                     ]
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -640,6 +644,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
             request(server)
                 .patch(`/api/documentindexes/${id}/delete`)
                 .expect(200)
+                .set('Cookie', accessToken)
                 .end((err, ctx) => {
                     if (err) throw err;
 

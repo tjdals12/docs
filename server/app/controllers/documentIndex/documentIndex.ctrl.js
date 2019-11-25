@@ -159,6 +159,16 @@ export const readExcel = async (ctx) => {
  * @description 문서목록 생성
  */
 export const create = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { vendor, list } = ctx.request.body;
 
     const schema = Joi.object().keys({
@@ -190,7 +200,11 @@ export const create = async (ctx) => {
     }
 
     try {
-        const documentIndex = await DocumentIndex.saveDocumentIndex({ vendor, list });
+        const documentIndex = await DocumentIndex.saveDocumentIndex({ 
+            vendor, 
+            list, 
+            user
+        });
 
         ctx.res.ok({
             data: documentIndex,
@@ -210,6 +224,16 @@ export const create = async (ctx) => {
  * @description 문서목록 개별 추가
  */
 export const addPartial = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let { list } = ctx.request.body;
 
@@ -235,7 +259,11 @@ export const addPartial = async (ctx) => {
     }
 
     try {
-        const documentIndex = await DocumentIndex.addPartial({ id, list });
+        const documentIndex = await DocumentIndex.addPartial({
+            id,
+            list,
+            user
+        });
 
         ctx.res.ok({
             data: documentIndex,
@@ -362,6 +390,16 @@ export const trackingDocument = async (ctx) => {
  * @description 문서목록 수정
  */
 export const editDocumentIndex = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let { vendor, list, deleteList } = ctx.request.body;
 
@@ -396,7 +434,13 @@ export const editDocumentIndex = async (ctx) => {
     }
 
     try {
-        const documentIndex = await DocumentIndex.editDocumentIndex({ id, vendor, list, deleteList });
+        const documentIndex = await DocumentIndex.editDocumentIndex({ 
+            id, 
+            vendor, 
+            list, 
+            deleteList, 
+            user
+        });
 
         ctx.res.ok({
             data: documentIndex,
@@ -460,6 +504,16 @@ export const deleteDocumentIndex = async (ctx) => {
  * @description 문서정보 삭제
  */
 export const deleteDocumentInfo = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+    
     let { id } = ctx.params;
     let { targetId, reason } = ctx.request.body;
 
@@ -480,7 +534,12 @@ export const deleteDocumentInfo = async (ctx) => {
     }
 
     try {
-        const documentIndex = await DocumentIndex.deleteDocumentInfo(id, targetId, reason);
+        const documentIndex = await DocumentIndex.deleteDocumentInfo({
+            id, 
+            targetId, 
+            reason, 
+            user
+        });
 
         ctx.res.ok({
             data: documentIndex,
