@@ -330,12 +330,18 @@ VendorLetterSchema.statics.receiveVendorLetter = async function (param) {
         officialNumber,
         receiveDocuments,
         receiveDate,
-        targetDate
+        targetDate,
+        user
     } = param;
 
     vendor = await Vendor.findOne({ _id: vendor });
 
-    const receiveTimestamp = new Timestamp({ regId: DEFINE.COMMON.SYSTEM, regDt: receiveDate, updId: DEFINE.COMMON.SYSTEM, updDt: receiveDate });
+    const receiveTimestamp = new Timestamp({ 
+        regId: user.profile.username, 
+        regDt: receiveDate, 
+        updId: user.profile.username, 
+        updDt: receiveDate
+    });
 
     receiveDocuments = receiveDocuments.map(document => {
         return {
@@ -349,13 +355,29 @@ VendorLetterSchema.statics.receiveVendorLetter = async function (param) {
     });
 
     const documents = await Document.saveDocuments(receiveDocuments);
-    const vendorLetter = new this({ vendor, senderGb, sender, receiverGb, receiver, officialNumber, documents, receiveDate, targetDate });
+    const vendorLetter = new this({ 
+        vendor, 
+        senderGb, 
+        sender, 
+        receiverGb, 
+        receiver, 
+        officialNumber, 
+        documents, 
+        receiveDate, 
+        targetDate 
+    });
 
     await Vendor.updateOne(
         { _id: vendor._id },
         {
             $push: {
                 trackingTransmittal: vendorLetter._id
+            },
+            $set: {
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         }
     );
@@ -385,7 +407,8 @@ VendorLetterSchema.statics.editVendorLetter = async function (param) {
         officialNumber,
         deleteDocuments,
         receiveDate,
-        targetDate
+        targetDate,
+        user
     } = param;
 
     await Document.deleteMany({ _id: { $in: deleteDocuments } });
@@ -395,6 +418,12 @@ VendorLetterSchema.statics.editVendorLetter = async function (param) {
             {
                 $pull: {
                     trackingDocument: deleteDocuments[i]
+                },
+                $set: {
+                    timestamp: {
+                        updId: user.profile.username,
+                        updDt: DEFINE.dateNow()
+                    }
                 }
             }
         );
@@ -411,7 +440,11 @@ VendorLetterSchema.statics.editVendorLetter = async function (param) {
                 receiver,
                 officialNumber,
                 receiveDate,
-                targetDate
+                targetDate,
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             },
             $pullAll: {
                 documents: deleteDocuments
@@ -420,7 +453,9 @@ VendorLetterSchema.statics.editVendorLetter = async function (param) {
         {
             new: true
         }
-    ).populate({ path: 'vendor', populate: { path: 'part' } }).populate({ path: 'documents', populate: { path: 'part documentGb' } });
+    )
+        .populate({ path: 'vendor', populate: { path: 'part' } })
+        .populate({ path: 'documents', populate: { path: 'part documentGb' } });
 };
 
 /**
@@ -432,12 +467,18 @@ VendorLetterSchema.statics.addDocumentInVendorLetter = async function (param) {
     let {
         id,
         receiveDocuments,
-        receiveDate
+        receiveDate,
+        user
     } = param;
 
     const vendorLetter = await this.findOne({ _id: id }, { vendor: 1, officialNumber: 1 }).populate({ path: 'vendor' });
 
-    const receiveTimestamp = new Timestamp({ regId: DEFINE.COMMON.SYSTEM, regDt: receiveDate, updId: DEFINE.COMMON.SYSTEM, updDt: receiveDate });
+    const receiveTimestamp = new Timestamp({ 
+        regId: user.profile.username,
+        regDt: receiveDate, 
+        updId: user.profile.username,
+        updDt: receiveDate 
+    });
 
     receiveDocuments = receiveDocuments.map(document => {
         return {
@@ -457,12 +498,20 @@ VendorLetterSchema.statics.addDocumentInVendorLetter = async function (param) {
         {
             $push: {
                 documents: documents
+            },
+            $set: {
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {
             new: true
         }
-    ).populate({ path: 'vendor', populate: { path: 'part' } }).populate({ path: 'documents', populate: { path: 'part documentGb' } });
+    )
+        .populate({ path: 'vendor', populate: { path: 'part' } })
+        .populate({ path: 'documents', populate: { path: 'part documentGb' } });
 };
 
 /**
@@ -475,7 +524,8 @@ VendorLetterSchema.statics.deleteVendorLetter = async function (param) {
     let {
         id,
         yn,
-        reason
+        reason,
+        user
     } = param;
 
     const vendorLetter = await this.findOneAndUpdate(
@@ -487,7 +537,10 @@ VendorLetterSchema.statics.deleteVendorLetter = async function (param) {
                     deleteDt: DEFINE.dateNow(),
                     reason
                 },
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {
@@ -502,6 +555,10 @@ VendorLetterSchema.statics.deleteVendorLetter = async function (param) {
                 yn,
                 deleteDt: DEFINE.dateNow(),
                 reason
+            },
+            timestamp: {
+                updId: user.profile.username,
+                updDt: DEFINE.dateNow()
             }
         }
     );
@@ -532,17 +589,39 @@ VendorLetterSchema.statics.deleteVendorLetter = async function (param) {
  * @author      minz-logger
  * @date        2019. 08. 29
  * @description 업체 공식 문서 상태 변경
- * @param       {String} id
- * @param       {String} inOutGb
- * @param       {String} officialNumber
- * @param       {String} status
- * @param       {String} resultCode
- * @param       {String} replyCode
+ * @param       {Object} param
  */
-VendorLetterSchema.statics.inOutVendorLetter = async function (id, inOutGb, officialNumber, status, resultCode, replyCode, date) {
-    const timestamp = new Timestamp({ regDt: date });
-    const newInOut = new InOut({ inOutGb, officialNumber, timestamp });
-    const newStatus = new Status({ _id: newInOut._id, status, statusName: status, resultCode, replyCode, timestamp });
+VendorLetterSchema.statics.inOutVendorLetter = async function (param) {
+    let {
+        id,
+        inOutGb, 
+        officialNumber, 
+        status, 
+        resultCode, 
+        replyCode, 
+        date, 
+        user
+    } = param;
+
+    const timestamp = new Timestamp({ 
+        regId: user.profile.username,
+        regDt: date,
+        updId: user.profile.username,
+        updDt: date
+    });
+    const newInOut = new InOut({ 
+        inOutGb, 
+        officialNumber, 
+        timestamp
+    });
+    const newStatus = new Status({ 
+        _id: newInOut._id,
+        status, 
+        statusName: status, 
+        resultCode, 
+        replyCode, 
+        timestamp
+    });
 
     const vendorLetter = await this.findOne({ _id: id });
 
@@ -554,7 +633,10 @@ VendorLetterSchema.statics.inOutVendorLetter = async function (id, inOutGb, offi
                 documentStatus: newStatus
             },
             $set: {
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         }
     );
@@ -566,7 +648,10 @@ VendorLetterSchema.statics.inOutVendorLetter = async function (id, inOutGb, offi
                 letterStatus: newStatus
             },
             $set: {
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {
@@ -596,10 +681,14 @@ VendorLetterSchema.statics.inOutVendorLetter = async function (id, inOutGb, offi
  * @author      minz-logger
  * @date        2019. 08. 27
  * @description 업체 공식 문서 상태 삭제
- * @param       {String} id
- * @param       {String} targetId
+ * @param       {Object} param
  */
-VendorLetterSchema.statics.deleteInOut = async function (id, targetId) {
+VendorLetterSchema.statics.deleteInOut = async function (param) {
+    let {
+        id, 
+        targetId,
+        user
+    } = param;
 
     const vendorLetter = await this.findOne({ _id: id });
 
@@ -622,7 +711,10 @@ VendorLetterSchema.statics.deleteInOut = async function (id, targetId) {
                 }
             },
             $set: {
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         }
     );
@@ -633,6 +725,12 @@ VendorLetterSchema.statics.deleteInOut = async function (id, targetId) {
             $pull: {
                 letterStatus: {
                     _id: targetId
+                }
+            },
+            $set: {
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
                 }
             }
         },

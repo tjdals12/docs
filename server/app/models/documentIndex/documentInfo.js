@@ -209,9 +209,7 @@ DocumentInfoSchema.statics.saveDocumentInfos = async function (param) {
 
     const timestamp = new Timestamp({
         regId: user.profile.username,
-        regDt: DEFINE.dateNow(),
         updId: user.profile.username,
-        updDt: DEFINE.dateNow(),
     });
 
     for (let i = 0; i < list.length; i++) {

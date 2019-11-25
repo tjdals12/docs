@@ -415,7 +415,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
     });
 
     describe('POST /vendorletters', () => {
-        it('recevie vendor letter', (done) => {
+        it('receive vendor letter', (done) => {
             request(server)
                 .post('/api/vendorletters')
                 .send({
@@ -435,6 +435,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     receiveDate: '2019-08-24',
                     targetDate: '2019-09-07'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -544,6 +545,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     ],
                     receiveDate: '2019-11-23'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -579,6 +581,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     receiveDate: '2019-06-02',
                     targetDate: '2019-06-14'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -598,6 +601,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     inOutGb: '10',
                     status: '10'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -615,6 +619,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     status: '11',
                     resultCode: '01'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -633,6 +638,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     status: '20',
                     resultCode: '01'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -651,6 +657,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     status: '21',
                     resultCode: '02'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -667,6 +674,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     inOutGb: '12',
                     status: '30'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -684,6 +692,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     status: '31',
                     resultCode: '01'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -702,6 +711,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     status: '40',
                     resultCode: '01'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -720,6 +730,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     status: '41',
                     resultCode: '01'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -739,6 +750,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     resultCode: '01',
                     replyCode: '01'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -758,6 +770,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                 .send({
                     targetId: statusId
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -777,6 +790,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     yn: 'YES',
                     reason: 'API 테스트 - 삭제'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -795,6 +809,7 @@ describe(clc.bgGreen(clc.black('[ Vendor Letter ]')), () => {
                     yn: 'NO',
                     reason: 'API 테스트 - 삭제취소'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;

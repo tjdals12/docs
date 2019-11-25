@@ -264,6 +264,16 @@ export const oneOnlyDocuments = async (ctx) => {
  * @description 업체 공식 문서 접수
  */
 export const receive = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let {
         vendor,
         senderGb,
@@ -318,7 +328,8 @@ export const receive = async (ctx) => {
             officialNumber,
             receiveDocuments,
             receiveDate,
-            targetDate
+            targetDate,
+            user
         });
 
         ctx.res.ok({
@@ -339,6 +350,16 @@ export const receive = async (ctx) => {
  * @description 업체 공식 문서 수정
  */
 export const edit = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let {
         vendor,
@@ -395,7 +416,8 @@ export const edit = async (ctx) => {
             officialNumber,
             deleteDocuments,
             receiveDate,
-            targetDate
+            targetDate,
+            user
         });
 
         ctx.res.ok({
@@ -416,6 +438,16 @@ export const edit = async (ctx) => {
  * @description 업체 공식 문서에 문서 추가
  */
 export const addPartial = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let {
         receiveDocuments,
@@ -443,7 +475,12 @@ export const addPartial = async (ctx) => {
     }
 
     try {
-        const vendorLetter = await VendorLetter.addDocumentInVendorLetter({ id, receiveDocuments, receiveDate });
+        const vendorLetter = await VendorLetter.addDocumentInVendorLetter({ 
+            id, 
+            receiveDocuments, 
+            receiveDate,
+            user
+        });
 
         ctx.res.ok({
             data: vendorLetter,
@@ -463,6 +500,16 @@ export const addPartial = async (ctx) => {
  * @description 업체 공식 문서 삭제
  */
 export const deleteVendorLetter = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let { yn, reason } = ctx.request.body;
 
@@ -483,7 +530,12 @@ export const deleteVendorLetter = async (ctx) => {
     }
 
     try {
-        const vendorLetter = await VendorLetter.deleteVendorLetter({ id, yn, reason });
+        const vendorLetter = await VendorLetter.deleteVendorLetter({ 
+            id, 
+            yn, 
+            reason, 
+            user
+        });
 
         ctx.res.ok({
             data: vendorLetter,
@@ -503,6 +555,16 @@ export const deleteVendorLetter = async (ctx) => {
  * @description 업체 공식 문서 상태 변경
  */
 export const inOut = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+    
     const { id } = ctx.params;
     const { inOutGb, officialNumber, status, resultCode, replyCode, date } = ctx.request.body;
 
@@ -527,9 +589,16 @@ export const inOut = async (ctx) => {
     }
 
     try {
-        console.time('inOut');
-        const vendorLetter = await VendorLetter.inOutVendorLetter(id, inOutGb, officialNumber, status, resultCode, replyCode, date);
-        console.timeEnd('inOut');
+        const vendorLetter = await VendorLetter.inOutVendorLetter({
+            id, 
+            inOutGb, 
+            officialNumber, 
+            status, 
+            resultCode, 
+            replyCode, 
+            date,
+            user
+        });
 
         ctx.res.ok({
             data: vendorLetter,
@@ -549,6 +618,16 @@ export const inOut = async (ctx) => {
  * @description 업체 공식 문서 상태 삭제
  */
 export const deleteInOut = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let { targetId } = ctx.request.body;
 
@@ -568,9 +647,11 @@ export const deleteInOut = async (ctx) => {
     }
 
     try {
-        console.time('inOut Delete');
-        const vendorLetter = await VendorLetter.deleteInOut(id, targetId);
-        console.timeEnd('inOut Delete');
+        const vendorLetter = await VendorLetter.deleteInOut({
+            id, 
+            targetId, 
+            user
+        });
 
         ctx.res.ok({
             data: vendorLetter,

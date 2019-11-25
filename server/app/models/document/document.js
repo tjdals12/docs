@@ -271,8 +271,21 @@ DocumentSchema.statics.saveDocument = async function (param) {
     } = param;
 
     const documentInOut = new InOut({ officialNumber });
-    const timestamp = new Timestamp({ regId: user.profile.username, updId: user.profile.username });
-    const document = new this({ vendor, part, documentNumber, documentTitle, documentGb, documentRev, documentInOut, memo, timestamp });
+    const timestamp = new Timestamp({ 
+        regId: user.profile.username, 
+        updId: user.profile.username
+    });
+    const document = new this({ 
+        vendor, 
+        part, 
+        documentNumber, 
+        documentTitle, 
+        documentGb, 
+        documentRev, 
+        documentInOut, 
+        memo, 
+        timestamp
+    });
 
     await document.save();
 
@@ -334,7 +347,18 @@ DocumentSchema.statics.saveDocuments = async function (param) {
 
         const documentInOut = new InOut({ officialNumber, timestamp });
         const documentStatus = new Status({ timestamp });
-        targets.push(new this({ vendor, part, documentNumber, documentTitle, documentGb, documentRev, documentInOut, documentStatus, memo, timestamp }));
+        targets.push(new this({ 
+            vendor, 
+            part, 
+            documentNumber, 
+            documentTitle, 
+            documentGb, 
+            documentRev, 
+            documentInOut, 
+            documentStatus, 
+            memo, 
+            timestamp 
+        }));
     }
 
     if (fails.length > 0) throw fails;
@@ -536,17 +560,38 @@ DocumentSchema.statics.inOutDocument = function (param) {
 /**
  * @author minz-logger
  * @description 문서 In / Out
- * @param       {String} id
- * @param       {String} inOutGb
- * @param       {String} officialNumber
- * @param       {String} status
- * @param       {String} resultCode
- * @param       {String} replyCode
+ * @param       {Object} param
  */
-DocumentSchema.statics.inOutDocuments = function (ids, inOutGb, officialNumber, status, resultCode, replyCode, date) {
-    const timestamp = new Timestamp({ regDt: date });
-    const newInOut = new InOut({ inOutGb, officialNumber, timestamp });
-    const newStatus = new Status({ status, statusName: status, resultCode, replyCode, timestamp });
+DocumentSchema.statics.inOutDocuments = function (param) {
+    let {
+        ids, 
+        inOutGb, 
+        officialNumber, 
+        status, 
+        resultCode, 
+        replyCode, 
+        date, 
+        user
+    } = param;
+
+    const timestamp = new Timestamp({ 
+        regId: user.profile.username,
+        regDt: date,
+        updId: user.profile.username,
+        updDt: date,
+    });
+    const newInOut = new InOut({ 
+        inOutGb, 
+        officialNumber, 
+        timestamp
+    });
+    const newStatus = new Status({ 
+        status, 
+        statusName: status, 
+        resultCode, 
+        replyCode, 
+        timestamp
+    });
 
     return this.updateMany(
         { _id: { $in: ids } },
@@ -556,7 +601,10 @@ DocumentSchema.statics.inOutDocuments = function (ids, inOutGb, officialNumber, 
                 documentStatus: newStatus
             },
             $set: {
-                'timestamp.updDt': DEFINE.dateNow()
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         }
     );

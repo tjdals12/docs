@@ -165,9 +165,7 @@ DocumentIndexSchema.statics.saveDocumentIndex = async function (param) {
 
     const timestamp = new Timestamp({
         regId: user.profile.username,
-        regDt: DEFINE.dateNow(),
         updId: user.profile.username,
-        updDt: DEFINE.dateNow(),
     });
 
     const documentIndex = new this({ 
