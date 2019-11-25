@@ -39,6 +39,8 @@ const DocumentInfoSchema = new Schema({
     }
 });
 
+DocumentInfoSchema.set('toJSON', { getters: true });
+
 /**
  * @author      minz-logger
  * @date        2019. 08. 26

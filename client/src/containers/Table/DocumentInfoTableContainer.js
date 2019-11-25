@@ -67,12 +67,11 @@ class DocumentInfoTableContainer extends React.Component {
 	}
 
 	render() {
-		const { infos, page, lastPage, checkedList, loading } = this.props;
-
-		if (loading || loading === undefined) return null;
+		const { infos, page, lastPage, checkedList, loading, searchLoading } = this.props;
 
 		return (
 			<DocumentInfoTable
+				loading={loading || searchLoading}
 				page={page}
 				lastPage={lastPage}
 				data={infos}
@@ -98,7 +97,8 @@ export default connect(
 		isSearch: state.info.getIn([ 'search', 'isSearch' ]),
 		search: state.info.get('search'),
 		checkedList: state.info.get('checkedList'),
-		loading: state.pender.pending['info/GET_INFOS']
+		loading: state.pender.pending['info/GET_INFOS'],
+		searchLoading: state.pender.pending['info/SEARCH_INFOS']
 	}),
 	(dispatch) => ({
 		VendorLetterActions: bindActionCreators(vendorLetterActions, dispatch),

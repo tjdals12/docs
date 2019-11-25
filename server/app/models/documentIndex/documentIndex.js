@@ -23,6 +23,8 @@ const DocumentIndexSchema = new Schema({
     }
 });
 
+DocumentIndexSchema.set('toJSON', { getters: true });
+
 /**
  * @author      minz-logger
  * @date        2019. 08. 17

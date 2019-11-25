@@ -3,25 +3,33 @@ import { Row, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 import VendorCard from 'components/Card/VendorCard';
 import Pagination from 'components/Pagination';
+import Loader from 'components/Loader';
 
-const VendorList = ({ page, lastPage, data, onPage, onOpenDetail }) => {
+const VendorList = ({ loading, page, lastPage, data, onPage, onOpenDetail }) => {
 	return (
 		<React.Fragment>
-			<Row>
-				{data.map((vendor, index) => (
-					<Col xs={12} md={6} lg={3} className="mb-4" key={index}>
-						<VendorCard vendor={vendor} onOpen={onOpenDetail(vendor.get('_id'))} />
-					</Col>
-				))}
-			</Row>
-			<Pagination
-				currentPage={page}
-				lastPage={lastPage}
-				onPage={onPage}
-				size="md"
-				aria-label="Page navigation"
-				listClassName="flex-row justify-content-end ml-auto"
-			/>
+			{loading && <Loader size={20} margin={10} />}
+
+			{!loading && (
+				<Row>
+					{data.map((vendor, index) => (
+						<Col xs={12} md={6} lg={3} className="mb-4" key={index}>
+							<VendorCard vendor={vendor} onOpen={onOpenDetail(vendor.get('_id'))} />
+						</Col>
+					))}
+				</Row>
+			)}
+
+			{!loading && (
+				<Pagination
+					currentPage={page}
+					lastPage={lastPage}
+					onPage={onPage}
+					size="md"
+					aria-label="Page navigation"
+					listClassName="flex-row justify-content-end ml-auto"
+				/>
+			)}
 		</React.Fragment>
 	);
 };

@@ -57,7 +57,6 @@ const DocumentSchema = new Schema({
 });
 
 DocumentSchema.set('toJSON', { getters: true });
-DocumentSchema.index({ 'timestamp.regDt': 1 });
 
 /**
  * @author      minz-logger

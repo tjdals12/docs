@@ -1,6 +1,6 @@
-version: '3'
+version: "3"
 services:
-  server1:
+  server:
     container_name: server1
     build:
       dockerfile: Dockerfile.env
@@ -19,50 +19,6 @@ services:
       - DB_URI=mongodb://mongo:27017/admin
       - DB_USER=docs
       - DB_PASS=1205360
-    volumes:  
-      - ~/app/aws:/app/app/aws
-  server2:
-    container_name: server2
-    build:
-      dockerfile: Dockerfile.env
-      context: ./server
-    restart: always
-    ports:
-      - 4001:4000
-    networks:
-      - backend
-    environment:
-      - APP_NAME=docs-backend
-      - APP_HOST=127.0.0.1
-      - APP_PORT=4000
-      - LOG_ENABLED=true
-      - LOG_LEVEL=all
-      - DB_URI=mongodb://mongo:27017/admin
-      - DB_USER=docs
-      - DB_PASS=1205360
-    volumes:  
-      - ~/app/aws:/app/app/aws
-  server3:
-    container_name: server3
-    build:
-      dockerfile: Dockerfile.env
-      context: ./server
-    restart: always
-    ports:
-      - 4002:4000
-    networks:
-      - backend
-    environment:
-      - APP_NAME=docs-backend
-      - APP_HOST=127.0.0.1
-      - APP_PORT=4000
-      - LOG_ENABLED=true
-      - LOG_LEVEL=all
-      - DB_URI=mongodb://mongo:27017/admin
-      - DB_USER=docs
-      - DB_PASS=1205360
-    volumes:  
-      - ~/app/aws:/app/app/aws
   client:
     container_name: client
     build:

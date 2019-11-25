@@ -237,7 +237,7 @@ export const one = async (ctx) => {
         const letter = await Letter.letterDetail(id);
 
         ctx.res.ok({
-            data: letter[0],
+            data: letter,
             message: 'Success - letterCtrl > one'
         });
     } catch (e) {
@@ -311,7 +311,7 @@ export const edit = async (ctx) => {
         });
 
         ctx.res.ok({
-            data: letter[0],
+            data: letter,
             message: 'Success - letterCtrl > edit'
         });
     } catch (e) {
@@ -351,7 +351,7 @@ export const reply = async (ctx) => {
         const letter = await Letter.replyLetter({ id, yn, replyDate });
 
         ctx.res.ok({
-            data: letter[0],
+            data: letter,
             message: 'Success - letterCtrl > reply'
         });
     } catch (e) {

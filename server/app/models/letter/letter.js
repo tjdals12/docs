@@ -345,7 +345,18 @@ LetterSchema.statics.letterDetail = function (id) {
         {
             $limit: 1
         }
-    ]);
+    ]).then(response => {
+        const letter = response[0];
+
+        return {
+            ...letter,
+            timestamp: {
+                ...letter.timestamp,
+                regDt: DEFINE.dateConverter(letter.timestamp.regDt),
+                updDt: DEFINE.dateConverter(letter.timestamp.updDt),
+            }
+        };
+    });
 };
 
 /**

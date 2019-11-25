@@ -56,11 +56,9 @@ class DocumentTableContainer extends React.Component {
 	render() {
 		const { documents, checkedList, lastPage, page, loading, searchLoading } = this.props;
 
-		if (loading || loading === undefined) return null;
-
 		return (
 			<DocumentTable
-				loading={searchLoading}
+				loading={loading || searchLoading}
 				page={page}
 				lastPage={lastPage}
 				documents={documents.toJS()}
