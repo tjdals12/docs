@@ -7,6 +7,16 @@ import Joi from 'joi';
  * @description 팀 생성
  */
 export const create = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let {
         part,
         teamName
@@ -29,7 +39,11 @@ export const create = async (ctx) => {
     }
 
     try {
-        const team = await Team.createTeam({ part, teamName });
+        const team = await Team.createTeam({ 
+            part, 
+            teamName, 
+            user
+        });
 
         ctx.res.ok({
             data: team,
@@ -136,6 +150,16 @@ export const one = async (ctx) => {
  * @description 팀 수정
  */
 export const edit = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let { part, teamName } = ctx.request.body;
 
@@ -156,7 +180,12 @@ export const edit = async (ctx) => {
     }
 
     try {
-        const team = await Team.editTeam({ id, part, teamName });
+        const team = await Team.editTeam({ 
+            id, 
+            part, 
+            teamName, 
+            user
+        });
 
         ctx.res.ok({
             data: team,
@@ -176,6 +205,16 @@ export const edit = async (ctx) => {
  * @description 팀 삭제
  */
 export const deleteTeam = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
 
     try {
@@ -200,8 +239,8 @@ export const deleteTeam = async (ctx) => {
 };
 
 /**
- * @author minz-logger
- * @date 2019. 10. 29
+ * @author      minz-logger
+ * @date        2019. 10. 29
  * @description 담당자 조회
  */
 export const oneManager = async (ctx) => {
@@ -228,7 +267,18 @@ export const oneManager = async (ctx) => {
  * @description 담당자 추가
  */
 export const add = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
+
     let {
         name,
         position,
@@ -255,7 +305,14 @@ export const add = async (ctx) => {
     }
 
     try {
-        const team = await Team.addManager({ id, name, position, effStaDt, effEndDt });
+        const team = await Team.addManager({ 
+            id, 
+            name, 
+            position, 
+            effStaDt, 
+            effEndDt,
+            user
+        });
 
         ctx.res.ok({
             data: team,
@@ -275,6 +332,16 @@ export const add = async (ctx) => {
  * @description 담당자 수정
  */
 export const editManager = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let { managerId, name, position, effStaDt, effEndDt } = ctx.request.body;
 
@@ -298,7 +365,15 @@ export const editManager = async (ctx) => {
     }
 
     try {
-        const team = await Team.editManager({ id, managerId, name, position, effStaDt, effEndDt });
+        const team = await Team.editManager({ 
+            id, 
+            managerId, 
+            name, 
+            position, 
+            effStaDt, 
+            effEndDt,
+            user
+        });
 
         ctx.res.ok({
             data: team,
@@ -318,6 +393,16 @@ export const editManager = async (ctx) => {
  * @description 담당자 삭제
  */
 export const deleteManager = async (ctx) => {
+    const { user } = ctx.request;
+
+    if(!user) {
+        ctx.res.forbidden({
+            message: 'Authentication failed'
+        });
+
+        return;
+    }
+
     let { id } = ctx.params;
     let { managerId } = ctx.request.body;
 
@@ -337,7 +422,11 @@ export const deleteManager = async (ctx) => {
     }
 
     try {
-        const team = await Team.deleteManager({ id, managerId });
+        const team = await Team.deleteManager({ 
+            id, 
+            managerId ,
+            user
+        });
 
         ctx.res.ok({
             data: team,

@@ -147,6 +147,7 @@ describe(clc.bgGreen(clc.black('[ Team ]')), () => {
                     part: part1,
                     teamName: '기계설계팀'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -185,6 +186,7 @@ describe(clc.bgGreen(clc.black('[ Team ]')), () => {
                     part: part2,
                     teamName: '장치설계팀'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -223,6 +225,7 @@ describe(clc.bgGreen(clc.black('[ Team ]')), () => {
                     effStaDt: '2019-10-26',
                     effEndDt: '9999-12-31'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -250,6 +253,7 @@ describe(clc.bgGreen(clc.black('[ Team ]')), () => {
                     effStaDt: '2019-10-29',
                     effEndDt: '2019-12-23'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;

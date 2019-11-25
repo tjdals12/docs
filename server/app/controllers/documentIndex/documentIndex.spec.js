@@ -239,6 +239,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     part: part,
                     teamName: '기계설계팀'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;
@@ -262,6 +263,7 @@ describe(clc.bgGreen(clc.black('[ Document Index ]')), () => {
                     effStaDt: '2019-10-26',
                     effEndDt: '9999-12-31'
                 })
+                .set('Cookie', accessToken)
                 .expect(200)
                 .end((err, ctx) => {
                     if (err) throw err;

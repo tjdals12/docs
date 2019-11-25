@@ -1,5 +1,6 @@
 import { Schema, model, Types } from 'mongoose';
 import { Timestamp } from 'models/common/schema';
+import DEFINE from 'models/common';
 import Manager from './manager';
 
 /**
@@ -33,14 +34,24 @@ const TeamSchema = new Schema({
 TeamSchema.statics.createTeam = async function (params) {
     let {
         part,
-        teamName
+        teamName,
+        user
     } = params;
 
-    const team = new this({ part, teamName });
+    const timestamp = new Timestamp({
+        regId: user.profile.username,
+        updId: user.profile.username
+    });
+    const team = new this({ 
+        part, 
+        teamName,
+        timestamp
+    });
 
     await team.save();
 
-    return this.findOne({ _id: team._id }).populate({ path: 'part' });
+    return this.findOne({ _id: team._id })
+        .populate({ path: 'part' });
 };
 
 /**
@@ -52,7 +63,8 @@ TeamSchema.statics.editTeam = function (params) {
     let {
         id,
         part,
-        teamName
+        teamName,
+        user
     } = params;
 
     return this.findOneAndUpdate(
@@ -60,7 +72,11 @@ TeamSchema.statics.editTeam = function (params) {
         {
             $set: {
                 part,
-                teamName
+                teamName,
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {
@@ -75,6 +91,7 @@ TeamSchema.statics.editTeam = function (params) {
  * @author      minz-logger
  * @date        2019. 10. 28
  * @description 팀 삭제
+ * @param       {String} id
  */
 TeamSchema.statics.deleteTeam = async function (id) {
     const team = await this.findOne({ _id: id });
@@ -146,16 +163,29 @@ TeamSchema.statics.addManager = async function (params) {
         name,
         position,
         effStaDt,
-        effEndDt
+        effEndDt,
+        user
     } = params;
 
-    const { _id } = await Manager.saveManager({ name, position, effStaDt, effEndDt });
+    const { _id } = await Manager.saveManager({ 
+        name, 
+        position, 
+        effStaDt, 
+        effEndDt, 
+        user
+    });
 
     return this.findOneAndUpdate(
         { _id: id },
         {
             $push: {
                 managers: _id
+            },
+            $set: {
+                timestamp: {
+                    updId: user.profile.username,
+                    updDt: DEFINE.dateNow()
+                }
             }
         },
         {
@@ -170,19 +200,27 @@ TeamSchema.statics.addManager = async function (params) {
  * @author      minz-logger
  * @date        2019. 10. 27
  * @description 담당자 수정
- * @param       {Object} params
+ * @param       {Object} param
  */
-TeamSchema.statics.editManager = async function (params) {
+TeamSchema.statics.editManager = async function (param) {
     let {
         id,
         managerId,
         name,
         position,
         effStaDt,
-        effEndDt
-    } = params;
+        effEndDt,
+        user
+    } = param;
 
-    await Manager.editManager({ managerId, name, position, effStaDt, effEndDt });
+    await Manager.editManager({ 
+        managerId, 
+        name, 
+        position, 
+        effStaDt, 
+        effEndDt,
+        user
+    });
 
     return this.findOne({ _id: id })
         .populate({ path: 'part' })
@@ -193,17 +231,26 @@ TeamSchema.statics.editManager = async function (params) {
  * @author      minz-logger
  * @date        2019. 10. 28
  * @description 담당자 삭제
+ * @param       {Object} param
  */
-TeamSchema.statics.deleteManager = async function (params) {
-    let { id, managerId } = params;
+TeamSchema.statics.deleteManager = async function (param) {
+    let { 
+        id, 
+        managerId,
+        user
+    } = param;
 
-    await Manager.deleteManager(managerId);
+    await Manager.deleteManager({ id: managerId, user});
 
     return this.findOneAndUpdate(
         { _id: id },
         {
             $pull: {
                 managers: managerId
+            },
+            $set: {
+                updId: user.profile.username,
+                updDt: DEFINE.dateNow()
             }
         },
         {
