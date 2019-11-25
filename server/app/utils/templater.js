@@ -1,4 +1,3 @@
-import path from 'path';
 import stream from 'stream';
 import Pizzip from 'pizzip';
 import Docxtemplater from 'docxtemplater';

@@ -17,6 +17,7 @@ const storage = multer.diskStorage({
 });
 
 export const localUploader = multer({ storage: storage });
+export const memoryUploader = multer({ storage: multer.memoryStorage() });
 
 // S3 Storage
 const storageS3 = multerS3({

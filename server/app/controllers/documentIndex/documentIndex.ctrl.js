@@ -124,8 +124,10 @@ export const search = async (ctx) => {
  * @description 엑셀 읽기
  */
 export const readExcel = async (ctx) => {
+    const { buffer } = ctx.req.file;
+
     try {
-        const workbook = XLSX.readFile(ctx.req.file.path);
+        const workbook = XLSX.read(buffer, { type: 'buffer' });
         const excelData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {
             header: ['documentNumber', 'documentTitle', 'plan']
         });
