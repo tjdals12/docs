@@ -199,7 +199,7 @@ const VendorLetterDetailModal = ({
 							<td colSpan={4}>
 								<InfiniteLoader
 									isRowLoaded={({ index }) => !!documents[index]}
-									loadMoreRows={({ stopIndex }) => onMoreDocuments(data.get('_id'), stopIndex)}
+									loadMoreRows={({ startIndex }) => onMoreDocuments(data.get('_id'), startIndex)}
 									rowCount={documentsCount}
 								>
 									{({ onRowsRendered, registerChild }) => (

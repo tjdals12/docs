@@ -16,7 +16,7 @@ class DocumentInfoDetailTableContainer extends React.Component {
 	getVendorLetter = (id) => {
 		const { VendorLetterActions } = this.props;
 
-		VendorLetterActions.getVendorLetter({ id });
+		VendorLetterActions.getVendorLetter(id);
 	};
 
 	handleOpen = ({ id }) => async () => {

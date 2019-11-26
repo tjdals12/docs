@@ -6,10 +6,10 @@ import * as indexesActions from 'store/modules/indexes';
 import Loader from 'components/Loader';
 
 class DocumentIndexOverallCardContainer extends React.Component {
-	getIndexOverall = () => {
+	getIndexOverall = async () => {
 		const { IndexesActions, id } = this.props;
 
-		IndexesActions.getIndexOverall({ id });
+		await IndexesActions.getIndexOverall(id);
 	};
 
 	componentDidMount() {

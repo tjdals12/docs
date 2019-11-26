@@ -198,7 +198,7 @@ export const one = async (ctx) => {
             .populate({ path: 'vendor', select: '_id vendorName partNumber part', populate: 'part' })
             .populate({ 
                 path: 'documents',
-                select: '_id, documentNumber documentTitle documentStatus timestamp'
+                select: '_id, documentNumber documentTitle documentRev documentStatus timestamp'
             });
 
         ctx.set('documentsCount', documentsCount);
@@ -244,7 +244,10 @@ export const oneOnlyDocuments = async (ctx) => {
                     documents: { $slice: [skip, 20] },
                 }
             )
-            .populate({ path: 'documents', select: '_id documentNumber documentTitle documentStatus timestamp' });
+            .populate({
+                path: 'documents',
+                select: '_id documentNumber documentTitle documentRev documentStatus timestamp'
+            });
 
         ctx.res.ok({
             data: documents,

@@ -11,7 +11,7 @@ class DocumentInfoCardContainer extends React.Component {
 	getTrackingDocument = async (page) => {
 		const { IndexesActions, id, history } = this.props;
 
-		await IndexesActions.getTrackingDocument({ id, page: page });
+		await IndexesActions.getTrackingDocument(id, page);
 		history.push(`/indexes/detail?id=${id}&page=${page}`);
 	};
 

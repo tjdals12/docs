@@ -105,6 +105,7 @@ const DocumentInfoAddModal = ({
 
 								return <span className={`${isError ? 'text-danger title-font' : 'font-weight-bold'} font-italic`}>{rowIndex + 1}.</span>
 							}}
+							width={width * 0.05}
 						/>
 						<VirtualColumn
 							label="문서번호"

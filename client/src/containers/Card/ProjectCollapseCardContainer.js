@@ -11,17 +11,17 @@ class ProjectCollapseCardContainer extends React.Component {
 		isOpen: false
 	};
 
-	getCmcodes = (major) => {
+	getCmcodes = async (major) => {
 		const { CmcodeActions } = this.props;
 
-		CmcodeActions.getCmcodeByMajor({ major: major });
+		await CmcodeActions.getCmcodeByMajor({ major: major });
 	};
 
 	getProjects = async (page) => {
 		const { ProjectActions } = this.props;
 
+		await ProjectActions.getProjects(page);
 		ProjectActions.onChange({ name: 'page', value: page });
-		await ProjectActions.getProjects({ page });
 	};
 
 	handleToggle = () => {
@@ -81,9 +81,9 @@ class ProjectCollapseCardContainer extends React.Component {
 			memo
 		} = project.toJS();
 
-		await ProjectActions.editProject({
-			id: _id,
-			param: {
+		await ProjectActions.editProject(
+			_id,
+			{
 				projectGb,
 				projectName,
 				projectCode,
@@ -94,8 +94,7 @@ class ProjectCollapseCardContainer extends React.Component {
 				contractor,
 				contractorCode,
 				memo
-			}
-		});
+			});
 
 		this.getProjects(page);
 	};
@@ -103,14 +102,14 @@ class ProjectCollapseCardContainer extends React.Component {
 	handleDelete = async (id, yn) => {
 		const { ProjectActions, page } = this.props;
 
-		await ProjectActions.deleteProject({ id, yn });
+		await ProjectActions.deleteProject(id, { yn });
 		this.getProjects(page);
 	}
 
 	handleMainProject = async (id) => {
 		const { ProjectActions, page } = this.props;
 
-		await ProjectActions.changeMainProject({ id });
+		await ProjectActions.changeMainProject(id);
 		this.getProjects(page);
 	}
 

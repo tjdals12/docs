@@ -8,16 +8,16 @@ import * as indexesActions from 'store/modules/indexes';
 import Loader from 'components/Loader';
 
 class TransmittalCardContainer extends React.Component {
-	getVendorLetter = (id) => {
+	getVendorLetter = async (id) => {
 		const { VendorLetterActions } = this.props;
 
-		VendorLetterActions.getVendorLetter({ id });
+		await VendorLetterActions.getVendorLetter(id);
 	};
 
-	getVendorLetters = () => {
+	getVendorLetters = async () => {
 		const { VendorLetterActions, vendor } = this.props;
 
-		VendorLetterActions.getVendorLettersByVendor({ vendor });
+		await VendorLetterActions.getVendorLettersByVendor(vendor);
 	};
 
 	handleOpenTransmittalDetail = async (id) => {

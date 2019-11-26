@@ -70,7 +70,7 @@ class DocumentInfoAddModalContainer extends React.Component {
 	handleAddInfo = async () => {
 		const { IndexesActions, target, infos } = this.props;
 
-		await IndexesActions.addPartial({ id: target, list: infos });
+		await IndexesActions.addPartial(target, { list: infos });
 		this.handleClose();
 	};
 

@@ -38,7 +38,7 @@ class LetterDetailModalContainer extends React.Component {
 		if (name === 'documentDetail') {
 			await DocumentActions.getDocument({ id });
 		} else if (name === 'vendorLetterDetail') {
-			await VendorLetterActions.getVendorLetter({ id });
+			await VendorLetterActions.getVendorLetter(id);
 		}
 
 		ModalActions.open(name);
@@ -58,7 +58,7 @@ class LetterDetailModalContainer extends React.Component {
 	handleCancel = (yn) => () => {
 		const { LetterActions, id, reason } = this.props;
 
-		LetterActions.cancelLetter({ id, yn, reason });
+		LetterActions.cancelLetter(id, { yn, reason });
 	};
 
 	handleDownload = (id) => () => {
@@ -70,7 +70,7 @@ class LetterDetailModalContainer extends React.Component {
 	handleReply = (id, yn) => () => {
 		const { LetterActions, replyDate } = this.props;
 
-		LetterActions.replyLetter({ id, yn, replyDate });
+		LetterActions.replyLetter(id, { yn, replyDate });
 	}
 
 	componentDidUpdate(prevProps, prevState) {

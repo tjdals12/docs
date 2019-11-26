@@ -6,10 +6,10 @@ import * as vendorLetterActions from 'store/modules/vendorLetter';
 import Loader from 'components/Loader';
 
 class StatisticsByTransmittalBarChartCardContainer extends React.Component {
-	getStatisticsByTransmittal = () => {
+	getStatisticsByTransmittal = async () => {
 		const { VendorLetterActions, vendor } = this.props;
 
-		VendorLetterActions.statisticsByTransmittal({ vendor });
+		await VendorLetterActions.statisticsByTransmittal(vendor);
 	};
 
 	componentDidMount() {

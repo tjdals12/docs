@@ -11,23 +11,23 @@ class AccountsCopllapseCardContainer extends React.Component {
         isOpen: false
     }
 
-    getRoles = () => {
+    getRoles = async () => {
         const { RoleActions } = this.props;
 
-        RoleActions.getRoles();
+        await RoleActions.getRoles();
     }
 
-    getUsers = (page) => {
+    getUsers = async (page) => {
         const { AccountActions } = this.props;
 
+        await AccountActions.getUsers(page);
         AccountActions.onChange({ name: 'page', value: page })
-        AccountActions.getUsers(page);
     }
 
-    getUser = (id) => {
+    getUser = async (id) => {
         const { AccountActions } = this.props;
 
-        AccountActions.getUser({ id });
+        await AccountActions.getUser(id);
     }
 
     handleToggle = () => {
@@ -72,7 +72,7 @@ class AccountsCopllapseCardContainer extends React.Component {
     handleEdit = async (id) => {
         const { AccountActions, edit, page } = this.props;
 
-        await AccountActions.editUser({ id, param: { ...edit.toJS() } });
+        await AccountActions.editUser(id, edit.toJS());
         AccountActions.initialize('errors');
         this.getUsers(page);
         this.getUser(id);
@@ -81,7 +81,7 @@ class AccountsCopllapseCardContainer extends React.Component {
     handleDelete = async (id, yn) => {
         const { AccountActions, page } = this.props;
 
-        await AccountActions.deleteUser({ id, param: { yn } });
+        await AccountActions.deleteUser(id, yn);
         this.getUsers(page);
         this.getUser(id);
     }

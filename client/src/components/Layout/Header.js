@@ -87,13 +87,18 @@ class Header extends React.Component {
 					<NavItem className="d-inline-flex">
 						<NavLink id="Popover1" className="position-relative">
 							{this.state.isNotificationsConfirmed ? (
-								<MdNotificationsNone size={25} className="can-click text-secondary" />
+								<MdNotificationsNone 
+									size={25}
+									className="can-click text-secondary" 
+									onClick={this.toggleNotificationPopover}
+								/>
 							) : (
-									<MdNotificationsActiveWithBadge
-										size={25}
-										className="can-click text-secondary swing animated infinite"
-									/>
-								)}
+								<MdNotificationsActiveWithBadge
+									size={25}
+									className="can-click text-secondary swing animated infinite"
+									onClick={this.toggleNotificationPopover}
+								/>
+							)}
 						</NavLink>
 						<Popover
 							placement="bottom"

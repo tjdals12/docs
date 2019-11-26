@@ -13,17 +13,17 @@ class TemplateCollapseCardContainer extends React.Component {
 		isOpen: false
 	};
 
-	getCmcodes = (major) => {
+	getCmcodes = async (major) => {
 		const { CmcodeActions } = this.props;
 
-		CmcodeActions.getCmcodeByMajor({ major: major });
+		await CmcodeActions.getCmcodeByMajor({ major: major });
 	};
 
-	getTemplates = (page) => {
+	getTemplates = async (page) => {
 		const { TemplateActions } = this.props;
 
+		await TemplateActions.getTemplates(page);
 		TemplateActions.onChange({ name: 'page', value: page });
-		TemplateActions.getTemplates({ page });
 	};
 
 	handleToggle = () => {
@@ -110,24 +110,23 @@ class TemplateCollapseCardContainer extends React.Component {
 
 		const { _id, templateGb, templateName, templateType, templatePath, templateDescription } = template.toJS();
 
-		await TemplateActions.editTemplate({
-			id: _id,
-			param: {
+		await TemplateActions.editTemplate(
+			_id,
+			{
 				templateGb,
 				templateName,
 				templateType,
 				templatePath,
 				templateDescription
-			}
-		});
+			});
 
 		this.getTemplates(1);
 	};
 
-	handleDelete = (id) => {
+	handleDelete = async (id) => {
 		const { TemplateActions } = this.props;
 
-		TemplateActions.deleteTemplate({ id });
+		await TemplateActions.deleteTemplate(id);
 		TemplateActions.initialize('template');
 		this.getTemplates(1);
 		this.handleCloseModal('question')();

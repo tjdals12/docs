@@ -12,23 +12,23 @@ class ManagerCollaseCardContainer extends React.Component {
         isOpen: false
     }
 
-    getCmcodes = (major) => {
+    getCmcodes = async (major) => {
         const { CmcodeActions } = this.props;
 
-        CmcodeActions.getCmcodeByMajorExcludeRemoved({ major: major });
+        await CmcodeActions.getCmcodeByMajorExcludeRemoved({ major: major });
     }
 
-    getTeams = (page) => {
+    getTeams = async (page) => {
         const { TeamActions } = this.props;
 
+        await TeamActions.getTeams(page);
         TeamActions.onChange({ name: 'page', value: page });
-        TeamActions.getTeams(page);
     }
 
-    getTeam = (id) => {
+    getTeam = async (id) => {
         const { TeamActions } = this.props;
 
-        TeamActions.getTeam({ id });
+        await TeamActions.getTeam(id);
         TeamActions.initialize('teamErrors');
     }
 
@@ -74,7 +74,7 @@ class ManagerCollaseCardContainer extends React.Component {
     handleEdit = async (id) => {
         const { TeamActions, edit, page } = this.props;
 
-        await TeamActions.editTeam({ id, param: edit.toJS() });
+        await TeamActions.editTeam(id, edit.toJS());
         this.getTeams(page);
     }
 
@@ -90,28 +90,28 @@ class ManagerCollaseCardContainer extends React.Component {
     handleSaveManager = async (id) => {
         const { TeamActions, addManager, page } = this.props;
 
-        await TeamActions.addManager({ id, param: { ...addManager.toJS() } });
+        await TeamActions.addManager(id, addManager.toJS());
         this.getTeams(page);
         this.getTeam(id);
     }
 
     handleEditManager = async (id) => {
         const { TeamActions, editManager } = this.props;
-        const { _id, name, position, effStaDt, effEndDt } = editManager.toJS();
+        const { _id: managerId, name, position, effStaDt, effEndDt } = editManager.toJS();
 
-        await TeamActions.editManager({ id, param: { managerId: _id, name, position, effStaDt, effEndDt } });
+        await TeamActions.editManager(id, { managerId, name, position, effStaDt, effEndDt });
         this.getTeam(id);
     }
 
     handleDeleteManager = (id) => async () => {
         const { ModalActions, TeamActions, manager, page } = this.props;
 
-        await TeamActions.deleteManager({ id, param: { managerId: manager.get('_id') } });
+        await TeamActions.deleteManager(id, { managerId: manager.get('_id') });
         ModalActions.close('question');
         TeamActions.initialize('manager');
         TeamActions.initialize('editManager');
         this.getTeams(page);
-        this.getTeam();
+        this.getTeam(id);
     }
 
     handleOpen = (name) => {

@@ -6,10 +6,10 @@ import * as indexesActions from 'store/modules/indexes';
 import Loader from 'components/Loader';
 
 class StatisticsByStatusBarChartContainer extends React.Component {
-	getStatisticsByStatus = () => {
+	getStatisticsByStatus = async () => {
 		const { IndexesActions, id } = this.props;
 
-		IndexesActions.getStatisticsByStatus({ id });
+		await IndexesActions.getStatisticsByStatus(id);
 	};
 
 	componentDidMount() {

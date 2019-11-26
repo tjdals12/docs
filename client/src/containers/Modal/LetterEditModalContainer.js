@@ -22,7 +22,7 @@ class LetterEditModalContainer extends React.Component {
 	handleEdit = async () => {
 		const { ModalActions, LetterActions, id, letter } = this.props;
 
-		await LetterActions.editLetter({ id, param: letter.toJS() });
+		await LetterActions.editLetter(id, letter.toJS());
 
 		this.handleClose();
 		ModalActions.open('letterDetail');
