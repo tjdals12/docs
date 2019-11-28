@@ -15,7 +15,7 @@ class DocumentInfoTableContainer extends React.Component {
 		if (isSearch) {
 			await InfoActions.searchInfos(page, search.toJS());
 		} else {
-			await InfoActions.getInfos({ page });
+			await InfoActions.getInfos(page);
 		}
 
 		history.push(`/indexes/infos?page=${page}`);
@@ -24,7 +24,7 @@ class DocumentInfoTableContainer extends React.Component {
 	getInfo = (id) => {
 		const { InfoActions } = this.props;
 
-		InfoActions.getInfo({ id });
+		InfoActions.getInfo(id);
 	};
 
 	handleTargetVendor = ({ id }) => {

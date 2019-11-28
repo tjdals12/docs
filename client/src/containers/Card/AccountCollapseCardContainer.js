@@ -92,7 +92,16 @@ class AccountsCopllapseCardContainer extends React.Component {
 
     render() {
         const { isOpen } = this.state;
-        const { roles, users, user, add, edit, errors, count, page } = this.props;
+        const { 
+            roles, 
+            users, 
+            user, 
+            add, 
+            edit, 
+            errors, 
+            count, 
+            page
+        } = this.props;
 
         return (
             <CollapseCard

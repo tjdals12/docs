@@ -21,7 +21,16 @@ const heightMap = {
 	}
 };
 
-const DocumentInfoCard = ({ data, currentPage, lastPage, height, onPage, onOpenLatest, className, ...rest }) => {
+const DocumentInfoCard = ({ 
+	data, 
+	currentPage, 
+	lastPage, 
+	height, 
+	onPage, 
+	onOpenLatest, 
+	className, 
+	...rest 
+}) => {
 	const classes = classNames('w-100 h-100', className);
 
 	return (
@@ -59,6 +68,8 @@ DocumentInfoCard.propTypes = {
 	currentPage: PropTypes.number,
 	lastPage: PropTypes.number,
 	height: PropTypes.string,
+	onPage: PropTypes.func,
+	onOpenLatest: PropTypes.func,
 	className: PropTypes.string
 };
 
@@ -66,7 +77,8 @@ DocumentInfoCard.defaultProps = {
 	currentPage: 1,
 	lastPage: 1,
 	height: 'lg',
-	onPage: () => console.warn('Warning: onPage is not defined')
+	onPage: () => console.warn('Warning: onPage is not defined'),
+	onOpenLatest: () => console.warn('Warning: onOpenLates is not defined')
 };
 
 export default DocumentInfoCard;

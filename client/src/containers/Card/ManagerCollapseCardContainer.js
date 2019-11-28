@@ -15,7 +15,7 @@ class ManagerCollaseCardContainer extends React.Component {
     getCmcodes = async (major) => {
         const { CmcodeActions } = this.props;
 
-        await CmcodeActions.getCmcodeByMajorExcludeRemoved({ major: major });
+        await CmcodeActions.getCmcodeByMajorExcludeRemoved(major);
     }
 
     getTeams = async (page) => {

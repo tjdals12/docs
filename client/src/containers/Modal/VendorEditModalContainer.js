@@ -24,13 +24,13 @@ class VendorEditModalContainer extends React.Component {
 	getCmcodes = async (major) => {
 		const { CmcodeActions } = this.props;
 
-		await CmcodeActions.getCmcodeByMajorExcludeRemoved({ major: major });
+		await CmcodeActions.getCmcodeByMajorExcludeRemoved(major);
 	};
 
 	handleEdit = async () => {
 		const { ModalActions, VendorActions, id, vendor } = this.props;
 
-		await VendorActions.editVendor({ id, vendor: vendor.toJS() });
+		await VendorActions.editVendor(id, vendor.toJS());
 		ModalActions.close('vendorEdit');
 		ModalActions.open('vendorDetail');
 	};

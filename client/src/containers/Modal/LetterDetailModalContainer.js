@@ -36,7 +36,7 @@ class LetterDetailModalContainer extends React.Component {
 		const { ModalActions, DocumentActions, VendorLetterActions } = this.props;
 
 		if (name === 'documentDetail') {
-			await DocumentActions.getDocument({ id });
+			await DocumentActions.getDocument(id);
 		} else if (name === 'vendorLetterDetail') {
 			await VendorLetterActions.getVendorLetter(id);
 		}

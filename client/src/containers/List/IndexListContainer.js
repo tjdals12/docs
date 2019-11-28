@@ -80,7 +80,15 @@ class IndexListContainer extends React.Component {
 	}
 
 	render() {
-		const { writable, isOpenQuestion, page, lastPage, indexes, loading, searchLoading } = this.props;
+		const { 
+			writable, 
+			isOpenQuestion, 
+			page, 
+			lastPage, 
+			indexes, 
+			loading, 
+			searchLoading
+		} = this.props;
 
 		return (
 			<IndexList

@@ -6,35 +6,35 @@ const real = '';
 
 /** Dashobard */
 export const getDashboardProjects = () => axios.get(`${real}/api/dashboards/projects`);
-export const getWidgetDatas = ({ id }) => axios.get(`${real}/api/dashboards/${id}/widgets`);
-export const getVendorDatas = ({ id }) => axios.get(`${real}/api/dashboards/${id}/vendors`);
+export const getWidgetDatas = (id) => axios.get(`${real}/api/dashboards/${id}/widgets`);
+export const getVendorDatas = (id) => axios.get(`${real}/api/dashboards/${id}/vendors`);
 
 /** Document */
-export const getDocuments = ({ page }) => axios.get(`${real}/api/documents?page=${page}`);
+export const getDocuments = (page) => axios.get(`${real}/api/documents?page=${page}`);
 export const searchDocuments = (page, param) => axios.post(`${real}/api/documents/search?page=${page}`, { ...param });
-export const getDocument = ({ id }) => axios.get(`${real}/api/documents/${id}`);
+export const getDocument = (id) => axios.get(`${real}/api/documents/${id}`);
 export const addDocument = (document) => axios.post(`${real}/api/documents`, { ...document });
-export const holdDocument = ({ id, yn, reason }) => axios.patch(`${real}/api/documents/${id}/hold`, { yn, reason });
-export const deleteDocument = ({ id, yn, reason }) => axios.patch(`${real}/api/documents/${id}/delete`, { yn, reason });
+export const holdDocument = (id, param) => axios.patch(`${real}/api/documents/${id}/hold`, { ...param });
+export const deleteDocument = (id, param) => axios.patch(`${real}/api/documents/${id}/delete`, { ...param });
 export const deleteDocuments = (ids, page) => axios.patch(`${real}/api/documents/delete?page=${page}`, { ids: ids });
-export const editDocument = ({ id, document }) => axios.patch(`${real}/api/documents/${id}/edit`, { ...document });
+export const editDocument = (id, param) => axios.patch(`${real}/api/documents/${id}/edit`, { ...param });
 export const inOutDocument = (id, param) => axios.patch(`${real}/api/documents/${id}/inout`, { ...param });
-export const deleteInOutDocument = ({ id, target }) =>
-	axios.patch(`${real}/api/documents/${id}/inout/delete`, { targetId: target });
+export const deleteInOutDocument = (id, param) =>
+	axios.patch(`${real}/api/documents/${id}/inout/delete`, { ...param });
 
 /** Vendor */
-export const getVendors = ({ page }) => axios.get(`${real}/api/vendors?page=${page}`);
+export const getVendors = (page) => axios.get(`${real}/api/vendors?page=${page}`);
 export const getVendorsForSelect = () => axios.get(`${real}/api/vendors/forselect`);
 export const searchVendors = (page, param) => axios.post(`${real}/api/vendors/search?page=${page}`, { ...param });
-export const getVendor = ({ id }) => axios.get(`${real}/api/vendors/${id}`);
-export const addVendor = (vendor) => axios.post(`${real}/api/vendors`, { ...vendor });
-export const editVendor = ({ id, vendor }) => axios.patch(`${real}/api/vendors/${id}/edit`, { ...vendor });
-export const deleteVendor = ({ id, yn, reason }) => axios.patch(`${real}/api/vendors/${id}/delete`, { yn, reason });
-export const addPerson = ({ id, persons }) => axios.post(`${real}/api/vendors/${id}/add`, { persons });
+export const getVendor = (id) => axios.get(`${real}/api/vendors/${id}`);
+export const addVendor = (param) => axios.post(`${real}/api/vendors`, { ...param });
+export const editVendor = (id, param) => axios.patch(`${real}/api/vendors/${id}/edit`, { ...param });
+export const deleteVendor = (id, param) => axios.patch(`${real}/api/vendors/${id}/delete`, { ...param });
+export const addPerson = (id, param) => axios.post(`${real}/api/vendors/${id}/add`, { ...param });
 
 /** Cmcode */
-export const getCmcodeByMajor = ({ major }) => axios.get(`${real}/api/cmcodes/${major}/minors`);
-export const getCmcodeByMajorExcludeRemoved = ({ major }) => axios.get(`${real}/api/cmcodes/${major}/minors/exclude`);
+export const getCmcodeByMajor = (major) => axios.get(`${real}/api/cmcodes/${major}/minors`);
+export const getCmcodeByMajorExcludeRemoved = (major) => axios.get(`${real}/api/cmcodes/${major}/minors/exclude`);
 export const getCdMajors = (page) => axios.get(`${real}/api/cmcodes/majors?page=${page}`);
 export const getCmcodeById = (id, page) => axios.get(`${real}/api/cmcodes/${id}?page=${page}`);
 export const getCdMinor = (id) => axios.get(`${real}/api/cmcodes/${id}/minor`);
@@ -57,10 +57,10 @@ export const editIndex = (id, param) => axios.patch(`${real}/api/documentindexes
 export const deleteIndex = (id) => axios.patch(`${real}/api/documentindexes/${id}/delete`);
 
 /** Index -> Info */
-export const getInfos = ({ page }) => axios.get(`${real}/api/documentinfos?page=${page}`);
+export const getInfos = (page) => axios.get(`${real}/api/documentinfos?page=${page}`);
 export const searchInfos = (page, param) => axios.post(`${real}/api/documentinfos/search?page=${page}`, { ...param });
-export const getInfo = ({ id }) => axios.get(`${real}/api/documentinfos/${id}`);
-export const getLatestDocuments = ({ vendor, page }) =>
+export const getInfo = (id) => axios.get(`${real}/api/documentinfos/${id}`);
+export const getLatestDocuments = (vendor, page) =>
 	axios.get(`${real}/api/documentinfos/${vendor}/latest?page=${page}`);
 export const exportExcel = (param) => axios.post(`${real}/api/documentinfos/writeexcel`, { ...param }, { responseType: 'blob' }).then((response) => {
 	let { filename } = ContentDisposition.parse(response.headers['content-disposition']).parameters;

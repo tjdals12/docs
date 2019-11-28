@@ -15,7 +15,13 @@ const heightMap = {
 	}
 };
 
-const TransmittalCard = ({ data, onOpenDetail, height, className, ...rest }) => {
+const TransmittalCard = ({ 
+	data, 
+	onOpenDetail, 
+	height, 
+	className, 
+	...rest
+}) => {
 	const classes = classNames('w-100 h-100', className);
 
 	return (

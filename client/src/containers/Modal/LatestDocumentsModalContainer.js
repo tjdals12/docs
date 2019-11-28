@@ -12,13 +12,13 @@ class LatestDocumentsModalContainer extends React.Component {
 
 		InfoActions.onChange({ name: 'page', value: page });
 
-		InfoActions.getLatestDocuments({ vendor: vendor.get('_id'), page });
+		InfoActions.getLatestDocuments(vendor.get('_id'), page);
 	};
 
 	getInfo = (id) => {
 		const { InfoActions } = this.props;
 
-		InfoActions.getInfo({ id });
+		InfoActions.getInfo(id);
 	};
 
 	handleClose = () => {

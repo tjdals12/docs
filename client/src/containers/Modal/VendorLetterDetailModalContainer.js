@@ -16,13 +16,13 @@ class VendorLetterDetailModalContainer extends React.Component {
 	getCmcodes = (major) => {
 		const { CmcodeActions } = this.props;
 
-		CmcodeActions.getCmcodeByMajorExcludeRemoved({ major: major });
+		CmcodeActions.getCmcodeByMajorExcludeRemoved(major);
 	};
 
 	getDocument = (id) => {
 		const { DocumentActions } = this.props;
 
-		DocumentActions.getDocument({ id });
+		DocumentActions.getDocument(id);
 	};
 
 	handleMoreDocument = async (id, startIndex) => {

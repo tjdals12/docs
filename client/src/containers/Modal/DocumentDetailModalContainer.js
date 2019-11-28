@@ -11,7 +11,7 @@ class DocumentDetailModalContainer extends React.Component {
 	getCmcodes = async (major) => {
 		const { CmcodeActions } = this.props;
 
-		await CmcodeActions.getCmcodeByMajorExcludeRemoved({ major: major });
+		await CmcodeActions.getCmcodeByMajorExcludeRemoved(major);
 	};
 
 	handleTarget = ({ id }) => {
@@ -46,14 +46,14 @@ class DocumentDetailModalContainer extends React.Component {
 	handleHold = ({ id, yn }) => async () => {
 		const { DocumentActions, reason } = this.props;
 
-		await DocumentActions.holdDocument({ id, yn, reason });
+		await DocumentActions.holdDocument(id, { yn, reason });
 		DocumentActions.onChange({ name: 'reason', value: '' });
 	};
 
 	handleDelete = ({ id, yn }) => async () => {
 		const { DocumentActions, reason } = this.props;
 
-		await DocumentActions.deleteDocument({ id, yn, reason });
+		await DocumentActions.deleteDocument(id, { yn, reason });
 		DocumentActions.onChange({ name: 'reason', value: '' });
 	};
 
@@ -79,7 +79,7 @@ class DocumentDetailModalContainer extends React.Component {
 	handleDeleteStatus = async () => {
 		const { DocumentActions, ModalActions, document, target } = this.props;
 
-		await DocumentActions.deleteInOutDocument({ id: document.get('_id'), target });
+		await DocumentActions.deleteInOutDocument(document.get('_id'), { targetId: target });
 		ModalActions.close('question');
 	};
 

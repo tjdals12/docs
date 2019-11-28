@@ -35,7 +35,12 @@ const ProjectCollapse = ({
 		const isDelete = props.dataItem.deleteYn === 'YES';
 
 		return React.cloneElement(Row, {
-			className: classNames(isDelete && 'text-line-through text-muted font-italic', isActive && 'bg-gradient-theme-left text-white ', 'can-click', Row.props.className)
+			className: classNames(
+				isDelete && 'text-line-through text-muted font-italic',
+				isActive && 'bg-gradient-theme-left text-white ',
+				'can-click',
+				Row.props.className
+			)
 		});
 	};
 
@@ -288,7 +293,8 @@ ProjectCollapse.propTypes = {
 	onChange: PropTypes.func,
 	onSave: PropTypes.func,
 	onEdit: PropTypes.func,
-	onDelete: PropTypes.func
+	onDelete: PropTypes.func,
+	onMainProject: PropTypes.func
 };
 
 ProjectCollapse.defaultProps = {
@@ -298,7 +304,8 @@ ProjectCollapse.defaultProps = {
 	onChange: () => console.warn('Warning: onChange is not defined'),
 	onSave: () => console.warn('Warning: onSave is not defined'),
 	onEdit: () => console.warn('Warning: onEdit is not defined'),
-	onDelete: () => console.warn('Warning: onDelete is not defined')
+	onDelete: () => console.warn('Warning: onDelete is not defined'),
+	onMainProject: () => console.warn('Warning: onMainProject is not defined')
 }
 
 export default ProjectCollapse;
