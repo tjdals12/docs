@@ -69,7 +69,7 @@ export default handleActions(
 			type: GET_CDMAJORS,
 			onSuccess: (state, action) => {
 				let { data: cdMajors } = action.payload.data;
-				const startIndex = (state.get('majorPage') - 1) * 10;
+				const startIndex = (state.get('majorPage') - 1) * 8;
 
 				cdMajors = cdMajors.map((cdMajor, index) => ({
 					index: startIndex + (index + 1),
@@ -91,7 +91,7 @@ export default handleActions(
 			type: GET_CDMINORS,
 			onSuccess: (state, action) => {
 				let { data: cmcode } = action.payload.data;
-				const startIndex = (state.get('minorPage') - 1) * 10;
+				const startIndex = (state.get('minorPage') - 1) * 8;
 
 				cmcode.cdMinors = cmcode.cdMinors.map((cdMinor, index) => ({
 					index: startIndex + (index + 1),

@@ -22,8 +22,8 @@ class TemplateCollapseCardContainer extends React.Component {
 	getTemplates = async (page) => {
 		const { TemplateActions } = this.props;
 
-		await TemplateActions.getTemplates(page);
 		TemplateActions.onChange({ name: 'page', value: page });
+		await TemplateActions.getTemplates(page);
 	};
 
 	handleToggle = () => {

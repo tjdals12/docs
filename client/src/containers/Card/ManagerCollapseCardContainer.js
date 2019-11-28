@@ -21,8 +21,8 @@ class ManagerCollaseCardContainer extends React.Component {
     getTeams = async (page) => {
         const { TeamActions } = this.props;
 
-        await TeamActions.getTeams(page);
         TeamActions.onChange({ name: 'page', value: page });
+        await TeamActions.getTeams(page);
     }
 
     getTeam = async (id) => {

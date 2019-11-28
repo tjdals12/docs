@@ -13,15 +13,15 @@ class CmcodeCollapseCardContainer extends React.Component {
 	getCdMajors = async (page) => {
 		const { CmcodeActions } = this.props;
 
-		await CmcodeActions.getCdMajors(page);
 		CmcodeActions.onChange({ name: 'majorPage', value: page });
+		await CmcodeActions.getCdMajors(page);
 	};
 
 	getCdMinors = async (id, page) => {
 		const { CmcodeActions } = this.props;
 
-		await CmcodeActions.getCdMinors(id, page);
 		CmcodeActions.onChange({ name: 'minorPage', value: page });
+		await CmcodeActions.getCdMinors(id, page);
 	};
 
 	getCdMinor = async (id) => {

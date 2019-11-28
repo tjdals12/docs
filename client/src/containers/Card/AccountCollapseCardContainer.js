@@ -20,8 +20,8 @@ class AccountsCopllapseCardContainer extends React.Component {
     getUsers = async (page) => {
         const { AccountActions } = this.props;
 
-        await AccountActions.getUsers(page);
         AccountActions.onChange({ name: 'page', value: page })
+        await AccountActions.getUsers(page);
     }
 
     getUser = async (id) => {

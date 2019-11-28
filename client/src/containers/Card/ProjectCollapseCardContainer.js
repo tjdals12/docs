@@ -20,8 +20,8 @@ class ProjectCollapseCardContainer extends React.Component {
 	getProjects = async (page) => {
 		const { ProjectActions } = this.props;
 
-		await ProjectActions.getProjects(page);
 		ProjectActions.onChange({ name: 'page', value: page });
+		await ProjectActions.getProjects(page);
 	};
 
 	handleToggle = () => {

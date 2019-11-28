@@ -91,7 +91,8 @@ export default handleActions({
                 .setIn(['edit', 'description'], user.profile.description)
                 .setIn(['edit', 'userType'], user.profile.userType)
                 .setIn(['edit', 'userId'], user.userId)
-                .setIn(['edit', 'roles'], fromJS(user.roles));
+                .setIn(['edit', 'roles'], fromJS(user.roles))
+                .setIn(['edit', 'pwd'], '');
         }
     }),
     ...pender({
