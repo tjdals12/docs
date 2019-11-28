@@ -11,7 +11,24 @@ const makeHeaderCell = ({ title, className }) => {
     return <span className={classes}>{title}</span>;
 };
 
-const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count, page, onPage, onSelect, onChange, onChangeRoles, onSave, onEdit, onDelete }) => {
+const AccountCollapse = ({ 
+    isOpen, 
+    roles, 
+    users, 
+    user, 
+    add, 
+    edit, 
+    errors, 
+    count, 
+    page, 
+    onPage, 
+    onSelect, 
+    onChange, 
+    onChangeRoles, 
+    onSave, 
+    onEdit, 
+    onDelete
+}) => {
     const isAdd = user.size === 0;
 
     const rowRender = (Row, props) => {
@@ -22,6 +39,48 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
             className: classNames(isActive && 'bg-gradient-theme-left text-white', isDelete && 'font-italic text-line-through', 'can-click', Row.props.className)
         })
     }
+
+    const roleRender = (roles) => (
+        roles.map((role) => {
+            const { _id, sub, name, roleId } = role.toJS();
+            const keys = Object.keys(roleId);
+
+            let result = keys.map((key, index) => (
+                <div key={`${_id}_${index}`} className="mb-2">
+                    <input
+                        type='checkbox'
+                        name="roles"
+                        value={roleId[key]}
+                        checked={isAdd ? add.get('roles').includes(roleId[key]) : edit.get('roles').includes(roleId[key])}
+                        onChange={onChangeRoles(isAdd ? 'add' : 'edit')}
+                    />
+                    <span className="pl-2">{name} ({key})</span>
+                </div>
+            ));
+
+            if (sub.length > 0) {
+                result.push(...sub.map((subRole) => {
+                    const { _id: subId, name: subName, roleId: subRoleId } = subRole;
+                    const keys = Object.keys(subRoleId);
+
+                    return keys.map((key, index) => (
+                        <div key={`${subId}_${index}`} className="mb-2">
+                            <input
+                                type='checkbox'
+                                name="roles"
+                                value={subRoleId[key]}
+                                checked={isAdd ? add.get('roles').includes(subRoleId[key]) : edit.get('roles').includes(subRoleId[key])}
+                                onChange={onChangeRoles(isAdd ? 'add' : 'edit')}
+                            />
+                            <span className="pl-2">{name} - {subName} ({key})</span>
+                        </div>
+                    ))
+                }))
+            }
+
+            return result;
+        })
+    )
 
     return (
         <Collapse isOpen={isOpen} className="mt-3 pt-4 border-top">
@@ -66,28 +125,45 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
                 <Col xl={4} lg={12}>
                     <Form className="pl-4 pr-4 pt-4 pb-2 border rounded bg-light h-100">
                         <FormGroup row>
-                            <Col md={4} className="mt-2 d-flex align-items-start justify-content-center">
-                                <Avatar size={140} />
-                            </Col>
-                            <Col md={8} className="d-flex justify-content-center flex-column">
+                            <Col md={12} className="d-flex justify-content-center flex-column">
                                 <FormGroup row>
                                     <Label md={3} for='username' className='text-right title-font'>이름</Label>
                                     <Col md={9}>
-                                        <Input type='text' id='username' name='username' value={isAdd ? add.get('username') : edit.get('username')} onChange={onChange(isAdd ? 'add' : 'edit')} invalid={errors.get('usernameError')} />
+                                        <Input
+                                            type='text'
+                                            id='username'
+                                            name='username'
+                                            value={isAdd ? add.get('username') : edit.get('username')}
+                                            onChange={onChange(isAdd ? 'add' : 'edit')}
+                                            invalid={errors.get('usernameError')}
+                                        />
                                     </Col>
                                 </FormGroup>
 
                                 <FormGroup row>
                                     <Label md={3} for='description' className='text-right title-font'>설명</Label>
                                     <Col md={9}>
-                                        <Input type='text' id='description' name='description' value={isAdd ? add.get('description') : edit.get('description')} onChange={onChange(isAdd ? 'add' : 'edit')} invalid={errors.get('descriptionError')} />
+                                        <Input 
+                                            type='text'
+                                            id='description'
+                                            name='description'
+                                            value={isAdd ? add.get('description') : edit.get('description')}
+                                            onChange={onChange(isAdd ? 'add' : 'edit')}
+                                            invalid={errors.get('descriptionError')}
+                                        />
                                     </Col>
                                 </FormGroup>
 
                                 <FormGroup row>
                                     <Label md={3} for='description' className='text-right title-font'>구분</Label>
                                     <Col md={9}>
-                                        <Input type='select' name='userType' value={isAdd ? add.get('userType') : edit.get('userType')} onChange={onChange(isAdd ? 'add' : 'edit')} invalid={errors.get('userTypeError')} >
+                                        <Input 
+                                            type='select'
+                                            name='userType'
+                                            value={isAdd ? add.get('userType') : edit.get('userType')}
+                                            onChange={onChange(isAdd ? 'add' : 'edit')}
+                                            invalid={errors.get('userTypeError')}
+                                        >
                                             <option value=''>-- 구분 --</option>
                                             <option value='Admin'>관리자</option>
                                             <option value='Manager'>담당자</option>
@@ -99,19 +175,36 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
                         </FormGroup>
 
                         <FormGroup row>
-                            <Label md={4} for='userId' className='text-right title-font'>ID</Label>
-                            <Col md={8}>
-                                <Input type='text' id='userId' name='userId' value={isAdd ? add.get('userId') : edit.get('userId')} onChange={onChange(isAdd ? 'add' : 'edit')} invalid={errors.get('userIdError')} />
+                            <Label md={3} for='userId' className='text-right title-font'>ID</Label>
+                            <Col md={9}>
+                                <Input 
+                                    type='text'
+                                    id='userId'
+                                    name='userId'
+                                    value={isAdd ? add.get('userId') : edit.get('userId')}
+                                    onChange={onChange(isAdd ? 'add' : 'edit')}
+                                    invalid={errors.get('userIdError')}
+                                />
+                            </Col>
+                        </FormGroup>
+
+                        <FormGroup row>
+                            <Label md={3} for='pwd' className='text-right title-font'>PWD</Label>
+                            <Col md={9}>
+                                <Input 
+                                    type='password'
+                                    id='pwd'
+                                    name='pwd'
+                                    value={isAdd ? add.get('pwd') : edit.get('pwd')}
+                                    onChange={onChange(isAdd ? 'add' : 'edit')}
+                                    invalid={errors.get('pwdError')}
+                                    placeholder={`${isAdd ? '' : '새로운 비밀번호를 입력하세요.'}`}
+                                    className="placeholder"
+                                />
                             </Col>
                         </FormGroup>
                         <FormGroup row>
-                            <Label md={4} for='pwd' className='text-right title-font' >PWD</Label>
-                            <Col md={8}>
-                                <Input type='password' id='pwd' name='pwd' disabled={!isAdd} value={isAdd ? add.get('pwd') : ''} onChange={onChange(isAdd ? 'add' : 'user')} invalid={errors.get('pwdError')} />
-                            </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Col className="d-flex align-items-center justify-content-end">
+                            <Col className="d-flex align-items-center justify-content-end mt-4">
                                 {isAdd ? (<Button color='primary' onClick={onSave}>추가</Button>)
                                     : (
                                         <React.Fragment>
@@ -131,46 +224,7 @@ const AccountCollapse = ({ isOpen, roles, users, user, add, edit, errors, count,
                 <Col xl={4} lg={12} style={{ maxHeight: '450px', overflow: 'scroll' }}>
                     <Form className="pl-4 pr-4 pt-4 pb-2 border rounded bg-light h-100 overflow-scroll">
                         <h3 className="title-font">권한</h3>
-                        {roles.map((role) => {
-                            const { _id, sub, name, roleId } = role.toJS();
-
-                            const keys = Object.keys(roleId);
-
-                            let result = keys.map((key, index) => (
-                                <div key={`${_id}_${index}`} className="mb-2">
-                                    <input
-                                        type='checkbox'
-                                        name="roles"
-                                        value={roleId[key]}
-                                        checked={isAdd ? add.get('roles').includes(roleId[key]) : edit.get('roles').includes(roleId[key])}
-                                        onChange={onChangeRoles(isAdd ? 'add' : 'edit')}
-                                    />
-                                    <span className="pl-2">{name} ({key})</span>
-                                </div>
-                            ));
-
-                            if (sub.length > 0) {
-                                result.push(...sub.map((subRole) => {
-                                    const { _id: subId, name: subName, roleId: subRoleId } = subRole;
-                                    const keys = Object.keys(subRoleId);
-
-                                    return keys.map((key, index) => (
-                                        <div key={`${subId}_${index}`} className="mb-2">
-                                            <input
-                                                type='checkbox'
-                                                name="roles"
-                                                value={subRoleId[key]}
-                                                checked={isAdd ? add.get('roles').includes(subRoleId[key]) : edit.get('roles').includes(subRoleId[key])}
-                                                onChange={onChangeRoles(isAdd ? 'add' : 'edit')}
-                                            />
-                                            <span className="pl-2">{name} - {subName} ({key})</span>
-                                        </div>
-                                    ))
-                                }))
-                            }
-
-                            return result;
-                        })}
+                        {roleRender(roles)}
                     </Form>
                 </Col>
             </Row>

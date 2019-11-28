@@ -57,8 +57,8 @@ const CmcodeCollapse = ({
 						pageable
 						data={cdMajors.toJS()}
 						total={majorCount}
-						take={10}
-						skip={(majorPage - 1) * 10}
+						take={8}
+						skip={(majorPage - 1) * 8}
 						onRowClick={(e) => onSelectCdMajor(e.dataItem._id, 1)}
 						onPageChange={(e) => onPageMajor(e.page.skip / e.page.take + 1)}
 						rowRender={majorRowRender}
@@ -97,8 +97,8 @@ const CmcodeCollapse = ({
 						pageable
 						data={cdMajor.size === 0 ? [] : cdMajor.get('cdMinors').toJS()}
 						total={minorCount}
-						take={10}
-						skip={(minorPage - 1) * 10}
+						take={8}
+						skip={(minorPage - 1) * 8}
 						onRowClick={(e) => onSelectCdMinor(e.dataItem._id)}
 						onPageChange={(e) => onSelectCdMajor(cdMajor.get('_id'), e.page.skip / e.page.take + 1)}
 						rowRender={minorRowRender}

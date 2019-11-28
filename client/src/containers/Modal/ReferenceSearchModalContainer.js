@@ -27,7 +27,7 @@ class ReferenceSearchModalContainer extends React.Component {
 	handleSearch = (page) => {
 		const { LetterActions, keyword } = this.props;
 
-		LetterActions.referenceSearch({ page, keyword });
+		LetterActions.referenceSearch(page, keyword);
 		LetterActions.onChange({ name: 'referencesPage', value: page });
 	};
 

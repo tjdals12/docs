@@ -13,7 +13,7 @@ class VendorListContainer extends React.Component {
 		if (isSearch) {
 			await VendorActions.searchVendors(page, search.toJS());
 		} else {
-			await VendorActions.getVendors({ page });
+			await VendorActions.getVendors(page);
 		}
 		history.push(`/vendors?page=${page}`);
 	};
@@ -31,7 +31,13 @@ class VendorListContainer extends React.Component {
 	}
 
 	render() {
-		const { vendors, lastPage, page, loading, searchLoading } = this.props;
+		const { 
+			vendors, 
+			lastPage, 
+			page, 
+			loading, 
+			searchLoading 
+		} = this.props;
 
 		return (
 			<VendorList

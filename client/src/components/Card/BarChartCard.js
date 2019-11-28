@@ -5,7 +5,16 @@ import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Legend, Tooltip, Responsive
 import Typography from 'components/Typography';
 import PropTypes from 'prop-types';
 
-const BarChartCard = ({ stack, title, data, color1, color2, color3, className, ...rest }) => {
+const BarChartCard = ({ 
+	stack, 
+	title, 
+	data, 
+	color1, 
+	color2, 
+	color3, 
+	className, 
+	...rest
+}) => {
 	const classes = classNames('w-100 h-100', className);
 
 	const getChart = (data) => {

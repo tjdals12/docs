@@ -12,7 +12,7 @@ class IndexesDetailTemplateContainer extends React.Component {
 	getIndex = async () => {
 		const { IndexesActions, id } = this.props;
 
-		await IndexesActions.getIndex({ id });
+		await IndexesActions.getIndex(id);
 	};
 
 	componentDidMount() {

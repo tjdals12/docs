@@ -7,15 +7,36 @@ import * as vendorLetterActions from 'store/modules/vendorLetter';
 import * as modalActions from 'store/modules/modal';
 
 class VendorLetterEditModalContainer extends React.Component {
+	state = {
+		page: 2
+	}
+
 	getVendorList = () => {
 		const { VendorActions } = this.props;
 
 		VendorActions.getVendorsForSelect();
 	};
 
+	handleMoreDocument = async (id, startIndex) => {
+		const { VendorLetterActions } = this.props;
+		const nextPage = (startIndex / 20) + 1;
+		const page = this.state.page;
+
+		if(page < nextPage) {
+			this.setState({
+				page: nextPage
+			});
+
+			await VendorLetterActions.getVendorLetterOnlyDocuments(id, nextPage);
+		}
+	}
+
 	handleClose = () => {
 		const { ModalActions } = this.props;
 
+		this.setState({
+			page: 1
+		});
 		ModalActions.close('vendorLetterEdit');
 	};
 
@@ -47,9 +68,9 @@ class VendorLetterEditModalContainer extends React.Component {
 			targetDate
 		} = edit.toJS();
 
-		await VendorLetterActions.editVendorLetter({
-			id: _id,
-			param: {
+		await VendorLetterActions.editVendorLetter(
+			_id,
+			{
 				vendor,
 				officialNumber,
 				senderGb,
@@ -59,8 +80,7 @@ class VendorLetterEditModalContainer extends React.Component {
 				deleteDocuments,
 				receiveDate,
 				targetDate
-			}
-		});
+			});
 
 		ModalActions.close('vendorLetterEdit');
 	};
@@ -70,7 +90,7 @@ class VendorLetterEditModalContainer extends React.Component {
 	}
 
 	render() {
-		const { vendorList, isOpen, edit, errors, loading, editLoading } = this.props;
+		const { vendorList, isOpen, edit, documentsCount, errors, loading, editLoading } = this.props;
 
 		if (loading || loading === undefined) return null;
 
@@ -80,7 +100,9 @@ class VendorLetterEditModalContainer extends React.Component {
 				vendorList={vendorList}
 				isOpen={isOpen}
 				data={edit}
+				documentsCount={documentsCount}
 				errors={errors}
+				onMoreDocuments={this.handleMoreDocument}
 				onClose={this.handleClose}
 				onChange={this.handleChange}
 				onSetDeleteDocument={this.handleSetDeleteDocument}
@@ -95,6 +117,7 @@ export default connect(
 		vendorList: state.vendor.get('vendorList'),
 		isOpen: state.modal.get('vendorLetterEditModal'),
 		edit: state.vendorLetter.get('edit'),
+		documentsCount: state.vendorLetter.get('documentsCount'),
 		errors: state.vendorLetter.get('errors'),
 		loading: state.pender.pending['vendorletter/GET_VENDORLETTER'],
 		editLoading: state.pender.pending['vendorletter/EDIT_VENDORLETTER']

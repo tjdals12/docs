@@ -14,7 +14,7 @@ class VendorLetterTableContainer extends React.Component {
 		if (isSearch) {
 			await VendorLetterActions.searchVendorLetters(page, search.toJS());
 		} else {
-			await VendorLetterActions.getVendorLetters({ page });
+			await VendorLetterActions.getVendorLetters(page);
 		}
 
 		history.push(`/letters/vendor?page=${page}`);
@@ -23,7 +23,7 @@ class VendorLetterTableContainer extends React.Component {
 	getVendorLetter = (id) => {
 		const { VendorLetterActions } = this.props;
 
-		VendorLetterActions.getVendorLetter({ id });
+		VendorLetterActions.getVendorLetter(id);
 	};
 
 	handleTarget = (id) => {

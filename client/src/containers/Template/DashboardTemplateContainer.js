@@ -15,13 +15,13 @@ class DashboardTemplateContainer extends React.Component {
     getWidgetDatas = async (id) => {
         const { DashboardActions } = this.props;
 
-        await DashboardActions.getWidgetDatas({ id });
+        await DashboardActions.getWidgetDatas(id);
     }
 
     getVendorDatas = async (id) => {
         const { DashboardActions } = this.props;
 
-        await DashboardActions.getVendorDatas({ id });
+        await DashboardActions.getVendorDatas(id);
     }
 
     handleSelectProject = async (project) => {

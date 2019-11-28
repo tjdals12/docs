@@ -11,11 +11,11 @@ import {
 	Label,
 	Input,
 	InputGroup,
-	InputGroupAddon,
-	Table
+	InputGroupAddon
 } from 'reactstrap';
 import { MdClose } from 'react-icons/md';
 import PropTypes from 'prop-types';
+import { Table as VirtualTable, Column as VirtualColumn, InfiniteLoader } from 'react-virtualized';
 import Loader from 'components/Loader';
 
 const VendorLetterEditModal = ({
@@ -23,7 +23,9 @@ const VendorLetterEditModal = ({
 	vendorList,
 	isOpen,
 	data,
+	documentsCount,
 	errors,
+	onMoreDocuments,
 	onClose,
 	onChange,
 	onSetDeleteDocument,
@@ -31,6 +33,9 @@ const VendorLetterEditModal = ({
 	className,
 	...rest
 }) => {
+	const documents = data.get('documents').toJS();
+	const width = 1100;
+
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -38,7 +43,7 @@ const VendorLetterEditModal = ({
 			className={className}
 			contentClassName="border rounded"
 			{...rest}
-			size="lg"
+			size="xl"
 		>
 			<ModalHeader toggle={onClose}>업체 공문 수정</ModalHeader>
 			<ModalBody>
@@ -93,8 +98,8 @@ const VendorLetterEditModal = ({
 											) : data.get('senderGb') === 'VENDOR' ? (
 												'03'
 											) : (
-															data.get('senderGb')
-														)
+												data.get('senderGb')
+											)
 										}
 										onChange={onChange}
 										invalid={errors.get('senderGbError')}
@@ -157,67 +162,77 @@ const VendorLetterEditModal = ({
 					</FormGroup>
 
 					<FormGroup row className="mt-4">
-						<Col md={12}>
+						<Col md={4}>
 							<Label for="receiveDocuments">접수목록</Label>
-							<Table bordered striped>
-								<colgroup>
-									<col width="5%" />
-									<col width="35%" />
-									<col width="50%" />
-									<col width="5%" />
-									<col width="5%" />
-								</colgroup>
-								<thead>
-									<tr style={{ background: '#e7f5ff' }}>
-										<th className="text-right">#</th>
-										<th>No.</th>
-										<th>Title</th>
-										<th className="text-center">Rev.</th>
-										<th />
-									</tr>
-								</thead>
-								<tbody>
-									{data.get('documents').size === 0 ? (
-										<tr>
-											<td colSpan="5" className="text-center text-muted font-italic">
-												접수목록이 없습니다.
-											</td>
-										</tr>
-									) : (
-											data.get('documents').map((document, index) => {
-												const deleted = document.get('deleted');
-
-												return (
-													<tr key={index} className={deleted && 'bg-danger'}>
-														<td className="text-right">{index + 1}</td>
-														<td className={deleted && 'text-line-through'}>
-															{document.get('documentNumber')}
-														</td>
-														<td className={deleted && 'text-line-through'}>
-															{document.get('documentTitle')}
-														</td>
-														<td
-															className={[
-																'text-center',
-																deleted && 'text-line-through'
-															].join(' ')}
-														>
-															{document.get('documentRev')}
-														</td>
-														<td className="text-center">
-															{!deleted && (
-																<MdClose
-																	className="can-click text-danger"
-																	onClick={onSetDeleteDocument(document.get('_id'))}
-																/>
-															)}
-														</td>
-													</tr>
-												);
-											})
-										)}
-								</tbody>
-							</Table>
+							<InfiniteLoader
+								isRowLoaded={({ index }) => !!documents[index]}
+								loadMoreRows={({ startIndex }) => onMoreDocuments(data.get('_id'), startIndex)}
+								rowCount={documentsCount}
+							>
+								{({ onRowsRendered, registerChild }) => (
+									<VirtualTable
+										ref={registerChild}
+										className="pb-2 ml-2"
+										headerClassName="d-flex align-items-center justify-content-center bg-light title-font"
+										rowClassName="table-row d-flex border-bottom outline-none"
+										gridClassName="outline-none"
+										headerHeight={70}
+										width={width}
+										height={500}
+										rowHeight={50}
+										rowCount={documents.length}
+										rowGetter={({ index }) => documents[index]}
+										onRowsRendered={onRowsRendered}
+									>
+										<VirtualColumn
+											label="#"
+											dataKey="deleted"
+											cellRenderer={({ dataKey, rowIndex, rowData }) => (
+												<span className={`font-weight-bold font-italic ${rowData[dataKey] ? 'text-danger text-line-through' : ''}`}>
+													{rowIndex + 1}.
+												</span>
+											)}
+											className="pl-2 align-self-center"
+											width={width * 0.05}
+										/>
+										<VirtualColumn
+											label="문서번호"
+											dataKey="documentNumber"
+											className="pl-2 align-self-center"
+											width={width * 0.3}
+										/>
+										<VirtualColumn
+											label="문서명"
+											dataKey="documentTitle"
+											cellRenderer={({ dataKey, rowData }) => (
+												<span className={`${rowData['deleted'] ? 'text-danger text-line-through font-italic' : ''}`}>
+													{rowData[dataKey]}
+												</span>
+											)}
+											className="align-self-center"
+											width={width * 0.55}
+										/>
+										<VirtualColumn
+											label="Rev."
+											dataKey="documentRev"
+											className="text-center align-self-center"
+											width={width * 0.05}
+										/>
+										<VirtualColumn
+											label=""
+											dataKey="_id"
+											cellRenderer={({ dataKey, rowData}) => (
+												<MdClose
+													className="can-click text-danger"
+													onClick={onSetDeleteDocument(rowData[dataKey])}
+												/>
+											)}
+											className="text-center align-self-center"
+											width={width * 0.05}
+										/>
+									</VirtualTable>
+								)}
+							</InfiniteLoader>
 						</Col>
 					</FormGroup>
 

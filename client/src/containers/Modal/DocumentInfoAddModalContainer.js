@@ -11,7 +11,7 @@ class DocumentInfoAddModalContainer extends React.Component {
 	getCmcodes = (major) => {
 		const { CmcodeActions } = this.props;
 
-		CmcodeActions.getCmcodeByMajorExcludeRemoved({ major: major });
+		CmcodeActions.getCmcodeByMajorExcludeRemoved(major);
 	};
 	getVendorList = () => {
 		const { IndexesActions } = this.props;
@@ -70,7 +70,7 @@ class DocumentInfoAddModalContainer extends React.Component {
 	handleAddInfo = async () => {
 		const { IndexesActions, target, infos } = this.props;
 
-		await IndexesActions.addPartial({ id: target, list: infos });
+		await IndexesActions.addPartial(target, { list: infos });
 		this.handleClose();
 	};
 

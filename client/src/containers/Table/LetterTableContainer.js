@@ -13,7 +13,7 @@ class LetterTableContainer extends React.Component {
 		if (isSearch) {
 			await LetterActions.searchLetters(page, search.toJS());
 		} else {
-			await LetterActions.getLetters({ page });
+			await LetterActions.getLetters(page);
 		}
 
 		history.push(`/letters/internal?page=${page}`);
@@ -22,7 +22,7 @@ class LetterTableContainer extends React.Component {
 	getLetter = (id) => {
 		const { LetterActions } = this.props;
 
-		LetterActions.getLetter({ id });
+		LetterActions.getLetter(id);
 	};
 
 	handleOpenDetail = async (id) => {

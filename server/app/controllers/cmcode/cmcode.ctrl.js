@@ -44,12 +44,14 @@ export const cdMajors = async (ctx) => {
     try {
         const cmcodes = await Cmcode
             .find({}, { cdMajor: 1, cdFName: 1, effStaDt: 1, effEndDt: 1 })
-            .sort({ cdMajor: 1 });
+            .sort({ cdMajor: 1 })
+            .skip((page - 1) * 8)
+            .limit(8);
 
         const count = await Cmcode.countDocuments();
 
         ctx.set('Total', count);
-        ctx.set('Last-Page', Math.ceil(count / 10));
+        ctx.set('Last-Page', Math.ceil(count / 8));
 
         ctx.res.ok({
             data: cmcodes,
@@ -83,7 +85,7 @@ export const one = async (ctx) => {
 
     try {
         const cmcode = await Cmcode
-            .findById(id, { cdMinors: { $slice: [(page - 1) * 10, 10] } })
+            .findById(id, { cdMinors: { $slice: [(page - 1) * 8, 8] } })
             .populate({ path: 'cdMinors', options: { sort: { cdMinor: 1 } } });
 
         const count = await Cmcode
@@ -93,7 +95,7 @@ export const one = async (ctx) => {
             });
 
         ctx.set('Total', count);
-        ctx.set('Last-Page', Math.ceil(count / 10));
+        ctx.set('Last-Page', Math.ceil(count / 8));
 
         ctx.res.ok({
             data: cmcode,

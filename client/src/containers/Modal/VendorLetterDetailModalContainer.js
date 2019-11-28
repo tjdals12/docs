@@ -16,18 +16,18 @@ class VendorLetterDetailModalContainer extends React.Component {
 	getCmcodes = (major) => {
 		const { CmcodeActions } = this.props;
 
-		CmcodeActions.getCmcodeByMajorExcludeRemoved({ major: major });
+		CmcodeActions.getCmcodeByMajorExcludeRemoved(major);
 	};
 
 	getDocument = (id) => {
 		const { DocumentActions } = this.props;
 
-		DocumentActions.getDocument({ id });
+		DocumentActions.getDocument(id);
 	};
 
-	handleMoreDocument = async (id, stopIndex) => {
+	handleMoreDocument = async (id, startIndex) => {
 		const { VendorLetterActions } = this.props;
-		const nextPage = Math.ceil(stopIndex / 20);
+		const nextPage = (startIndex / 20) + 1;
 		const page = this.state.page;
 
 		if(page < nextPage) {
@@ -35,7 +35,7 @@ class VendorLetterDetailModalContainer extends React.Component {
 				page: nextPage
 			});
 
-			await VendorLetterActions.getVendorLetterOnlyDocuments({ id, page: nextPage });
+			await VendorLetterActions.getVendorLetterOnlyDocuments(id, nextPage);
 		}
 	}
 
@@ -72,6 +72,9 @@ class VendorLetterDetailModalContainer extends React.Component {
 		const { ModalActions } = this.props;
 
 		if (name === 'vendorLetterEdit') {
+			this.setState({
+				page: 1
+			});
 			ModalActions.close('vendorLetterDetail');
 		}
 
@@ -88,7 +91,7 @@ class VendorLetterDetailModalContainer extends React.Component {
 	handleDelete = async ({ id, yn }) => {
 		const { VendorLetterActions, reason } = this.props;
 
-		await VendorLetterActions.deleteVendorLetter({ id, yn, reason });
+		await VendorLetterActions.deleteVendorLetter(id, { yn, reason });
 		this.setState({
 			page: 1
 		})
@@ -112,7 +115,7 @@ class VendorLetterDetailModalContainer extends React.Component {
 	handleDeleteStatus = async () => {
 		const { ModalActions, VendorLetterActions, transmittal, target } = this.props;
 
-		await VendorLetterActions.deleteInOutVendorLetter({ id: transmittal.get('_id'), target });
+		await VendorLetterActions.deleteInOutVendorLetter(transmittal.get('_id'), { targetId: target });
 		this.setState({
 			page: 1
 		});

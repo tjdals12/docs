@@ -11,7 +11,7 @@ class DocumentEditModalContainer extends React.Component {
 	getCmcodes = async (major) => {
 		const { CmcodeActions } = this.props;
 
-		await CmcodeActions.getCmcodeByMajorExcludeRemoved({ major: major });
+		await CmcodeActions.getCmcodeByMajorExcludeRemoved(major);
 	};
 
 	getVendorList = async () => {
@@ -23,7 +23,7 @@ class DocumentEditModalContainer extends React.Component {
 	handleEdit = async () => {
 		const { DocumentActions, ModalActions, id, document } = this.props;
 
-		await DocumentActions.editDocument({ id, document: document.toJS() });
+		await DocumentActions.editDocument(id, { document: document.toJS() });
 		ModalActions.close('documentEdit');
 		ModalActions.open('documentDetail');
 	};

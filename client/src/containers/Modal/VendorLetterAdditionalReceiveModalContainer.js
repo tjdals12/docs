@@ -13,10 +13,10 @@ class VendorLetterAdditionalReceiveModalContainer extends React.Component {
 		VendorActions.getVendorsForSelect();
 	};
 
-	getTransmittalsByVendor = (id) => {
+	getTransmittalsByVendor = (vendor) => {
 		const { VendorLetterActions } = this.props;
 
-		VendorLetterActions.getVendorLettersByVendor({ vendor: id });
+		VendorLetterActions.getVendorLettersByVendor(vendor);
 	};
 
 	handleClose = () => {
@@ -79,7 +79,7 @@ class VendorLetterAdditionalReceiveModalContainer extends React.Component {
 		const { ModalActions, VendorLetterActions, data } = this.props;
 		const { id, receiveDocuments, receiveDate } = data.toJS();
 
-		await VendorLetterActions.additionalReceiveVendorLetter({ id, param: { receiveDocuments, receiveDate } });
+		await VendorLetterActions.additionalReceiveVendorLetter(id, { receiveDocuments, receiveDate });
 		ModalActions.close('vendorLetterAdditionalReceive');
 	};
 

@@ -47,7 +47,7 @@ class VendorPersonAddModalContainer extends React.Component {
 	handleInsert = async () => {
 		const { ModalActions, VendorActions, target, persons } = this.props;
 
-		await VendorActions.addPerson({ id: target, persons: persons.toJS() });
+		await VendorActions.addPerson(target, { persons: persons.toJS() });
 		ModalActions.close('vendorPersonAdd');
 		ModalActions.open('vendorDetail');
 	};

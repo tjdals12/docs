@@ -5,7 +5,13 @@ import Typography from 'components/Typography';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-const OverallCard = ({ title, description, data, className, ...rest }) => {
+const OverallCard = ({ 
+	title, 
+	description, 
+	data, 
+	className, 
+	...rest
+}) => {
 	const classes = classNames('w-100 h-100', className);
 
 	const getData = (data) => {

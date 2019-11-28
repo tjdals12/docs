@@ -13,7 +13,7 @@ class DocumentTableContainer extends React.Component {
 		if (isSearch) {
 			await DocumentActions.searchDocuments(page, search.toJS());
 		} else {
-			await DocumentActions.getDocuments({ page });
+			await DocumentActions.getDocuments(page);
 		}
 		history.push(`/documents?page=${page}`);
 	};
@@ -21,7 +21,7 @@ class DocumentTableContainer extends React.Component {
 	getDocument = async (id) => {
 		const { DocumentActions } = this.props;
 
-		await DocumentActions.getDocument({ id });
+		await DocumentActions.getDocument(id);
 	};
 
 	handleOpenDetail = (id) => {

@@ -48,7 +48,7 @@ const withBadge = ({ position = 'bottom-right', size = 'sm', style = {}, classNa
 	WrappedComponent
 ) => ({ tag: Tag = 'div', ...restProps }) => {
 	return (
-		<Tag className="position-relative">
+		<Tag className="d-inline-block position-relative">
 			<WrappedComponent {...restProps} />
 			<Badge
 				className={classNames(className, 'position-absolute')}

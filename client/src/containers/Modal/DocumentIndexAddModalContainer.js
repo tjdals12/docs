@@ -12,7 +12,7 @@ class DocumentIndexAddModalContainer extends React.Component {
 	getCmcodes = (major) => {
 		const { CmcodeActions } = this.props;
 
-		CmcodeActions.getCmcodeByMajorExcludeRemoved({ major: major });
+		CmcodeActions.getCmcodeByMajorExcludeRemoved(major);
 	};
 
 	getVendorList = () => {

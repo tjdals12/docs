@@ -10,25 +10,25 @@ class CmcodeCollapseCardContainer extends React.Component {
 		isOpen: false
 	};
 
-	getCdMajors = (page) => {
+	getCdMajors = async (page) => {
 		const { CmcodeActions } = this.props;
 
 		CmcodeActions.onChange({ name: 'majorPage', value: page });
-		CmcodeActions.getCdMajors(page);
+		await CmcodeActions.getCdMajors(page);
 	};
 
-	getCdMinors = (id, page) => {
+	getCdMinors = async (id, page) => {
 		const { CmcodeActions } = this.props;
 
 		CmcodeActions.onChange({ name: 'minorPage', value: page });
-		CmcodeActions.getCdMinors(id, page);
+		await CmcodeActions.getCdMinors(id, page);
 	};
 
-	getCdMinor = (id) => {
+	getCdMinor = async (id) => {
 		const { CmcodeActions } = this.props;
 
+		await CmcodeActions.getCdMinor(id);
 		CmcodeActions.initialize('errors');
-		CmcodeActions.getCdMinor(id);
 	};
 
 	handleToggle = () => {
@@ -56,32 +56,32 @@ class CmcodeCollapseCardContainer extends React.Component {
 		CmcodeActions.onChange({ target, name, value });
 	};
 
-	handleSave = (id) => {
+	handleSave = async (id) => {
 		const { CmcodeActions, add, minorPage } = this.props;
 
-		CmcodeActions.addCdMinor(id, { ...add.toJS() });
+		await CmcodeActions.addCdMinor(id, { ...add.toJS() });
 		this.getCdMinors(id, minorPage);
 	};
 
-	handleEdit = (major) => {
+	handleEdit = async (major) => {
 		const { CmcodeActions, cdMinor: edit, minorPage } = this.props;
 		const { _id: minor, cdMinor, cdSName } = edit.toJS();
 
-		CmcodeActions.editCdMinor(major, minor, { cdMinor, cdSName });
+		await CmcodeActions.editCdMinor(major, minor, { cdMinor, cdSName });
 		this.getCdMinors(major, minorPage);
 	}
 
-	handleDelete = (major) => {
+	handleDelete = async (major) => {
 		const { CmcodeActions, cdMinor, minorPage } = this.props;
 
-		CmcodeActions.deleteCdMinor(major, cdMinor.get('_id'));
+		await CmcodeActions.deleteCdMinor(major, cdMinor.get('_id'));
 		this.getCdMinors(major, minorPage)
 	}
 
-	handleRecovery = (major) => {
+	handleRecovery = async (major) => {
 		const { CmcodeActions, cdMinor, minorPage } = this.props;
 
-		CmcodeActions.recoveryCdMinor(major, cdMinor.get('_id'));
+		await CmcodeActions.recoveryCdMinor(major, cdMinor.get('_id'));
 		this.getCdMinors(major, minorPage);
 	}
 

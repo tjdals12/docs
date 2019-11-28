@@ -4,7 +4,16 @@ import classNames from 'classnames';
 import Avatar from 'components/Avatar';
 import PropTypes from 'prop-types';
 
-const UserCard = ({ avatar, avatarSize, title, subtitle, text, children, className, ...restProps }) => {
+const UserCard = ({ 
+	avatar, 
+	avatarSize, 
+	title, 
+	subtitle, 
+	text, 
+	children, 
+	className, 
+	...restProps
+}) => {
 	const classes = classNames('bg-gradient-theme border-0 w-100 h-100', className);
 
 	return (
@@ -30,7 +39,10 @@ UserCard.propTypes = {
 };
 
 UserCard.defaultProps = {
-	avatarSize: 80
+	avatarSize: 80,
+	title: '',
+	subtitle: '',
+	text: ''
 };
 
 export default UserCard;

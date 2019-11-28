@@ -5,7 +5,13 @@ import { FaCircle } from 'react-icons/fa';
 import Typography from 'components/Typography';
 import PropTypes from 'prop-types';
 
-const CollapseCard = ({ title, description, onToggle, onAddForm, collapse: Collapse, className }) => {
+const CollapseCard = ({ 
+	title, 
+	description, 
+	onToggle, 
+	onAddForm, 
+	collapse: Collapse, 
+	className }) => {
 	const classes = classNames('px-4 py-3 mb-3', className);
 
 	return (

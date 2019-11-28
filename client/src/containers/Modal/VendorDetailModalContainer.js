@@ -9,7 +9,7 @@ class VendorDetailModalContainer extends React.Component {
 	getVendor = () => {
 		const { VendorActions, target } = this.props;
 
-		VendorActions.getVendor({ id: target });
+		VendorActions.getVendor(target);
 	};
 
 	handleTarget = ({ id }) => {
@@ -38,7 +38,7 @@ class VendorDetailModalContainer extends React.Component {
 	handleDelete = async (yn) => {
 		const { ModalActions, VendorActions, target, reason } = this.props;
 
-		await VendorActions.deleteVendor({ id: target, yn, reason });
+		await VendorActions.deleteVendor(target, { yn, reason });
 		ModalActions.close('question');
 	};
 

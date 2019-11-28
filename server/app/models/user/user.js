@@ -113,6 +113,7 @@ UserSchema.statics.editUser = function (id, param) {
         description,
         userType,
         userId,
+        pwd,
         roles
     } = param;
 
@@ -126,6 +127,7 @@ UserSchema.statics.editUser = function (id, param) {
                     userType
                 },
                 userId,
+                pwd: auth.hash(pwd),
                 roles
             }
         },

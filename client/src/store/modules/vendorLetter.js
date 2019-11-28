@@ -170,7 +170,8 @@ export default handleActions(
 				const { data } = action.payload.data;
 				const documents = state.getIn(['vendorLetter', 'documents']).toJS();
 
-				return state.setIn(['vendorLetter', 'documents'], fromJS(documents.concat(data.documents)));
+				return state.setIn(['vendorLetter', 'documents'], fromJS(documents.concat(data.documents)))
+							.setIn(['edit', 'documents'], fromJS(documents.concat(data.documents)));
 			}
 		}),
 		...pender({

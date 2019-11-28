@@ -13,7 +13,7 @@ class IndexListContainer extends React.Component {
 		if (isSearch) {
 			await IndexesActions.searchIndexes(page, search.toJS());
 		} else {
-			await IndexesActions.getIndexes({ page });
+			await IndexesActions.getIndexes(page);
 		}
 
 		history.push(`/indexes/overall?page=${page}`);
@@ -38,7 +38,7 @@ class IndexListContainer extends React.Component {
 		const { ModalActions, IndexesActions } = this.props;
 
 		IndexesActions.setTarget(id);
-		await IndexesActions.getIndex({ id });
+		await IndexesActions.getIndex(id);
 		IndexesActions.initialize('infosError');
 		ModalActions.open('documentIndexEdit');
 	};
@@ -71,7 +71,7 @@ class IndexListContainer extends React.Component {
 	handleDeleteIndex = async () => {
 		const { ModalActions, IndexesActions, target } = this.props;
 
-		await IndexesActions.deleteIndex({ id: target });
+		await IndexesActions.deleteIndex(target);
 		ModalActions.close('question');
 	};
 
@@ -80,7 +80,15 @@ class IndexListContainer extends React.Component {
 	}
 
 	render() {
-		const { writable, isOpenQuestion, page, lastPage, indexes, loading, searchLoading } = this.props;
+		const { 
+			writable, 
+			isOpenQuestion, 
+			page, 
+			lastPage, 
+			indexes, 
+			loading, 
+			searchLoading
+		} = this.props;
 
 		return (
 			<IndexList
