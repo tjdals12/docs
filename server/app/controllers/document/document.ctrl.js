@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
  * @date        2019. 07. 21
  * @description 문서 목록 조회
  */
-export const list = async (ctx) => {
+export const list = async ctx => {
     let page = parseInt(ctx.query.page || 1, 10);
 
     if (page < 1) {
@@ -20,15 +20,14 @@ export const list = async (ctx) => {
     }
 
     try {
-        const documents = await Document
-            .find()
+        const documents = await Document.find()
             .populate({
                 path: 'vendor',
                 populate: { path: 'part vendorPerson' }
             })
             .populate({ path: 'part' })
             .populate({ path: 'documentGb' })
-            .skip(((page - 1) * 10))
+            .skip((page - 1) * 10)
             .limit(10)
             .sort({ 'timestamp.regDt': -1 });
 
@@ -53,7 +52,7 @@ export const list = async (ctx) => {
  * @date        2019. 08. 02
  * @description 문서 검색
  */
-export const search = async (ctx) => {
+export const search = async ctx => {
     let page = parseInt(ctx.query.page || 1, 10);
 
     if (page < 1) {
@@ -97,7 +96,10 @@ export const search = async (ctx) => {
         const documents = await Document.searchDocuments(query, page);
         const countQuery = await Document.searchDocumentsCount(query);
 
-        ctx.set('Last-Page', Math.ceil((countQuery[0] ? countQuery[0].count : 1) / 10));
+        ctx.set(
+            'Last-Page',
+            Math.ceil((countQuery[0] ? countQuery[0].count : 1) / 10)
+        );
 
         ctx.res.ok({
             data: documents,
@@ -116,10 +118,10 @@ export const search = async (ctx) => {
  * @date        2019. 07. 21
  * @description 문서 개별 추가
  */
-export const add = async (ctx) => {
+export const add = async ctx => {
     const { user } = ctx.request;
 
-    if(!user) {
+    if (!user) {
         ctx.res.forbidden({
             message: 'Authentication failed'
         });
@@ -190,12 +192,11 @@ export const add = async (ctx) => {
  * @date        2019. 07. 23
  * @description 문서 개별 조회
  */
-export const one = async (ctx) => {
+export const one = async ctx => {
     let { id } = ctx.params;
 
     try {
-        const document = await Document
-            .findById(id)
+        const document = await Document.findById(id)
             .populate({ path: 'vendor', populate: { path: 'part vendorPerson' } })
             .populate({ path: 'part' })
             .populate({ path: 'documentGb' });
@@ -217,10 +218,10 @@ export const one = async (ctx) => {
  * @date        2019. 07. 23
  * @description 문서 수정
  */
-export const edit = async (ctx) => {
+export const edit = async ctx => {
     const { user } = ctx.request;
 
-    if(!user) {
+    if (!user) {
         ctx.res.forbidden({
             message: 'Authentication failed'
         });
@@ -265,8 +266,8 @@ export const edit = async (ctx) => {
     }
 
     try {
-        const document = await Document.editDocument({ 
-            id, 
+        const document = await Document.editDocument({
+            id,
             vendor,
             part,
             documentNumber,
@@ -296,17 +297,17 @@ export const edit = async (ctx) => {
  * @date        2019. 07. 21
  * @description 문서 삭제
  */
-export const deleteOne = async (ctx) => {
+export const deleteOne = async ctx => {
     const { user } = ctx.request;
 
-    if(!user) {
+    if (!user) {
         ctx.res.forbidden({
             message: 'Authentication failed'
         });
 
         return;
     }
-    
+
     let { id } = ctx.params;
     let { yn, reason } = ctx.request.body;
 
@@ -333,7 +334,7 @@ export const deleteOne = async (ctx) => {
             reason,
             user
         });
-        
+
         ctx.res.ok({
             data: document,
             message: 'Success - documentCtrl > deleteOne'
@@ -351,10 +352,10 @@ export const deleteOne = async (ctx) => {
  * @date        2019. 08. 01
  * @description 문서 일괄 삭제
  */
-export const deleteMany = async (ctx) => {
+export const deleteMany = async ctx => {
     const { user } = ctx.request;
 
-    if(!user) {
+    if (!user) {
         ctx.res.forbidden({
             message: 'Authentication failed'
         });
@@ -375,7 +376,9 @@ export const deleteMany = async (ctx) => {
     }
 
     const schema = Joi.object().keys({
-        ids: Joi.array().items(Joi.string()).required()
+        ids: Joi.array()
+            .items(Joi.string())
+            .required()
     });
 
     const result = Joi.validate(ctx.request.body, schema);
@@ -392,11 +395,10 @@ export const deleteMany = async (ctx) => {
     try {
         await Document.deleteDocuments({ ids, user });
 
-        const documents = await Document
-            .find()
+        const documents = await Document.find()
             .populate({ path: 'part' })
             .populate({ path: 'documentGb' })
-            .skip(((page - 1) * 10))
+            .skip((page - 1) * 10)
             .limit(10)
             .sort({ 'timestamp.regDt': -1 });
 
@@ -421,10 +423,10 @@ export const deleteMany = async (ctx) => {
  * @date        2019. 07. 22
  * @description 문서 In / Out
  */
-export const inOut = async (ctx) => {
+export const inOut = async ctx => {
     const { user } = ctx.request;
 
-    if(!user) {
+    if (!user) {
         ctx.res.forbidden({
             message: 'Authentication failed'
         });
@@ -433,7 +435,14 @@ export const inOut = async (ctx) => {
     }
 
     const { id } = ctx.params;
-    const { inOutGb, officialNumber, status, resultCode, replyCode, date } = ctx.request.body;
+    const {
+        inOutGb,
+        officialNumber,
+        status,
+        resultCode,
+        replyCode,
+        date
+    } = ctx.request.body;
 
     const schema = Joi.object().keys({
         inOutGb: Joi.string().required(),
@@ -457,13 +466,13 @@ export const inOut = async (ctx) => {
 
     try {
         const document = await Document.inOutDocument({
-            id, 
-            inOutGb, 
-            officialNumber, 
-            status, 
-            resultCode, 
-            replyCode, 
-            date, 
+            id,
+            inOutGb,
+            officialNumber,
+            status,
+            resultCode,
+            replyCode,
+            date,
             user
         });
 
@@ -484,17 +493,17 @@ export const inOut = async (ctx) => {
  * @date        2019. 07. 31
  * @description 문서 In / Out 삭제
  */
-export const deleteInOut = async (ctx) => {
+export const deleteInOut = async ctx => {
     const { user } = ctx.request;
 
-    if(!user) {
+    if (!user) {
         ctx.res.forbidden({
             message: 'Authentication failed'
         });
 
         return;
     }
-    
+
     const { id } = ctx.params;
     const { targetId } = ctx.request.body;
 
@@ -537,17 +546,17 @@ export const deleteInOut = async (ctx) => {
  * @date        2019. 07. 23
  * @description 문서 보류
  */
-export const hold = async (ctx) => {
+export const hold = async ctx => {
     const { user } = ctx.request;
 
-    if(!user) {
+    if (!user) {
         ctx.res.forbidden({
             message: 'Authentication failed'
         });
 
         return;
     }
-    
+
     let { id } = ctx.params;
     let { yn, reason } = ctx.request.body;
 

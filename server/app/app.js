@@ -20,18 +20,22 @@ app.use(errorHandler());
 app.use(jwtMiddleware());
 app.use(requestId());
 app.use(serve({ rootDir: 'upload', rootPath: '/upload' }));
-app.use(bodyParser({
-    enableTypes: ['json', 'form'],
-    jsonLimit: '10mb',
-    formLimit: '10mb'
-}));
+app.use(
+    bodyParser({
+        enableTypes: ['json', 'form'],
+        jsonLimit: '10mb',
+        formLimit: '10mb'
+    })
+);
 
-app.use(cors({
-    origin: '*',
-    allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
-    allowHeaders: ['Content-Type', 'Authorization'],
-    exposeHeaders: ['Content-Length', 'Date', 'X-Request-Id', 'Last-Page']
-}));
+app.use(
+    cors({
+        origin: '*',
+        allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
+        allowHeaders: ['Content-Type', 'Authorization'],
+        exposeHeaders: ['Content-Length', 'Date', 'X-Request-Id', 'Last-Page']
+    })
+);
 app.use(helmet());
 loggerSetting(app);
 swaggerSetting(app);

@@ -278,10 +278,10 @@ DocumentSchema.statics.saveDocument = async function (param) {
     const document = new this({ 
         vendor, 
         part, 
-        documentNumber, 
-        documentTitle, 
+        documentNumber: documentNumber.trim(), 
+        documentTitle: documentTitle.trim(), 
         documentGb, 
-        documentRev, 
+        documentRev: documentRev.trim(), 
         documentInOut, 
         memo, 
         timestamp
@@ -350,14 +350,14 @@ DocumentSchema.statics.saveDocuments = async function (param) {
         targets.push(new this({ 
             vendor, 
             part, 
-            documentNumber, 
-            documentTitle, 
+            documentNumber: documentNumber.trim(), 
+            documentTitle: documentTitle.trim(), 
             documentGb, 
-            documentRev, 
-            documentInOut, 
-            documentStatus, 
-            memo, 
-            timestamp 
+            documentRev: documentRev.trim(), 
+            documentInOut,
+            documentStatus,
+            memo: memo.trim(), 
+            timestamp
         }));
     }
 
@@ -413,10 +413,10 @@ DocumentSchema.statics.editDocument = function (param) {
             $set: {
                 vendor,
                 part,
-                documentNumber,
-                documentTitle,
+                documentNumber: documentNumber.trim(),
+                documentTitle: documentTitle.trim(),
                 documentGb,
-                documentRev,
+                documentRev: documentRev.trim(),
                 level,
                 officialNumber,
                 memo,
@@ -606,12 +606,22 @@ DocumentSchema.statics.inOutDocuments = function (param) {
  * @description 문서 In / Out 삭제
  * @param       {Object} param
  */
-DocumentSchema.statics.deleteInOutDocument = function (param) {
+DocumentSchema.statics.deleteInOutDocument = async function (param) {
     let {
         id, 
         targetId,
         user
     } = param;
+
+    const target = await this.findOne({ _id: id })
+        .populate({ path: 'vendor', populate: { path: 'part vendorPerson' } })
+        .populate({ path: 'part' })
+        .populate({ path: 'documentGb' });
+
+    /** '접수' 상태는 삭제할 수 없음. */
+    if(target.documentStatus[0]._id == targetId || target.documentInOut[0]._id == targetId) {
+        return target;
+    }
 
     return this.findOneAndUpdate(
         { _id: id },

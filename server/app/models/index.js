@@ -17,8 +17,8 @@ export const connect = () => {
             const mockgoose = new Mockgoose(mongoose);
 
             mockgoose.prepareStorage().then(() => {
-                mongoose.connect(dbUri,
-                    {
+                mongoose
+                    .connect(dbUri, {
                         useNewUrlParser: true,
                         useCreateIndex: true,
                         useUnifiedTopology: true,
@@ -31,8 +31,8 @@ export const connect = () => {
                     });
             });
         } else {
-            mongoose.connect(dbUri,
-                {
+            mongoose
+                .connect(dbUri, {
                     useNewUrlParser: true,
                     useCreateIndex: true,
                     useUnifiedTopology: true,
@@ -55,8 +55,7 @@ export const connect = () => {
  * @description DB 종료
  */
 export const close = () => {
-    if (process.env.NODE_ENV === 'test')
-        new Mockgoose(mongoose).helper.reset();
+    if (process.env.NODE_ENV === 'test') new Mockgoose(mongoose).helper.reset();
 
     return mongoose.disconnect();
 };

@@ -2,7 +2,6 @@ import React from 'react';
 import classNames from 'classnames';
 import { Collapse, Row, Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Grid, GridColumn as Column } from '@progress/kendo-react-grid';
-import Avatar from 'components/Avatar';
 import PropTypes from 'prop-types';
 
 const makeHeaderCell = ({ title, className }) => {
