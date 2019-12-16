@@ -7,6 +7,7 @@ import DocumentInfoTableContainer from 'containers/Table/DocumentInfoTableContai
 import VendorDetailModalContainer from 'containers/Modal/VendorDetailModalContainer';
 import DocumentInfoDetailModalContainer from 'containers/Modal/DocumentInfoDetailModalContainer';
 import DocumentDetailModalContainer from 'containers/Modal/DocumentDetailModalContainer';
+import LoadingModalContainer from 'containers/Modal/LoadingModalContainer';
 import queryString from 'query-string';
 
 const IndexesInfosPage = (props) => {
@@ -23,6 +24,7 @@ const IndexesInfosPage = (props) => {
 				<VendorDetailModalContainer />
 				<DocumentInfoDetailModalContainer />
 				<DocumentDetailModalContainer />
+				<LoadingModalContainer />
 			</ScrollToTop>
 		</Page>
 	);

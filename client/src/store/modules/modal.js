@@ -29,7 +29,8 @@ const initialState = Map({
 	referenceSearchModal: false,
 	latestDocumentsModal: false,
 	templateDownloadModal: false,
-	questionModal: false
+	questionModal: false,
+	loadingModal: false
 });
 
 export default handleActions(
