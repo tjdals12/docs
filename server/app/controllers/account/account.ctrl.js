@@ -133,7 +133,7 @@ export const edit = async (ctx) => {
         description: Joi.string().required(),
         userType: Joi.string().required(),
         userId: Joi.string().required(),
-        pwd: Joi.string().required(),
+        pwd: Joi.string().allow(''),
         roles: Joi.array().min(0),
     });
 

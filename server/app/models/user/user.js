@@ -117,19 +117,24 @@ UserSchema.statics.editUser = function (id, param) {
         roles
     } = param;
 
+    const newData = {
+        profile: {
+            username,
+            description,
+            userType
+        },
+        userId,
+        roles
+    }
+
+    if(pwd) {
+        newData.pwd = auth.hash(pwd);
+    }
+
     return this.findOneAndUpdate(
         { _id: id },
         {
-            $set: {
-                profile: {
-                    username,
-                    description,
-                    userType
-                },
-                userId,
-                pwd: auth.hash(pwd),
-                roles
-            }
+            $set: newData
         },
         {
             new: true,
