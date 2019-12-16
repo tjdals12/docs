@@ -2,6 +2,8 @@
 
 문서관리 시스템 프로젝트 ([https://minz-docs.xyz/](https://minz-docs.xyz/))
 
+&nbsp;
+
 ## Project Stack
 
 ### Client
