@@ -54,7 +54,7 @@
 		"saslprep": "^1.0.3",
 		"swagger-jsdoc": "^3.3.0",
 		"swagger-ui-koa": "^0.0.1",
-		"xlsx": "^0.15.0"
+		"xlsx": "^0.17.0"
 	},
 	"scripts": {
 		"dev": "NODE_ENV=development NODE_PATH=app nodemon --watch app/ app/server.js --exec babel-node",
